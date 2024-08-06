@@ -8,29 +8,30 @@ export const formatQueryParamsToString=(params:any)=>{
 }
 
 export const formatQueryParamsToObj=(queryString:string)=>{
-     if (queryString.startsWith('?')) {
-        queryString = queryString.substring(1);
-      }
-    
-      const pairs = queryString.split('&');
-      const result:{ [key: string]: string|number} = {};
-    
-      pairs.forEach(pair => {
-        const [key, value] = pair.split('=');
-        const decodedKey = decodeURIComponent(key);
-        const decodedValue = decodeURIComponent(value); 
-        result[decodedKey] = isNaN(Number(decodedValue)) ? decodedValue : Number(decodedValue);      });
-      return result;
+    if (queryString.startsWith('?')) {
+      queryString = queryString.substring(1);
+    }
+  
+    const pairs = queryString.split('&');
+    const result:{ [key: string]: string|number} = {};
+  
+    pairs.forEach(pair => {
+      const [key, value] = pair.split('=');
+      const decodedKey = decodeURIComponent(key);
+      const decodedValue = decodeURIComponent(value); 
+      result[decodedKey] = isNaN(Number(decodedValue)) ? decodedValue : Number(decodedValue);      });
+    return result;
 }
 
 export const pathToScreens=(path:string)=>{
     let slashIndexs=getAllCharOccurences(path,"/");
     let paramIndex=path.indexOf("?")
-    let screens:StackScreen[]=new Array(slashIndexs.length).fill({});
+    let screens=new Array(slashIndexs.length).fill({});
     return screens.map((screen,i)=>({
-        component:ComponentsInfo[path.substring(slashIndexs[i]+1,(i==(screens.length-1))?(paramIndex==-1?path.length:paramIndex):slashIndexs[i+1])],
+        id:path.substring(slashIndexs[i]+1,(i==(screens.length-1))?(paramIndex==-1?path.length:paramIndex):slashIndexs[i+1]),
+        // component:,
         props:((i==screens.length-1 && paramIndex!=-1)?formatQueryParamsToObj(path.substring(paramIndex+1,path.length)):undefined),
-        animationStyle:"HorizontalSlideToLeft",
+        // animationStyle:"HorizontalSlideToLeft",
     }))
 }
 

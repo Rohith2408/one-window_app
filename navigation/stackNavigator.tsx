@@ -15,7 +15,7 @@ const Stacknavigator=(props:StackNavigator)=>{
             <View style={{width:'100%',height:"100%"}}>
             {
                 props.screens.map((screen:StackScreenType)=>
-                <StackScreen {...screen}/>
+                <StackScreen key={screen.id} {...screen}/>
                 )
             }
             </View>
@@ -177,7 +177,7 @@ const styles=StyleSheet.create({
     swipeStrip:{
         height:"100%",
         position:"absolute",
-        backgroundColor:'red'
+        // backgroundColor:'red'
     }
 })
 
