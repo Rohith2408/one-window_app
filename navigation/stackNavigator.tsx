@@ -1,11 +1,13 @@
-import { Animated, Dimensions, Easing, PanResponder, StyleSheet, View } from "react-native"
+import { Animated, Dimensions, Easing, PanResponder, Pressable, StyleSheet, Text, View } from "react-native"
 import { StackNavigator, StackScreen as StackScreenType } from "../types"
 import { useEffect, useRef } from "react"
 import { GestureHandlerRootView, HandlerStateChangeEvent, PanGestureChangeEventPayload, PanGestureHandler, PanGestureHandlerEventPayload } from "react-native-gesture-handler"
+import useNavigation from "../hooks/useNavigation"
 
 const Stacknavigator=(props:StackNavigator)=>{
 
     const Invalidscreen=props.invalidPathScreen
+    console.log("stack",props)
 
     return(
         <View style={[styles.wrapper]}>
@@ -14,8 +16,8 @@ const Stacknavigator=(props:StackNavigator)=>{
             ?
             <View style={{width:'100%',height:"100%"}}>
             {
-                props.screens.map((screen:StackScreenType)=>
-                <StackScreen key={screen.id} {...screen}/>
+                props.screens.map((screen:StackScreenType,i)=>
+                <StackScreen key={screen.id} {...screen} swipable={i==0?false:true}/>
                 )
             }
             </View>
@@ -33,6 +35,7 @@ const StackScreen=(props:StackScreenType)=>{
     const opacity=useRef(new Animated.Value(0)).current;
     const swipeThreshold = 100;
     const currentPos=useRef(0);
+    const Navigation=useNavigation();
 
     const getCurrentPosition=()=>(currentPos.current)
     const setCurrentPosition=(val:number)=>{currentPos.current=val}
@@ -50,12 +53,12 @@ const StackScreen=(props:StackScreenType)=>{
           },
           onPanResponderRelease: (e,state) => {
             let initialPos=getCurrentPosition()
-            if((state.dx+initialPos)>Dimensions.get("screen").width/2)
+            if((state.dx+initialPos)>Dimensions.get("screen").width/4)
             {
                 Animated.spring(translateX,{
                     toValue:Dimensions.get("screen").width,
                     useNativeDriver:false
-                }).start()
+                }).start(back)
                 setCurrentPosition(Dimensions.get("screen").width)
             }
             else
@@ -103,34 +106,53 @@ const StackScreen=(props:StackScreenType)=>{
           Animated.spring(translateX, { toValue: 0, useNativeDriver: false }).start();
           Animated.spring(translateY, { toValue: 0, useNativeDriver: false}).start();
         }
-      };
+    };
 
     useEffect(()=>{
-        Animated.parallel([
-            Animated.timing(translateY,{
-                toValue:0,
-                useNativeDriver:false,
-                easing:Easing.ease
-            }),
-            Animated.timing(translateX,{
-                toValue:0,
-                useNativeDriver:false,
-                easing:Easing.ease
-            }),
-            Animated.timing(opacity,{
-                toValue:1,
-                useNativeDriver:false,
-                easing:Easing.ease
-            })
-        ]).start()
+        animate(0,0,1)
     },[])
+
+    const animate=(x:number,y:number,opacityVal:number,callBack?:any)=>{
+      Animated.parallel([
+        Animated.timing(translateY,{
+            toValue:y,
+            useNativeDriver:false,
+            duration:300,
+            easing:Easing.ease
+        }),
+        Animated.timing(translateX,{
+            toValue:x,
+            duration:300,
+            useNativeDriver:false,
+            easing:Easing.ease,
+            
+        }),
+        Animated.timing(opacity,{
+            toValue:opacityVal,
+            useNativeDriver:false,
+            duration:300,
+            easing:Easing.ease
+        })
+    ]).start(callBack)
+    }
+
+    const back=()=>{
+      animate(Dimensions.get("screen").width,0,1,()=>{Navigation?.navigate({type:"remove",payload:null})})
+    }
 
     const Container=props.component
 
     return(
-        <Animated.View style={[styles.screen,{transform:[{translateY:translateY},{translateX:translateX}],opacity:opacity}]}>
+        <Animated.View style={[styles.screenWrapper,{transform:[{translateY:translateY},{translateX:translateX}],opacity:opacity}]}>
+          {
+            props.swipable
+            ?
             <View {...panResponder.panHandlers} style={[styles.swipeStrip,{width:"4%"}]}></View>
-            <Container {...props.props}></Container>
+            :
+            null
+          }
+          <Pressable onPress={back}><Text>Back</Text></Pressable>
+          <View style={[styles.screen]}><Container {...props.props}></Container></View>
         </Animated.View>
         // <GestureHandlerRootView>
         //     <PanGestureHandler onGestureEvent={onGestureEvent} onHandlerStateChange={onHandlerStateChange}>
@@ -167,17 +189,23 @@ const styles=StyleSheet.create({
         justifyContent:"center",
         alignItems:'center'
     },
-    screen:{
+    screenWrapper:{
         position:"absolute",
         top:0,
         left:0,
         width:"100%",
-        height:"100%"
+        height:"100%",
+    },
+    screen:{
+      marginLeft:"4%",
+      width:"96%",
+      height:"100%"
     },
     swipeStrip:{
         height:"100%",
         position:"absolute",
-        // backgroundColor:'red'
+        backgroundColor:'white',
+        zIndex:1
     }
 })
 

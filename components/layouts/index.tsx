@@ -7,9 +7,10 @@ const Layout=(props:LayoutType)=>{
 
     const Container=ComponentsInfo.find((item)=>item.id==props.component.id)?.component
     const Invalidpathscreen=props.invalidPathScreen
+    console.log("layout",props.component)
 
     return(
-        <View>
+        <View style={{width:"100%",height:"100%"}}>
             {
                 Container
                 ?

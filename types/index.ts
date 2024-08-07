@@ -1,11 +1,13 @@
 import React from "react"
 import { ImageSourcePropType } from "react-native"
 
+export type ComponentInfo={
+    id:string,
+    props:any
+}
+
 export type Layout={
-    component:{
-        id:string,
-        props:any
-    },
+    component:ComponentInfo,
     invalidPathScreen:React.FC<any>
 }
 
@@ -16,6 +18,24 @@ export type StackNavigator={
 }
 
 export type StackScreen={
+    id:string,
+    swipable:boolean,
+    component:React.FC,
+    props:any,
+    animationStyle:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTop"|"VerticalSlideToBottom"|"Custom",
+    initialPosition?:{
+        top:number,
+        left:number
+    }
+}
+
+export type TabNavigator={
+    screens:TabScreen[],
+    initialTab:ComponentInfo,
+    invalidPathScreen:React.FC
+}
+
+export type TabScreen={
     id:string,
     component:React.FC,
     props:any,

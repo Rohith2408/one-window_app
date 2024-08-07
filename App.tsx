@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { Linking, StyleSheet, Text, View } from 'react-native';
+import { Linking, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Stacknavigator from './navigation/stackNavigator';
 import { useEffect, useReducer, useRef, useState } from 'react';
-import { StackScreen } from './types';
+import { ComponentInfo, StackScreen } from './types';
 import Home from './components/screens/Home';
 import Profile from './components/screens/Profile';
 import Navigationcontext from './contexts/PathContext';
@@ -13,7 +13,7 @@ import Layout from './components/layouts';
 
 export default function App() {
 
-  const [path,navigate]=useReducer(NavigationReducer,"/Login?auth=google")
+  const [path,navigate]=useReducer(NavigationReducer,"expo://Student/Home")
 
   useEffect(()=>{
   Linking.addEventListener('url', (event: { url: string })=>{
@@ -28,15 +28,15 @@ export default function App() {
   };
   },[])
 
-  const screens:{id:string,props:any}[]=pathToScreens(path)
-  console.log("screens",screens)
+  const screens:ComponentInfo[]=pathToScreens(path)
+  console.log("screens",path)
 
   return (
     <Navigationcontext.Provider value={{path,navigate}}>
-      <View style={styles.container}>
-        <Layout component={{id:screens[0].id,props:screens.length==1?screens[0].props:screens.filter((item,i)=>i!=screens.length-1)}} invalidPathScreen={Invalidpath}></Layout>
+      <SafeAreaView style={styles.container} >
+        <Layout component={{id:screens[0].id,props:screens.length==1?screens[0].props:screens.filter((item,i)=>i!=0)}} invalidPathScreen={Invalidpath}></Layout>
         {/* <Stacknavigator screens={screens} invalidPathScreen={Invalidpath}/> */}
-      </View>
+      </SafeAreaView>
     </Navigationcontext.Provider>
   );
 }

@@ -1,4 +1,5 @@
 import ComponentsInfo from "./components/info";
+import { baseAppUrl } from "./constants";
 import { StackScreen } from "./types";
 
 export const formatQueryParamsToString=(params:any)=>{
@@ -24,13 +25,14 @@ export const formatQueryParamsToObj=(queryString:string)=>{
 }
 
 export const pathToScreens=(path:string)=>{
-    let slashIndexs=getAllCharOccurences(path,"/");
-    let paramIndex=path.indexOf("?")
+    let truncatedPath=path.replace(baseAppUrl,"");
+    let slashIndexs=getAllCharOccurences(truncatedPath,"/");
+    let paramIndex=truncatedPath.indexOf("?")
     let screens=new Array(slashIndexs.length).fill({});
     return screens.map((screen,i)=>({
-        id:path.substring(slashIndexs[i]+1,(i==(screens.length-1))?(paramIndex==-1?path.length:paramIndex):slashIndexs[i+1]),
+        id:truncatedPath.substring(slashIndexs[i]+1,(i==(screens.length-1))?(paramIndex==-1?truncatedPath.length:paramIndex):slashIndexs[i+1]),
         // component:,
-        props:((i==screens.length-1 && paramIndex!=-1)?formatQueryParamsToObj(path.substring(paramIndex+1,path.length)):undefined),
+        props:((i==screens.length-1 && paramIndex!=-1)?formatQueryParamsToObj(truncatedPath.substring(paramIndex+1,truncatedPath.length)):undefined),
         // animationStyle:"HorizontalSlideToLeft",
     }))
 }
@@ -45,3 +47,6 @@ export const getAllCharOccurences=(str:string, char:string)=>{
     return indexes;
 }
 
+export const getComponent=(id:string)=>{
+  return ComponentsInfo.find((component)=>component.id==id)
+}
