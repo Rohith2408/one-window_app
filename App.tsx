@@ -32,12 +32,12 @@ export default function App() {
 
   // notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
   //   alert(notification.request.content.body+" "+notification.request.content.data.someData)
-  // });
+  // })
 
   // responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
   //   console.log(response);
   // });
-  
+
   // setTimeout(()=>{
   //   navigate({type:"add",payload:{params:{popup:"sample",popupdata:"Rohith"},path:"Popup"}})
   // },2000)
