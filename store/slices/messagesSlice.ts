@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Chat, Message, Participant, Sharedinfo, StoreItem } from "../../misc/typeDefinations";
-import { bakeMessagesWithSeenInfo, getParticipantsLastSeenMessage, setWordCase } from "../../misc/lib";
+import { bakeMessagesWithSeenInfo, getParticipantsLastSeenMessage, setWordCase } from "../../utils/index";
+import { Message, Participant, StoreItem } from "../../types";
 
 let initialState:StoreItem<Message[]>={
     requestStatus:"not_initiated",

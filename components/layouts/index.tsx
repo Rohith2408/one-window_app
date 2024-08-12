@@ -5,7 +5,7 @@ import { Layout as LayoutType} from "../../types"
 
 const Layout=(props:LayoutType)=>{
 
-    const Container=ComponentsInfo.find((item)=>item.id==props.component.id)?.component
+    const Container=ComponentsInfo.find((item)=>item.id==props.component)?.component
     const Invalidpathscreen=props.invalidPathScreen
     console.log("layout",props.component)
 
@@ -14,7 +14,7 @@ const Layout=(props:LayoutType)=>{
             {
                 Container
                 ?
-                <Container {...props.component.props}></Container>
+                <Container screens={props.screens} params={props.props}></Container>
                 :
                 <Invalidpathscreen></Invalidpathscreen>
             }

@@ -30,7 +30,7 @@ export const NavigationReducer=(state:string,action:NavigationActions)=>{
             break;
 
         case "add":
-            return state+"/"+action.payload.path+"?"+formatQueryParamsToString(action.payload.params)
+            return state.substring(0,state.indexOf("?"))+"/"+action.payload.path+"?"+formatQueryParamsToString(action.payload.params)
             break;
 
         case "remove":

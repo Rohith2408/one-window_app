@@ -1,13 +1,74 @@
 import React from "react"
 import { ImageSourcePropType } from "react-native"
 
+export interface Event{
+    name:string,
+    data?:any,
+    triggerBy:string | number
+}
+
+export type Endpoint={
+    category:string,
+    tail:string,
+    type:"GET"|"POST"|"PUT"|"DELETE",
+    constructor:(data:any)=>{url:string,body:any}
+}
+
 export type ComponentInfo={
     id:string,
     props:any
 }
 
+export type Form={
+    fields:FormField[],
+    submit:{
+        onSubmit:(fields:FormField[])=>void,
+        successText:string,
+        failureText:string,
+        idleText:string
+    },
+    initialFocussedField?:number
+}
+
+export type FormField={
+    id:string,
+    componentInfo:{
+        component:React.FC<any>,
+        props:any
+    },
+    title:string,
+    value:any,
+    // isFocussed:boolean,
+    onUpdate?:{
+        event:string,
+        handler?:(fields:FormField[],data:any)=>FormField[]
+    },
+    onFocus?:{
+        event:string,
+        handler?:any
+    }
+}
+
+export type ListItem={
+    label:string,
+    value:string
+}
+
+export type Dropdown={
+    options:{
+        label:string,
+        value:string
+    }[],
+    selectionMode:"single"|"multi",
+    value:ListItem,
+    isFocussed:boolean,
+    eventHandler:(event:Event)=>void
+}
+
 export type Layout={
-    component:ComponentInfo,
+    component:string,
+    screens:string[],
+    props:any,
     invalidPathScreen:React.FC<any>
 }
 
@@ -20,9 +81,9 @@ export type StackNavigator={
 export type StackScreen={
     id:string,
     swipable:boolean,
-    component:React.FC,
+    component:string,
     props:any,
-    animationStyle:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTop"|"VerticalSlideToBottom"|"Custom",
+    animationStyle?:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTopPartial"|"VerticalSlideToTop"|"VerticalSlideToBottom"|"Custom",
     initialPosition?:{
         top:number,
         left:number
@@ -37,13 +98,13 @@ export type TabNavigator={
 
 export type TabScreen={
     id:string,
-    component:React.FC,
-    props:any,
-    animationStyle:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTop"|"VerticalSlideToBottom"|"Custom",
-    initialPosition?:{
-        top:number,
-        left:number
-    }
+    component:React.FC<any>,
+    // props:any,
+    //animationStyle:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTop"|"VerticalSlideToBottom"|"Custom",
+    // initialPosition?:{
+    //     top:number,
+    //     left:number
+    // }
 }
 
 export type CartItem={
@@ -666,4 +727,20 @@ export interface TriggerObject{
     sender:User,
     recievers?:User[],
     data:any
+}
+
+export interface Advisor{
+    assignedCountries: string[],
+    info: {
+        _id:string,
+        role: string,
+        displayPicSrc: string,
+        email: string,
+        userType: string,
+        firstName: string,
+        lastName: string,
+        language: string[],
+        expertiseCountry: string[]
+    },
+    _id: string
 }

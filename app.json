@@ -12,16 +12,23 @@
       "backgroundColor": "#ffffff"
     },
     "scheme": "onewindow",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.onewindow",
       "infoPlist": {
         "CFBundleURLTypes": [
           {
-            "CFBundleURLSchemes": ["onewindow"]
+            "CFBundleURLSchemes": [
+              "onewindow"
+            ]
           }
-      ]}
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -38,12 +45,23 @@
               "host": "onewindow.io"
             }
           ],
-          "category": ["DEFAULT", "BROWSABLE"]
+          "category": [
+            "DEFAULT",
+            "BROWSABLE"
+          ]
         }
       ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-secure-store",
+        {
+          "faceIDPermission": "Allow One Window to access your Face ID biometric data."
+        }
+      ]
+    ]
   }
 }

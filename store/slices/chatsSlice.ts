@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Chat, Participant,StoreItem } from "../../misc/typeDefinations";
-import { getChatType } from "../../misc/lib";
+
+import { Chat, Participant, StoreItem } from "../../types";
+import { getChatType } from "../../utils";
 
 type ChatType="advisors"|"community"
 
