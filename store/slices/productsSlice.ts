@@ -1,7 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { StoreAction, StoreItem } from "../../misc/typeDefinations";
 
-let initialState:StoreItem<Application[]>={
+import { Product, StoreItem } from "../../types";
+
+let initialState:StoreItem<Product[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -13,20 +14,20 @@ export const productsSlice=createSlice({
     name:'products',
     initialState:initialState,
     reducers:{
-        initproducts:(state,action:PayloadAction<StoreItem<Application[]>>)=>({...action.payload}),
-        addApplication:(state,action:PayloadAction<Application>)=>{state.data.push(action.payload)},
-        updateApplication:(state,action:PayloadAction<Application>)=>{
+        initproducts:(state,action:PayloadAction<StoreItem<Product[]>>)=>({...action.payload}),
+        addProduct:(state,action:PayloadAction<Product>)=>{state.data.push(action.payload)},
+        updateProduct:(state,action:PayloadAction<Product>)=>{
             let index=state.data.findIndex((item)=>item._id==action.payload._id);
             state.data[index]=action.payload;
         },
-        requestApplicationCancel:(state,action:PayloadAction<string>)=>{
+        requestProductCancel:(state,action:PayloadAction<string>)=>{
             let index=state.data.findIndex((item)=>item._id==action.payload);
             state.data[index].cancellationRequest=true
         },
-        removeApplication:(state,action:PayloadAction<string>)=>({...state,data:state.data.filter((item,index)=>item._id!=action.payload)}),
+        removeProduct:(state,action:PayloadAction<string>)=>({...state,data:state.data.filter((item,index)=>item._id!=action.payload)}),
         resetproducts:(state,action:PayloadAction)=>({...initialState}),
     }
 })
 
-export const {initproducts,addApplication,updateApplication,removeApplication,resetproducts}=productsSlice.actions;
+export const {initproducts,addProduct,updateProduct,removeProduct,resetproducts}=productsSlice.actions;
 export default productsSlice.reducer;

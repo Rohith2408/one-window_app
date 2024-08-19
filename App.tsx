@@ -5,19 +5,21 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import { ComponentInfo, StackScreen } from './types';
 import Home from './components/screens/Home';
 import Profile from './components/screens/Profile';
-import Navigationcontext from './contexts/PathContext';
+
 import { NavigationReducer } from './reducers/PathReducer';
-import { decodePath, registerForPushNotificationsAsync} from './utils';
+import {  encodePath, registerForPushNotificationsAsync} from './utils';
 import Invalidpath from './components/partials/Invalidpath';
 import Layout from './components/layouts';
 import * as SecureStore from 'expo-secure-store';
 import * as Notifications from 'expo-notifications';
 import { Provider as StoreProvider } from 'react-redux';
 import { store } from './store';
+import Appcontext from './contexts/AppContext';
 
 export default function App() {
 
-  const [path,navigate]=useReducer(NavigationReducer,"onewindow://Student/Base/Profile?tab=home")//"onewindow://Student/base"
+  const [theme,setTheme]=useState<"light"|"dark">("light");
+  const [path,navigate]=useReducer(NavigationReducer,"onewindow://Student/Base?tab=home")//"onewindow://Student/Base/Profile?tab=home"
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
 
@@ -51,17 +53,17 @@ export default function App() {
   };
   },[])
 
-  const decodedData:{screens:string[],props:any}=decodePath(path)
-  console.log("screens data",path,decodedData)
+  const encodedData:{screens:string[],props:any}=encodePath(path)
+  console.log("screens data",path)
 
   return (
     <StoreProvider store={store}>
-      <Navigationcontext.Provider value={{path,navigate}}>
+      <Appcontext.Provider value={{path,navigate,theme,setTheme}}>
         <SafeAreaView style={styles.container} >
-          <Layout component={decodedData.screens[0]} screens={decodedData.screens.filter((screen,i)=>i!=0)} props={decodedData.props} invalidPathScreen={Invalidpath}></Layout>
+          <Layout component={encodedData.screens[0]} screens={encodedData.screens.filter((screen,i)=>i!=0)} props={encodedData.props} invalidPathScreen={Invalidpath}></Layout>
           {/* <Stacknavigator screens={screens} invalidPathScreen={Invalidpath}/> */}
         </SafeAreaView>
-      </Navigationcontext.Provider>
+      </Appcontext.Provider>
     </StoreProvider>
   );
 }

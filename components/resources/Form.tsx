@@ -1,15 +1,19 @@
-import { useReducer, useState } from "react"
+import { useReducer, useRef, useState } from "react"
 import { FormReducer } from "../../reducers/FormReducer";
-import { Event, FormField as FieldType, Form as FormType} from "../../types";
+import { Event, FormField as FieldType, FormData, Form as FormType} from "../../types";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { forms } from "../../constants";
 
-const Form=(props:FormType)=>{
+const Form=(props:{formid:string,forminitialdataid?:string})=>{
 
-    const [fields,dispatch]=useReducer(FormReducer,props.fields);
-    const [focussedField,setFocussedField]=useState(props.initialFocussedField?props.initialFocussedField:-1);
+    // console.log("s",props)
+    const formInfo=useRef(forms.find((form)=>form.id==props.formid)).current
+    const [fields,dispatch]=useReducer(FormReducer,formInfo?formInfo.getInitialData(props.forminitialdataid):[]);
+    const [focussedField,setFocussedField]=useState<string|number|undefined>(undefined);
 
     const eventHandler=async (event:Event)=>{
-        let field=fields.find((field)=>field.id==event.triggerBy)
+        console.log(event)
+        let field=formInfo?.allFields.find((field)=>field.id==event.triggerBy)
         console.log(event,field?.id)
         if(field)
         {
@@ -29,7 +33,7 @@ const Form=(props:FormType)=>{
 
             case field.onFocus?.event:
                 console.log(event.triggerBy)
-                setFocussedField(fields.findIndex((field)=>field.id==event.triggerBy))
+                setFocussedField(event.triggerBy)
                 break;
             }
         }
@@ -49,7 +53,16 @@ const Form=(props:FormType)=>{
         // }
     }
 
-    console.log(JSON.stringify(fields[1],null,2))
+    const onSubmit=async ()=>{
+        let handler=formInfo?.submit.onSubmit;
+        if(handler)
+        {
+            let res=await handler(fields);
+            console.log("res",res);
+        }
+    }
+
+    // console.log("Fields",fields)
 
     return(
         <View style={[styles.mainWrapper]}>
@@ -57,21 +70,22 @@ const Form=(props:FormType)=>{
                 <ScrollView style={{flex:1}} contentContainerStyle={[styles.fields]}>
                 {
                     fields.map((field,i)=>
-                    <Field key={field.id} info={{...field}} isFocussed={focussedField==i?true:false} index={i} eventHandler={eventHandler}></Field>
+                    <Field key={field.id} data={field} info={formInfo?.allFields.find((item)=>field.id==item.id)} isFocussed={focussedField==undefined?false:(focussedField==field.id?true:false)} index={i} eventHandler={eventHandler}></Field>
                     )
                 }
                 </ScrollView>
             </View>
-            <Pressable style={[styles.submitButton]}><Text adjustsFontSizeToFit>{props.submit.idleText}</Text></Pressable>
+            <Pressable onPress={onSubmit} style={[styles.submitButton]}><Text adjustsFontSizeToFit>{formInfo?.submit.idleText}</Text></Pressable>
         </View>
     )
 }
 
-const Field=(props:{info:FieldType,isFocussed:boolean,index:number,eventHandler:(event:Event)=>void})=>{
+const Field=(props:{info:FieldType,data:FormData,isFocussed:boolean,index:number,eventHandler:(event:Event)=>void})=>{
 
     const Container=props.info.componentInfo.component
 
     const eventHandler=async (event:Event)=>{
+        console.log("e",event)
         props.eventHandler({...event,triggerBy:props.info.id})
         // switch(event.name){
         //     case props.info.onUpdate?.event:
@@ -90,7 +104,7 @@ const Field=(props:{info:FieldType,isFocussed:boolean,index:number,eventHandler:
     return(
         <View style={{flex:1,zIndex:props.isFocussed?1:-1}}>
             <Text>{props.info.title}</Text>
-            <Container {...props.info.componentInfo.props} value={props.info.value} isFocussed={props.isFocussed} eventHandler={eventHandler}></Container>
+            <Container {...props.info.componentInfo.props} value={props.data.value} isFocussed={props.isFocussed} eventHandler={eventHandler}></Container>
         </View>
     )
 
@@ -101,7 +115,8 @@ export default Form
 const styles=StyleSheet.create({
     mainWrapper:{
         flex:1,
-        gap:10
+        gap:10,
+        backgroundColor:"white"
     },
     submitButton:{
         flex:1

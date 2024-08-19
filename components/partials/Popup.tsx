@@ -1,18 +1,34 @@
 import { View } from "react-native"
 import { ComponentInfo } from "../../types"
-import { getComponent } from "../../utils"
+import { getComponent, isStringified } from "../../utils"
+import { useEffect, useRef, useState } from "react";
 
-const Popup=(props:{popup:string,popupdata:any})=>{
+const Popup=(props:{popupid:string,popupdata:any})=>{
 
-    console.log("popup",props);
-    const Container:React.FC<any>|undefined=getComponent(props.popup)?.component
+    const popupRef = useRef(null);
+    const Container:React.FC<any>|undefined=getComponent(props.popupid)?.component
+    let params=props.popupdata
+    if(typeof props.popupdata=="string")
+    {
+        params={data:props.popupdata}
+    }
+
+    useEffect(()=>{
+        if (popupRef.current) {
+            popupRef.current.measure((x, y, width,height) => {
+                console.log(width,height);
+            });
+        }
+    },[popupRef.current])
+
+    console.log("pop",params,Container)
 
     return(
-        <View style={{flex:1,backgroundColor:"red"}}>
+        <View ref={popupRef} style={{flex:1,width:"100%",height:"100%",backgroundColor:"pink"}}>
         {
             Container
             ?
-            <Container data={props.popupdata}/>
+            <Container {...params}/>
             :
             null
         }

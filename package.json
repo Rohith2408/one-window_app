@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "8.2.0",
     "@reduxjs/toolkit": "^2.2.7",
     "expo": "~51.0.24",
     "expo-status-bar": "~1.12.1",
@@ -23,7 +24,8 @@
     "expo-device": "~6.0.2",
     "expo-notifications": "~0.28.15",
     "expo-secure-store": "~13.0.2",
-    "expo-constants": "~16.0.2"
+    "expo-constants": "~16.0.2",
+    "expo-image": "~1.12.13"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

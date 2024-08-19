@@ -1,20 +1,30 @@
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native"
 import Gradienttext from "../resources/Gradienttext"
 import useNavigation from "../../hooks/useNavigation";
+import { useRef } from "react";
+import { setComponentInfo } from "../../constants";
 
 
 const Profile=(props:any)=>{
 
     console.log("Profile",props);
-    const Navigation=useNavigation()
+    const [path,navigate]=useNavigation()
+    const containerRef = useRef<any>(null);
+
+    const press=()=>{
+        if (containerRef.current) {
+            containerRef.current.measureInWindow((x, y, width, height) => {
+              setComponentInfo("Popup","customPlacement",{initial:{x:x/Dimensions.get("screen").width,y:y/Dimensions.get("screen").height,opacity:0,scale:0,width:width/Dimensions.get("screen").width,height:height/Dimensions.get("screen").height},final:{x:0.25,y:0.25,opacity:1,scale:0.5,width:0.5,height:0.5}})
+              navigate({type:"AddScreen",payload:{screen:"Popup",params:{popupid:"Error",popupdata:{message:"Hie there"}}}})
+            });
+          }
+    }
 
     return(
         <View style={{width:"100%",height:"100%",backgroundColor:'yellow'}}>
-            {/* <Pressable style={{margin:50}} onPress={()=>Navigation?.navigate({type:"set",payload:{path:"Home",params:{}}})}><Text style={{color:"black"}}>Back</Text></Pressable> */}
-            <View style={[Section1Styles.wrapper]}>
-                <Gradienttext text="Rohith Kumar" fontSize={20} gradient={["#6067C4","#3C4077"]}></Gradienttext>
-                <Text style={[Section1Styles.email]}>Kumarrohith24081999@gmail.com</Text>
-            </View>
+            <Text style={{fontSize:20}}>Rohith Kumar</Text>
+            <Pressable onPress={()=>Navigation?.navigate({type:"AddScreen",payload:{screen:"Workexperience",params:{name:"a"}}})}><Text>Work Experience</Text></Pressable>
+            <Pressable onPress={press} ref={containerRef}  style={{backgroundColor:'red',width:100,height:100,position:"absolute",top:200,left:10}}></Pressable>
         </View>
     )
 }

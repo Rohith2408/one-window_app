@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { StoreAction, StoreItem, WorkExperience } from "../../misc/typeDefinations";
+import {StoreItem, WorkExperience } from "../../types";
 
 let initialState:StoreItem<WorkExperience[]>={
     requestStatus:"not_initiated",

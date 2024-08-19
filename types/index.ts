@@ -1,6 +1,8 @@
 import React from "react"
 import { ImageSourcePropType } from "react-native"
 
+export type Device="MobileS"|"MobileM"|"MobileL"|"Tab"
+
 export interface Event{
     name:string,
     data?:any,
@@ -19,8 +21,24 @@ export type ComponentInfo={
     props:any
 }
 
+export type ScreenInfo={
+    id:string,
+    component:React.FC<any>,
+    props?:string[],
+    type:"Screen"|"Partial"|"Layout"|"Popup",
+    swipeDirection?:"X"|"Y"|"XY",
+    animationStyle?:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTopPartial"|"VerticalSlideToTop"|"Custom",
+    removalThreshold?:number,
+    customPlacement?:{
+        initial:{x:number,y:number,scale:number,opacity:number,height:number,width:number},
+        final:{x:number,y:number,scale:number,opacity:number,height:number,width:number}
+    }
+}
+
 export type Form={
+    id:string,
     fields:FormField[],
+    initialFormData:FormData[],
     submit:{
         onSubmit:(fields:FormField[])=>void,
         successText:string,
@@ -37,16 +55,21 @@ export type FormField={
         props:any
     },
     title:string,
-    value:any,
+    //value:any,
     // isFocussed:boolean,
     onUpdate?:{
         event:string,
-        handler?:(fields:FormField[],data:any)=>FormField[]
+        handler?:(fields:FormData[],data:any)=>FormData[]
     },
     onFocus?:{
         event:string,
         handler?:any
     }
+}
+
+export type FormData={
+    id:string,
+    value:any
 }
 
 export type ListItem={
@@ -83,11 +106,6 @@ export type StackScreen={
     swipable:boolean,
     component:string,
     props:any,
-    animationStyle?:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTopPartial"|"VerticalSlideToTop"|"VerticalSlideToBottom"|"Custom",
-    initialPosition?:{
-        top:number,
-        left:number
-    }
 }
 
 export type TabNavigator={
@@ -384,7 +402,15 @@ export interface Application{
     __v: number
 }
 
-export interface serverResponse{
+export type ServerRequest={
+    url:string,
+    reqType:"GET"|"PUT"|"DELETE"|"POST",
+    responseType?:"JSON"|"BLOB",
+    routeType?:"public"|"private",
+    body?:any
+}
+
+export interface ServerResponse{
     success:boolean,
     data:any,
     message:string,
@@ -507,6 +533,83 @@ export interface UniversityListObj{
     graduationRate: string
 }
 
+export interface Course{
+    location: Location,
+    tuitionFee?:{
+        tuitionFee: number,
+        tuitionFeeType:string
+    },
+    stemDetails: {
+        stem: boolean
+    }
+    AdmissionsRequirements?: {
+        LanguageRequirements?: {
+            _id: string,
+            testName: string,
+            Accepted: string,
+            minScore: number
+        }[],
+        AcademicRequirements?: {
+            _id: string,
+            testName: string,
+            required:string,
+            minScore: string
+        }[],
+        generalRequirements?: string[]
+    },
+    currency?: {
+        symbol: string,
+        code: string
+    },
+    applicationDetails: {
+        applicationFee: string,
+        applicationFeeLink:string
+    },
+    _id: string,
+    university?: {
+        location?:Location,
+        currency?: {
+            symbol: string,
+            code:string
+        },
+        _id: string,
+        name: string,
+        logoSrc: string,
+        type: string,
+        establishedYear:number,
+        ranking?: {
+            _id: string,
+            rank:number,
+            source: string
+        }[],
+        cost?:{
+            name: string,
+            lowerLimit: number,
+            upperLimit: number,
+            _id: string
+        }[]
+    },
+    name: string,
+    subDiscipline: string,
+    schoolName: string,
+    about:string,
+    discipline: string,
+    studyLevel:string,
+    totalCredits:string,
+    duration: string,
+    studyMode: string[],
+    startDate?:{
+        _id:string,
+        courseStarting:string,
+        Deadline: string,
+        courseStartingMonth: number,
+        deadlineMonth: number
+    }[],
+    type: string,
+    unisName: string,
+    elite: true
+}
+
 export interface CourseListObj{
     tuitionFee: {
         tuitionFee: number,
@@ -526,7 +629,8 @@ export interface CourseListObj{
         name: string,
         logoSrc: string,
         type: string,
-        uni_rating: number
+        //uni_rating: number,
+        establishedYear:number
     },
     name:  string,
     subDiscipline: string,
@@ -541,7 +645,8 @@ export interface CourseListObj{
         Deadline: string,
         courseStartingMonth: number,
         deadlineMonth: number
-    }[]
+    }[],
+    elite:boolean
 }
 
 export interface EducationHistory{
@@ -663,6 +768,39 @@ export interface Documents{
     }
 }
 
+export interface Personalinfo{
+    DOB?: string,
+    Gender?: string, // enum
+    temporaryAddress?:Address,
+    permanentAddress?: Address,
+    nationality?: string,// enum
+    countyOfBirth?: string, // enum
+    maritalStatus?: string, // enum 
+    validPassport?: string,// enum yes no and processing
+    validPermit?: string,// enum yes no and processing,
+    visaRejectedDetails?: string,
+}
+
+export interface Sharedinfo{
+    _id?:string,
+    firstName?:string,
+    lastName?:string,
+    displayPicSrc?:string,
+    email?:string,
+    phone?:Phone,
+    LeadSource?: string,
+    isPlanningToTakeAcademicTest: boolean,
+    isPlanningToTakeLanguageTest: boolean,
+    
+}
+
+export type ResearchPaper={
+    title: string,
+    publication: string,
+    fieldOfStudy: "entertainment"|"finance"|"medical"|"information technology"| "education"| "textile"| "media and news"| "food processing"|"hospitality"|"construction and engineering"| "law"|"paper"| "real estate"| "automobile"| "aviation"|"pharmaceutical"|"fertilizers"|"advertising"|"metallurgy"| "energy"|"telecommunications"|"retail"| "manufacturing"|"agriculture"|"chemicals"| "transportation and logistics"|"consumer goods"| "healthcare",
+    publishedDate: Date,
+}
+
 export type Preferences={
     degree?: string,
     intake?: Date,
@@ -744,3 +882,180 @@ export interface Advisor{
     },
     _id: string
 }
+
+export interface Meeting_Server{
+    _id:string,
+    user: User,
+    member: User,
+    data: {
+      kind: string,
+      etag:string,
+      id: string,
+      status: string,
+      htmlLink: string,
+      created: string,
+      updated:  string,
+      summary:  string,
+      description:  string,
+      creator: {
+        email:  string,
+        self:boolean
+      },
+      organizer: {
+        email:  string,
+        self: boolean
+      },
+      start: {
+        dateTime:  string,
+        timeZone:  string
+      },
+      end: {
+        dateTime:  string,
+        timeZone:  string
+      },
+      iCalUID:  string,
+      sequence: number,
+      attendees: {
+        email: string,
+        responseStatus: string
+      }[],
+      hangoutLink: string,
+      conferenceData: {
+        createRequest: {
+          requestId: string,
+          conferenceSolutionKey: {
+            type: string
+          },
+          status: {
+            statusCode: string
+          }
+        },
+        entryPoints: {
+            entryPointType: string,
+            uri: string,
+            label:string
+          }[],
+        conferenceSolution: {
+          key: {
+            type: string
+          },
+          name: string,
+          iconUri: string
+        },
+        conferenceId: string
+      },
+      reminders: {
+        useDefault: false,
+        overrides: {
+            method: string,
+            minutes: number
+          }[]
+      },
+      eventType: string
+    },
+    status: string,
+    createdAt: string,
+    updatedAt: string,
+    __v: number
+}
+
+export interface Product{
+    info: {
+        notes: string[],
+        questionnaire: string[]
+    },
+    _id: string,
+    course:CourseListObj,
+    intake: string, //ex. 2024-11-30T18:30:00.000Z
+    deadline: string, //ex. 2024-11-30T18:30:00.000Z
+    user: string,
+    category: string,
+    cancellationRequest: boolean,
+    advisors: string[],//ex. ids
+    docChecklist:  {
+        name: string,
+        isChecked: false,
+        doc: Document,
+        _id: string
+    }[],
+    log: {
+        status: string,
+        stages: {
+            name: string,
+            updatedAt: string,
+            _id: string
+        }[],
+        _id: string
+    }[],
+    __v: 10,
+    createdAt:string, //ex. "2024-08-03T08:05:42.665Z"
+    updatedAt: string, //ex. "2024-08-03T08:05:42.665Z"
+    order: string,
+    stage: string,
+    status:string
+}
+
+export interface Order{
+    paymentDetails: {
+        razorpay_order_id: string,
+        amount: number,
+        amount_due: number,
+        created_at: string,
+        currency: string,
+        paymentStatus:string,
+        misc: {
+            id: string,
+            entity: string,
+            amount: number,
+            amount_paid: number,
+            amount_due: number,
+            currency: string,
+            receipt: null,
+            offer_id: null,
+            status: string,
+            attempts: number,
+            notes: {
+                item_ids: {
+                    package: string,
+                    products: string[]
+                },
+                note_key: string
+            },
+            created_at: number
+        }
+    },
+    _id: string,
+    Package:Package,
+    products: Product[],
+    status: string,
+    logs: {
+        action: string,
+        time: string,//ex.2024-08-02T20:48:24.751Z
+        details: string,// ex. "{\"note_key\":\"purchase initiated by Rohith Kumar\",\"item_ids\":{\"package\":null,\"products\":[\"66ad463cedb6f560dea4327a\",\"66ad463cedb6f560dea4327b\"]}}"
+        _id: string
+    }[]
+}
+
+export interface Package{
+    priceDetails: {
+        currency: {
+            symbol: string,
+            code: string
+        },
+        totalPrice: number
+    },
+    _id: string,
+    name: string,
+    description: string,
+    country: string[],
+    requirements: string[],
+    benefits: string[],
+    termsAndConditions: string
+    active: boolean,
+    products: {
+        _id:string,
+        category: string,
+        quantity:number
+    }[]
+}
+

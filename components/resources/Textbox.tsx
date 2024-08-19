@@ -5,7 +5,7 @@ const Textbox=(props:{placeholder:string,eventHandler:(event:Event)=>void,value:
 
     return(
         <View style={{flex:1}}>
-            <TextInput onFocus={()=>props.eventHandler({name:"onFocus",triggerBy:"textinput"})} placeholder={props.placeholder} value={props.value}></TextInput>
+            <TextInput onChangeText={(value)=>props.eventHandler({name:"onTextInputl",data:value,triggerBy:"textinput"})} onFocus={()=>props.eventHandler({name:"onFocus",triggerBy:"textinput"})} placeholder={props.placeholder} value={props.value}></TextInput>
         </View>
     )
 }

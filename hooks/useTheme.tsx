@@ -1,10 +1,9 @@
 import { useContext } from "react"
 import Appcontext from "../contexts/AppContext"
 
-
-const useNavigation=()=>{
+const useTheme=()=>{
     const context=useContext(Appcontext)
-    return [context?.path,context?.navigate] as const
+    return [context?.theme,context?.setTheme]
 }
 
-export default useNavigation
+export default useTheme

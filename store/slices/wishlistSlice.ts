@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { StoreItem, wishlistItem } from "../../misc/typeDefinations";
+import { StoreItem, wishlistItem } from "../../types";
+
 
 let initialState:StoreItem<wishlistItem[]>={
     requestStatus:"not_initiated",

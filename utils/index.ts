@@ -1,7 +1,6 @@
-import { Platform } from "react-native";
-import ComponentsInfo from "../components/info";
-import { baseAppUrl, secureStore } from "../constants";
-import { Chat, Message, Participant, StackScreen, serverResponse } from "../types";
+import { Dimensions, Platform } from "react-native";
+import { baseAppUrl,secureStoreKeys } from "../constants";
+import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo } from "../types";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
@@ -26,11 +25,29 @@ import { resetVerification } from "../store/slices/verificationSlice";
 import { resetWorkExperience } from "../store/slices/workexperienceSlice";
 import { resetSharedinfo } from "../store/slices/sharedinfoSlice";
 import { baseURL, endPoints } from "../constants/server";
+import {components} from "../constants/components";
+
+export const propsMapper=(screens:string[],params:any|undefined)=>{
+  return screens.map((screen)=>{
+      let requiredKeys=components.find((item)=>item.id==screen)?.props
+      return {id:screen,props:requiredKeys?requiredKeys.reduce((acc,curr,i)=>{acc[curr]=(params?params[curr]:undefined);return acc},{}):undefined}
+  })
+}
 
 export const formatQueryParamsToString=(params:any)=>{
+  console.log("params",params)
     let keys=Object.keys(params);
     let values=Object.values(params);
-    return keys.reduce((acc,current,index)=>acc+(current+"="+values[index])+(index==(keys.length-1)?"":"&"),"")
+    return keys.reduce((acc, current, index) => 
+      acc + 
+      (current + "=" + 
+          (typeof values[index] === "string" 
+              ? values[index] 
+              : JSON.stringify(values[index])
+          )
+      ) + 
+      (index === keys.length - 1 ? "" : "&"), 
+    "")
 }
 
 export const formatQueryParamsToObj=(queryString:string)=>{
@@ -44,12 +61,33 @@ export const formatQueryParamsToObj=(queryString:string)=>{
     pairs.forEach(pair => {
       const [key, value] = pair.split('=');
       const decodedKey = decodeURIComponent(key);
-      const decodedValue = decodeURIComponent(value); 
-      result[decodedKey] = isNaN(Number(decodedValue)) ? decodedValue : Number(decodedValue);      });
+      const decodedValue = decodeURIComponent(value)
+      if(isStringified(decodedValue))
+      {
+        result[decodedKey] = JSON.parse(decodedValue);
+      }
+      else
+      {
+        result[decodedKey] = isNaN(Number(decodedValue)) ? decodedValue : Number(decodedValue);
+      }})
     return result;
 }
 
-export const decodePath=(path:string)=>{
+export const isStringified=(str:string)=>{
+    let parsedValue;
+    try {
+      parsedValue = JSON.parse(str);
+      if (typeof parsedValue !== 'string') {
+        return true
+      } else {
+        return false
+      }
+    } catch (error) {
+      return false
+    }
+}
+
+export const encodePath=(path:string)=>{
     let truncatedPath="/"+path.replace(baseAppUrl,"");
     let slashIndexs=getAllCharOccurences(truncatedPath,"/");
     let paramIndex=truncatedPath.indexOf("?")
@@ -60,6 +98,9 @@ export const decodePath=(path:string)=>{
     } 
 }
 
+export const decodePath=(data:{screens:string[],props:any})=>{
+  return baseAppUrl+data.screens[0]+(data.screens.filter((screen,i)=>i!=0).reduce((acc,screen)=>acc+"/"+screen,""))+(data.props?("?"+formatQueryParamsToString(data.props)):"")
+}
 
 export const getAllCharOccurences=(str:string, char:string)=>{
     let regex = new RegExp(char, 'g');
@@ -72,7 +113,7 @@ export const getAllCharOccurences=(str:string, char:string)=>{
 }
 
 export const getComponent=(id:string)=>{
-  return ComponentsInfo.find((component)=>component.id==id)
+  return components.find((component)=>component.id==id)
 }
 
 export async function registerForPushNotificationsAsync() {
@@ -116,83 +157,37 @@ export async function registerForPushNotificationsAsync() {
   }
 }
 
-export const checkAccessToken=async ()=>{
-  let res:serverResponse={
+export const serverRequest=async (requestData:ServerRequest)=>{
+  let res:ServerResponse={
     success:true,
     message:"",
     data:undefined
   };
-  let accessToken;
-  try{
-      accessToken=await SecureStore.getItemAsync(secureStore.ACCESS_TOKEN)
-  }
-  catch(e){
-      console.log(e);
-  }
-  if(!accessToken)
+  let accessToken=await SecureStore.getItemAsync(secureStoreKeys.ACCESS_TOKEN)
+  if(accessToken?.length==0 && requestData.routeType=="private")
   {
-      // res.success=false;
-      // res.message="no access token found"
-      // store.dispatch(setUserAuthStatus({
-      //     isAuthorized: false,
-      //     isRegistered: true,
-      //     role: 'guest'
-      // }))
-      //reset the store
+    res.success=false
+    res.message="Not allowed"
   }
   else
   {
-      res.success=true;
-      res.message="access token found"
-      res.data=accessToken;
-  }
-  return res;
-}
-
-export const processServerResponse=async (serverRes:any,resType:"blob"|"json")=>{
-  let res:serverResponse={
-      success:true,
-      message:"",
-      data:undefined
-  };
-  switch(resType){
-      case "blob":
-          res={success:true,data:await serverRes.blob(),message:''}
-          break;
-
-      case "json":
-          res=await serverRes.json()
-          break;
-
-  }
-  if(!res.success)
-  {
-      // store.dispatch(setPopup({
-      //     show:true,
-      //     data:{
-      //         container:{
-      //             name:"errorpopup",
-      //             data:res.message,
-      //             dimensions:{
-      //                 width:Dimensions.get("screen").width*0.6,
-      //                 height:Dimensions.get("screen").width*0.6
-      //             }
-      //         },
-      //         headerIcon:face_icon,
-      //         type:"custom",
-      //         showTitle:false
-      //     }
-      // }))
-      if(res.message==server.LOGIN_AGAIN)
-      {
-          store.dispatch(setUserAuthStatus({
-              isAuthorized: false,
-              isRegistered: true,
-              role: 'guest'
-          }))
+      let fetchObj:RequestInit={
+        headers:{"Authorization":"Bearer "+accessToken},
+        method:requestData.reqType,
+        body:JSON.stringify({...requestData.body})
       }
+      requestData.routeType=="public"?delete fetchObj.headers:null
+      !requestData.body?delete fetchObj.body:null
+      console.log("url",requestData)
+      let serverRes=await fetch(requestData.url,fetchObj);
+      let data:ServerResponse=requestData.responseType=="JSON"||requestData.responseType==undefined?await serverRes.json():{success:true,message:"",data:await serverRes.blob()}
+      console.log("server res",data);
+      if(data.AccessToken)
+      {
+        await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,data.AccessToken)
+      }
+      res={...data}
   }
-  (res.AccessToken!=undefined)?await SecureStore.setItemAsync(secureStore.ACCESS_TOKEN,res.AccessToken):null
   return res
 }
 
@@ -370,14 +365,40 @@ export const bakeMessagesWithSeenInfo=(messages:Message[],participants:Participa
   return list
 }
 
-const getRequestObj=(endpointId:string,queryParams?:any,body?:any)=>{
+export const getServerRequestURL=(endpointId:string,reqType:"GET"|"PUT"|"DELETE"|"POST",queryParams?:any)=>{
+  // console.log("params",queryParams)
   let endObj=endPoints.find((item)=>item.id==endpointId)
   let endpoint=baseURL+"/"+endObj?.category+"/"+endObj?.tail
-  let obj={
-    url:endpoint+queryParams?("?"+formatQueryParamsToString(queryParams)):"",
-    body:{...body}
+  return endpoint+(queryParams?("?"+formatQueryParamsToString(queryParams)):"")
+}
+
+export const editProfileServerRequest=async (data:any)=>{
+  const res:ServerResponse=await serverRequest({
+      url: getServerRequestURL("profile","PUT"),
+      reqType: "GET",
+      body:JSON.stringify(data)
+    }
+  )
+  return res;
+}
+
+export const getDevice=()=>{
+  let width=Dimensions.get("screen").width
+  if(width>=320 && width<=375)
+  {
+    return "MobileS"
   }
-  !body?delete obj.body:null
-  return obj
+  if(width>375 && width<=420)
+  {
+    return "MobileM"
+  }
+  if(width>420 && width<=480)
+  {
+    return "MobileL"
+  }
+  if(width>480)
+  {
+    return "Tab"
+  }
 }
 

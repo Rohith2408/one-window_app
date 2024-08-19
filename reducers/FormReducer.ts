@@ -1,4 +1,4 @@
-import { FormField, Form } from "../types";
+import { FormData, Form } from "../types";
 
 export type FormAction=
     {
@@ -11,13 +11,13 @@ export type FormAction=
     {
         type:"set",
         payload:{
-            fields:FormField[]
+            fields:FormData[]
         }
     }|
     {
         type:"reset",
         payload:{
-            initialValue:FormField[]
+            initialValue:FormData[]
         }
     }|
     {
@@ -25,7 +25,7 @@ export type FormAction=
     }
 
 
-export const FormReducer=(state:FormField[],action:FormAction)=>{
+export const FormReducer=(state:FormData[],action:FormAction)=>{
     switch(action.type){
         case "update":
             //const currentField=state.find((field)=>field.id==action.payload.id)

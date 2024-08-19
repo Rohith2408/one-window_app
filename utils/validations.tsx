@@ -1,4 +1,4 @@
-const validations={
+export const validations={
     EMAIL:{regex:/^[^\s@]+@[^\s@]+\.[^\s@]+$/,errorMessage:"Please enter a valid email"},
     PASSWORD:{regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{9,}$/,errorMessage:"Password neeeds to be greater than 8 characters,have atleast one upper and lowercase alphabet,have atleast one special character"},
     FIRSTNAME:{regex:/^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/,errorMessage:"Invalid first name"},

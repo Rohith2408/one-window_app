@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import {  Advisor, StoreItem, User } from "../../misc/typeDefinations";
+import {  Advisor, StoreItem, User } from "../../types";
 
 let initialState:StoreItem<Advisor[]|undefined>={
     requestStatus:"not_initiated",
@@ -16,9 +16,10 @@ const AdvisorsSlice=createSlice({
         setAdvisors:(state,action:PayloadAction<Advisor[]>)=>{state.data=action.payload},
         initAdvisors:(state,action:PayloadAction<StoreItem<Advisor[]>>)=>({...action.payload}),
         addAdvisor:(state,action:PayloadAction<StoreItem<Advisor>>)=>{
-            let existingAdvisor=state.data.findIndex((item)=>action.payload.data.info._id==item.info._id)
+            
+            let existingAdvisor=state.data?.findIndex((item)=>action.payload.data.info._id==item.info._id)
             if(existingAdvisor==-1){
-                state.data.push(action.payload.data);
+                state.data?.push(action.payload.data);
             }
             else{
                 state.data[existingAdvisor]=action.payload.data

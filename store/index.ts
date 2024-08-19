@@ -25,6 +25,10 @@ import verificationSlice from "./slices/verificationSlice";
 import meetingsSlice from "./slices/meetingsSlice";
 import advisorsSlice from "./slices/advisorsSlice";
 import recommendationsSlice from "./slices/recommendationsSlice";
+import productsSlice from "./slices/productsSlice";
+import cartSlice from "./slices/cartSlice";
+import wishlistSlice from "./slices/wishlistSlice";
+import suggestedpackageSlice from "./slices/suggestedpackageSlice";
 
 const store = configureStore({
         reducer:{
@@ -52,8 +56,12 @@ const store = configureStore({
             userauthstatus:userAuthStatusSlice,
             error:errorSlice,
             notifications:notificationsSlice,
-            applayout:appLayoutSlice,
+            // applayout:appLayoutSlice,
             popup:popupSlice,
+            products:productsSlice,
+            cart:cartSlice,
+            wishlist:wishlistSlice,
+            suggestedpackages:suggestedpackageSlice
         }
     });
 
