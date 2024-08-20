@@ -30,7 +30,9 @@ export type NavigationActions=
     }|
     {
         type:"Logout",
-        //payload:null
+    }|
+    {
+        type:"Login",
     }
 
 export const NavigationReducer=(state:string,action:NavigationActions)=>{
@@ -73,7 +75,12 @@ export const NavigationReducer=(state:string,action:NavigationActions)=>{
             break;
 
         case "Logout":
+            console.log("urlllllll",baseAppUrl+"Login/Loginbase")
             return baseAppUrl+"Login/Loginbase"
+            break;
+
+        case "Login":
+            return baseAppUrl+"Student/Base?tab=home"
             break;
     }
 }

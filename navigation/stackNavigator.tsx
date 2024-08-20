@@ -5,6 +5,8 @@ import useNavigation from "../hooks/useNavigation"
 import { getComponent } from "../utils"
 import React from "react"
 import { components } from "../constants"
+import back_icon from '../assets/images/misc/back.png'
+import { Image } from "expo-image"
 
 const Stacknavigator=(props:StackNavigator)=>{
 
@@ -18,7 +20,7 @@ const Stacknavigator=(props:StackNavigator)=>{
             <View style={{width:'100%',height:"100%"}}>
             {
                 props.screens.map((screen:StackScreenType,i)=>
-                <StackScreen key={screen.id} {...screen} swipable={i==0?false:true}/>
+                <StackScreen key={screen.id} {...screen} index={i}/>
                 )
             }
             </View>
@@ -29,7 +31,7 @@ const Stacknavigator=(props:StackNavigator)=>{
     )
 }
 
-const StackScreen=React.memo((props:StackScreenType)=>{
+const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
 
   const screenInfo=useRef(components.find((component)=>component.id==props.id)).current
   const getState=(type:"initial"|"final")=>{
@@ -59,7 +61,7 @@ const StackScreen=React.memo((props:StackScreenType)=>{
   const width=useRef(new Animated.Value(initialState?initialState.opacity:0)).current;
   const height=useRef(new Animated.Value(initialState?initialState.scale:0)).current
   const swipeThreshold = 100;
-  const Navigation=useNavigation();
+  const [path,navigate]=useNavigation();
   console.log(screenInfo,getState("initial"),getState("final"));
 
   const getCurrentPosition=()=>(currentState.current)
@@ -163,7 +165,7 @@ const StackScreen=React.memo((props:StackScreenType)=>{
       {property:opacity,value:initialState?initialState.opacity:0,duration:duration},
       {property:width,value:initialState?initialState.width:0,native:false,duration:duration},
       {property:height,value:initialState?initialState.height:0,native:false,duration:duration},
-    ],()=>{Navigation?.navigate({type:"RemoveScreen"})})
+    ],()=>{navigate?navigate({type:"RemoveScreen"}):null})
   }
 
   const Container=getComponent(props.component)?.component
@@ -171,28 +173,28 @@ const StackScreen=React.memo((props:StackScreenType)=>{
   return(
       <Animated.View key={props.id} style={[styles.screenWrapper,{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
         {
-          props.swipable && screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY"
+          props.index!=0 && screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY"
           ?
           <View {...panResponder.panHandlers} style={[styles.swipeStripL]}></View>
           :
           null
         }
         {
-          props.swipable && screenInfo?.swipeDirection=="Y" || screenInfo?.swipeDirection=="XY"
+          props.index!=0 && screenInfo?.swipeDirection=="Y" || screenInfo?.swipeDirection=="XY"
           ?
           <View {...panResponder.panHandlers} style={[styles.swipeStripT]}></View>
           :
           null
         } 
         {
-          props.swipable && screenInfo?.swipeDirection=="XY"
+          props.index!=0 && screenInfo?.swipeDirection=="XY"
           ?
           <View {...panResponder.panHandlers} style={[styles.swipeStripR]}></View>
           :
           null
         }
         {
-          props.swipable && screenInfo?.swipeDirection=="XY"
+          props.index!=0 && screenInfo?.swipeDirection=="XY"
           ?
           <View {...panResponder.panHandlers} style={[styles.swipeStripB]}></View>
           :
@@ -200,9 +202,9 @@ const StackScreen=React.memo((props:StackScreenType)=>{
         }
         <View style={[styles.screen]}>
           {
-            screenInfo?.type=="Partial"
+            screenInfo?.type=="Partial" && props.index!=0
             ?
-            <Pressable style={[styles.back]} onPress={()=>{back(200)}}><Text>Back</Text></Pressable>
+            <Pressable style={[styles.back]} onPress={()=>{back(200)}}><Image source={back_icon} style={[styles.back_icon]}></Image></Pressable>
             :
             null
           }
@@ -322,11 +324,12 @@ const styles=StyleSheet.create({
     screen:{
       width:"100%",
       height:"100%",
-      paddingLeft:0.04*Dimensions.get("screen").width,
-      paddingRight:0.04*Dimensions.get("screen").width,
-      paddingTop:0.04*Dimensions.get("screen").width
+      paddingLeft:0.06*Dimensions.get("screen").width,
+      paddingRight:0.06*Dimensions.get("screen").width,
+      paddingTop:0.06*Dimensions.get("screen").width
     },
     back:{
+      backgroundColor:"white"
       // paddingTop:0.04*Dimensions.get("screen").width
     },
     swipeStripL:{
@@ -335,7 +338,7 @@ const styles=StyleSheet.create({
       top:0,
       width:0.04*Dimensions.get("screen").width,
       position:"absolute",
-      backgroundColor:'black',
+      //backgroundColor:'black',
       zIndex:1
     },
     swipeStripR:{
@@ -364,6 +367,11 @@ const styles=StyleSheet.create({
       position:"absolute",
       backgroundColor:'black',
       zIndex:1
+    },
+    back_icon:{
+      width:12,
+      height:12,
+      objectFit:'contain'
     }
 })
 

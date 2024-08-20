@@ -2,7 +2,8 @@ import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native"
 import Gradienttext from "../resources/Gradienttext"
 import useNavigation from "../../hooks/useNavigation";
 import { useRef } from "react";
-import { setComponentInfo } from "../../constants";
+import { secureStoreKeys, setComponentInfo } from "../../constants";
+import * as SecureStore from 'expo-secure-store'
 
 
 const Profile=(props:any)=>{
@@ -20,11 +21,17 @@ const Profile=(props:any)=>{
           }
     }
 
+    const logout=async ()=>{
+        await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,"");
+        navigate?navigate({type:"Logout"}):null
+    }
+
     return(
         <View style={{width:"100%",height:"100%",backgroundColor:'yellow'}}>
             <Text style={{fontSize:20}}>Rohith Kumar</Text>
-            <Pressable onPress={()=>Navigation?.navigate({type:"AddScreen",payload:{screen:"Workexperience",params:{name:"a"}}})}><Text>Work Experience</Text></Pressable>
+            <Pressable onPress={()=>navigate?navigate({type:"AddScreen",payload:{screen:"Workexperience",params:{name:"a"}}}):null}><Text>Work Experience</Text></Pressable>
             <Pressable onPress={press} ref={containerRef}  style={{backgroundColor:'red',width:100,height:100,position:"absolute",top:200,left:10}}></Pressable>
+            <Pressable onPress={logout}><Text>Logout</Text></Pressable>
         </View>
     )
 }

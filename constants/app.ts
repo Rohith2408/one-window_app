@@ -8,5 +8,14 @@ const Themes={
         OnewindowYellow:(opacity:number)=>"rgba(250, 234, 208,"+opacity+")"
     }
 }
+const Fonts={
+    NeutrifStudio:{
+        ExtraBold:"NeutrifStudio-ExtraBold",
+        Bold:"NeutrifStudio-Bold",
+        SemiBold:"NeutrifStudio-SemiBold",
+        Medium:"NeutrifStudio-Medium",
+        Regular:"NeutrifStudio-Regular"
+    }
+}
 
-export {baseAppUrl,Themes}
+export {baseAppUrl,Themes,Fonts}

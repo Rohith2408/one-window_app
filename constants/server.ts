@@ -1,5 +1,6 @@
 const serverResponses={
-    LOGIN_AGAIN:"Token Verification Failed"
+    VerificationFailed:"Token Verification Failed",
+    TokenMissing:"Access Token Missing"
 }
 
 const endPoints=[
@@ -171,13 +172,16 @@ const endPoints=[
         
     },
     {
-        ENUM:"listings/universities",
-        TYPE:"public",
-        
+        id:"universities",
+        category:"public",
+        tail:"listings/universities",
+        type:"POST",
     },
     {
-        ENUM:"listings/courses",
-        TYPE:"public",
+        id:"programs",
+        category:"public",
+        tail:"listings/courses",
+        type:"POST",
         
     },
     {

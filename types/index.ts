@@ -9,6 +9,29 @@ export interface Event{
     triggerBy:string | number
 }
 
+export type ListInfo={
+    id:string,
+    card:React.FC<any>,
+    filters:{
+        additional:FilterInfo[],
+        quick:FilterInfo[]
+    },
+    listFetcher:(search:string,appliedFilters:AppliedFilter[],page:number)=>Promise<ServerResponse>
+}
+
+export type AppliedFilter={
+    type:string,
+    data:ListItem[]
+}
+
+export type FilterInfo={
+    type:string,
+    title:string,
+    handler:(currentAppliedFilter:AppliedFilter[],data:any)=>AppliedFilter[]
+    icon:string,
+    container:React.FC<any>
+}
+
 export type Endpoint={
     category:string,
     tail:string,
@@ -25,7 +48,7 @@ export type ScreenInfo={
     id:string,
     component:React.FC<any>,
     props?:string[],
-    type:"Screen"|"Partial"|"Layout"|"Popup",
+    type:"Screen"|"Partial"|"Layout"|"Popup"|"Flyer",
     swipeDirection?:"X"|"Y"|"XY",
     animationStyle?:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTopPartial"|"VerticalSlideToTop"|"Custom",
     removalThreshold?:number,
@@ -83,9 +106,16 @@ export type Dropdown={
         value:string
     }[],
     selectionMode:"single"|"multi",
-    value:ListItem,
     isFocussed:boolean,
     eventHandler:(event:Event)=>void
+}
+
+export type List<type>={
+    direction:"Horizontal"|"Vertical",
+    mode:"Swipe"|"Scroll",
+    card:React.FC<type>,
+    cardDimensions?:{width:number,height:number},
+    list:type[]
 }
 
 export type Layout={
@@ -103,7 +133,6 @@ export type StackNavigator={
 
 export type StackScreen={
     id:string,
-    swipable:boolean,
     component:string,
     props:any,
 }

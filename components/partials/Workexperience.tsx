@@ -4,13 +4,13 @@ import useNavigation from "../../hooks/useNavigation"
 
 const Workexperience=(props:any)=>{
 
-    const Navigation=useNavigation()
+    const [path,navigate]=useNavigation()
     useEffect(()=>{
 
     },[])
 
     const openForm=()=>{
-        Navigation?.navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Workexperience"}}})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Workexperience"}}}):null
     }
 
     const openFlyer=()=>{

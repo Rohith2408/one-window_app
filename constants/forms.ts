@@ -8,17 +8,18 @@ import { getServerRequestURL, serverRequest } from "../utils";
 const forms=[
     {
         id:"Workexperience",
+        title:"Please provide your Work Experience",
         getInitialData:(id:string|undefined)=>{
             let data:WorkExperience|undefined=id?store.getState().workexperience.data.find((item)=>item._id==id):undefined
             return [
                 {id:"companyname",value:data?data.companyName:""},
                 {id:"ongoing",value:data?data.Ongoing:""},
+                {id:"worktype",value:data?data.type:[]},
                 {id:"designation",value:data?data.designation:""},
                 {id:"document",value:data?data.docId:""},
                 {id:"enddate",value:data?data.endDate:""},
                 {id:"sector",value:data?data.sector:""},
-                {id:"startdate",value:data?data.startDate:""},
-                {id:"worktype",value:data?data.type:""}
+                {id:"startdate",value:data?data.startDate:""}
             ]
         },
         submit:{

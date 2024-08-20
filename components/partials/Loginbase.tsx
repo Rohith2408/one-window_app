@@ -4,14 +4,30 @@ import { Event, ServerResponse } from "../../types"
 import { getServerRequestURL, serverRequest } from "../../utils"
 import { validations } from "../../utils/validations"
 import useNavigation from "../../hooks/useNavigation"
-import * as SecureStore from 'expo-secure-store';
-import { secureStoreKeys } from "../../constants"
+
+const GeneralStyles=StyleSheet.create({
+    main_wrapper:{
+        width:"100%",
+        height:"100%",
+        display:"flex",
+        flexDirection:"column",
+        // backgroundColor:"red"
+    },
+    email:{
+        borderBottomColor:"black",
+        borderBottomWidth:1
+    },
+    password:{
+        borderBottomColor:"black",
+        borderBottomWidth:1
+    }
+})
 
 const Loginbase=(props:{auth:string})=>{
 
     const [email,setEmail]=useState("kumarrohith24081999@gmail.com")
     const [password,setPassword]=useState("Rohith")
-    const Navigation=useNavigation()
+    const [path,navigate]=useNavigation()
 
     const login=async (email:string,password:string)=>{
         let validEmail=validations.EMAIL.regex.test(email)
@@ -21,14 +37,12 @@ const Loginbase=(props:{auth:string})=>{
             let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:email,password:password}})
             if(res.success)
             {
-                //SecureStore.getItemAsync(secureStoreKeys.ACCESS_TOKEN).then((res)=>console.log("AT",res))
-                Navigation?.navigate({type:"SetLayout",payload:{layoutScreen:"Student",screens:["Base"],params:{tab:"profile"}}})
+                navigate?navigate({type:"Login"}):null
             }
         }
         if(validEmail && !validPassword)
         {
             console.log("invalid password")
-            //Navigation?.navigate({type:"AddScreen",payload:{screen:"Popup",params:{popupcontainer:"Error",popupdata:{message:"Check your password!"}}}})
         }
         if(!validEmail && validPassword){
 
@@ -144,33 +158,19 @@ const Loginbase=(props:{auth:string})=>{
         // login(email,password)
     },[])
 
-    console.log("login base ",props)
-
     return(
-        <View>
+        <View style={[GeneralStyles.main_wrapper]}>
             <View>
                 <Text>Email</Text>
-                <TextInput onChangeText={(text)=>eventHandler({name:"emailInput",triggerBy:"email",data:text})} style={[styles.email]}>{email}</TextInput>
+                <TextInput onChangeText={(text)=>eventHandler({name:"emailInput",triggerBy:"email",data:text})} style={[GeneralStyles.email]}>{email}</TextInput>
             </View>
             <View>
                 <Text>Password</Text>
-                <TextInput onChangeText={(text)=>eventHandler({name:"passwordInput",triggerBy:"password",data:text})} style={[styles.password]}>{password}</TextInput>
+                <TextInput onChangeText={(text)=>eventHandler({name:"passwordInput",triggerBy:"password",data:text})} style={[GeneralStyles.password]}>{password}</TextInput>
             </View>
             <Pressable onPress={()=>login(email,password)}><Text>Login</Text></Pressable>
         </View>
     )
-
 }
 
 export default Loginbase
-
-const styles=StyleSheet.create({
-    email:{
-        borderBottomColor:"black",
-        borderBottomWidth:1
-    },
-    password:{
-        borderBottomColor:"black",
-        borderBottomWidth:1
-    }
-})

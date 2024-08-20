@@ -5,7 +5,6 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import { ComponentInfo, StackScreen } from './types';
 import Home from './components/screens/Home';
 import Profile from './components/screens/Profile';
-
 import { NavigationReducer } from './reducers/PathReducer';
 import {  encodePath, registerForPushNotificationsAsync} from './utils';
 import Invalidpath from './components/partials/Invalidpath';
@@ -15,6 +14,7 @@ import * as Notifications from 'expo-notifications';
 import { Provider as StoreProvider } from 'react-redux';
 import { store } from './store';
 import Appcontext from './contexts/AppContext';
+import * as Font from 'expo-font';
 
 export default function App() {
 
@@ -22,6 +22,21 @@ export default function App() {
   const [path,navigate]=useReducer(NavigationReducer,"onewindow://Student/Base?tab=home")//"onewindow://Student/Base/Profile?tab=home"
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        "NeutrifStudio-ExtraBold": require('./assets/fonts/NeutrifStudio-ExtraBold.ttf'),
+        'NeutrifStudio-Bold': require('./assets/fonts/NeutrifStudio-Bold.ttf'),
+        'NeutrifStudio-SemiBold': require('./assets/fonts/NeutrifStudio-SemiBold.ttf'),
+        'NeutrifStudio-Medium': require('./assets/fonts/NeutrifStudio-Medium.ttf'),
+        'NeutrifStudio-Regular': require('./assets/fonts/NeutrifStudio-Regular.ttf')
+      });
+      setFontsLoaded(true);
+    }
+    loadFonts();
+  }, []);
 
   useEffect(()=>{
     Linking.addEventListener('url', (event: { url: string })=>{

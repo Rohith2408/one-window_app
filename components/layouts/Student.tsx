@@ -27,6 +27,9 @@ import { initVerification } from "../../store/slices/verificationSlice"
 import { initMeetings } from "../../store/slices/meetingsSlice"
 import { initCart } from "../../store/slices/cartSlice"
 import { initWishlist } from "../../store/slices/wishlistSlice"
+import { initOrders } from "../../store/slices/ordersSlice"
+import { initSuggestedPackage } from "../../store/slices/suggestedpackageSlice"
+import { initProducts } from "../../store/slices/productsSlice"
 
 const Student=(props:{screens:string[],params:any})=>{
 
@@ -78,7 +81,7 @@ const Student=(props:{screens:string[],params:any})=>{
     // }
     // ]).current
     const dispatch=useAppDispatch()
-    const Navigation=useNavigation()
+    const [path,navigate]=useNavigation()
 
     const fetchProfile=async ()=>{
         let res:ServerResponse=await serverRequest({
@@ -87,9 +90,9 @@ const Student=(props:{screens:string[],params:any})=>{
         })
         if(!res.success)
         {
-            if(res.message==serverResponses.LOGIN_AGAIN)
+            if(res.message==serverResponses.VerificationFailed || res.message==serverResponses.TokenMissing)
             {
-                Navigation?.navigate({type:"Logout"});
+                navigate?navigate({type:"Logout"}):null
             }
         }
         else
@@ -117,13 +120,6 @@ const Student=(props:{screens:string[],params:any})=>{
                     isPlanningToTakeAcademicTest:res.data.isPlanningToTakeAcademicTest,
                     isPlanningToTakeLanguageTest:res.data.isPlanningToTakeLanguageTest,
                 }
-            }))
-            dispatch(initEducationHistory({
-                requestStatus:"initiated",
-                responseStatus:"recieved",
-                haveAnIssue:false,
-                issue:"",
-                data:res.data.education
             }))
             dispatch(initEducationHistory({
                 requestStatus:"initiated",
@@ -200,10 +196,31 @@ const Student=(props:{screens:string[],params:any})=>{
         {
             if(res.message==serverResponses.LOGIN_AGAIN)
             {
-                Navigation?.navigate({type:"Logout"});
+                //Navigation?.navigate({type:"Logout"});
             }
         }
         else{
+            dispatch(initOrders({
+                requestStatus:"initiated",
+                responseStatus:"recieved",
+                haveAnIssue:false,
+                issue:"",
+                data:res.data.orders
+            }))
+            dispatch(initProducts({
+                requestStatus:"initiated",
+                responseStatus:"recieved",
+                haveAnIssue:false,
+                issue:"",
+                data:res.data.activity.products
+            }))
+            dispatch(initSuggestedPackage({
+                requestStatus:"initiated",
+                responseStatus:"recieved",
+                haveAnIssue:false,
+                issue:"",
+                data:res.data.suggestedPackages
+            }))
             dispatch(initWishlist({
                 requestStatus:"initiated",
                 responseStatus:"recieved",
@@ -246,7 +263,8 @@ const Student=(props:{screens:string[],params:any})=>{
     }
 
     useEffect(()=>{
-        //fetchProfile()
+        fetchProfile()
+        fetchActivity()
     },[])   
     
     return(

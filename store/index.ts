@@ -29,6 +29,7 @@ import productsSlice from "./slices/productsSlice";
 import cartSlice from "./slices/cartSlice";
 import wishlistSlice from "./slices/wishlistSlice";
 import suggestedpackageSlice from "./slices/suggestedpackageSlice";
+import ordersSlice from "./slices/ordersSlice";
 
 const store = configureStore({
         reducer:{
@@ -61,7 +62,8 @@ const store = configureStore({
             products:productsSlice,
             cart:cartSlice,
             wishlist:wishlistSlice,
-            suggestedpackages:suggestedpackageSlice
+            suggestedpackages:suggestedpackageSlice,
+            orders:ordersSlice
         }
     });
 

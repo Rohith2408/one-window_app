@@ -17,6 +17,9 @@
       "android",
       "web"
     ],
+    "assetBundlePatterns": [
+      "assets/fonts/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.onewindow",
@@ -61,7 +64,8 @@
         {
           "faceIDPermission": "Allow One Window to access your Face ID biometric data."
         }
-      ]
+      ],
+      "expo-font"
     ]
   }
 }

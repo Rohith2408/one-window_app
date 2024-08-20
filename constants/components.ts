@@ -11,6 +11,9 @@ import Workexperience from "../components/partials/Workexperience"
 import Form from "../components/resources/Form"
 import { ScreenInfo } from "../types"
 import Flyer from "../components/partials/Flyer"
+import Filters from "../components/flyers/Filters"
+import Explore from "../components/partials/Explore"
+import Dropdownoptions from "../components/flyers/Dropdownoptions"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -20,10 +23,13 @@ const components:ScreenInfo[]=[
     {id:"Login",component:Login,type:"Layout"},
     {id:"Popup",component:Popup,props:["popupid","popupdata"],swipeDirection:"XY",type:"Screen",animationStyle:"Custom",customPlacement:{initial:{x:0,y:0,scale:0,opacity:1,height:0,width:0},final:{x:0.25,y:0.25,scale:1,opacity:1,height:0.5,width:0.5}}},
     {id:"Error",component:Error,props:["message"],type:"Popup"},
-    {id:"Loginbase",component:Loginbase,swipeDirection:"X",props:["auth"],type:"Partial"},
+    {id:"Loginbase",component:Loginbase,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
     {id:"Workexperience",component:Workexperience,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3,type:"Partial"},
-    {id:"Form",component:Form,type:"Partial",swipeDirection:"X",props:["formid","forminitialdataid"]},
-    {id:"Flyer",component:Flyer,type:"Partial",props:["flyerid","flyerdata"],swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6} 
+    {id:"Form",component:Form,type:"Partial",props:["formid","forminitialdataid","formupdate"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Flyer",component:Flyer,type:"Partial",props:["flyerid","flyerdata"],swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Filters",component:Filters,type:"Flyer",props:["additionalfilters","quickfilters"]},
+    {id:"Explore",component:Explore,type:"Partial",props:["additionalfilters","quickfilters","initialexploretab","page","search"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Dropdownoptions",component:Dropdownoptions,type:"Flyer"}
 ]
 
 const setComponentInfo=(id:string,key:keyof ScreenInfo,value:any)=>{

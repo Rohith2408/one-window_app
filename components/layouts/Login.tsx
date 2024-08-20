@@ -1,7 +1,8 @@
 
+import { components } from "../../constants"
 import Stacknavigator from "../../navigation/stackNavigator"
 import { propsMapper } from "../../utils"
-import ComponentsInfo from "../../constants/components"
+
 import Invalidpath from "../partials/Invalidpath"
 
 const Login=(props:{screens:string[],params:any})=>{
@@ -14,8 +15,8 @@ const Login=(props:{screens:string[],params:any})=>{
                 component:screen.id,
                 props:screen.props,
                 swipable:true,
-                animationStyle:ComponentsInfo.find((component)=>component.id==screen.id)?.animationStyle
-        }))}
+                animationStyle:components.find((component)=>component.id==screen.id)?.animationStyle
+            }))}
         />
     )
 }

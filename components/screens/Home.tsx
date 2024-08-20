@@ -9,6 +9,9 @@ import destinations_icon from "../../assets/images/explore/destinations.png"
 import universities_icon from '../../assets/images/explore/universities.png'
 import programs_icon from '../../assets/images/explore/programs.png'
 import { Device } from "../../types"
+import { useAppSelector } from "../../hooks/useAppSelector"
+import List from "../resources/List"
+import Product from "../cards/Product"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -49,6 +52,14 @@ const GeneralStyles=StyleSheet.create({
     },
     explore_text:{
         fontWeight:"700"
+    },
+    products_wrapper:{
+        width:"100%",
+        display:'flex',
+        gap:5
+    },
+    products_title:{
+        fontWeight:"700"
     }
 })
 
@@ -69,6 +80,12 @@ const TabStyles=StyleSheet.create({
     },
     explore_text:{
         fontSize:12
+    },
+    products_wrapper:{
+        height:200
+    },
+    products_title:{
+        fontSize:16
     }
 })
 
@@ -90,6 +107,12 @@ const MobileSStyles=StyleSheet.create({
     },
     explore_text:{
         fontSize:10
+    },
+    products_wrapper:{
+        height:200
+    },
+    products_title:{
+        fontSize:14
     }
 })
 const MobileMStyles=StyleSheet.create({
@@ -111,6 +134,12 @@ const MobileMStyles=StyleSheet.create({
     },
     explore_text:{
         fontSize:12
+    },
+    products_wrapper:{
+        height:200
+    },
+    products_title:{
+        fontSize:14
     }
 })
 const MobileLStyles=StyleSheet.create({
@@ -131,6 +160,12 @@ const MobileLStyles=StyleSheet.create({
     },
     explore_text:{
         fontSize:12
+    },
+    products_wrapper:{
+        height:200
+    },
+    products_title:{
+        fontSize:14
     }
 })
 
@@ -143,6 +178,7 @@ const styles={
 
 const Home=(props:undefined|{name:string})=>{
 
+    const products=useAppSelector((state)=>state.products)
     const [theme,setTheme]=useTheme();
     const Nav=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
@@ -152,7 +188,7 @@ const Home=(props:undefined|{name:string})=>{
         {text:"Programs",icon:programs_icon}
     ]).current
 
-    console.log(Device?styles[Device].sub_wrapper:{})
+    console.log(GeneralStyles.products_wrapper)
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
@@ -170,6 +206,10 @@ const Home=(props:undefined|{name:string})=>{
                     )
                 }
                 </View>
+                <View style={[GeneralStyles.products_wrapper,Device?styles[Device].products_wrapper:{}]}>
+                    <Text style={[GeneralStyles.products_title,Device?styles[Device].products_title:{},{color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
+                    <List list={products.data} card={Product} direction="Horizontal" mode="Scroll"></List>
+                </View>
             </View>
             {/* <Text>Home</Text>
             <Text>{props?.name}</Text>
@@ -180,9 +220,10 @@ const Home=(props:undefined|{name:string})=>{
 
 const Exploreitem=(props:{icon:string,text:string,theme:"light"|"dark",device:Device})=>{
 
+    const [path,navigate]=useNavigation();
 
     return(
-        <Pressable style={[GeneralStyles.explore_item]}>
+        <Pressable onPress={()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"programs",additionalfilters:[],quickfilters:[],search:"harv",page:1}}}):null} style={[GeneralStyles.explore_item]}>
             <Image source={props.icon} style={[GeneralStyles.explore_icon,props.device?styles[props.device].explore_icon:{}]}></Image>
             <Text style={[GeneralStyles.explore_text, {color:Themes.Light.OnewindowPrimaryBlue(1)} ,props.device?styles[props.device].explore_text:{}]}>{props.text}</Text>
         </Pressable>

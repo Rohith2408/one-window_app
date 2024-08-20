@@ -14,7 +14,7 @@ export const productsSlice=createSlice({
     name:'products',
     initialState:initialState,
     reducers:{
-        initproducts:(state,action:PayloadAction<StoreItem<Product[]>>)=>({...action.payload}),
+        initProducts:(state,action:PayloadAction<StoreItem<Product[]>>)=>({...action.payload}),
         addProduct:(state,action:PayloadAction<Product>)=>{state.data.push(action.payload)},
         updateProduct:(state,action:PayloadAction<Product>)=>{
             let index=state.data.findIndex((item)=>item._id==action.payload._id);
@@ -25,9 +25,9 @@ export const productsSlice=createSlice({
             state.data[index].cancellationRequest=true
         },
         removeProduct:(state,action:PayloadAction<string>)=>({...state,data:state.data.filter((item,index)=>item._id!=action.payload)}),
-        resetproducts:(state,action:PayloadAction)=>({...initialState}),
+        resetProducts:(state,action:PayloadAction)=>({...initialState}),
     }
 })
 
-export const {initproducts,addProduct,updateProduct,removeProduct,resetproducts}=productsSlice.actions;
+export const {initProducts,addProduct,updateProduct,removeProduct,resetProducts}=productsSlice.actions;
 export default productsSlice.reducer;

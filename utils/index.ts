@@ -1,4 +1,4 @@
-import { Dimensions, Platform } from "react-native";
+import { Dimensions, LayoutAnimation, Platform } from "react-native";
 import { baseAppUrl,secureStoreKeys } from "../constants";
 import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo } from "../types";
 import * as Notifications from 'expo-notifications';
@@ -402,3 +402,29 @@ export const getDevice=()=>{
   }
 }
 
+export const setLayoutAnimation=()=>{
+  LayoutAnimation.configureNext(
+      {
+          duration: 300,
+          create: {
+              duration: 300,
+              delay:50,
+              springDamping:10,
+              type:LayoutAnimation.Types.easeOut,
+              property:LayoutAnimation.Properties.opacity,
+          },
+          update:{
+              duration: 300,
+              delay:200,
+              springDamping:1,
+              type:LayoutAnimation.Types.easeOut
+          },
+          delete:{
+              duration: 300,
+              delay:0,
+              springDamping:1,
+              type:LayoutAnimation.Types.easeOut,
+              property:LayoutAnimation.Properties.opacity,
+          },
+      })
+}
