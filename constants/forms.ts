@@ -1,11 +1,13 @@
+import Datetime from "../components/resources/Datetime";
 import Dropdown from "../components/resources/Dropdown";
 import Textbox from "../components/resources/Textbox";
 import { store } from "../store";
 import { setWorkExperience } from "../store/slices/workexperienceSlice";
-import { FormData, FormField, ServerResponse, WorkExperience } from "../types";
-import { getServerRequestURL, serverRequest } from "../utils";
+import { FormData, FormField, FormInfo, ServerResponse, WorkExperience } from "../types";
+import { getServerRequestURL, serverRequest, setWordCase } from "../utils";
+import { Industries } from "./misc";
 
-const forms=[
+const forms:FormInfo[]=[
     {
         id:"Workexperience",
         title:"Please provide your Work Experience",
@@ -17,40 +19,43 @@ const forms=[
                 {id:"worktype",value:data?data.type:[]},
                 {id:"designation",value:data?data.designation:""},
                 {id:"document",value:data?data.docId:""},
-                {id:"enddate",value:data?data.endDate:""},
-                {id:"sector",value:data?data.sector:""},
-                {id:"startdate",value:data?data.startDate:""}
+                {id:"enddate",value:data?data.endDate:undefined},
+                {id:"sector",value:data?data.sector:[]},
+                {id:"startdate",value:data?data.startDate:undefined}
             ]
         },
         submit:{
-            onSubmit:async (data:FormData[])=>{
+            dataConverter:(data:FormData[])=>{
                 let workexperience:WorkExperience={
-                    companyName:data[data.findIndex((item)=>item.id=="companyname")].value.toString(),
-                    sector:data[data.findIndex((item)=>item.id=="sector")].value.toString(),
-                    type:data[data.findIndex((item)=>item.id=="worktype")].value.toString(),
-                    designation:data[data.findIndex((item)=>item.id=="designation")].value.toString(),
-                    Ongoing:data[data.findIndex((item)=>item.id=="ongoing")].value.toString()=="yes"?true:false,
-                    startDate:data[data.findIndex((item)=>item.id=="startdate")].value.toString(),
+                    companyName:data[data.findIndex((item)=>item.id=="companyname")].value,
+                    sector:data[data.findIndex((item)=>item.id=="sector")].value[0].value,
+                    type:data[data.findIndex((item)=>item.id=="worktype")].value[0].value,
+                    designation:data[data.findIndex((item)=>item.id=="designation")].value,
+                    Ongoing:data[data.findIndex((item)=>item.id=="ongoing")].value=="yes"?true:false,
+                    startDate:data[data.findIndex((item)=>item.id=="startdate")].value,
                     endDate:data.find((item)=>item.id=="enddate")?.value,
                     docId:undefined
                     //docId:Doc2Upload
                 }
-                // let res:ServerResponse=await serverRequest({
-                //     url: getServerRequestURL("workexperience","POST"),
-                //     reqType: "POST",
-                //     body:workexperience
-                // })
-                // if(res.success)
-                // {
-                //     store.dispatch(setWorkExperience(res.data.workExperience))
-                // }
                 return workexperience
+            },
+            onSubmit:async (data:WorkExperience)=>{
+                let res:ServerResponse=await serverRequest({
+                    url: getServerRequestURL("profile","PUT"),
+                    reqType: "PUT",
+                    body:{workExperience:[...store.getState().workexperience.data,data]}
+                })
+                if(res.success)
+                {
+                    store.dispatch(setWorkExperience(res.data.workExperience))
+                }
+                return res
             },
             successText:"Success!",
             failureText:"Failed :(",
             idleText:"Submit"
         },
-        initialFields:["companyname","worktype","sector","designation","ongoing","startdate"],
+        //initialFields:["companyname","worktype","sector","designation","ongoing","startdate"],
         allFields:[
             {
                 id:"companyname",
@@ -62,9 +67,6 @@ const forms=[
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
-                    // handler:(formData:FormData[],data:any)=>{
-
-                    // }
                 },
                 onFocus:{
                     event:"onFocus"
@@ -90,9 +92,6 @@ const forms=[
                 onUpdate:{
                     event:"onSelect",
                     handler:undefined
-                    // handler:(formData:FormData[],data:any)=>{
-
-                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -101,16 +100,16 @@ const forms=[
             {
                 id:"sector",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:"Ex. Microsoft"}
+                    component:Dropdown,
+                    props:{
+                        options:Industries.map((item)=>({label:setWordCase(item),value:item})),
+                        selectionMode:"single"
+                    }
                 },
                 title:"Sector",
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
-                    // handler:(formData:FormData[],data:any)=>{
-
-                    // }
                 },
                 onFocus:{
                     event:"onFocus"
@@ -126,9 +125,6 @@ const forms=[
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
-                    // handler:(formData:FormData[],data:any)=>{
-
-                    // }
                 },
                 onFocus:{
                     event:"onFocus"
@@ -144,9 +140,6 @@ const forms=[
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
-                    // handler:(formData:FormData[],data:any)=>{
-
-                    // }
                 },
                 onFocus:{
                     event:"onFocus"
@@ -155,16 +148,13 @@ const forms=[
             {
                 id:"startdate",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:"Ex. Microsoft"}
+                    component:Datetime,
+                    props:undefined
                 },
                 title:"Start Date",
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
-                    // handler:(formData:FormData[],data:any)=>{
-
-                    // }
                 },
                 onFocus:{
                     event:"onFocus"
@@ -173,16 +163,13 @@ const forms=[
             {
                 id:"enddate",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:"Ex. Microsoft"}
+                    component:Datetime,
+                    props:undefined
                 },
                 title:"End Date",
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
-                    // handler:(formData:FormData[],data:any)=>{
-
-                    // }
                 },
                 onFocus:{
                     event:"onFocus"
@@ -195,12 +182,10 @@ const forms=[
                     props:{placeholder:"Ex. Microsoft"}
                 },
                 title:"Document",
+                isOptional:true,
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
-                    // handler:(formData:FormData[],data:any)=>{
-
-                    // }
                 },
                 onFocus:{
                     event:"onFocus"

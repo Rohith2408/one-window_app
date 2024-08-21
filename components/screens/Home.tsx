@@ -192,12 +192,12 @@ const Home=(props:undefined|{name:string})=>{
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
-            <View style={[GeneralStyles.sub_wrapper,Device?styles[Device].sub_wrapper:{}]}>
+            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper]}>
                 <View>
                     <Text style={[{color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , Rohith!</Text>
                 </View>
                 <Pressable style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'}]}>
-                    <Text style={[GeneralStyles.search_text,Device?styles[Device].search_text:{}]}>Search for "Harvard University"</Text>
+                    <Text style={[GeneralStyles.search_text,styles[Device].search_text]}>Search for "Harvard University"</Text>
                 </Pressable>
                 <View style={[GeneralStyles.explore_wrapper]}>
                 {
@@ -206,8 +206,8 @@ const Home=(props:undefined|{name:string})=>{
                     )
                 }
                 </View>
-                <View style={[GeneralStyles.products_wrapper,Device?styles[Device].products_wrapper:{}]}>
-                    <Text style={[GeneralStyles.products_title,Device?styles[Device].products_title:{},{color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
+                <View style={[GeneralStyles.products_wrapper,styles[Device].products_wrapper]}>
+                    <Text style={[GeneralStyles.products_title,styles[Device].products_title,{color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
                     <List list={products.data} card={Product} direction="Horizontal" mode="Scroll"></List>
                 </View>
             </View>
@@ -224,8 +224,8 @@ const Exploreitem=(props:{icon:string,text:string,theme:"light"|"dark",device:De
 
     return(
         <Pressable onPress={()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"programs",additionalfilters:[],quickfilters:[],search:"harv",page:1}}}):null} style={[GeneralStyles.explore_item]}>
-            <Image source={props.icon} style={[GeneralStyles.explore_icon,props.device?styles[props.device].explore_icon:{}]}></Image>
-            <Text style={[GeneralStyles.explore_text, {color:Themes.Light.OnewindowPrimaryBlue(1)} ,props.device?styles[props.device].explore_text:{}]}>{props.text}</Text>
+            <Image source={props.icon} style={[GeneralStyles.explore_icon,styles[props.device].explore_icon]}></Image>
+            <Text style={[GeneralStyles.explore_text, {color:Themes.Light.OnewindowPrimaryBlue(1)} ,styles[props.device].explore_text]}>{props.text}</Text>
         </Pressable>
     )
 

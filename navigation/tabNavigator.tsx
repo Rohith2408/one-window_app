@@ -4,14 +4,14 @@ import { StyleSheet, View } from "react-native"
 
 const Tabnavigator=(props:TabNavigator)=>{
 
-    const Screen:React.FC<any>|undefined=props.screens.find((screen)=>screen.id==props.initialTab.id)?.component
+    const Screen:React.FC<any>|undefined=props.screens.find((screen)=>screen.id==props.currentTab.id)?.component
 
     return(
         <View style={[styles.mainWrapper]}>
             {
                 Screen
                 ?
-                <Screen/>
+                <Screen {...props.currentTab.props}/>
                 :
                 null
             }

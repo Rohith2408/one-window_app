@@ -14,6 +14,10 @@ import Flyer from "../components/partials/Flyer"
 import Filters from "../components/flyers/Filters"
 import Explore from "../components/partials/Explore"
 import Dropdownoptions from "../components/flyers/Dropdownoptions"
+import Personalinfo from "../components/partials/Personalinfo"
+import DPoptions from "../components/flyers/DPoptions"
+import Dp from "../components/partials/Dp"
+import Documents from "../components/partials/Documents"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -23,13 +27,16 @@ const components:ScreenInfo[]=[
     {id:"Login",component:Login,type:"Layout"},
     {id:"Popup",component:Popup,props:["popupid","popupdata"],swipeDirection:"XY",type:"Screen",animationStyle:"Custom",customPlacement:{initial:{x:0,y:0,scale:0,opacity:1,height:0,width:0},final:{x:0.25,y:0.25,scale:1,opacity:1,height:0.5,width:0.5}}},
     {id:"Error",component:Error,props:["message"],type:"Popup"},
-    {id:"Loginbase",component:Loginbase,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
-    {id:"Workexperience",component:Workexperience,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3,type:"Partial"},
-    {id:"Form",component:Form,type:"Partial",props:["formid","forminitialdataid","formupdate"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
-    {id:"Flyer",component:Flyer,type:"Partial",props:["flyerid","flyerdata"],swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Loginbase",component:Loginbase,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial",title:"Login"},
+    {id:"Form",component:Form,type:"Partial",title:"Form",props:["formid","forminitialdataid","formupdate"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Flyer",component:Flyer,type:"Flyer",props:["flyerid","flyerdata"],swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Filters",component:Filters,type:"Flyer",props:["additionalfilters","quickfilters"]},
-    {id:"Explore",component:Explore,type:"Partial",props:["additionalfilters","quickfilters","initialexploretab","page","search"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
-    {id:"Dropdownoptions",component:Dropdownoptions,type:"Flyer"}
+    {id:"Explore",component:Explore,type:"Partial",title:"Explore",props:["additionalfilters","quickfilters","initialexploretab","page","search"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Dropdownoptions",component:Dropdownoptions,type:"Flyer"},
+    {id:"Personalinfo",component:Personalinfo,type:"Partial",title:"Personal Info",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3,swipeDirection:"X"},
+    {id:"DPoptions",component:DPoptions,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Dp",component:Dp,type:"Popup",props:["image"],swipeDirection:"XY",isTransparent:true,occupyFullScreen:true,animationStyle:"FadeIn",removalThreshold:0.5},
+    {id:"Documents",component:Documents,type:"Partial",title:"Documents",props:["documentstab"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3}
 ]
 
 const setComponentInfo=(id:string,key:keyof ScreenInfo,value:any)=>{

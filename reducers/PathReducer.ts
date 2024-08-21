@@ -15,7 +15,7 @@ export type NavigationActions=
         type:"AddScreen",
         payload:{
             screen:string,
-            params:any
+            params?:any
         }
     }|
     {
@@ -45,8 +45,7 @@ export const NavigationReducer=(state:string,action:NavigationActions)=>{
 
         case "AddScreen":
             encodedPath.screens=[...encodedPath.screens,action.payload.screen]
-            encodedPath.props={...encodedPath.props,...action.payload.params}
-            console.log("add ",encodedPath)
+            action.payload.params?encodedPath.props={...encodedPath.props,...action.payload.params}:null
             return decodePath(encodedPath)
             break;
 
@@ -75,7 +74,6 @@ export const NavigationReducer=(state:string,action:NavigationActions)=>{
             break;
 
         case "Logout":
-            console.log("urlllllll",baseAppUrl+"Login/Loginbase")
             return baseAppUrl+"Login/Loginbase"
             break;
 

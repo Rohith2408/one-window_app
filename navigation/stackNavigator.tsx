@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react"
 import useNavigation from "../hooks/useNavigation"
 import { getComponent } from "../utils"
 import React from "react"
-import { components } from "../constants"
+import { Fonts, Themes, components } from "../constants"
 import back_icon from '../assets/images/misc/back.png'
 import { Image } from "expo-image"
 
@@ -46,6 +46,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
     {
       if(screenInfo?.animationStyle)
       {
+        //console.log('QQQ',screenInfo.id,screenInfo?.animationStyle,Presets[screenInfo?.animationStyle])
         let presetData=type=="initial"?Presets[screenInfo?.animationStyle].start:Presets[screenInfo?.animationStyle].end
         return presetData
       }
@@ -58,11 +59,10 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
   const translateX=useRef(new Animated.Value(initialState?initialState.x:0)).current;
   const opacity=useRef(new Animated.Value(initialState?initialState.opacity:0)).current;
   const scale=useRef(new Animated.Value(initialState?initialState.scale:0)).current
-  const width=useRef(new Animated.Value(initialState?initialState.opacity:0)).current;
-  const height=useRef(new Animated.Value(initialState?initialState.scale:0)).current
+  const width=useRef(new Animated.Value(initialState?initialState.width:0)).current;
+  const height=useRef(new Animated.Value(initialState?initialState.height:0)).current
   const swipeThreshold = 100;
   const [path,navigate]=useNavigation();
-  console.log(screenInfo,getState("initial"),getState("final"));
 
   const getCurrentPosition=()=>(currentState.current)
   const setCurrentPosition=(val:{x:number,y:number,opacity:number,scale:number})=>{currentState.current=val}
@@ -92,10 +92,10 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           let removeThreshold=screenInfo?.removalThreshold?screenInfo.removalThreshold:0.5
           let swipeLengthX=state.dx/Dimensions.get("screen").width;
           let swipeLengthY=state.dy/Dimensions.get("screen").height
-          console.log("vx",state.vx)
+          console.log("v",state.vx,state.vy)
           if(screenInfo?.swipeDirection=="X")
           {
-            if((swipeLengthX+initialState.x)>removeThreshold)
+            if((swipeLengthX+initialState.x)>removeThreshold || state.vx>2)
             {
               back(200-(state.vx/2)*50);
               //animate([{property:translateX,value:initialState?initialState.x:0,style:"spring",duration:100}],back)
@@ -109,7 +109,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           }
           if(screenInfo?.swipeDirection=="Y")
           {
-            if((swipeLengthY+initialState.y)>removeThreshold)
+            if((swipeLengthY+initialState.y)>removeThreshold || state.vy>1.5)
             {
               back(200-(state.vy/2)*50)
               //animate([{property:translateY,value:initialState?initialState.y:0,style:"spring",duration:100}],back)
@@ -140,19 +140,17 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
     ).current;
 
   useEffect(()=>{
-    console.log(finalState)
     animate([
-      {property:translateX,value:finalState?finalState.x:0,duration:300},
-      {property:translateY,value:finalState?finalState.y:0,duration:300},
-      {property:scale,value:finalState?finalState.scale:0,duration:300},
-      {property:opacity,value:finalState?finalState.opacity:0,duration:300},
-      {property:width,value:finalState?finalState.width:0,duration:300,native:false},
-      {property:height,value:finalState?finalState.height:0,duration:300,native:false},
+      {property:translateX,value:finalState?finalState.x:0,duration:200},
+      {property:translateY,value:finalState?finalState.y:0,duration:200},
+      {property:scale,value:finalState?finalState.scale:0,duration:200},
+      {property:opacity,value:finalState?finalState.opacity:0,duration:200},
+      {property:width,value:finalState?finalState.width:0,duration:200},
+      {property:height,value:finalState?finalState.height:0,duration:200},
     ])
   },[])
 
   const animate=(animData:{property:Animated.Value,style?:"timing"|"spring",value:number,duration:number,native?:boolean}[],callBack?:any)=>{
-    console.log("anim",animData);
     let animations=animData.map((data)=>Animated[data.style?data.style:"timing"](data.property,{toValue:data.value,duration:data.duration,easing:Easing.ease,useNativeDriver:false}));
     Animated.parallel(animations).start(callBack)
   }
@@ -171,7 +169,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
   const Container=getComponent(props.component)?.component
 
   return(
-      <Animated.View key={props.id} style={[styles.screenWrapper,{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
+      <Animated.View key={props.id} style={[styles.screenWrapper,!screenInfo?.occupyFullScreen?{paddingLeft:0.06*Dimensions.get("screen").width,paddingRight:0.06*Dimensions.get("screen").width}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,screenInfo?.type=="Flyer"?{borderRadius:20,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{},{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
         {
           props.index!=0 && screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY"
           ?
@@ -200,7 +198,8 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           :
           null
         }
-        <View style={[styles.screen]}>
+        <View style={[styles.screen,screenInfo?.type=="Flyer"?{shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{}]}>
+          <View style={{flexDirection:"row",justifyContent:'center',alignItems:'center',position:"relative"}}> 
           {
             screenInfo?.type=="Partial" && props.index!=0
             ?
@@ -208,6 +207,14 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
             :
             null
           }
+          {
+            screenInfo?.title
+            ?
+            <Text style={[{fontSize:16,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{screenInfo.title}</Text>
+            :
+            null
+          }
+          </View>
           {
             Container
             ?
@@ -273,9 +280,9 @@ const Presets={
         },
         end:{
           x:0,
-          y:2/3,
+          y:1/2,
           scale:1,
-          height:1,
+          height:1/2,
           width:1,
           opacity:1
         }
@@ -298,12 +305,60 @@ const Presets={
           opacity:1
         }
     },
-    // VerticalSlideToBottom:{
-
-    //     x:0,
-    //     y:-Dimensions.get("screen").height,
-    //     scale:1
-    // }
+    CenterPopIn:{
+      start:{
+        x:0.5,
+        y:1,
+        scale:0,
+        height:1,
+        width:1,
+        opacity:1
+      },
+      end:{
+        x:0.5,
+        y:0.5,
+        scale:1,
+        height:1,
+        width:1,
+        opacity:1
+      },
+    },
+    CenterFadeIn:{
+      start:{
+        x:0.5,
+        y:0.5,
+        scale:1,
+        height:1,
+        width:1,
+        opacity:0
+      },
+      end:{
+        x:0.5,
+        y:0.5,
+        scale:1,
+        height:1,
+        width:1,
+        opacity:1
+      }
+    },
+    FadeIn:{
+      start:{
+        x:0,
+        y:0,
+        scale:1,
+        height:1,
+        width:1,
+        opacity:0
+      },
+      end:{
+        x:0,
+        y:0,
+        scale:1,
+        height:1,
+        width:1,
+        opacity:1
+      }
+    }
 }
 
 const styles=StyleSheet.create({
@@ -323,13 +378,11 @@ const styles=StyleSheet.create({
     },
     screen:{
       width:"100%",
-      height:"100%",
-      paddingLeft:0.06*Dimensions.get("screen").width,
-      paddingRight:0.06*Dimensions.get("screen").width,
-      paddingTop:0.06*Dimensions.get("screen").width
+      height:"100%"
     },
     back:{
-      backgroundColor:"white"
+      position:"absolute",
+      left:-10
       // paddingTop:0.04*Dimensions.get("screen").width
     },
     swipeStripL:{
@@ -347,7 +400,7 @@ const styles=StyleSheet.create({
       top:0,
       width:0.04*Dimensions.get("screen").width,
       position:"absolute",
-      backgroundColor:'black',
+      // backgroundColor:'black',
       zIndex:1
     },
     swipeStripT:{
@@ -356,7 +409,7 @@ const styles=StyleSheet.create({
       top:0,
       width:"100%",
       position:"absolute",
-      backgroundColor:'black',
+      // backgroundColor:'black',
       zIndex:1
     },
     swipeStripB:{
@@ -365,7 +418,7 @@ const styles=StyleSheet.create({
       bottom:0,
       width:"100%",
       position:"absolute",
-      backgroundColor:'black',
+      // backgroundColor:'black',
       zIndex:1
     },
     back_icon:{

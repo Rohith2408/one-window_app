@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { StoreItem, Test, TestSection } from "../../misc/typeDefinations";
+import { Request, Test, TestSection } from "../../misc/typeDefinations";
 
-let initialState:StoreItem<Test[]>={
+let initialState:Request<Test[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -13,7 +13,7 @@ const TestScoresSlice=createSlice({
     name:'testscores',
     initialState:initialState,
     reducers:{
-        initTestScores:(state,action:PayloadAction<StoreItem<Test[]>>)=>({...action.payload}),
+        initTestScores:(state,action:PayloadAction<Request<Test[]>>)=>({...action.payload}),
         addTest:(state,action:PayloadAction<Test>)=>{state.data.push(action.payload)},
         addTestSection:(state,action:PayloadAction<TestSection>)=>{
             let testIndex=state.data.findIndex((test)=>test.name==action.payload.testName)

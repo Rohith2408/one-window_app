@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { CartItem, StoreItem } from "../../types";
+import { CartItem, Request } from "../../types";
 
-let initialState:StoreItem<CartItem[]>={
+let initialState:Request<CartItem[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -13,7 +13,7 @@ export const cartSlice=createSlice({
     name:'cart',
     initialState:initialState,
     reducers:{
-        initCart:(state,action:PayloadAction<StoreItem<CartItem[]>>)=>({...action.payload}),
+        initCart:(state,action:PayloadAction<Request<CartItem[]>>)=>({...action.payload}),
         addCart:(state,action:PayloadAction<CartItem>)=>{state.data.push(action.payload)},
         updateCart:(state,action:PayloadAction<CartItem>)=>{
             let index=state.data.findIndex((item)=>item._id==action.payload._id);

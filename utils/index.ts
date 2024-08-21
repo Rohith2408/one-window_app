@@ -26,6 +26,7 @@ import { resetWorkExperience } from "../store/slices/workexperienceSlice";
 import { resetSharedinfo } from "../store/slices/sharedinfoSlice";
 import { baseURL, endPoints } from "../constants/server";
 import {components} from "../constants/components";
+import * as DocumentPicker from 'expo-document-picker';
 
 export const propsMapper=(screens:string[],params:any|undefined)=>{
   return screens.map((screen)=>{
@@ -174,8 +175,9 @@ export const serverRequest=async (requestData:ServerRequest)=>{
       let fetchObj:RequestInit={
         headers:{"Authorization":"Bearer "+accessToken},
         method:requestData.reqType,
-        body:JSON.stringify({...requestData.body})
+        body:!requestData.preventStringify?JSON.stringify({...requestData.body}):requestData.body
       }
+      console.log("fetch",fetchObj)
       requestData.routeType=="public"?delete fetchObj.headers:null
       !requestData.body?delete fetchObj.body:null
       console.log("url",requestData)
@@ -388,15 +390,15 @@ export const getDevice=()=>{
   {
     return "MobileS"
   }
-  if(width>375 && width<=420)
+  else if(width>375 && width<=420)
   {
     return "MobileM"
   }
-  if(width>420 && width<=480)
+  else if(width>420 && width<=480)
   {
     return "MobileL"
   }
-  if(width>480)
+  else
   {
     return "Tab"
   }
@@ -427,4 +429,61 @@ export const setLayoutAnimation=()=>{
               property:LayoutAnimation.Properties.opacity,
           },
       })
+}
+
+const stringEmptyChecker=(str:string)=>str.length==0?true:false
+
+const arrayEmptyChecker=(arr:any[])=>arr.length==0?true:false
+
+export const pickDocument=async (sizeLimit:number)=>{
+  let res:DocumentPicker.DocumentPickerResult=await DocumentPicker.getDocumentAsync({type: 'application/pdf'})
+  let response:ServerResponse={
+      success:false,
+      data:null,
+      message:""
+  };
+  console.log("Doc size",res.assets[0].size/1000000)
+  if(!res.canceled){
+      if(res.assets[0].size && res.assets[0].mimeType && (res.assets[0].size/1000000)<=sizeLimit)
+      {
+          let uploadedFile={
+              uri : res.assets[0].uri,
+              type: res.assets[0].mimeType,
+              name: res.assets[0].name
+          };
+          response.success=true;
+          response.data=uploadedFile;
+      }
+      else
+      {
+          // store.dispatch(setPopup({
+          //     show: true,
+          //     data:{
+          //         type:"error",
+          //         container:{
+          //             name:"error",
+          //             data:"Document size should be less than "+sizeLimit+"mb"
+          //         }
+          //     }
+          // }))
+      }
+  }
+  else
+  {
+      response.message="Document picking cancelled"
+  }
+  return response
+}
+
+export const Word2Sentence=(words:string[],startStr?:string,seperator?:string)=>{
+  return words.reduce((sentence,word,i)=>(word!=undefined && word.length>0)?(i==(words.length-1)?(sentence+word):(sentence+word+(seperator?seperator:" , "))):(sentence+""),startStr!=undefined?startStr:"")
+}
+
+export const formatDate=(date:string,showWeek?:boolean)=>{
+  let dateObj=new Date(date)
+  let week=setWordCase(dateObj.toDateString().substring(0,3));
+  let month=setWordCase(dateObj.toDateString().substring(4,7));
+  let day=dateObj.getDate();
+  let year=dateObj.getFullYear()
+  return (month+" "+day+","+year+" "+(showWeek?week:""))
 }

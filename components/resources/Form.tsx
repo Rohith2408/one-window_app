@@ -1,10 +1,11 @@
 import { useEffect, useReducer, useRef, useState } from "react"
 import { FormReducer } from "../../reducers/FormReducer";
-import { Event, FormField as FieldType, FormData, Form as FormType} from "../../types";
+import { Event, FormField as FieldType, FormData, Form as FormType, ServerResponse} from "../../types";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Fonts, Themes, forms } from "../../constants";
 import { getDevice } from "../../utils";
 import useNavigation from "../../hooks/useNavigation";
+import Asynchronousbutton from "./Asynchronousbutton";
 
 
 const GeneralStyles=StyleSheet.create({
@@ -39,7 +40,8 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     field_title:{
-        fontSize:12
+        fontSize:12,
+        paddingLeft:10
     },
     form_title:{
         fontSize:13,
@@ -61,7 +63,8 @@ const MobileSStyles=StyleSheet.create({
 })
 const MobileMStyles=StyleSheet.create({
     field_title:{
-        fontSize:12
+        fontSize:12,
+        paddingLeft:10
     },
     form_title:{
         fontSize:13,
@@ -71,7 +74,8 @@ const MobileMStyles=StyleSheet.create({
 })
 const MobileLStyles=StyleSheet.create({
     field_title:{
-        fontSize:12
+        fontSize:12,
+        paddingLeft:10
     },
     form_title:{
         fontSize:13,
@@ -93,6 +97,7 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
     const [fields,dispatch]=useReducer(FormReducer,formInfo?formInfo.getInitialData(props.forminitialdataid):[]);
     const [focussedField,setFocussedField]=useState<string|number|undefined>(undefined);
     const Device=useRef(getDevice()).current
+    const [errors,setError]=useState<{id:string,error:undefined|string}[]>([]) 
 
     const eventHandler=async (event:Event)=>{
         console.log(event)
@@ -136,13 +141,44 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
         // }
     }
 
-    const onSubmit=async ()=>{
-        let handler=formInfo?.submit.onSubmit;
-        if(handler)
+    const onSubmit=async ()=>{ 
+        let errors=validate()
+        setError(errors);
+        console.log("errors",errors);
+        if(errors.length==0)
         {
-            let res=await handler(fields);
-            console.log("res",res);
+            let handler=formInfo?.submit.onSubmit;
+            let res:ServerResponse={
+                success:false,
+                message:"",
+                data:undefined
+            };
+            if(handler)
+            {
+                res=await handler(fields);
+                console.log("res",res);
+            }
+            return res.success
         }
+        else
+        {
+            return false
+        }
+    }
+
+    const validate=()=>{
+        let errors:{id:string,error:string}[]=[]
+        fields.forEach((field)=>{
+            let info=formInfo?.allFields.find((item)=>item.id==field.id)
+            let error:undefined|string=undefined
+            let isEmpty=false;
+            let validation:ServerResponse={success:false,message:"",data:undefined}
+            isEmpty=(info?.emptyChecker)?(info.emptyChecker(field.value).success):(field.value==undefined || field.value?.length==0)
+            !isEmpty ? validation=(info?.validator)?info.validator(field.value):{success:true,message:"",data:undefined} :null
+            error=(isEmpty && !info?.isOptional)?"Field cannot be empty":(!validation.success?validation.message:undefined)
+            error?errors.push({id:field.id,error:error}):null
+        })
+        return errors;
     }
 
     useEffect(()=>{
@@ -152,26 +188,26 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
         }
     },[props.formupdate])
 
-    console.log("fields",fields)
+    //console.log("fields",fields)
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.fields_wrapper]}>
-                <Text style={[GeneralStyles.form_title,Device?styles[Device].form_title:{},{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{formInfo?.title}</Text>
+                <Text style={[GeneralStyles.form_title,styles[Device].form_title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{formInfo?.title}</Text>
                 <ScrollView style={{flex:1}} contentContainerStyle={[GeneralStyles.fields]}>
                 {
                     fields.map((field,i)=>
-                    <Field key={field.id} data={field} info={formInfo?.allFields.find((item)=>field.id==item.id)} isFocussed={focussedField==undefined?false:(focussedField==field.id?true:false)} index={i} eventHandler={eventHandler}></Field>
+                    <Field error={errors.find((item)=>item.id==field.id)?.error} key={field.id} data={field} info={formInfo?.allFields.find((item)=>field.id==item.id)} isFocussed={focussedField==undefined?false:(focussedField==field.id?true:false)} index={i} eventHandler={eventHandler}></Field>
                     )
                 }
                 </ScrollView>
             </View>
-            <Pressable onPress={onSubmit} style={[GeneralStyles.submit_button]}><Text adjustsFontSizeToFit>{formInfo?.submit.idleText}</Text></Pressable>
+            <Asynchronousbutton idleText={formInfo?.submit.idleText} successText={formInfo?.submit.successText} failureText={formInfo?.submit.failureText} callback={onSubmit}/>
         </View>
     )
 }
 
-const Field=(props:{info:FieldType,data:FormData,isFocussed:boolean,index:number,eventHandler:(event:Event)=>void})=>{
+const Field=(props:{info:FieldType,data:FormData,isFocussed:boolean,index:number,error:string|undefined,eventHandler:(event:Event)=>void})=>{
 
     const Container=props.info.componentInfo.component
     const Device=useRef(getDevice()).current
@@ -197,8 +233,15 @@ const Field=(props:{info:FieldType,data:FormData,isFocussed:boolean,index:number
 
     return(
         <View style={[GeneralStyles.field,{zIndex:props.isFocussed?1:-1}]}>
-            <Text style={[GeneralStyles.field_title,Device?styles[Device].field_title:{},{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.info.title}</Text>
+            <Text style={[GeneralStyles.field_title,styles[Device].field_title,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.info.title}</Text>
             <Container id={props.info.id} {...props.info.componentInfo.props} value={props.data.value} isFocussed={props.isFocussed} eventHandler={eventHandler}></Container>
+            {
+                props.error
+                ?
+                <Text style={[GeneralStyles.field_title,styles[Device].field_title,{color:'red',fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.error}</Text>
+                :
+                null
+            }
         </View>
     )
 

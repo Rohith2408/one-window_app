@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Application, StoreAction, StoreItem } from "../../misc/typeDefinations";
+import { Application, StoreAction, Request } from "../../misc/typeDefinations";
 
-let initialState:StoreItem<Application[]>={
+let initialState:Request<Application[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -13,7 +13,7 @@ export const applicationsSlice=createSlice({
     name:'applications',
     initialState:initialState,
     reducers:{
-        initApplications:(state,action:PayloadAction<StoreItem<Application[]>>)=>({...action.payload}),
+        initApplications:(state,action:PayloadAction<Request<Application[]>>)=>({...action.payload}),
         addApplication:(state,action:PayloadAction<Application>)=>{state.data.push(action.payload)},
         updateApplication:(state,action:PayloadAction<Application>)=>{
             let index=state.data.findIndex((item)=>item._id==action.payload._id);

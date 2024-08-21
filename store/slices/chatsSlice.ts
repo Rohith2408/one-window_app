@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import { Chat, Participant, StoreItem } from "../../types";
+import { Chat, Participant, Request } from "../../types";
 import { getChatType } from "../../utils";
 
 type ChatType="advisors"|"community"
 
-let initialState:StoreItem<{advisors:Chat[],community:Chat[]}>={
+let initialState:Request<{advisors:Chat[],community:Chat[]}>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -20,7 +20,7 @@ export const chatsSlice=createSlice({
     name:'chats',
     initialState:initialState,
     reducers:{
-        initChats:(state,action:PayloadAction<StoreItem<Chat[]>>)=>{
+        initChats:(state,action:PayloadAction<Request<Chat[]>>)=>{
             let chatType:ChatType;
             state.haveAnIssue=action.payload.haveAnIssue
             state.issue=action.payload.issue
@@ -100,7 +100,7 @@ export const {initChats,addChats,updateParticipantsActivity,updateChat,updatePar
 export default chatsSlice.reducer;
 
 
-// updateChats:(state:StoreItem<{advisors:Chat[],community:Chat[]}>,action)=>{
+// updateChats:(state:Request<{advisors:Chat[],community:Chat[]}>,action)=>{
         //     let clone={...state};let chatType
         //     switch(action.payload.updateType){
 

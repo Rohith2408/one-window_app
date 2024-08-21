@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import Userbaselayout from "../../components/partialviews/userbaselayout";
-import { Page, StoreItem } from "../../misc/typeDefinations";
+import { Page, Request } from "../../misc/typeDefinations";
 
-let initialState:StoreItem<Page[]>={
+let initialState:Request<Page[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,

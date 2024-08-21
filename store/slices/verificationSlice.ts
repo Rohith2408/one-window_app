@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Verification, StoreItem, UserStatus } from "../../misc/typeDefinations";
+import { Verification, Request, UserStatus } from "../../misc/typeDefinations";
 
-let initialState:StoreItem<Verification[]|undefined>={
+let initialState:Request<Verification[]|undefined>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -15,7 +15,7 @@ const VerificationSlice=createSlice({
     name:'verification',
     initialState:initialState,
     reducers:{
-        initVerification:(state,action:PayloadAction<StoreItem<Verification[]>>)=>({...action.payload}),
+        initVerification:(state,action:PayloadAction<Request<Verification[]>>)=>({...action.payload}),
         Verified:(state,action:PayloadAction<verificationTypes>)=>{
             if(state.data)
             {

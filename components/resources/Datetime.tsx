@@ -1,7 +1,9 @@
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { Platform, Pressable, View } from "react-native"
+import { useState } from 'react'
+import { Platform, Pressable, Text, View } from "react-native"
+import useNavigation from '../../hooks/useNavigation'
 
-const Datetime=()=>{
+const Datetime=(props:{value:string,id:string})=>{
 
     return(
         <View >
@@ -9,9 +11,9 @@ const Datetime=()=>{
             {
                 Platform.OS=="android"
                 ?
-                <AndroidPicker state={null} nonState={props.nonState}></AndroidPicker>
+                <AndroidPicker date={props.value} id={props.id}></AndroidPicker>
                 :
-                <IosPicker state={null} nonState={props.nonState}></IosPicker>
+                <IosPicker date={props.value} id={props.id}></IosPicker>
             }
             </View>
         </View>
@@ -19,36 +21,41 @@ const Datetime=()=>{
 
 }
 
-const AndroidPicker=(props:Component<any,null>)=>{
+const AndroidPicker=(props:{date:string,id:string})=>{
 
-    const [state,setState]=useState(props.nonState.initialValue?props.nonState.initialValue:new Date().toISOString());
+    //const [state,setState]=useState(props.nonState.initialValue?props.nonState.initialValue:new Date().toISOString());
     const [showPicker, setShowPicker] = useState(false);
+    const [path,navigate]=useNavigation()
 
-    const eventHandler=(event:Event)=>{
-        setState(event.data)
-        setShowPicker(false);
-        props.nonState.eventHandler
-        ?
-        props.nonState.eventHandler({...event,triggerBy:{componentName:'dateinput',id:props.nonState.id}})
-        :
-        null
-    }
+    // const eventHandler=(event:Event)=>{
+    //     setState(event.data)
+    //     setShowPicker(false);
+    //     props.nonState.eventHandler
+    //     ?
+    //     props.nonState.eventHandler({...event,triggerBy:{componentName:'dateinput',id:props.nonState.id}})
+    //     :
+    //     null
+    // }
 
     return(
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-            <Pressable style={{backgroundColor:"lightgrey",borderRadius:10}} onPress={()=>setShowPicker(true)}><Text style={{fontSize:13,padding:10}}>{new Date(state).toDateString().substring(4)}</Text></Pressable>
+            <Pressable style={{backgroundColor:"lightgrey",borderRadius:10}} onPress={()=>setShowPicker(true)}><Text style={{fontSize:13,padding:10}}>{new Date(props.date).toDateString().substring(4)}</Text></Pressable>
             {
                 showPicker
                 ?
                 <DateTimePicker
                 maximumDate={new Date()}
                 testID="dateTimePicker"
-                value={new Date(state)}
+                value={props.date?new Date(props.date):new Date()}
                 mode="date"
                 is24Hour={true}
-                accentColor={THEME.COLOR.SECONDARY.SUNSHINE(1)}
+                //accentColor={THEME.COLOR.SECONDARY.SUNSHINE(1)}
                 style={{transform:[{scale:0.8}]}}
-                onChange={(e,date)=>eventHandler({name:'dateChange',data:date?.toISOString()})}
+                onChange={(e,date)=>{
+                    setShowPicker(false)
+                    navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.id,newvalue:date?.toISOString()}}}):null
+                }
+                }
                 />
                 :
                 null
@@ -58,30 +65,30 @@ const AndroidPicker=(props:Component<any,null>)=>{
 
 }
 
-const IosPicker=(props:Component<any,string>)=>{
+const IosPicker=(props:{date:string,id:string})=>{
 
-    const [state,setState]=useState(props.nonState.initialValue?props.nonState.initialValue:new Date().toISOString());
-
-    const eventHandler=(event:Event)=>{
-        setState(event.data)
-        props.nonState.eventHandler
-        ?
-        props.nonState.eventHandler({...event,triggerBy:{componentName:'dateinput',id:props.nonState.id}})
-        :
-        null
-    }
+    const [path,navigate]=useNavigation()
+    //const [state,setState]=useState(props.nonState.initialValue?props.nonState.initialValue:new Date().toISOString());
+    // const eventHandler=(event:Event)=>{
+    //     setState(event.data)
+    //     props.nonState.eventHandler
+    //     ?
+    //     props.nonState.eventHandler({...event,triggerBy:{componentName:'dateinput',id:props.nonState.id}})
+    //     :
+    //     null
+    // }
 
     return(
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
             <DateTimePicker
             maximumDate={new Date()}
             testID="dateTimePicker"
-            value={new Date(state)}
+            value={props.date?new Date(props.date):new Date()}
             mode="date"
             is24Hour={true}
-            accentColor={THEME.COLOR.SECONDARY.SUNSHINE(1)}
+            //accentColor={THEME.COLOR.SECONDARY.SUNSHINE(1)}
             style={{transform:[{scale:0.8}]}}
-            onChange={(e,date)=>eventHandler({name:'dateChange',data:date?.toISOString()})}
+            onChange={(e,date)=>navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.id,newvalue:date?.toISOString()}}}):null}
             />
         </View>
     )

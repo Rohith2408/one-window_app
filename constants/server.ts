@@ -112,14 +112,17 @@ const endPoints=[
         
     },
     {
-        ENUM:"upload-profile",
-        TYPE:"student",
+        id:"upload-profile",
+        category:"student",
+        tail:"upload-profile",
+        type:"POST",
         
     },
     {
-        ENUM:"delete-uploaded-profile",
-        TYPE:"student",
-        
+        id:"delete-uploaded-profile",
+        category:"student",
+        tail:"delete-uploaded-profile",
+        type:"POST",
     },
     {
         ENUM:"download",

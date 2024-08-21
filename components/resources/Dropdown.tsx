@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { Dropdown as DropdownType, ListItem} from "../../types"
 import { Animated, LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
-import { addToBasket } from "../../constants/basket"
+import { addToBasket, removeFromBasket } from "../../constants/basket"
 import { Fonts, Themes } from "../../constants"
 import arrow_icon from '../../assets/images/misc/back.png'
 import close_icon from '../../assets/images/misc/close.png'
@@ -55,31 +55,6 @@ const GeneralStyles=StyleSheet.create({
 const Dropdown=(props:DropdownType & {value:ListItem[],id:string})=>{
 
     const [path,navigate]=useNavigation()
-    const [showOptions,setShowOptions]=useState(false);
-    const [selectDimensions,setSelectDimensions]=useState<undefined|LayoutRectangle>(undefined);
-    const scaleY=useRef(new Animated.Value(0)).current
-
-    useEffect(()=>{
-        !props.isFocussed?setShowOptions(false):null
-    },[props.isFocussed])
-
-    useEffect(()=>{
-        Animated.timing(scaleY,{
-            toValue:showOptions?1:0,
-            duration:200,
-            useNativeDriver:false
-        }).start()
-    },[showOptions])
-
-    const toggle=()=>{
-        setShowOptions(showOptions?false:true);
-        props.eventHandler({name:"onToggle",triggerBy:"dropdown"})
-    }
-
-    const selection=(option:{label:string,value:string})=>{
-        props.eventHandler({name:"onSelect",data:option,triggerBy:"dropdown"})
-        setShowOptions(false);
-    }
 
     const onSelect=()=>{
         addToBasket("dropdown",{options:props.options,selectionMode:props.selectionMode,id:props.id,selected:props.value})
@@ -91,9 +66,16 @@ const Dropdown=(props:DropdownType & {value:ListItem[],id:string})=>{
         navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.id,newvalue:props.value.filter((data)=>data.label!=item.label)}}}):null
     }
 
+    useEffect(()=>{
+     
+        return ()=>{
+            removeFromBasket("dropdown");
+        }
+    })
+
     return(
         <View style={[GeneralStyles.mainWrapper]}>
-            <Pressable style={[GeneralStyles.selecttext_wrapper]} onPress={onSelect} onLayout={(e)=>setSelectDimensions(e.nativeEvent.layout)}>
+            <Pressable style={[GeneralStyles.selecttext_wrapper]} onPress={onSelect}>
                 <View style={{flex:1}}><Text style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,fontWeight:"700"}]}>Select</Text></View>
                 <Image source={arrow_icon} style={{width:10,height:10,resizeMode:"contain",transform:[{rotate:"-90deg"}]}}></Image>
             </Pressable>

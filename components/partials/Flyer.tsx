@@ -1,6 +1,18 @@
-import { View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { ComponentInfo } from "../../types"
 import { getComponent } from "../../utils"
+
+const GeneralStyles=StyleSheet.create({
+    main_wrapper:{
+        flex:1,
+        // backgroundColor:'white',
+        // elevation:3,
+        // shadowOffset:{width:0,height:-5},
+        // shadowOpacity:0.2,
+        // borderRadius:15,
+        padding:10
+    }
+})
 
 const Flyer=(props:{flyerid:string,flyerdata:any})=>{
 
@@ -13,7 +25,7 @@ const Flyer=(props:{flyerid:string,flyerdata:any})=>{
     }
 
     return(
-        <View style={{flex:1,backgroundColor:"red"}}>
+        <View style={[GeneralStyles.main_wrapper]}>
         {
             Container
             ?

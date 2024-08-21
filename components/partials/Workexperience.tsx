@@ -1,9 +1,11 @@
 import { useEffect } from "react"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
+import { useAppSelector } from "../../hooks/useAppSelector"
 
 const Workexperience=(props:any)=>{
 
+    const workExperiences=useAppSelector((state)=>state.workexperience)
     const [path,navigate]=useNavigation()
     useEffect(()=>{
 
@@ -14,23 +16,14 @@ const Workexperience=(props:any)=>{
     }
 
     const openFlyer=()=>{
-        Navigation?.navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Error",flyerdata:{message:"scasc"}}}})
+        //Navigation?.navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Error",flyerdata:{message:"scasc"}}}})
     }
 
     return(
         <View style={[styles.mainWrapper]}>
-            <Text>Work Experience</Text>
-            <Pressable onPress={openForm}><Text>Open Form</Text></Pressable>
-            <Pressable onPress={openFlyer}><Text>Open Flyer</Text></Pressable>
+        
         </View>
     )
 }
-
-const styles=StyleSheet.create({
-    mainWrapper:{
-        flex:1,
-        backgroundColor:'white'
-    }
-})
 
 export default Workexperience

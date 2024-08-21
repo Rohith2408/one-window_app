@@ -9,6 +9,13 @@ export interface Event{
     triggerBy:string | number
 }
 
+export type Tabbar={
+    tabChangeHandler:(tab:string)=>void,
+    currentTab:string,
+    fitWidth?:boolean,
+    tabs:{icon?:string,title:string}[]
+}
+
 export type ListInfo={
     id:string,
     card:React.FC<any>,
@@ -48,9 +55,13 @@ export type ScreenInfo={
     id:string,
     component:React.FC<any>,
     props?:string[],
+    title?:string,
     type:"Screen"|"Partial"|"Layout"|"Popup"|"Flyer",
     swipeDirection?:"X"|"Y"|"XY",
-    animationStyle?:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTopPartial"|"VerticalSlideToTop"|"Custom",
+    shiftOriginToCenter?:boolean,
+    isTransparent?:boolean,
+    occupyFullScreen?:boolean,
+    animationStyle?:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTopPartial"|"VerticalSlideToTop"|"CenterPopIn"|"CenterFadeIn"|"FadeIn"|"Custom",
     removalThreshold?:number,
     customPlacement?:{
         initial:{x:number,y:number,scale:number,opacity:number,height:number,width:number},
@@ -110,6 +121,38 @@ export type Dropdown={
     eventHandler:(event:Event)=>void
 }
 
+export type FormInfo={
+    id:"Workexperience",
+        title:string,
+        getInitialData:(id:string|undefined)=>FormData[],
+        submit:{
+            dataConverter?:(data:FormData[])=>any,
+            onSubmit:(data:any)=>Promise<ServerResponse>,
+            successText:string,
+            failureText:string,
+            idleText:string
+        },
+        allFields:{
+            id:string,
+            componentInfo:{
+                component:React.FC<any>,
+                props:any
+            },
+            title:string,
+            isOptional?:boolean,
+            emptyChecker?:(data:any)=>ServerResponse,
+            validator?:(data:any)=>ServerResponse,
+            onUpdate:{
+                event:string,
+                handler?:any
+            },
+            onFocus:{
+                event:string,
+                handler?:any
+            }
+        }[]
+}
+
 export type List<type>={
     direction:"Horizontal"|"Vertical",
     mode:"Swipe"|"Scroll",
@@ -139,7 +182,7 @@ export type StackScreen={
 
 export type TabNavigator={
     screens:TabScreen[],
-    initialTab:ComponentInfo,
+    currentTab:ComponentInfo,
     invalidPathScreen:React.FC
 }
 
@@ -436,6 +479,7 @@ export type ServerRequest={
     reqType:"GET"|"PUT"|"DELETE"|"POST",
     responseType?:"JSON"|"BLOB",
     routeType?:"public"|"private",
+    preventStringify?:boolean,
     body?:any
 }
 
@@ -446,7 +490,7 @@ export interface ServerResponse{
     AccessToken?:string
 }
 
-export interface StoreItem<datatype>{
+export interface Request<datatype>{
     requestStatus:"not_initiated" | "initiated",
     responseStatus:"recieved" | "not_recieved",
     haveAnIssue:boolean,
@@ -763,7 +807,7 @@ export interface Document{
     name: string,
     contentType: string,
     createdAt: string
-  }
+}
 
 export interface Documents{
     test?:{

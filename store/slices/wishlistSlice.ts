@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { StoreItem, wishlistItem } from "../../types";
+import { Request, wishlistItem } from "../../types";
 
 
-let initialState:StoreItem<wishlistItem[]>={
+let initialState:Request<wishlistItem[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -14,7 +14,7 @@ export const wishlistSlice=createSlice({
     name:'wishlist',
     initialState:initialState,
     reducers:{
-        initWishlist:(state,action:PayloadAction<StoreItem<wishlistItem[]>>)=>({...action.payload}),
+        initWishlist:(state,action:PayloadAction<Request<wishlistItem[]>>)=>({...action.payload}),
         addWishlist:(state,action:PayloadAction<wishlistItem>)=>{state.data.push(action.payload)},
         updateWishlist:(state,action:PayloadAction<wishlistItem>)=>{
             let index=state.data.findIndex((item)=>item._id==action.payload._id);

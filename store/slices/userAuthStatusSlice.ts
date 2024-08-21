@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { StoreItem, UserStatus } from "../../misc/typeDefinations";
+import { Request, UserStatus } from "../../misc/typeDefinations";
 
 
-let initialState:StoreItem<UserStatus>={
+let initialState:Request<UserStatus>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,

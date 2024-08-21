@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { Docinfo, Document, Documents, StoreItem } from "../../misc/typeDefinations";
+import { Documents, Request } from "../../types";
 
-let initialState:StoreItem<Documents|undefined>={
+let initialState:Request<Documents|undefined>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -10,34 +10,13 @@ let initialState:StoreItem<Documents|undefined>={
     data:undefined
 }
 
-type Fields="personal"|"resume"|"passportBD"|"academic"|"secondarySchool"|"plus2"|"degree"|"bachelors"|"masters"|"transcripts"|"bonafide"|"CMM"|"PCM"|"OD"|"test"|"languageProf"|"general"|"workExperiences"
+//type Fields="personal"|"resume"|"passportBD"|"academic"|"secondarySchool"|"plus2"|"degree"|"bachelors"|"masters"|"transcripts"|"bonafide"|"CMM"|"PCM"|"OD"|"test"|"languageProf"|"general"|"workExperiences"
 
 export const documentsSlice=createSlice({
     name:'documents',
     initialState:initialState,
     reducers:{
-        // let docPaths=[
-//     {pathArray:['personal','resume'],isArray:false},
-//     {pathArray:['personal','passportBD'],isArray:false},
-//     {pathArray:['personal','passportADD'],isArray:false},
-//     {pathArray:['academic','secondarySchool'],isArray:false},
-//     {pathArray:['academic','plus2'],isArray:false},
-//     {pathArray:['academic','degree'],isArray:false},
-//     {pathArray:['academic','bachelors','transcripts'],isArray:false},
-//     {pathArray:['academic','bachelors','bonafide'],isArray:false},
-//     {pathArray:['academic','bachelors','CMM'],isArray:false},
-//     {pathArray:['academic','bachelors','PCM'],isArray:false},
-//     {pathArray:['academic','bachelors','OD'],isArray:false},
-//     {pathArray:['academic','masters','transcripts'],isArray:false},
-//     {pathArray:['academic','masters','bonafide'],isArray:false},
-//     {pathArray:['academic','masters','CMM'],isArray:false},
-//     {pathArray:['academic','masters','PCM'],isArray:false},
-//     {pathArray:['academic','masters','OD'],isArray:false},
-//     {pathArray:['test','languageProf'],isArray:true},
-//     {pathArray:['test','general'],isArray:true},
-//     {pathArray:['workExperiences'],isArray:true},
-// ]
-        initDocuments:(state,action:PayloadAction<StoreItem<Documents>>)=>{
+        initDocuments:(state,action:PayloadAction<Request<Documents>>)=>{
             state.responseStatus=action.payload.responseStatus
             state.haveAnIssue=action.payload.haveAnIssue
             state.issue=action.payload.issue,
