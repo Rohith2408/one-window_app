@@ -6,7 +6,7 @@ import { Fonts, Themes, forms } from "../../constants";
 import { getDevice } from "../../utils";
 import useNavigation from "../../hooks/useNavigation";
 import Asynchronousbutton from "./Asynchronousbutton";
-
+import { clearBasket, getFullBasket } from "../../constants/basket";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -172,11 +172,17 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
         console.log(props.formupdate)
         if(props.formupdate)
         {
+            let field=formInfo?.allFields.find((field)=>field.id==props.formupdate?.id);
+            field?.onUpdate.handler?field.onUpdate.handler(fields,props.formupdate.newvalue):null
             dispatch({type:"update",payload:{id:props.formupdate.id,data:props.formupdate.newvalue}})
         }
     },[props.formupdate])
 
-    //console.log("fields",fields)
+    useEffect(()=>{
+        formInfo?.onLoad?formInfo.onLoad():null
+
+        return (()=>clearBasket())
+    },[])
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
@@ -197,6 +203,7 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
 
 const Field=(props:{info:FieldType,data:FormData,isFocussed:boolean,index:number,error:string|undefined,eventHandler:(event:Event)=>void})=>{
 
+    //console.log("info",props.info)
     const Container=props.info.componentInfo.component
     const Device=useRef(getDevice()).current
     const [path,navigate]=useNavigation()
@@ -219,7 +226,7 @@ const Field=(props:{info:FieldType,data:FormData,isFocussed:boolean,index:number
     return(
         <View style={[GeneralStyles.field,{zIndex:props.isFocussed?1:-1}]}>
             <Text style={[GeneralStyles.field_title,styles[Device].field_title,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.info.title}</Text>
-            <Container id={props.info.id} {...props.info.componentInfo.props} value={props.data.value} isFocussed={props.isFocussed} eventHandler={(e)=>{props.eventHandler({...e,triggerBy:props.info.id})}}></Container>
+            <Container id={props.info.id} {...props.info.componentInfo.props} value={props.data.value} isFocussed={props.isFocussed} eventHandler={(e:Event)=>{props.eventHandler({...e,triggerBy:props.info.id})}}></Container>
             {
                 props.error
                 ?

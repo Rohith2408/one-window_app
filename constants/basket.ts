@@ -8,6 +8,7 @@ const getBasket=(id:string)=>{
 
 const setBasket=(id:string,data:any)=>{
     basket=basket.map((item)=>item.id==id?{id:id,data:data}:item)
+    console.log("settttr",basket)
 }
 
 const addToBasket=(id:string,data:any)=>{
@@ -19,12 +20,21 @@ const addToBasket=(id:string,data:any)=>{
     }
     else
     {
-        basket.push({id:id,data:data})
+        basket=[...basket,{id:id,data:data}]
     }
+    console.log("add3",basket)
 }
 
 const removeFromBasket=(id:string)=>{
     basket=basket.filter((item)=>item.id!=id)
 }
 
-export {getBasket,setBasket,addToBasket,removeFromBasket}
+const getFullBasket=()=>{
+    return basket
+}
+
+const clearBasket=()=>{
+    basket=[];
+}
+
+export {getBasket,addToBasket,removeFromBasket,getFullBasket,clearBasket}

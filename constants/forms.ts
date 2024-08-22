@@ -1,13 +1,15 @@
+import Countrydropdown from "../components/resources/Countrydropdown";
 import Datetime from "../components/resources/Datetime";
 import Dropdown from "../components/resources/Dropdown";
+import Statedropdown from "../components/resources/Statedropdown";
 import Textbox from "../components/resources/Textbox";
 import { store } from "../store";
 import { setEducationHistory } from "../store/slices/educationHistorySlice";
 import { setWorkExperience } from "../store/slices/workexperienceSlice";
-import { EducationHistory_School, FormData, FormField, FormInfo, ListItem, ServerResponse, WorkExperience } from "../types";
-import { fetchCities, fetchStates, getServerRequestURL, profileUpdator, serverRequest, setWordCase } from "../utils";
+import { EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FormData, FormField, FormInfo, ListItem, ServerResponse, WorkExperience } from "../types";
+import { fetchCities, fetchCountries, fetchStates, getServerRequestURL, profileUpdator, serverRequest, setWordCase } from "../utils";
 import { validations} from "../utils/validations";
-import { getBasket, setBasket } from "./basket";
+import { addToBasket, getBasket, getFullBasket} from "./basket";
 import { GradingSystems, Industries } from "./misc";
 
 const forms:FormInfo[]=[
@@ -212,33 +214,33 @@ const forms:FormInfo[]=[
         getInitialData:(id:string|undefined)=>{
             let data:EducationHistory_School|undefined=store.getState().educationhistory.data.school
             return [
-                {id:"instituteName",value:data?data.instituteName:""},
-                {id:"country",value:data?[{label:setWordCase(data.country),value:data.country}]:[]},
-                {id:"state",value:data?[{label:setWordCase(data.state),value:data.state}]:[]},
-                {id:"city",value:data?[{label:setWordCase(data.city),value:data.city}]:[]},
-                {id:"languageOfInstruction",value:data?data.languageOfInstruction:""},
-                {id:"gradingSystem",value:data?data.gradingSystem:undefined},
-                {id:"board",value:data?data.board:[]},
-                {id:"totalScore",value:data?data.totalScore:undefined},
-                {id:"startDate",value:data?data.startDate:[]},
-                {id:"endDate",value:data?data.endDate:undefined}
+                {id:"institutename",value:data?.instituteName?data.instituteName:""},
+                {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
+                {id:"state",value:data?.state?[{label:setWordCase(data.state),value:data.state}]:[]},
+                {id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
+                {id:"languageofinstruction",value:data?.languageOfInstruction?[{label:setWordCase(data.languageOfInstruction),value:data.languageOfInstruction}]:[]},
+                {id:"board",value:data?.board?[{label:setWordCase(data.board),value:data.board}]:[]},
+                {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
+                {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
+                {id:"startdate",value:data?.startDate?data.startDate:undefined},
+                {id:"enddate",value:data?.endDate?data.endDate:undefined},
             ]
         },
         submit:{
             dataConverter:(data:FormData[],id?:string)=>{
-                let schooldetail:EducationHistory_School={
+                let schooldetails:EducationHistory_School={
                     instituteName:data[data.findIndex((item)=>item.id=="institutename")].value,
                     city: data[data.findIndex((item)=>item.id=="city")].value[0].value,
                     state: data[data.findIndex((item)=>item.id=="state")].value[0].value,
                     country: data[data.findIndex((item)=>item.id=="country")].value[0].value,
-                    languageOfInstruction:data[data.findIndex((item)=>item.id=="languageofinstruction")].value,
-                    gradingSystem: data[data.findIndex((item)=>item.id=="gradingsystem")].value,
-                    board: data[data.findIndex((item)=>item.id=="board")].value,
+                    languageOfInstruction:data[data.findIndex((item)=>item.id=="languageofinstruction")].value[0].value,
+                    gradingSystem: data[data.findIndex((item)=>item.id=="gradingsystem")].value[0].value,
+                    board: data[data.findIndex((item)=>item.id=="board")].value[0].value,
                     totalScore: data[data.findIndex((item)=>item.id=="totalscore")].value,
                     startDate: data[data.findIndex((item)=>item.id=="startdate")].value,
-                    endDate: data[data.findIndex((item)=>item.id=="enddate")].value
+                    endDate: data[data.findIndex((item)=>item.id=="enddate")].value,
                 }
-                return schooldetail
+                return schooldetails
             },
             onSubmit:async (data:EducationHistory_School)=>{
                 let res:ServerResponse=await profileUpdator({education:{...store.getState().educationhistory.data,school:data}},(res)=>res.success?store.dispatch(setEducationHistory(res.data.education)):null)
@@ -267,21 +269,24 @@ const forms:FormInfo[]=[
             {
                 id:"country",
                 componentInfo:{
-                    component:Dropdown,
+                    component:Countrydropdown,
                     props:{
-                        options:[],
                         selectionMode:"single",
-                        basketid:"country-dropdown"
+                        basketid:"country-dropdown",
+                        optionsFetcher:async ()=>{
+                            let countries=await fetchCountries();
+                            return countries.map((country:any)=>({label:setWordCase(country.name),value:country.name}))
+                        },
+                        cityFieldId:"city",
+                        stateFieldId:"state"
                     }
                 },
                 title:"Country",
                 onUpdate:{
                     event:"onSelect",
-                    handler:async (fields:FormData[],data:ListItem[])=>{
+                    handler:(fields:FormData[],data:ListItem[])=>{
                         let selectedCountry=data[0].value;
-                        setBasket("state-dropdown",{isLoading:true,options:[]})
-                        let states=await fetchStates(selectedCountry)
-                        setBasket("state-dropdown",{isLoading:false,options:states.map((city:string)=>({label:setWordCase(city),value:city}))})
+                        addToBasket("country-dropdown",selectedCountry)
                     }
                 },
                 onFocus:{
@@ -293,21 +298,26 @@ const forms:FormInfo[]=[
                 componentInfo:{
                     component:Dropdown,
                     props:{
-                        options:[],
                         selectionMode:"single",
-                        basketid:"state-dropdown"
+                        basketid:"state-dropdown",
+                        optionsFetcher:async ()=>{
+                            let selectedCountry=getBasket("country-dropdown")
+                            let states=await fetchStates(selectedCountry)
+                            return states.map((state:any)=>({label:setWordCase(state.name),value:state.name}))
+                        }
                     }
                 },
                 title:"State",
                 onUpdate:{
                     event:"onSelect",
-                    handler:async (fields:FormData[],data:ListItem[])=>{
-                        let selectedCountry=fields.find((field)=>field.id=="country")?.value[0].value
-                        let selectedState=data[0].value;
-                        setBasket("city-dropdown",{isLoading:true,options:[]})
-                        let cities=await fetchCities(selectedCountry,selectedState)
-                        setBasket("city-dropdown",{isLoading:false,options:cities.map((city:string)=>({label:setWordCase(city),value:city}))})
-                    }
+                    handler:undefined
+                    // (fields:FormData[],data:ListItem[])=>{
+                    //     if(data.length>0)
+                    //     {
+                    //         let selectedCountry=data[0].value;
+                    //         addToBasket("state-dropdown",selectedCountry)
+                    //     }
+                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -318,10 +328,15 @@ const forms:FormInfo[]=[
                 componentInfo:{
                     component:Dropdown,
                     props:{
-                        options:[],
                         selectionMode:"single",
-                        basketid:"city-dropdown"
-                    }
+                        basketid:"city-dropdown",
+                        optionsFetcher:async ()=>{
+                            let selectedCountry=getBasket("country-dropdown")
+                            let selectedState=getBasket("state-dropdown")
+                            let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):[]
+                            return cities.map((city:any)=>({label:setWordCase(city),value:city}))
+                        } 
+                        }
                 },
                 title:"City",
                 onUpdate:{
@@ -392,15 +407,13 @@ const forms:FormInfo[]=[
                         basketid:"gradingsystem-dropdown"
                     }
                 },
-                validator:()=>{
-                    
-                },
                 title:"Grading System",
                 onUpdate:{
                     event:"onSelect",
-                    handler:(formdata:FormData[],data:ListItem[])=>{
-                        setBasket("gradingsystem-dropdown",data[0].value)
-                    }
+                    handler:undefined
+                    // (formdata:FormData[],data:ListItem[])=>{
+                    //     addToBasket("gradingsystem-dropdown",data[0].value)
+                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -412,11 +425,11 @@ const forms:FormInfo[]=[
                     component:Textbox,
                     props:{placeholder:""}
                 },
-                validator:(data:ListItem[])=>{
+                validator:(data:any)=>{
                     let gradingSystemSelected=getBasket("gradingsystem-dropdown");
                     let validationData=validations[gradingSystemSelected.toUpperCase()]
                     return {
-                        success:validationData.regex.test(data[0].value),
+                        success:validationData.regex.test(data),
                         message:validationData.errorMessage,
                         data:undefined
                     }
@@ -459,6 +472,970 @@ const forms:FormInfo[]=[
                 onFocus:{
                     event:"onFocus"
                 }
+            },
+            {
+                id:"stream",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Stream",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"backlogs",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Backlogs",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"completed",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Completed?",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            }
+        ]
+    },
+    {
+        id:"Intermediate",
+        title:"Please provide your Intermediate Details",
+        getInitialData:(id:string|undefined)=>{
+            let data:EducationHistory_Plus2|undefined=store.getState().educationhistory.data.plus2
+            return [
+                {id:"institutename",value:data?.instituteName?data.instituteName:""},
+                {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
+                {id:"state",value:data?.state?[{label:setWordCase(data.state),value:data.state}]:[]},
+                {id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
+                {id:"languageofinstruction",value:data?.languageOfInstruction?[{label:setWordCase(data.languageOfInstruction),value:data.languageOfInstruction}]:[]},
+                {id:"board",value:data?.board?[{label:setWordCase(data.board),value:data.board}]:[]},
+                {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
+                {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
+                {id:"startdate",value:data?.startDate?data.startDate:undefined},
+                {id:"enddate",value:data?.endDate?data.endDate:undefined},
+                {id:"stream",value:data?.stream?data.stream:undefined},
+                {id:"backlogs",value:data?.backlogs?data.backlogs.toString():undefined},
+                {id:"completed",value:data?.isCompleted?(data.isCompleted?"yes":"no"):undefined}
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let intermediatedetail:EducationHistory_Plus2={
+                    instituteName:data[data.findIndex((item)=>item.id=="institutename")].value,
+                    city: data[data.findIndex((item)=>item.id=="city")].value[0].value,
+                    state: data[data.findIndex((item)=>item.id=="state")].value[0].value,
+                    country: data[data.findIndex((item)=>item.id=="country")].value[0].value,
+                    languageOfInstruction:data[data.findIndex((item)=>item.id=="languageofinstruction")].value[0].value,
+                    gradingSystem: data[data.findIndex((item)=>item.id=="gradingsystem")].value[0].value,
+                    board: data[data.findIndex((item)=>item.id=="board")].value[0].value,
+                    totalScore: data[data.findIndex((item)=>item.id=="totalscore")].value,
+                    startDate: data[data.findIndex((item)=>item.id=="startdate")].value,
+                    endDate: data[data.findIndex((item)=>item.id=="enddate")].value,
+                    stream:data[data.findIndex((item)=>item.id=="stream")].value,
+                    backlogs:data[data.findIndex((item)=>item.id=="backlogs")].value,
+                    isCompleted:data[data.findIndex((item)=>item.id=="completed")].value=="yes"?true:false
+                }
+                return intermediatedetail
+            },
+            onSubmit:async (data:EducationHistory_Plus2)=>{
+                let res:ServerResponse=await profileUpdator({education:{...store.getState().educationhistory.data,plus2:data}},(res)=>res.success?store.dispatch(setEducationHistory(res.data.education)):null)
+                return res
+            },
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        allFields:[
+            {
+                id:"institutename",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Institute Name",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"country",
+                componentInfo:{
+                    component:Countrydropdown,
+                    props:{
+                        selectionMode:"single",
+                        basketid:"country-dropdown",
+                        cityFieldId:"city",
+                        stateFieldId:"state",
+                        optionsFetcher:async ()=>{
+                            let countries=await fetchCountries();
+                            return countries.map((country:any)=>({label:setWordCase(country.name),value:country.name}))
+                        }
+                    }
+                },
+                title:"Country",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:(fields:FormData[],data:ListItem[])=>{
+                        let selectedCountry=data[0].value;
+                        addToBasket("country-dropdown",selectedCountry)
+                    }
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"state",
+                componentInfo:{
+                    component:Statedropdown,
+                    props:{
+                        selectionMode:"single",
+                        basketid:"state-dropdown",
+                        cityFieldId:"city",
+                        optionsFetcher:async ()=>{
+                            let selectedCountry=getBasket("country-dropdown")
+                            let states=await fetchStates(selectedCountry)
+                            return states.map((state:any)=>({label:setWordCase(state.name),value:state.name}))
+                        }
+                    }
+                },
+                title:"State",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:(fields:FormData[],data:ListItem[])=>{
+                        if(data.length>0)
+                        {
+                            let selectedCountry=data[0].value;
+                            addToBasket("state-dropdown",selectedCountry)
+                        }
+                    }
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"city",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        selectionMode:"single",
+                        basketid:"city-dropdown",
+                        optionsFetcher:async ()=>{
+                            let selectedCountry=getBasket("country-dropdown")
+                            let selectedState=getBasket("state-dropdown")
+                            let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):[]
+                            return cities.map((city:any)=>({label:setWordCase(city),value:city}))
+                        } 
+                     }
+                },
+                title:"City",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"board",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:[
+                            {label:"CBSE",value:"CBSE"},
+                            {label:"ICSE",value:"ICSE"},
+                            {label:"IB",value:"IB"},
+                            {label:"NIOS",value:"NIOS"},
+                            {label:"AISSCE",value:"AISSCE"},
+                            {label:"other",value:"other"}
+                        ],
+                        selectionMode:"single",
+                        basketid:"board-dropdown"
+                    }
+                },
+                title:"Board",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"languageofinstruction",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:[
+                            {label:"English",value:"english"},
+                            {label:"Hindi",value:"hindi"},
+                            {label:"Telugu",value:"telugu"},
+                            {label:"Other",value:"other"}
+                        ],
+                        selectionMode:"single",
+                        basketid:"language-dropdown"
+                    }
+                },
+                title:"Language Of Instruction",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"gradingsystem",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:GradingSystems.map((item)=>({label:item,value:item.toLowerCase()})),
+                        selectionMode:"single",
+                        basketid:"gradingsystem-dropdown"
+                    }
+                },
+                title:"Grading System",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                    // (formdata:FormData[],data:ListItem[])=>{
+                    //     addToBasket("gradingsystem-dropdown",data[0].value)
+                    // }
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"totalscore",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                validator:(data:any)=>{
+                    console.log("basket",getBasket("gradingsystem-dropdown"),getFullBasket())
+                    let gradingSystemSelected=getBasket("gradingsystem-dropdown");
+                    console.log("ggg",gradingSystemSelected);
+                    let validationData=validations[gradingSystemSelected.toUpperCase()]
+                    return {
+                        success:validationData.regex.test(data),
+                        message:validationData.errorMessage,
+                        data:undefined
+                    }
+                },
+                title:"Total Score",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"startdate",
+                componentInfo:{
+                    component:Datetime,
+                    props:undefined
+                },
+                title:"Start Date",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"enddate",
+                componentInfo:{
+                    component:Datetime,
+                    props:undefined
+                },
+                title:"End Date",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"stream",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Stream",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"backlogs",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Backlogs",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"completed",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Completed?",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            }
+        ]
+    },
+    {
+        id:"Undergraduation",
+        title:"Please provide your Undergraduation Details",
+        getInitialData:(id:string|undefined)=>{
+            let data:EducationHistory_UnderGraduation|undefined=store.getState().educationhistory.data.underGraduation
+            return [
+                {id:"institutename",value:data?.instituteName?data.instituteName:""},
+                {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
+                {id:"state",value:data?.state?[{label:setWordCase(data.state),value:data.state}]:[]},
+                {id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
+                {id:"programmajor",value:data?.instituteName?data.programMajor:""},
+                {id:"degreeprogram",value:data?.instituteName?data.degreeProgram:""},
+                {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
+                {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
+                {id:"startdate",value:data?.startDate?data.startDate:undefined},
+                {id:"enddate",value:data?.endDate?data.endDate:undefined},
+                {id:"backlogs",value:data?.backlogs?data.backlogs.toString():undefined},
+                {id:"completed",value:data?.isCompleted?(data.isCompleted?"yes":"no"):undefined}
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let ugdetail:EducationHistory_UnderGraduation={
+                    instituteName:data[data.findIndex((item)=>item.id=="institutename")].value,
+                    city: data[data.findIndex((item)=>item.id=="city")].value[0].value,
+                    state: data[data.findIndex((item)=>item.id=="state")].value[0].value,
+                    country: data[data.findIndex((item)=>item.id=="country")].value[0].value,
+                    degreeProgram:data[data.findIndex((item)=>item.id=="degreeprogram")].value,
+                    programMajor:data[data.findIndex((item)=>item.id=="programmajor")].value,
+                    gradingSystem: data[data.findIndex((item)=>item.id=="gradingsystem")].value[0].value,
+                    affiliatedUniversity:data[data.findIndex((item)=>item.id=="affiliateduniversity")].value,
+                    totalScore: data[data.findIndex((item)=>item.id=="totalscore")].value,
+                    startDate: data[data.findIndex((item)=>item.id=="startdate")].value,
+                    endDate: data[data.findIndex((item)=>item.id=="enddate")].value,
+                    backlogs:data[data.findIndex((item)=>item.id=="backlogs")].value,
+                    isCompleted:data[data.findIndex((item)=>item.id=="completed")].value=="yes"?true:false
+                }
+                return ugdetail
+            },
+            onSubmit:async (data:EducationHistory_UnderGraduation)=>{
+                let res:ServerResponse=await profileUpdator({education:{...store.getState().educationhistory.data,underGraduation:data}},(res)=>res.success?store.dispatch(setEducationHistory(res.data.education)):null)
+                return res
+            },
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        allFields:[
+            {
+                id:"institutename",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Institute Name",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"country",
+                componentInfo:{
+                    component:Countrydropdown,
+                    props:{
+                        selectionMode:"single",
+                        basketid:"country-dropdown",
+                        cityFieldId:"city",
+                        stateFieldId:"state",
+                        optionsFetcher:async ()=>{
+                            let countries=await fetchCountries();
+                            return countries.map((country:any)=>({label:setWordCase(country.name),value:country.name}))
+                        }
+                    }
+                },
+                title:"Country",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:(fields:FormData[],data:ListItem[])=>{
+                        let selectedCountry=data[0].value;
+                        addToBasket("country-dropdown",selectedCountry)
+                    }
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"state",
+                componentInfo:{
+                    component:Statedropdown,
+                    props:{
+                        selectionMode:"single",
+                        basketid:"state-dropdown",
+                        cityFieldId:"city",
+                        optionsFetcher:async ()=>{
+                            let selectedCountry=getBasket("country-dropdown")
+                            let states=await fetchStates(selectedCountry)
+                            return states.map((state:any)=>({label:setWordCase(state.name),value:state.name}))
+                        }
+                    }
+                },
+                title:"State",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:(fields:FormData[],data:ListItem[])=>{
+                        if(data.length>0)
+                        {
+                            let selectedCountry=data[0].value;
+                            addToBasket("state-dropdown",selectedCountry)
+                        }
+                    }
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"city",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        selectionMode:"single",
+                        basketid:"city-dropdown",
+                        optionsFetcher:async ()=>{
+                            let selectedCountry=getBasket("country-dropdown")
+                            let selectedState=getBasket("state-dropdown")
+                            let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):[]
+                            return cities.map((city:any)=>({label:setWordCase(city),value:city}))
+                        } 
+                     }
+                },
+                title:"City",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"affiliateduniversity",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Affiliated University",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"programmajor",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Program Major",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"degreeprogram",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Degree Program",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"gradingsystem",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:GradingSystems.map((item)=>({label:item,value:item.toLowerCase()})),
+                        selectionMode:"single",
+                        basketid:"gradingsystem-dropdown"
+                    }
+                },
+                title:"Grading System",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                    // (formdata:FormData[],data:ListItem[])=>{
+                    //     addToBasket("gradingsystem-dropdown",data[0].value)
+                    // }
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"totalscore",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                validator:(data:any)=>{
+                    console.log("basket",getBasket("gradingsystem-dropdown"),getFullBasket())
+                    let gradingSystemSelected=getBasket("gradingsystem-dropdown");
+                    console.log("ggg",gradingSystemSelected);
+                    let validationData=validations[gradingSystemSelected.toUpperCase()]
+                    return {
+                        success:validationData.regex.test(data),
+                        message:validationData.errorMessage,
+                        data:undefined
+                    }
+                },
+                title:"Total Score",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"startdate",
+                componentInfo:{
+                    component:Datetime,
+                    props:undefined
+                },
+                title:"Start Date",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"enddate",
+                componentInfo:{
+                    component:Datetime,
+                    props:undefined
+                },
+                title:"End Date",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"backlogs",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Backlogs",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"completed",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Completed?",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            }
+        ]
+    },
+    {
+        id:"Postgraduation",
+        title:"Please provide your Postgraduation Details",
+        getInitialData:(id:string|undefined)=>{
+            let data:EducationHistory_PostGraduation|undefined=store.getState().educationhistory.data.postGraduation
+            return [
+                {id:"institutename",value:data?.instituteName?data.instituteName:""},
+                {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
+                {id:"state",value:data?.state?[{label:setWordCase(data.state),value:data.state}]:[]},
+                {id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
+                {id:"affiliateduniversity",value:data?.instituteName?data.affiliatedUniversity:""},
+                {id:"specialization",value:data?.instituteName?data.specialization:""},
+                {id:"degreeprogram",value:data?.instituteName?data.degreeProgram:""},
+                {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
+                {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
+                {id:"startdate",value:data?.startDate?data.startDate:undefined},
+                {id:"enddate",value:data?.endDate?data.endDate:undefined},
+                {id:"backlogs",value:data?.backlogs?data.backlogs.toString():undefined},
+                {id:"completed",value:data?.isCompleted?(data.isCompleted?"yes":"no"):undefined}
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let pgdetail:EducationHistory_PostGraduation={
+                    instituteName:data[data.findIndex((item)=>item.id=="institutename")].value,
+                    city: data[data.findIndex((item)=>item.id=="city")].value[0].value,
+                    state: data[data.findIndex((item)=>item.id=="state")].value[0].value,
+                    country: data[data.findIndex((item)=>item.id=="country")].value[0].value,
+                    degreeProgram:data[data.findIndex((item)=>item.id=="degreeprogram")].value,
+                    affiliatedUniversity:data[data.findIndex((item)=>item.id=="affiliateduniversity")].value,
+                    specialization:data[data.findIndex((item)=>item.id=="specialization")].value,
+                    gradingSystem: data[data.findIndex((item)=>item.id=="gradingsystem")].value[0].value,
+                    totalScore: data[data.findIndex((item)=>item.id=="totalscore")].value,
+                    startDate: data[data.findIndex((item)=>item.id=="startdate")].value,
+                    endDate: data[data.findIndex((item)=>item.id=="enddate")].value,
+                    backlogs:data[data.findIndex((item)=>item.id=="backlogs")].value,
+                    isCompleted:data[data.findIndex((item)=>item.id=="completed")].value=="yes"?true:false
+                }
+                return pgdetail
+            },
+            onSubmit:async (data:EducationHistory_UnderGraduation)=>{
+                let res:ServerResponse=await profileUpdator({education:{...store.getState().educationhistory.data,postGraduation:data}},(res)=>res.success?store.dispatch(setEducationHistory(res.data.education)):null)
+                return res
+            },
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        allFields:[
+            {
+                id:"institutename",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Institute Name",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"country",
+                componentInfo:{
+                    component:Countrydropdown,
+                    props:{
+                        selectionMode:"single",
+                        basketid:"country-dropdown",
+                        cityFieldId:"city",
+                        stateFieldId:"state",
+                        optionsFetcher:async ()=>{
+                            let countries=await fetchCountries();
+                            return countries.map((country:any)=>({label:setWordCase(country.name),value:country.name}))
+                        }
+                    }
+                },
+                title:"Country",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:(fields:FormData[],data:ListItem[])=>{
+                        let selectedCountry=data[0].value;
+                        addToBasket("country-dropdown",selectedCountry)
+                    }
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"state",
+                componentInfo:{
+                    component:Statedropdown,
+                    props:{
+                        selectionMode:"single",
+                        basketid:"state-dropdown",
+                        cityFieldId:"city",
+                        optionsFetcher:async ()=>{
+                            let selectedCountry=getBasket("country-dropdown")
+                            let states=await fetchStates(selectedCountry)
+                            return states.map((state:any)=>({label:setWordCase(state.name),value:state.name}))
+                        }
+                    }
+                },
+                title:"State",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:(fields:FormData[],data:ListItem[])=>{
+                        if(data.length>0)
+                        {
+                            let selectedCountry=data[0].value;
+                            addToBasket("state-dropdown",selectedCountry)
+                        }
+                    }
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"city",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        selectionMode:"single",
+                        basketid:"city-dropdown",
+                        optionsFetcher:async ()=>{
+                            let selectedCountry=getBasket("country-dropdown")
+                            let selectedState=getBasket("state-dropdown")
+                            let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):[]
+                            return cities.map((city:any)=>({label:setWordCase(city),value:city}))
+                        } 
+                     }
+                },
+                title:"City",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"affiliateduniversity",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Affiliated University",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"specialization",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Specialization",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"degreeprogram",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Degree Program",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"gradingsystem",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:GradingSystems.map((item)=>({label:item,value:item.toLowerCase()})),
+                        selectionMode:"single",
+                        basketid:"gradingsystem-dropdown"
+                    }
+                },
+                title:"Grading System",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                    // (formdata:FormData[],data:ListItem[])=>{
+                    //     addToBasket("gradingsystem-dropdown",data[0].value)
+                    // }
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"totalscore",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                validator:(data:any)=>{
+                    console.log("basket",getBasket("gradingsystem-dropdown"),getFullBasket())
+                    let gradingSystemSelected=getBasket("gradingsystem-dropdown");
+                    console.log("ggg",gradingSystemSelected);
+                    let validationData=validations[gradingSystemSelected.toUpperCase()]
+                    return {
+                        success:validationData.regex.test(data),
+                        message:validationData.errorMessage,
+                        data:undefined
+                    }
+                },
+                title:"Total Score",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"startdate",
+                componentInfo:{
+                    component:Datetime,
+                    props:undefined
+                },
+                title:"Start Date",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"enddate",
+                componentInfo:{
+                    component:Datetime,
+                    props:undefined
+                },
+                title:"End Date",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"backlogs",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Backlogs",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"completed",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Completed?",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
             }
         ]
     }
@@ -466,144 +1443,5 @@ const forms:FormInfo[]=[
 
 export {forms}
 
-//const formFields:FormField[]=[
-//     {
-//         _id:"companyname",
-//         title:"Company Name",
-//         container:{
-//             _id:'companyname',
-//             component:"textbox",
-//             data:{placeholder:""},
-//             formUpdateEventName:"textInput",
-//             formFocusEventName:"onInteraction"
-//         },
-//         emptyChecker:stringEmptyChecker,
-//         initialValue:undefined
-//     },
-//     {
-//         _id:"worktype",
-//         title:"Work Type",
-//         container:{
-//             _id:'worktype',
-//             component:"formdropdown",
-//             data:{
-//                 options:[
-//                     {label:"Full-time",value:"full-time"},
-//                     {label:"Part-time",value:"part-time"},
-//                     {label:"Freelancing",value:"freelancing"},
-//                     {label:"Contract",value:"contract"},
-//                     {label:"Remote",value:"remote"},
-//                     {label:"Flexible",value:"flexible"},
-//                     {label:"Shift-work",value:"shift work"}
-//                 ]
-//             },
-//             formUpdateEventName:"itemSelected",
-//             formFocusEventName:"onToggle"
-//         },
-//         emptyChecker:stringEmptyChecker,
-//         initialValue:undefined
-//     },
-//     {
-//         _id:"sector",
-//         title:"Sector",
-//         container:{
-//             _id:'sector',
-//             component:"formdropdown",
-//             data:{
-//                 options:Industries.map((industry)=>({label:setWordCase(industry),value:industry})),
-//                 showSearch:true
-//             },
-//             formUpdateEventName:"itemSelected",
-//             formFocusEventName:"onToggle"
-//         },
-//         emptyChecker:stringEmptyChecker,
-//         initialValue:undefined
-//     },
-//     {
-//         _id:"designation",
-//         title:"Designation",
-//         container:{
-//             _id:'designation',
-//             component:"textbox",
-//             data:{placeholder:"Your role in the company"},
-//             formUpdateEventName:"textInput",
-//             formFocusEventName:"onInteraction"
-//         },
-//         emptyChecker:stringEmptyChecker,
-//         initialValue:undefined
-//     },
-//     {
-//         _id:"ongoing",
-//         title:"Ongoing?",
-//         container:{
-//             _id:'ongoing',
-//             component:"formdropdown",
-//             data:{
-//                 options:[
-//                     {label:"Yes",value:"yes"},
-//                     {label:"No",value:"no"}
-//                 ]
-//             },
-//             formUpdateEventName:"itemSelected",
-//             formFocusEventName:"onToggle"
-//         },
-//         listeners:[{
-//             event:"itemSelected",
-//             type:"state",
-//             function:(data)=>{
-//                 let endDateField:FormField={
-//                     _id:"enddate",
-//                     title:"End Date",
-//                     container:{
-//                         _id:'enddate',
-//                         component:"dateinput",
-//                         data:"Ex. dd/mm/yyyy",
-//                         formUpdateEventName:"dateChange"
-//                     },
-//                     emptyChecker:stringEmptyChecker,
-//                     initialValue:undefined
-//                 }
-//                 let updatedFields:FormField[]=data.fields
-//                 let currentFields=[...data.fields];
-//                 if(data.data=="no")
-//                 {
-//                     let startDateindex=data.fields.findIndex((field)=>field._id=="startdate") 
-//                     currentFields.splice(startDateindex+1,0,endDateField)
-//                     updatedFields=currentFields
-//                 }
-//                 if(data.data=="yes")
-//                 {
-//                     updatedFields=currentFields.filter((item)=>item._id!="enddate")
-//                 }
-//                 return updatedFields
-//             }
-//             }],
-//         emptyChecker:stringEmptyChecker,
-//         initialValue:undefined
-//     },
-//     {
-//         _id:"startdate",
-//         title:"Start Date",
-//         container:{
-//             _id:'startdate',
-//             component:"dateinput",
-//             data:"Ex. dd/mm/yyyy",
-//             formUpdateEventName:"dateChange"
-//         },
-//         emptyChecker:stringEmptyChecker,
-//         initialValue:undefined
-//     },
-//     {
-//         _id:"document",
-//         title:"Document",
-//         container:{
-//             _id:'document',
-//             component:"formdoccontainer",
-//             data:undefined,
-//             formUpdateEventName:"docsChanged"
-//         },
-//         isOptional:true,
-//         initialValue:{uploadedDoc:undefined,pickedDoc:undefined}
-//     }
-// ]
+
 

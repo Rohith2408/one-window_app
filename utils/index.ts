@@ -511,7 +511,8 @@ export const fetchStates=async (countryData:string)=>{
       body:JSON.stringify({country:countryData})
   })
   let data=await res.json()
-  return data;
+  console.log("states",JSON.stringify(data,null,2));
+  return data.data.states;
 }
 
 export const fetchCities=async (countryData:string,stateData:string)=>{
@@ -523,5 +524,16 @@ export const fetchCities=async (countryData:string,stateData:string)=>{
       body:JSON.stringify({country:countryData,state:stateData})
   })
   let data=await res.json()
-  return data;
+  return data.data;
+}
+
+export const fetchCountries=async ()=>{
+  let res=await fetch(Api.countries,{
+    headers:{
+        "Content-Type": "application/json"
+    },
+    method:"GET",
+  })
+  let data=await res.json()
+  return data.data;
 }

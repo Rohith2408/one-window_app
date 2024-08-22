@@ -18,6 +18,7 @@ import Personalinfo from "../components/partials/Personalinfo"
 import DPoptions from "../components/flyers/DPoptions"
 import Dp from "../components/partials/Dp"
 import Documents from "../components/partials/Documents"
+import Educationhistory from "../components/partials/Educationhistory"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -37,7 +38,8 @@ const components:ScreenInfo[]=[
     {id:"DPoptions",component:DPoptions,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Dp",component:Dp,type:"Popup",props:["image"],swipeDirection:"XY",isTransparent:true,occupyFullScreen:true,animationStyle:"FadeIn",removalThreshold:0.5},
     {id:"Documents",component:Documents,type:"Partial",title:"Documents",props:["documentstab"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
-    {id:"Workexperience",component:Workexperience,type:"Partial",title:"Workexperience",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3}
+    {id:"Workexperience",component:Workexperience,type:"Partial",title:"Workexperience",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Educationhistory",component:Educationhistory,type:"Partial",title:"Education History",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3}
 ]
 
 const setComponentInfo=(id:string,key:keyof ScreenInfo,value:any)=>{

@@ -4,11 +4,9 @@ import { Fonts, Themes } from "../../constants";
 
 const Textbox=(props:{placeholder:string,eventHandler:(event:Event)=>void,value:string|undefined})=>{
 
-
-    
     return(
         <View style={[GeneralStyles.wrapper]}>
-            <TextInput style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,fontWeight:"700"}]} onChangeText={(value)=>props.eventHandler({name:"onTextInput",data:value,triggerBy:"textinput"})} onFocus={()=>props.eventHandler({name:"onFocus",triggerBy:"textinput"})} placeholder={props.placeholder} value={props.value}></TextInput>
+            <TextInput style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,fontWeight:"700"}]} onChangeText={(value)=>props.eventHandler({name:"onTextInput",data:value,triggerBy:"textinput"})} placeholder={props.placeholder} value={props.value}></TextInput>
         </View>
     )
 }

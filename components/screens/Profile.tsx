@@ -15,7 +15,7 @@ import orders_icon from '../../assets/images/profile/orders.png'
 import preferences_icon from '../../assets/images/profile/preferences.png'
 import { useAppSelector } from "../../hooks/useAppSelector";
 import Loadingview from "../resources/Loadingview";
-import defaultDP from '../../assets/images/misc/defaultDP.png'
+import defaultDP from '../../assets/images/misc/sampledp.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{

@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react"
 import { Dropdown as DropdownType, ListItem} from "../../types"
 import { Animated, LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
-import { addToBasket, removeFromBasket } from "../../constants/basket"
+import { addToBasket, getBasket, removeFromBasket } from "../../constants/basket"
 import { Fonts, Themes } from "../../constants"
 import arrow_icon from '../../assets/images/misc/back.png'
 import close_icon from '../../assets/images/misc/close.png'
 import { Image } from "expo-image"
 import { setLayoutAnimation } from "../../utils"
+import loading_gif from '../../assets/images/misc/loader.gif'
 
 const GeneralStyles=StyleSheet.create({
     mainWrapper:{
@@ -55,10 +56,24 @@ const GeneralStyles=StyleSheet.create({
 const Dropdown=(props:DropdownType & {value:ListItem[],id:string})=>{
 
     const [path,navigate]=useNavigation()
+    const [loading,setLoading]=useState(false)
+    const options=useRef<undefined|ListItem[]>(props.options);
+    const addedToBasket=useRef(false);
 
-    const onSelect=()=>{
-        props.options?addToBasket(props.basketid,{options:props.options}):null
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:props.basketid,selectionMode:props.selectionMode,id:props.id,selected:props.value}}}}):null
+    const onSelect=async ()=>{
+        console.log("options",props.options,props.optionsFetcher);
+        if(props.optionsFetcher)
+        {
+            setLoading(true)
+            options.current=await props.optionsFetcher()
+            setLoading(false)
+        }   
+        console.log("options",options.current)
+        if(options.current)
+        {
+            addToBasket(props.basketid+"-dropdownoptions",{options:options.current,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value});
+        }
+        options.current?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null:null
     }
 
     const removeSelected=(item:ListItem)=>{
@@ -69,17 +84,31 @@ const Dropdown=(props:DropdownType & {value:ListItem[],id:string})=>{
     useEffect(()=>{
      
         return ()=>{
-            removeFromBasket(props.basketid);
+            //removeFromBasket(props.basketid);
         }
     })
 
-    console.log(props.selectionMode);
+    useEffect(()=>{
+        console.log("called",props.basketid,props.value);
+        if(props.value.length>0)
+        {
+            if(props.selectionMode=="single")
+            {
+                addToBasket(props.basketid,props.value[0].value)
+            }
+            else
+            {
+                addToBasket(props.basketid,props.value.map((item)=>item.value))
+            }
+        }
+    },[props.value])
+
 
     return(
         <View style={[GeneralStyles.mainWrapper]}>
             <Pressable style={[GeneralStyles.selecttext_wrapper]} onPress={onSelect}>
                 <View style={{flex:1}}><Text style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,fontWeight:"700"}]}>{(props.selectionMode=="single" && props.value.length!=0)?props.value[0].label:"Select"}</Text></View>
-                <Image source={arrow_icon} style={{width:10,height:10,resizeMode:"contain",transform:[{rotate:"-90deg"}]}}></Image>
+                <Image source={loading?loading_gif:arrow_icon} style={{width:10,height:10,resizeMode:"contain",transform:[{rotate:"-90deg"}]}}></Image>
             </Pressable>
             {
                 props.selectionMode=="multi"

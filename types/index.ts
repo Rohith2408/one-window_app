@@ -112,10 +112,11 @@ export type ListItem={
 }
 
 export type Dropdown={
-    options:{
+    options?:{
         label:string,
         value:string
     }[],
+    optionsFetcher?:(data?:any)=>Promise<ListItem[]>,
     basketid:string,
     selectionMode:"single"|"multi",
     isFocussed:boolean,
@@ -126,6 +127,7 @@ export type FormInfo={
     id:string,
     title:string,
     getInitialData:(id:string|undefined)=>FormData[],
+    onLoad?:()=>void,
     submit:{
         dataConverter?:(data:FormData[],id?:string)=>any,
         onSubmit:(data:any)=>Promise<ServerResponse>,
