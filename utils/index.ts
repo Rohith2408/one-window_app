@@ -1,5 +1,5 @@
 import { Dimensions, LayoutAnimation, Platform } from "react-native";
-import { baseAppUrl,secureStoreKeys } from "../constants";
+import { Api, baseAppUrl,secureStoreKeys } from "../constants";
 import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo } from "../types";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
@@ -442,6 +442,7 @@ export const pickDocument=async (sizeLimit:number)=>{
       data:null,
       message:""
   };
+
   console.log("Doc size",res.assets[0].size/1000000)
   if(!res.canceled){
       if(res.assets[0].size && res.assets[0].mimeType && (res.assets[0].size/1000000)<=sizeLimit)
@@ -476,7 +477,7 @@ export const pickDocument=async (sizeLimit:number)=>{
 }
 
 export const Word2Sentence=(words:string[],startStr?:string,seperator?:string)=>{
-  return words.reduce((sentence,word,i)=>(word!=undefined && word.length>0)?(i==(words.length-1)?(sentence+word):(sentence+word+(seperator?seperator:" , "))):(sentence+""),startStr!=undefined?startStr:"")
+  return words.reduce((sentence,word,i)=>(word!=undefined && word.length>0)?(i==(words.length-1)?(sentence+setWordCase(word)):(sentence+setWordCase(word)+(seperator?seperator:" , "))):(sentence+""),startStr!=undefined?startStr:"")
 }
 
 export const formatDate=(date:string,showWeek?:boolean)=>{
@@ -486,4 +487,41 @@ export const formatDate=(date:string,showWeek?:boolean)=>{
   let day=dateObj.getDate();
   let year=dateObj.getFullYear()
   return (month+" "+day+","+year+" "+(showWeek?week:""))
+}
+
+export const profileUpdator=async (data:any,callback?:(res:ServerResponse)=>void)=>{
+  let res:ServerResponse=await serverRequest({
+    url:getServerRequestURL("profile","PUT"),
+    reqType:"PUT",
+    body:data
+  })
+  if(callback)
+  {
+    callback(res) //store update
+  }
+  return res
+}
+
+export const fetchStates=async (countryData:string)=>{
+  let res=await fetch(Api.states,{
+      headers:{
+          "Content-Type": "application/json"
+      },
+      method:"POST",
+      body:JSON.stringify({country:countryData})
+  })
+  let data=await res.json()
+  return data;
+}
+
+export const fetchCities=async (countryData:string,stateData:string)=>{
+  let res=await fetch(Api.cities,{
+      headers:{
+          "Content-Type": "application/json"
+      },
+      method:"POST",
+      body:JSON.stringify({country:countryData,state:stateData})
+  })
+  let data=await res.json()
+  return data;
 }

@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Order, StoreItem } from "../../types";
+import { Order, Request } from "../../types";
 
-let initialState:StoreItem<Order[]>={
+let initialState:Request<Order[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -13,7 +13,7 @@ const OrdersSlice=createSlice({
     name:'orders',
     initialState:initialState,
     reducers:{
-        initOrders:(state,action:PayloadAction<StoreItem<Order[]>>)=>({...action.payload}),
+        initOrders:(state,action:PayloadAction<Request<Order[]>>)=>({...action.payload}),
         setOrders:(state,action:PayloadAction<Order[]>)=>{state.data=action.payload},
         addOrders:(state,action:PayloadAction<Order>)=>{state.data.push(action.payload)},
         removeNotification:(state,action:PayloadAction<string>)=>{state.data=state.data.filter((notification)=>notification._id!=action.payload)},

@@ -57,8 +57,8 @@ const Dropdown=(props:DropdownType & {value:ListItem[],id:string})=>{
     const [path,navigate]=useNavigation()
 
     const onSelect=()=>{
-        addToBasket("dropdown",{options:props.options,selectionMode:props.selectionMode,id:props.id,selected:props.value})
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:"dropdown"}}}}):null
+        props.options?addToBasket(props.basketid,{options:props.options}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:props.basketid,selectionMode:props.selectionMode,id:props.id,selected:props.value}}}}):null
     }
 
     const removeSelected=(item:ListItem)=>{
@@ -69,26 +69,34 @@ const Dropdown=(props:DropdownType & {value:ListItem[],id:string})=>{
     useEffect(()=>{
      
         return ()=>{
-            removeFromBasket("dropdown");
+            removeFromBasket(props.basketid);
         }
     })
+
+    console.log(props.selectionMode);
 
     return(
         <View style={[GeneralStyles.mainWrapper]}>
             <Pressable style={[GeneralStyles.selecttext_wrapper]} onPress={onSelect}>
-                <View style={{flex:1}}><Text style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,fontWeight:"700"}]}>Select</Text></View>
+                <View style={{flex:1}}><Text style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,fontWeight:"700"}]}>{(props.selectionMode=="single" && props.value.length!=0)?props.value[0].label:"Select"}</Text></View>
                 <Image source={arrow_icon} style={{width:10,height:10,resizeMode:"contain",transform:[{rotate:"-90deg"}]}}></Image>
             </Pressable>
-            <View style={[GeneralStyles.selected_wrapper]}>
             {
-                props.value?.map((item)=>
-                <View key={item.label} style={[GeneralStyles.selecteditem_wrapper]}>
-                    <View style={{flex:1}}><Text style={[GeneralStyles.selected,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.label}</Text></View>
-                    <Pressable onPress={()=>removeSelected(item)}><Image source={close_icon} style={[GeneralStyles.close]}/></Pressable>
+                props.selectionMode=="multi"
+                ?
+                <View style={[GeneralStyles.selected_wrapper]}>
+                {
+                    props.value?.map((item)=>
+                    <View key={item.label} style={[GeneralStyles.selecteditem_wrapper]}>
+                        <View style={{flex:1}}><Text style={[GeneralStyles.selected,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.label}</Text></View>
+                        <Pressable onPress={()=>removeSelected(item)}><Image source={close_icon} style={[GeneralStyles.close]}/></Pressable>
+                    </View>
+                    )
+                }
                 </View>
-                )
+                :
+                null
             }
-            </View>
             {/* {
                 selectDimensions
                 ?

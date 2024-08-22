@@ -56,7 +56,7 @@ const GeneralStyles=StyleSheet.create({
         borderRadius:500
     },
     name:{
-        alignSelf:'center'
+        alignSelf:'center',
         //fontWeight:"700",
     },
     email:{

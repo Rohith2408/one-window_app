@@ -5,7 +5,8 @@ const Themes={
         OnewindowRed:(opacity:number)=>"rgba(255, 168, 156,"+opacity+")",
         OnewindowPurple:(opacity:number)=>"rgba(209, 211, 249,"+opacity+")",
         OnewindowTeal:(opacity:number)=>"rgba(117, 236, 229,"+opacity+")",
-        OnewindowYellow:(opacity:number)=>"rgba(250, 234, 208,"+opacity+")"
+        OnewindowYellow:(opacity:number)=>"rgba(250, 234, 208,"+opacity+")",
+        OnewindowLightBlue:"#F7F6FB"
     }
 }
 const Fonts={

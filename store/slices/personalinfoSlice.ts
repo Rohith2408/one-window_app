@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import * as SecureStore from 'expo-secure-store';
-import { Personalinfo, StoreItem} from "../../misc/typeDefinations";
+import { Personalinfo, Request} from "../../misc/typeDefinations";
 
-let initialState:StoreItem<Personalinfo|undefined>={
+let initialState:Request<Personalinfo|undefined>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -16,7 +16,7 @@ const personalinfoSlice=createSlice({
     name:'personalinfo',
     initialState:initialState,
     reducers:{
-        initPersonalInfo:(state,action:PayloadAction<StoreItem<Personalinfo>>)=>({...action.payload}),
+        initPersonalInfo:(state,action:PayloadAction<Request<Personalinfo>>)=>({...action.payload}),
         setPersonalInfo:(state,action:PayloadAction<Personalinfo>)=>{state.data=action.payload},
         // updatePersonalInfo:(state,action:PayloadAction<{field:Field,data:any}>)=>{
         //     state.data

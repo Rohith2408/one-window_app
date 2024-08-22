@@ -39,11 +39,11 @@ const GeneralStyles=StyleSheet.create({
     }
 })
 
-const Dropdownoptions=(props:{basketid:string})=>{
+const Dropdownoptions=(props:{basketid:string,selected:ListItem[],id:string})=>{
 
     let info=useRef(getBasket(props.basketid)).current
     let options=useRef(info?.options).current
-    const [selected,setSelected]=useState<ListItem[]>(info.selected?info.selected:[])
+    const [selected,setSelected]=useState<ListItem[]>(props.selected?props.selected:[])
     const [path,navigate]=useNavigation()
     console.log("dooo",props.basketid,getBasket(props.basketid))
 
@@ -60,7 +60,7 @@ const Dropdownoptions=(props:{basketid:string})=>{
 
     const apply=()=>{
         navigate?navigate({type:"RemoveScreen"}):null;
-        navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:info?.id,newvalue:selected}}}):null
+        navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props?.id,newvalue:selected}}}):null
     }
 
     setLayoutAnimation()

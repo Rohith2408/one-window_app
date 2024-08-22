@@ -121,7 +121,7 @@ const Personalinfo=()=>{
     const options=useRef([
         {title:"My Details",icon:personal_icon,screen:{id:"Mydetails",params:undefined}},
         {title:"Documents",icon:expert_icon,screen:{id:"Documents",params:{documentstab:"Personal"}}},
-        {title:"Workexperience",icon:preferences_icon,screen:{id:"Mydetails",params:undefined}},
+        {title:"Workexperience",icon:preferences_icon,screen:{id:"Workexperience",params:undefined}},
         {title:"Education History",icon:preferences_icon,screen:{id:"Mydetails",params:undefined}},
         {title:"Test Scores",icon:favourites_icon,screen:{id:"Mydetails",params:undefined}},
     ]).current

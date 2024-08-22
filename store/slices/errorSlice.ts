@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Error, StoreItem } from "../../misc/typeDefinations";
+import { Error, Request } from "../../misc/typeDefinations";
 
-let initialState:StoreItem<Error>={
+let initialState:Request<Error>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -17,7 +17,7 @@ const ErrorSlice=createSlice({
     initialState:initialState,
     reducers:{
         setError:(state,action:PayloadAction<Error>)=>{state.data=action.payload},
-        initError:(state,action:PayloadAction<StoreItem<Error>>)=>({...action.payload})
+        initError:(state,action:PayloadAction<Request<Error>>)=>({...action.payload})
 }
 })
 

@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import * as SecureStore from 'expo-secure-store';
-import { FamilyInfo, StoreItem} from "../../misc/typeDefinations";
+import { FamilyInfo, Request} from "../../misc/typeDefinations";
 
-let initialState:StoreItem<FamilyInfo[]>={
+let initialState:Request<FamilyInfo[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -16,7 +16,7 @@ const familyinfoSlice=createSlice({
     name:'familyinfo',
     initialState:initialState,
     reducers:{
-        initFamilyinfo:(state,action:PayloadAction<StoreItem<FamilyInfo[]>>)=>({...action.payload}),
+        initFamilyinfo:(state,action:PayloadAction<Request<FamilyInfo[]>>)=>({...action.payload}),
         setFamilyinfo:(state,action:PayloadAction<FamilyInfo[]>)=>{state.data=action.payload},
         updateFamilyinfo:(state,action:PayloadAction<{id:number,field:Field,data:any}>)=>{
             state.data[action.payload.id][action.payload.field]=action.payload.data

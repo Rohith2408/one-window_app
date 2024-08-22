@@ -116,41 +116,42 @@ export type Dropdown={
         label:string,
         value:string
     }[],
+    basketid:string,
     selectionMode:"single"|"multi",
     isFocussed:boolean,
     eventHandler:(event:Event)=>void
 }
 
 export type FormInfo={
-    id:"Workexperience",
-        title:string,
-        getInitialData:(id:string|undefined)=>FormData[],
-        submit:{
-            dataConverter?:(data:FormData[])=>any,
-            onSubmit:(data:any)=>Promise<ServerResponse>,
-            successText:string,
-            failureText:string,
-            idleText:string
+    id:string,
+    title:string,
+    getInitialData:(id:string|undefined)=>FormData[],
+    submit:{
+        dataConverter?:(data:FormData[],id?:string)=>any,
+        onSubmit:(data:any)=>Promise<ServerResponse>,
+        successText:string,
+        failureText:string,
+        idleText:string
+    },
+    allFields:{
+        id:string,
+        componentInfo:{
+            component:React.FC<any>,
+            props:any
         },
-        allFields:{
-            id:string,
-            componentInfo:{
-                component:React.FC<any>,
-                props:any
-            },
-            title:string,
-            isOptional?:boolean,
-            emptyChecker?:(data:any)=>ServerResponse,
-            validator?:(data:any)=>ServerResponse,
-            onUpdate:{
-                event:string,
-                handler?:any
-            },
-            onFocus:{
-                event:string,
-                handler?:any
-            }
-        }[]
+        title:string,
+        isOptional?:boolean,
+        emptyChecker?:(data:any)=>ServerResponse,
+        validator?:(data:any)=>ServerResponse,
+        onUpdate:{
+            event:string,
+            handler?:any
+        },
+        onFocus:{
+            event:string,
+            handler?:any
+        }
+    }[]
 }
 
 export type List<type>={

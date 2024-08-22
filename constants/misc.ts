@@ -29,4 +29,7 @@ const Industries=[
     "healthcare"
 ]
 
-export {Industries}
+const GradingSystems=["Percentage","Grade","GPA","CGPA"]
+
+
+export {Industries,GradingSystems}

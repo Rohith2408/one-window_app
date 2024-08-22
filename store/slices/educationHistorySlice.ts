@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { EducationHistory, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, StoreAction, StoreItem } from "../../misc/typeDefinations";
+import { EducationHistory, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, StoreAction, Request } from "../../types/index";
 
 type EducationType="school" | "plus2" | "underGraduation" | "postGraduation"
 type EducationData=EducationHistory_School | EducationHistory_Plus2 | EducationHistory_UnderGraduation | EducationHistory_PostGraduation
 
-let initialState:StoreItem<EducationHistory>={
+let initialState:Request<EducationHistory>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -21,7 +21,7 @@ export const educationHistorySlice=createSlice({
     name:'educationhistory',
     initialState:initialState,
     reducers:{
-        initEducationHistory:(state,action:PayloadAction<StoreItem<EducationHistory>>)=>({...action.payload}),
+        initEducationHistory:(state,action:PayloadAction<Request<EducationHistory>>)=>({...action.payload}),
         setSchool:(state,action:PayloadAction<EducationHistory_School>)=>{state.data.school=action.payload},
         setPlus2:(state,action:PayloadAction<EducationHistory_Plus2>)=>{state.data.plus2=action.payload},
         setUnderGraduation:(state,action:PayloadAction<EducationHistory_UnderGraduation>)=>{state.data.underGraduation=action.payload},

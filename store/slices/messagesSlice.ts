@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { bakeMessagesWithSeenInfo, getParticipantsLastSeenMessage, setWordCase } from "../../utils/index";
-import { Message, Participant, StoreItem } from "../../types";
+import { Message, Participant, Request } from "../../types";
 
-let initialState:StoreItem<Message[]>={
+let initialState:Request<Message[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -14,7 +14,7 @@ export const messagesSlice=createSlice({
     name:'messages',
     initialState:initialState,
     reducers:{
-        initMessages:(state,action:PayloadAction<StoreItem<Message[]>>)=>({...action.payload}),
+        initMessages:(state,action:PayloadAction<Request<Message[]>>)=>({...action.payload}),
         resetMessages:(state,action:PayloadAction)=>({...initialState}),
         addMessage:(state,action:PayloadAction<Message>)=>{
             state.data=[...state.data.filter((msg)=>msg.type!="typing"),action.payload,...state.data.filter((msg)=>msg.type=="typing")]

@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Skill, StoreItem } from "../../misc/typeDefinations";
+import { Skill, Request } from "../../misc/typeDefinations";
 
-let initialState:StoreItem<Skill[]>={
+let initialState:Request<Skill[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -13,7 +13,7 @@ export const skillsSlice=createSlice({
     name:'skills',
     initialState:initialState,
     reducers:{
-        initSkills:(state,action:PayloadAction<StoreItem<Skill[]>>)=>({...action.payload}),
+        initSkills:(state,action:PayloadAction<Request<Skill[]>>)=>({...action.payload}),
         setSkills:(state,action:PayloadAction<Skill[]>)=>{state.data=action.payload},
         addSkill:(state,action:PayloadAction<Skill>)=>{state.data.push(action.payload)},
         removeSkill:(state,action:PayloadAction<number>)=>{state.data=state.data.filter((item,i)=>i!=action.payload)},

@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import {StoreItem, WorkExperience } from "../../types";
+import {Request, WorkExperience } from "../../types";
 
-let initialState:StoreItem<WorkExperience[]>={
+let initialState:Request<WorkExperience[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -13,7 +13,7 @@ export const workexperienceSlice=createSlice({
     name:'workexperience',
     initialState:initialState,
     reducers:{
-        initWorkexperience:(state,action:PayloadAction<StoreItem<WorkExperience[]>>)=>({...action.payload}),
+        initWorkexperience:(state,action:PayloadAction<Request<WorkExperience[]>>)=>({...action.payload}),
         addWorkexperience:(state,action:PayloadAction<WorkExperience>)=>{state.data.push(action.payload)},
         removeWorkexperience:(state,action:PayloadAction<string>)=>{state.data=state.data.filter((item)=>item._id!=action.payload)},
         updateWorkexperience:(state,action:PayloadAction<WorkExperience>)=>{

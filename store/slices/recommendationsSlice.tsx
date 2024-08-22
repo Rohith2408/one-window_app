@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Recommendation, StoreItem } from "../../misc/typeDefinations";
+import { Recommendation, Request } from "../../misc/typeDefinations";
 
 type RecommendationType={
     criteria: {
@@ -10,7 +10,7 @@ type RecommendationType={
 data:Recommendation[]
 }
 
-let initialState:StoreItem<RecommendationType|undefined>={
+let initialState:Request<RecommendationType|undefined>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -22,7 +22,7 @@ export const recommendationsSlice=createSlice({
     name:'recommendedcourses',
     initialState:initialState,
     reducers:{
-        initRecommendations:(state,action:PayloadAction<StoreItem<RecommendationType>>)=>({...action.payload}),
+        initRecommendations:(state,action:PayloadAction<Request<RecommendationType>>)=>({...action.payload}),
         setRecommendations:(state,action:PayloadAction<RecommendationType>)=>{state.data=action.payload},
         addRecommendation:(state,action)=>{},
         removeRecommendation:(state,action)=>{}

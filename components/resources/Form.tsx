@@ -100,45 +100,31 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
     const [errors,setError]=useState<{id:string,error:undefined|string}[]>([]) 
 
     const eventHandler=async (event:Event)=>{
-        console.log(event)
         let field=formInfo?.allFields.find((field)=>field.id==event.triggerBy)
-        console.log(event,field?.id)
+        console.log(field?.onUpdate)
         if(field)
         {
             switch(event.name){
-            case field.onUpdate?.event:
-                if(field.onUpdate?.handler)
-                {
-                    let updatedFields=await field.onUpdate.handler(fields,event.data)
-                    dispatch({type:"set",payload:{fields:updatedFields}})
-                }
-                else
-                {
-                    //xconsole.log(event)
-                    dispatch({type:"update",payload:{id:event.triggerBy,data:event.data}})
-                }
-                break;
+                case field.onUpdate?.event:
+                    if(field.onUpdate?.handler)
+                    {
+                        
+                        let updatedFields=await field.onUpdate.handler(fields,event.data)
+                        dispatch({type:"set",payload:{fields:updatedFields}})
+                    }
+                    else
+                    {
+                        console.log("evv",event)
+                        dispatch({type:"update",payload:{id:event.triggerBy,data:event.data}})
+                    }
+                    break;
 
-            case field.onFocus?.event:
-                console.log(event.triggerBy)
-                setFocussedField(event.triggerBy)
-                break;
+                case field.onFocus?.event:
+                    console.log(event.triggerBy)
+                    setFocussedField(event.triggerBy)
+                    break;
             }
         }
-        // switch(event.name){
-        //     case "updateFields":
-        //         dispatch({type:"update",payload:event.data})
-        //         break;
-
-        //     case "setFields":
-        //         dispatch({type:"set",payload:event.data})
-        //         break;
-
-        //     case "setFocus":
-        //         setFocussedField(event.data)
-        //         break;
-
-        // }
     }
 
     const onSubmit=async ()=>{ 
@@ -155,7 +141,8 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
             };
             if(handler)
             {
-                res=await handler(fields);
+                console.log("ini",typeof props.forminitialdataid)
+                res=await handler(formInfo?.submit.dataConverter?formInfo.submit.dataConverter(fields,props.forminitialdataid):fields);
                 console.log("res",res);
             }
             return res.success
@@ -182,6 +169,7 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
     }
 
     useEffect(()=>{
+        console.log(props.formupdate)
         if(props.formupdate)
         {
             dispatch({type:"update",payload:{id:props.formupdate.id,data:props.formupdate.newvalue}})
@@ -214,27 +202,24 @@ const Field=(props:{info:FieldType,data:FormData,isFocussed:boolean,index:number
     const [path,navigate]=useNavigation()
 
     const eventHandler=async (event:Event)=>{
-        navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.info.id,newvalue:event.data}}}):null
-        //console.log("e",event)
-        //props.eventHandler({...event,triggerBy:props.info.id})
-        // switch(event.name){
-        //     case props.info.onUpdate?.event:
-        //         if(props.info.onUpdate?.handler)
-        //         {
-        //             let updatedFields=await props.info.onUpdate.handler()
-        //         }
-        //         else
-        //         {
+        switch(event.name){
+            case props.info.onUpdate?.event:
+                if(props.info.onUpdate?.handler)
+                {
+                    let updatedFields=await props.info.onUpdate.handler()
+                }
+                else
+                {
 
-        //         }
-        //         break;
-        // }
+                }
+                break;
+        }
     }
 
     return(
         <View style={[GeneralStyles.field,{zIndex:props.isFocussed?1:-1}]}>
             <Text style={[GeneralStyles.field_title,styles[Device].field_title,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.info.title}</Text>
-            <Container id={props.info.id} {...props.info.componentInfo.props} value={props.data.value} isFocussed={props.isFocussed} eventHandler={eventHandler}></Container>
+            <Container id={props.info.id} {...props.info.componentInfo.props} value={props.data.value} isFocussed={props.isFocussed} eventHandler={(e)=>{props.eventHandler({...e,triggerBy:props.info.id})}}></Container>
             {
                 props.error
                 ?
@@ -244,7 +229,7 @@ const Field=(props:{info:FieldType,data:FormData,isFocussed:boolean,index:number
             }
         </View>
     )
-
 }
+
 
 export default Form

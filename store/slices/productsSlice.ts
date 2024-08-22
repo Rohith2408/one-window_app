@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import { Product, StoreItem } from "../../types";
+import { Product, Request } from "../../types";
 
-let initialState:StoreItem<Product[]>={
+let initialState:Request<Product[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -14,7 +14,7 @@ export const productsSlice=createSlice({
     name:'products',
     initialState:initialState,
     reducers:{
-        initProducts:(state,action:PayloadAction<StoreItem<Product[]>>)=>({...action.payload}),
+        initProducts:(state,action:PayloadAction<Request<Product[]>>)=>({...action.payload}),
         addProduct:(state,action:PayloadAction<Product>)=>{state.data.push(action.payload)},
         updateProduct:(state,action:PayloadAction<Product>)=>{
             let index=state.data.findIndex((item)=>item._id==action.payload._id);

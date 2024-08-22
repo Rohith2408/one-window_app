@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Popup, StoreItem } from "../../misc/typeDefinations";
+import { Popup, Request } from "../../misc/typeDefinations";
 
-let initialState:StoreItem<Popup>={
+let initialState:Request<Popup>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,

@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { StoreItem, Package} from "../../types";
+import { Request, Package} from "../../types";
 
 
-let initialState:StoreItem<Package[]>={
+let initialState:Request<Package[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
@@ -14,7 +14,7 @@ export const suggestedPackageSlice=createSlice({
     name:'suggestedpackage',
     initialState:initialState,
     reducers:{
-        initSuggestedPackage:(state,action:PayloadAction<StoreItem<Package[]>>)=>({...action.payload}),
+        initSuggestedPackage:(state,action:PayloadAction<Request<Package[]>>)=>({...action.payload}),
         addSuggestedPackage:(state,action:PayloadAction<Package>)=>{state.data.push(action.payload)},
         updateSuggestedPackage:(state,action:PayloadAction<Package>)=>{
             let index=state.data.findIndex((item)=>item._id==action.payload._id);
