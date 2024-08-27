@@ -2,8 +2,10 @@ import { useEffect, useReducer, useRef, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { ListReducer } from "../../reducers/ListReducer"
 import { ListsInfo } from "../../constants/lists"
-import { AppliedFilter, ServerResponse } from "../../types"
+import { AppliedFilter, ListItem, QuickFilterInfo, ServerResponse } from "../../types"
 import useNavigation from "../../hooks/useNavigation"
+import { addToBasket } from "../../constants/basket"
+
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -18,32 +20,54 @@ const GeneralStyles=StyleSheet.create({
     }
 })
 
-const Listing=(props:{listid:string,additionalFilters:AppliedFilter[],quickFilters:AppliedFilter[],search:string,page:number})=>{
+const Listing=(props:{listid:string,additionalFilters:AppliedFilter[],quickFilters:AppliedFilter[],search:string,page:number,basketid:string})=>{
 
     const ListInfo=useRef(ListsInfo.find((list)=>list.id==props.listid)).current
-    const [list,setList]=useState([]);
-    const Component:React.FC<any>|undefined=ListInfo?.card
+    const [list,setList]=useState<any[]>([]);
     const [path,navigate]=useNavigation()
+    const [isLoading,setIsLoading]=useState(false)
+    const Component:React.FC<any>|undefined=ListInfo?.card
 
     useEffect(()=>{
+        getList().then((res:ServerResponse|undefined)=>(res && res.success)?setList(res.data.list):null)
+    },[props.additionalFilters,props.quickFilters,props.search])
+
+    useEffect(()=>{
+        getList().then((res:ServerResponse|undefined)=>(res && res.success)?setList([...list,...res.data.list]):null)
+    },[props.page])
+
+    const getList=async ()=>{
+        setIsLoading(true);
         let appliedFilters=bakeFilters(props.additionalFilters,props.quickFilters);
-        ListInfo?.listFetcher(props.search,appliedFilters,props.page).then((res:ServerResponse)=>{
-            if(res.success)
-            {
-                setList([...list,...res.data.list])
-            }
+        let res=await ListInfo?.listFetcher(props.search,appliedFilters,props.page)
+        setIsLoading(false)
+        return res
+    }
+
+    const applyQuickFilter=(data:QuickFilterInfo)=>{
+        let arr=props.quickFilters.find((item)=>item.type==data.type)?props.quickFilters.filter((item)=>item.type!=data.type):[...props.quickFilters,{type:data.type,data:data.items}]
+        navigate?navigate({type:"UpdateParam",payload:{param:props.listid.toLowerCase()+"quickfilters",newValue:arr}}):null
+    }
+
+    const openAllFilters=()=>{
+        //console.log("alll",JSON.stringify(ListInfo?.filters,null,2))
+        addToBasket(props.basketid,{
+            additionalFiltersApplied:props.additionalFilters,
+            quickFiltersApplied:props.quickFilters
         })
-    },[props.additionalFilters,props.quickFilters,props.page,props.search])
+        navigate?navigate({type:"AddScreen",payload:{screen:"Filters",params:{filtersbasketid:props.basketid,filterslistid:props.listid}}}):null
+    }
+
+    //console.log()
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
         <View style={[GeneralStyles.filter_wrapper]}>
-            <Pressable onPress={()=>navigate?navigate({type:"UpdateParam",payload:{param:"page",newValue:2}}):null}><Text>Add Page</Text></Pressable>
-            <Pressable onPress={()=>navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Filters",flyerdata:{additionalFilters:props.additionalFilters,quickFilters:props.quickFilters}}}}):null}><Text>All Filters</Text></Pressable>
-            <ScrollView style={{flex:1}} horizontal>
+            <Pressable onPress={openAllFilters}><Text>All Filters</Text></Pressable>
+            <ScrollView style={{flex:1}} horizontal contentContainerStyle={{gap:20}}>
             {
                 ListInfo?.filters.quick.map((filterinfo)=>
-                    <View style={[{backgroundColor:props.quickFilters.find((item)=>item.type==filterinfo.type)?"red":"white"}]}><Text>{filterinfo.title}</Text></View>
+                    <Pressable onPress={()=>applyQuickFilter(filterinfo)} style={[{backgroundColor:props.quickFilters.find((item)=>item.type==filterinfo.type)?"red":"white"}]}><Text>{filterinfo.title}</Text></Pressable>
                 )
             }
             </ScrollView>

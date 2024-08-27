@@ -22,13 +22,13 @@ const GeneralStyles=StyleSheet.create({
         flex:9
     },
     fields:{
-        gap:20
+        gap:30
     },
     field:{
         flex:1,
         display:"flex",
         flexDirection:"column",
-        gap:10
+        gap:8
     },
     form_title:{
         fontWeight:"500"
@@ -63,22 +63,22 @@ const MobileSStyles=StyleSheet.create({
 })
 const MobileMStyles=StyleSheet.create({
     field_title:{
-        fontSize:12,
+        fontSize:14,
         paddingLeft:10
     },
     form_title:{
-        fontSize:13,
+        fontSize:14,
         marginTop:30,
         marginBottom:30
     }
 })
 const MobileLStyles=StyleSheet.create({
     field_title:{
-        fontSize:12,
+        fontSize:15,
         paddingLeft:10
     },
     form_title:{
-        fontSize:13,
+        fontSize:15,
         marginTop:30,
         marginBottom:30
     }
@@ -183,6 +183,8 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
 
         return (()=>clearBasket())
     },[])
+
+    //console.log("data",fields);
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>

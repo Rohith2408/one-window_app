@@ -169,7 +169,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
   const Container=getComponent(props.component)?.component
 
   return(
-      <Animated.View key={props.id} style={[styles.screenWrapper,!screenInfo?.occupyFullScreen?{paddingLeft:0.06*Dimensions.get("screen").width,paddingRight:0.06*Dimensions.get("screen").width}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,screenInfo?.type=="Flyer"?{borderRadius:20,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{},{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
+      <Animated.View key={props.id} style={[styles.screenWrapper,!screenInfo?.occupyFullScreen?{paddingLeft:0.06*Dimensions.get("screen").width,paddingRight:0.06*Dimensions.get("screen").width,}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,screenInfo?.type=="Flyer"?{borderRadius:20,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{},{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
         {
           props.index!=0 && screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY"
           ?
@@ -199,7 +199,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           null
         }
         <View style={[styles.screen,screenInfo?.type=="Flyer"?{shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{}]}>
-          <View style={{flexDirection:"row",justifyContent:'center',alignItems:'center',position:"relative"}}> 
+          <View style={[{flexDirection:"row",justifyContent:'center',alignItems:'center',position:"relative"},(screenInfo?.type=="Partial")?{paddingBottom:20,paddingTop:30}:{}]}> 
           {
             screenInfo?.type=="Partial" && props.index!=0
             ?
@@ -210,7 +210,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           {
             screenInfo?.title
             ?
-            <Text style={[{fontSize:16,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{screenInfo.title}</Text>
+            <Text style={[{fontSize:14,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{screenInfo.title}</Text>
             :
             null
           }
@@ -222,6 +222,9 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
             :
             null
           }
+          {/* <View style={{position:"absolute"}}>
+            <Image source={}></Image>
+          </View> */}
         </View>
       </Animated.View>
       // <GestureHandlerRootView>
@@ -382,6 +385,7 @@ const styles=StyleSheet.create({
     },
     back:{
       position:"absolute",
+      top:0,
       left:-10
       // paddingTop:0.04*Dimensions.get("screen").width
     },

@@ -10,16 +10,19 @@ const Statedropdown=(props:DropdownType & {cityFieldId:string} & {value:ListItem
     const initialRender=useRef(true)
 
     useEffect(()=>{
+        console.log("called1")
         if(!initialRender.current)
         {
+            console.log("called2")
             navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.cityFieldId,newvalue:[]}}}):null
         }
         else
         {
-            //props.value.length!=0?addToBasket(props.basketid,props.value[0].value):null
             initialRender.current=false
         }
     },[props.value])
+
+
 
     return(
         <Dropdown {...props}/>

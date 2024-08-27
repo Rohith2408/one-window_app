@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { Dropdown as DropdownType, ListItem} from "../../types"
+import { Dropdown as DropdownType, ListItem, ServerResponse} from "../../types"
 import { Animated, LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { addToBasket, getBasket, removeFromBasket } from "../../constants/basket"
@@ -53,27 +53,36 @@ const GeneralStyles=StyleSheet.create({
     }
 })
 
-const Dropdown=(props:DropdownType & {value:ListItem[],id:string})=>{
+// options:{
+//     list?:any[],
+//     card:React.FC<any>,
+//     fetcher:(data?:any)=>Promise<any>
+// },
+// isAsync?:boolean,
+// basketid:string,
+// selectionMode:"single"|"multi",
+
+const Dropdown=(props:DropdownType & {value:any[],id:string})=>{
 
     const [path,navigate]=useNavigation()
     const [loading,setLoading]=useState(false)
-    const options=useRef<undefined|ListItem[]>(props.options);
     const addedToBasket=useRef(false);
 
     const onSelect=async ()=>{
-        console.log("options",props.options,props.optionsFetcher);
-        if(props.optionsFetcher)
+        if(props.isAsync)
+        {
+            addToBasket(props.basketid+"-dropdownoptionsasync",{optionsFetcher:props.options.fetcher,selectedHandler:props.apply,optionsCard:props.options.card,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value});
+            navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptionsasync",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null
+        }
+        else
         {
             setLoading(true)
-            options.current=await props.optionsFetcher()
+            let options;
+            let res:ServerResponse=props.options.fetcher?await props.options.fetcher():{success:true,data:props.options.list,message:''}
             setLoading(false)
-        }   
-        console.log("options",options.current)
-        if(options.current)
-        {
-            addToBasket(props.basketid+"-dropdownoptions",{options:options.current,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value});
+            res.success?addToBasket(props.basketid+"-dropdownoptions",{options:res.data,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value}):null
+            res.success?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null:null
         }
-        options.current?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null:null
     }
 
     const removeSelected=(item:ListItem)=>{
@@ -84,12 +93,11 @@ const Dropdown=(props:DropdownType & {value:ListItem[],id:string})=>{
     useEffect(()=>{
      
         return ()=>{
-            //removeFromBasket(props.basketid);
+            
         }
     })
 
     useEffect(()=>{
-        console.log("called",props.basketid,props.value);
         if(props.value.length>0)
         {
             if(props.selectionMode=="single")
@@ -102,7 +110,6 @@ const Dropdown=(props:DropdownType & {value:ListItem[],id:string})=>{
             }
         }
     },[props.value])
-
 
     return(
         <View style={[GeneralStyles.mainWrapper]}>

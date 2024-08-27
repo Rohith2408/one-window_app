@@ -11,7 +11,7 @@ import Workexperience from "../components/partials/Workexperience"
 import Form from "../components/resources/Form"
 import { ScreenInfo } from "../types"
 import Flyer from "../components/partials/Flyer"
-import Filters from "../components/flyers/Filters"
+import Filters from "../components/partials/Filters"
 import Explore from "../components/partials/Explore"
 import Dropdownoptions from "../components/flyers/Dropdownoptions"
 import Personalinfo from "../components/partials/Personalinfo"
@@ -19,6 +19,11 @@ import DPoptions from "../components/flyers/DPoptions"
 import Dp from "../components/partials/Dp"
 import Documents from "../components/partials/Documents"
 import Educationhistory from "../components/partials/Educationhistory"
+import Testscores from "../components/partials/Testscores"
+import Testoptions from "../components/flyers/Testoptions"
+import Dropdownoptionsasync from "../components/flyers/Dropdownoptionsasync"
+import Mydetails from "../components/partials/Mydetails"
+import Emailverification from "../components/flyers/Emailverification"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -31,15 +36,20 @@ const components:ScreenInfo[]=[
     {id:"Loginbase",component:Loginbase,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial",title:"Login"},
     {id:"Form",component:Form,type:"Partial",title:"Form",props:["formid","forminitialdataid","formupdate"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Flyer",component:Flyer,type:"Flyer",props:["flyerid","flyerdata"],swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
-    {id:"Filters",component:Filters,type:"Flyer",props:["additionalfilters","quickfilters"]},
-    {id:"Explore",component:Explore,type:"Partial",title:"Explore",props:["additionalfilters","quickfilters","initialexploretab","page","search"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Filters",component:Filters,type:"Partial",props:["filtersbasketid","filterslistid"],title:"Filters",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3,swipeDirection:"X"},
+    {id:"Explore",component:Explore,type:"Partial",title:"Explore",props:["initialexploretab","programsadditionalfilters","programsquickfilters","universitiesadditionalfilters","universitiesquickfilters","search","universitiespage","programspage"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Dropdownoptions",component:Dropdownoptions,type:"Flyer"},
+    {id:"Dropdownoptionsasync",component:Dropdownoptionsasync,type:"Flyer"},
+    {id:"Emailverification",component:Emailverification,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Personalinfo",component:Personalinfo,type:"Partial",title:"Personal Info",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3,swipeDirection:"X"},
     {id:"DPoptions",component:DPoptions,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Dp",component:Dp,type:"Popup",props:["image"],swipeDirection:"XY",isTransparent:true,occupyFullScreen:true,animationStyle:"FadeIn",removalThreshold:0.5},
     {id:"Documents",component:Documents,type:"Partial",title:"Documents",props:["documentstab"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Workexperience",component:Workexperience,type:"Partial",title:"Workexperience",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
-    {id:"Educationhistory",component:Educationhistory,type:"Partial",title:"Education History",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3}
+    {id:"Educationhistory",component:Educationhistory,type:"Partial",title:"Education History",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Testscores",component:Testscores,type:"Partial",title:"Test Scores",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Testoptions",component:Testoptions,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Mydetails",component:Mydetails,type:"Partial",title:"My Details",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
 ]
 
 const setComponentInfo=(id:string,key:keyof ScreenInfo,value:any)=>{

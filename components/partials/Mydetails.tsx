@@ -9,6 +9,7 @@ import favourites_icon from '../../assets/images/profile/favourites.png'
 import orders_icon from '../../assets/images/profile/orders.png'
 import preferences_icon from '../../assets/images/profile/preferences.png'
 import go_icon from '../../assets/images/misc/back.png'
+import { Fonts, Themes } from "../../constants"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{

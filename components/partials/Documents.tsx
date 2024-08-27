@@ -363,8 +363,9 @@ const Document=(props:{title:string,fieldPath:string,doc:DocumentType|undefined}
 }
 
 const uploadDoc=async (fieldPath:string,callback?:(res:ServerResponse)=>void)=>{
+    console.log("docrs");
     let docRes=await pickDocument(40);
-    console.log(docRes);
+    console.log("docrs",docRes);
     if(docRes.success)
     {
         const data = new FormData()

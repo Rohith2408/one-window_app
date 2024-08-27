@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Verification, Request, UserStatus } from "../../misc/typeDefinations";
+import { Verification, Request} from "../../types/index";
 
 let initialState:Request<Verification[]|undefined>={
     requestStatus:"not_initiated",

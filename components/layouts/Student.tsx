@@ -88,6 +88,7 @@ const Student=(props:{screens:string[],params:any})=>{
             url:getServerRequestURL("profile","GET"),
             reqType: "GET"
         })
+        console.log("ress",res)
         if(!res.success)
         {
             if(res.message==serverResponses.VerificationFailed || res.message==serverResponses.TokenMissing)
@@ -117,8 +118,8 @@ const Student=(props:{screens:string[],params:any})=>{
                     displayPicSrc:res.data.displayPicSrc?res.data.displayPicSrc:"",
                     phone:res.data.phone,
                     LeadSource:res.data.LeadSource,
-                    isPlanningToTakeAcademicTest:res.data.isPlanningToTakeAcademicTest,
-                    isPlanningToTakeLanguageTest:res.data.isPlanningToTakeLanguageTest,
+                    // isPlanningToTakeAcademicTest:res.data.isPlanningToTakeAcademicTest,
+                    // isPlanningToTakeLanguageTest:res.data.isPlanningToTakeLanguageTest,
                 }
             }))
             dispatch(initEducationHistory({
@@ -194,9 +195,9 @@ const Student=(props:{screens:string[],params:any})=>{
         })
         if(!res.success)
         {
-            if(res.message==serverResponses.LOGIN_AGAIN)
+            if(res.message==serverResponses.VerificationFailed || res.message==serverResponses.TokenMissing)
             {
-                //Navigation?.navigate({type:"Logout"});
+                navigate?navigate({type:"Logout"}):null
             }
         }
         else{

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Request, Test, TestSection } from "../../misc/typeDefinations";
+import { Request, Test, TestSection } from "../../types/index";
 
 let initialState:Request<Test[]>={
     requestStatus:"not_initiated",

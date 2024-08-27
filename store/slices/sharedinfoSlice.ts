@@ -15,7 +15,8 @@ export const sharedinfoSlice=createSlice({
     reducers:{
         initSharedInfo:(state,action:PayloadAction<Request<Sharedinfo>>)=>({...action.payload}),
         setSharedInfo:(state,action:PayloadAction<Sharedinfo>)=>{state.data=action.payload},
-        resetSharedinfo:(state,action:PayloadAction)=>({...initialState})
+        resetSharedinfo:(state,action:PayloadAction)=>({...initialState}),
+        updatEmail:(state,action:PayloadAction<string>)=>({...state,email:action.payload})
     }
 });
 

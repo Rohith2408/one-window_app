@@ -2,10 +2,10 @@ import { Text, View } from "react-native"
 import { UniversityListObj } from "../../types"
 
 
-const University=(props:UniversityListObj)=>{
+const Universitycard=(props:UniversityListObj)=>{
     return(
         <View ><Text>{props.name}</Text></View>
     )
 }
 
-export default University
+export default Universitycard

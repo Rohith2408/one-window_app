@@ -1,30 +1,32 @@
 import { useRef } from "react"
 import { Image } from "expo-image"
 import { Pressable, StyleSheet, Text, View } from "react-native"
-import personal_icon from '../../assets/images/profile/personal.png'
-import cart_icon from '../../assets/images/profile/cart.png'
-import expert_icon from '../../assets/images/profile/expert.png'
-import favourites_icon from '../../assets/images/profile/favourites.png'
-import orders_icon from '../../assets/images/profile/orders.png'
-import preferences_icon from '../../assets/images/profile/preferences.png'
+import personal_icon from '../../assets/images/profile/personalinfo/mydetails.png'
+import documents_icon from '../../assets/images/profile/personalinfo/documents.png'
+import work_icon from '../../assets/images/profile/personalinfo/workexperience.png'
+import education_icon from '../../assets/images/profile/personalinfo/education.png'
+import test_icon from '../../assets/images/profile/personalinfo/tests.png'
 import go_icon from '../../assets/images/misc/back.png'
+import expert_icon from '../../assets/images/profile/expert.png'
+import preferences_icon from '../../assets/images/profile/preferences.png'
 import { getDevice } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 import useNavigation from "../../hooks/useNavigation"
+import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         width:"100%",
         height:"100%",
         backgroundColor:'white',
-        paddingTop:10,
+        paddingTop:10
     },
     option_wrapper:{
         display:'flex',
         flexDirection:'row',
         justifyContent:"center",
         alignItems:'center',
-        gap:5,
+        gap:7,
         padding:10
     },
     go_icon:{
@@ -33,6 +35,9 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
+    main_wrapper:{
+        gap:7
+    },
     option_icon:{
         width:20,
         height:20,
@@ -52,9 +57,15 @@ const TabStyles=StyleSheet.create({
 })
 
 const MobileSStyles=StyleSheet.create({
+    main_wrapper:{
+        gap:10
+    },
+    option_wrapper:{
+        gap:5
+    },
     option_icon:{
-        width:36,
-        height:36,
+        width:30,
+        height:30,
         objectFit:'contain'
     },
     options_text:{
@@ -71,39 +82,51 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
+    main_wrapper:{
+        gap:15
+    },
+    option_wrapper:{
+        gap:10
+    },
     option_icon:{
-        width:24,
-        height:24,
+        width:32,
+        height:32,
         objectFit:'contain'
     },
     options_text:{
-        fontSize:14
+        fontSize:15
     },
     options_wrapper:{
         flex:5,
     },
     go_icon:{
-        width:10,
-        height:10,
+        width:8,
+        height:8,
         objectFit:'contain'
     }
 })
 
 const MobileLStyles=StyleSheet.create({
+    main_wrapper:{
+        gap:17
+    },
+    option_wrapper:{
+        gap:10
+    },
     option_icon:{
-        width:20,
-        height:20,
+        width:34,
+        height:34,
         objectFit:'contain'
     },
     options_text:{
-        fontSize:14
+        fontSize:16
     },
     options_wrapper:{
         flex:5,
     },
     go_icon:{
-        width:10,
-        height:10,
+        width:8,
+        height:8,
         objectFit:'contain'
     }
 })
@@ -119,11 +142,11 @@ const Personalinfo=()=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const options=useRef([
-        {title:"My Details",icon:personal_icon,screen:{id:"Mydetails",params:undefined}},
-        {title:"Documents",icon:expert_icon,screen:{id:"Documents",params:{documentstab:"Personal"}}},
-        {title:"Workexperience",icon:preferences_icon,screen:{id:"Workexperience",params:undefined}},
-        {title:"Education History",icon:preferences_icon,screen:{id:"Educationhistory",params:undefined}},
-        {title:"Test Scores",icon:favourites_icon,screen:{id:"Mydetails",params:undefined}},
+        {title:"My Details",icon:personal_icon,screen:{id:"Form",params:{formid:"Mydetails"}}},
+        {title:"Workexperience",icon:work_icon,screen:{id:"Workexperience",params:undefined}},
+        {title:"Education History",icon:education_icon,screen:{id:"Educationhistory",params:undefined}},
+        {title:"Test Scores",icon:test_icon,screen:{id:"Testscores",params:undefined}},
+        {title:"Documents",icon:documents_icon,screen:{id:"Documents",params:{documentstab:"Personal"}}},
     ]).current
     const [path,navigate]=useNavigation()
 
@@ -132,7 +155,7 @@ const Personalinfo=()=>{
     }
 
     return(
-        <View style={[GeneralStyles.main_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>
         {
             options.map((option)=>
             <Pressable key={option.title} onPress={()=>openScreen(option.screen)}><Option {...option} Device={Device}></Option></Pressable>

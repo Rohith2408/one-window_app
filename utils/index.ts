@@ -1,6 +1,6 @@
 import { Dimensions, LayoutAnimation, Platform } from "react-native";
-import { Api, baseAppUrl,secureStoreKeys } from "../constants";
-import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo } from "../types";
+import { Api, GradingSystems, Tests, baseAppUrl,secureStoreKeys } from "../constants";
+import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem } from "../types";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
@@ -27,6 +27,8 @@ import { resetSharedinfo } from "../store/slices/sharedinfoSlice";
 import { baseURL, endPoints } from "../constants/server";
 import {components} from "../constants/components";
 import * as DocumentPicker from 'expo-document-picker';
+import Textbox from "../components/resources/Textbox";
+import Datetime from "../components/resources/Datetime";
 
 export const propsMapper=(screens:string[],params:any|undefined)=>{
   return screens.map((screen)=>{
@@ -442,8 +444,7 @@ export const pickDocument=async (sizeLimit:number)=>{
       data:null,
       message:""
   };
-
-  console.log("Doc size",res.assets[0].size/1000000)
+  console.log("Doc res",res)
   if(!res.canceled){
       if(res.assets[0].size && res.assets[0].mimeType && (res.assets[0].size/1000000)<=sizeLimit)
       {
@@ -477,7 +478,7 @@ export const pickDocument=async (sizeLimit:number)=>{
 }
 
 export const Word2Sentence=(words:string[],startStr?:string,seperator?:string)=>{
-  return words.reduce((sentence,word,i)=>(word!=undefined && word.length>0)?(i==(words.length-1)?(sentence+setWordCase(word)):(sentence+setWordCase(word)+(seperator?seperator:" , "))):(sentence+""),startStr!=undefined?startStr:"")
+  return words.reduce((sentence,word,i)=>(word!=undefined && word.length>0)?(i==(words.length-1)?(sentence+setWordCase(word)):(sentence+setWordCase(word)+(seperator?(" "+seperator+" "):" , "))):(sentence+""),startStr!=undefined?startStr:"")
 }
 
 export const formatDate=(date:string,showWeek?:boolean)=>{
@@ -536,4 +537,12 @@ export const fetchCountries=async ()=>{
   })
   let data=await res.json()
   return data.data;
+}
+
+export const removeAllSpaces=(str:string)=>{
+  return str.replace(/\s+/g, '')
+}
+
+export const filterAndsearch=(mainList:ListItem[],itemsPerPage:number,searchStr:string,page:number)=>{
+  return mainList.filter((item)=>item.label.includes(searchStr)).splice(itemsPerPage*(page-1),itemsPerPage);
 }

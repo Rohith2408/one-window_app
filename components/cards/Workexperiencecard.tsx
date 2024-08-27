@@ -111,7 +111,7 @@ const MobileMStyles=StyleSheet.create({
     wrapper:{
         gap:10,
         padding:15,
-        borderRadius:15
+        borderRadius:25
     },
     sub_wrapper:{
         gap:10
@@ -146,7 +146,7 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Workexperiencecard=(props:{data:WorkExperience})=>{
+const Workexperiencecard=(props:{data:WorkExperience,index:number})=>{
 
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
     const Device=useRef<keyof typeof styles>(getDevice()).current
@@ -166,11 +166,11 @@ const Workexperiencecard=(props:{data:WorkExperience})=>{
     }
 
     return(
-        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}}>
+        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,padding:5}}>
         {
             dimensions
             ?
-            <View style={[GeneralStyles.wrapper,styles[Device].wrapper,{backgroundColor:Themes.Light.OnewindowLightBlue}]}>
+            <View style={[GeneralStyles.wrapper,styles[Device].wrapper,{backgroundColor:props.index%2==0?Themes.Light.OnewindowRed(0.3):Themes.Light.OnewindowYellow(0.3)}]}>
                 <View style={[GeneralStyles.actions_wrapper]}>
                     <Pressable onPress={edit}><Image source={edit_icon} style={[styles[Device].delete_icon]}></Image></Pressable>
                     <Pressable onPress={()=>!isLoading?remove():null}><Image source={isLoading?loading_gif:delete_icon} style={[styles[Device].delete_icon]}></Image></Pressable>
@@ -180,7 +180,7 @@ const Workexperiencecard=(props:{data:WorkExperience})=>{
                     <View style={[GeneralStyles.info_wrapper]}>
                         <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.data.companyName}</Text>
                         <Text style={[styles[Device].info,GeneralStyles.info,{color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.type,props.data.sector,props.data.designation],""," | ",true)}</Text>
-                        <View style={[GeneralStyles.ongoing_wrapper,{backgroundColor:Themes.Light.OnewindowPrimaryBlue(1)}]}><Text style={[styles[Device].ongoing,{color:'white',fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.data.Ongoing?"Ongoing":"Completed"}</Text></View>
+                        <View style={[GeneralStyles.ongoing_wrapper,{backgroundColor:props.index%2==0?Themes.Light.OnewindowRed(0.6):Themes.Light.OnewindowYellow(0.6)}]}><Text style={[styles[Device].ongoing,{color:'white',fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.data.Ongoing?"Ongoing":"Completed"}</Text></View>
                     </View>
                 </View>
                 <View style={[GeneralStyles.timeline_wrapper]}>

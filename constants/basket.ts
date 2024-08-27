@@ -8,12 +8,12 @@ const getBasket=(id:string)=>{
 
 const setBasket=(id:string,data:any)=>{
     basket=basket.map((item)=>item.id==id?{id:id,data:data}:item)
-    console.log("settttr",basket)
+    //console.log("settttr",basket)
 }
 
 const addToBasket=(id:string,data:any)=>{
     let res=getBasket(id)
-    console.log("add2",id,data,res)
+    //console.log("add2",id,data,res)
     if(res)
     {
         setBasket(id,data)
@@ -22,7 +22,7 @@ const addToBasket=(id:string,data:any)=>{
     {
         basket=[...basket,{id:id,data:data}]
     }
-    console.log("add3",basket)
+    //console.log("add3",basket)
 }
 
 const removeFromBasket=(id:string)=>{

@@ -3,7 +3,7 @@ import useNavigation from "../../hooks/useNavigation"
 import { getDevice } from "../../utils"
 import { useRef } from "react"
 import useTheme from "../../hooks/useTheme"
-import { Themes } from "../../constants"
+import {Themes } from "../../constants"
 import { Image } from "expo-image";
 import destinations_icon from "../../assets/images/explore/destinations.png"
 import universities_icon from '../../assets/images/explore/universities.png'
@@ -180,15 +180,13 @@ const Home=(props:undefined|{name:string})=>{
 
     const products=useAppSelector((state)=>state.products)
     const [theme,setTheme]=useTheme();
-    const Nav=useNavigation()
+    const [path,navigate]=useNavigation();
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const exploreTabs=useRef([
-        {text:"Destinations",icon:destinations_icon},
-        {text:"Universities",icon:universities_icon},
-        {text:"Programs",icon:programs_icon}
+        {text:"Destinations",icon:destinations_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"destinations",destinationsadditionalfilters:[],destinationsquickfilters:[],search:"",destinationspage:1}}}):null},
+        {text:"Universities",icon:universities_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"universities",universitiesadditionalfilters:[],universitiesquickfilters:[],search:"harv",universitiespage:1}}}):null},
+        {text:"Programs",icon:programs_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"programs",programsadditionalfilters:[],programsquickfilters:[],search:"",programspage:1}}}):null}
     ]).current
-
-    console.log(GeneralStyles.products_wrapper)
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
@@ -218,17 +216,14 @@ const Home=(props:undefined|{name:string})=>{
     )
 }
 
-const Exploreitem=(props:{icon:string,text:string,theme:"light"|"dark",device:Device})=>{
-
-    const [path,navigate]=useNavigation();
+const Exploreitem=(props:{icon:string,text:string,theme:"light"|"dark",device:Device,handler:any})=>{
 
     return(
-        <Pressable onPress={()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"programs",additionalfilters:[],quickfilters:[],search:"harv",page:1}}}):null} style={[GeneralStyles.explore_item]}>
+        <Pressable onPress={()=>props.handler()} style={[GeneralStyles.explore_item]}>
             <Image source={props.icon} style={[GeneralStyles.explore_icon,styles[props.device].explore_icon]}></Image>
             <Text style={[GeneralStyles.explore_text, {color:Themes.Light.OnewindowPrimaryBlue(1)} ,styles[props.device].explore_text]}>{props.text}</Text>
         </Pressable>
     )
-
 }
 
 export default Home

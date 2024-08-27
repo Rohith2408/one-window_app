@@ -17,6 +17,12 @@ const endPoints=[
         type:"GET",
     },
     {
+        id:"regex",
+        category:"public",
+        tail:"university",
+        type:"GET",
+    },
+    {
         id:"post-review",
         category:"student",
         tail:"post-review",
@@ -44,14 +50,16 @@ const endPoints=[
         
     },
     {
-        ENUM:"send-sms-otp",
-        TYPE:"student",
-        
+        id:"otp-request",
+        category:"student",
+        tail:"send-sms-otp",
+        type:"GET",
     },
     {
-        ENUM:"verify-sms-otp",
-        TYPE:"student",
-        
+        id:"otp-verify",
+        category:"student",
+        tail:"verify-sms-otp",
+        type:"GET",
     },
     {
         ENUM:"phone",

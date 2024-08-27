@@ -18,7 +18,11 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-
+    add_icon:{
+        width:34,
+        height:34,
+        resizeMode:"contain"
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -29,10 +33,18 @@ const MobileSStyles=StyleSheet.create({
     }
 })
 const MobileMStyles=StyleSheet.create({
-
+    add_icon:{
+        width:38,
+        height:38,
+        resizeMode:"contain"
+    }
 })
 const MobileLStyles=StyleSheet.create({
-
+    add_icon:{
+        width:34,
+        height:34,
+        resizeMode:"contain"
+    }
     
 })
 
@@ -63,13 +75,13 @@ const Workexperience=(props:any)=>{
         {
             workExperiences.responseStatus=="not_recieved"
             ?
-            <Loadinglistscreen cardGap={30} cardHeight={150}></Loadinglistscreen>
+            <Loadinglistscreen cardGap={30} cardHeight={Device=="MobileS"?150:(Device=="MobileM"?200:250)}></Loadinglistscreen>
             :
             <View style={{flex:1,gap:30}}>
                 <Pressable onPress={add} style={[GeneralStyles.add_wrapper]}><Image style={[styles[Device].add_icon]} source={add_icon}></Image></Pressable>
                 {
                     workExperiences.data.map((item,i)=>
-                    <View key={item._id} style={{width:'100%',height:150}}><Workexperiencecard data={item}></Workexperiencecard></View>
+                    <View key={item._id} style={{width:'100%',height:Device=="MobileS"?150:(Device=="MobileM"?170:200)}}><Workexperiencecard data={item} index={i}></Workexperiencecard></View>
                     )
                 }
             </View>

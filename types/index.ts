@@ -1,5 +1,7 @@
 import React from "react"
 import { ImageSourcePropType } from "react-native"
+import { FormAction } from "../reducers/FormReducer"
+import { NavigationActions } from "../reducers/PathReducer"
 
 export type Device="MobileS"|"MobileM"|"MobileL"|"Tab"
 
@@ -18,10 +20,11 @@ export type Tabbar={
 
 export type ListInfo={
     id:string,
+    basketid:string,
     card:React.FC<any>,
     filters:{
-        additional:FilterInfo[],
-        quick:FilterInfo[]
+        additional:AdditionalFilterInfo[],
+        quick:QuickFilterInfo[]
     },
     listFetcher:(search:string,appliedFilters:AppliedFilter[],page:number)=>Promise<ServerResponse>
 }
@@ -31,13 +34,35 @@ export type AppliedFilter={
     data:ListItem[]
 }
 
-export type FilterInfo={
+export type AdditionalFilterInfo={
     type:string,
     title:string,
-    handler:(currentAppliedFilter:AppliedFilter[],data:any)=>AppliedFilter[]
+    handler?:(currentAppliedFilter:AppliedFilter[],data:any)=>AppliedFilter[]
     icon:string,
-    container:React.FC<any>
+    container?:{
+        component:React.FC<any>,
+        props?:any
+    }
 }
+
+export type QuickFilterInfo={
+    type:string,
+    title:string,
+    //handler?:(currentAppliedFilter:AppliedFilter[],data:any)=>AppliedFilter[]
+    icon:string,
+    items:ListItem[]
+}
+
+// export type FilterInfo={
+//     type:string,
+//     title:string,
+//     handler?:(currentAppliedFilter:AppliedFilter[],data:any)=>AppliedFilter[]
+//     icon:string,
+//     container?:{
+//         component:React.FC<any>,
+//         props?:any
+//     }
+// }
 
 export type Endpoint={
     category:string,
@@ -112,15 +137,22 @@ export type ListItem={
 }
 
 export type Dropdown={
-    options?:{
-        label:string,
-        value:string
-    }[],
-    optionsFetcher?:(data?:any)=>Promise<ListItem[]>,
+    options:{
+        list?:any[],
+        card:React.FC<any>,
+        fetcher?:(data?:any)=>Promise<any>,
+        idExtractor:(item:any)=>string,
+        labelExtractor?:(item:any)=>string
+    },
+    isAsync?:boolean,
     basketid:string,
     selectionMode:"single"|"multi",
-    isFocussed:boolean,
-    eventHandler:(event:Event)=>void
+    apply:(data:any[])=>NavigationActions
+    //eventHandler?:(event:Event)=>void
+    //isFocussed?:boolean,
+    //optionsCard?:React.FC<any>,
+    //optionsFetcher?:(data?:any)=>Promise<ListItem[]>,
+    //selectedHandler?:(data:any)=>any,
 }
 
 export type FormInfo={
@@ -763,6 +795,7 @@ export interface EducationHistory_Plus2 {
 
 export interface EducationHistory_UnderGraduation{
     instituteName:string,
+    custom:boolean
     city: string,
     state: string,
     country: string,
@@ -865,9 +898,17 @@ export interface Sharedinfo{
     email?:string,
     phone?:Phone,
     LeadSource?: string,
-    isPlanningToTakeAcademicTest: boolean,
-    isPlanningToTakeLanguageTest: boolean,
-    
+    // isPlanningToTakeAcademicTest: boolean,
+    // isPlanningToTakeLanguageTest: boolean,
+}
+
+export type Verification={
+    type: "email" | "phone", 
+    status: boolean,
+    token: {
+        data: string, // jwt
+        expiry: Date, // expiry date
+    }
 }
 
 export type ResearchPaper={
@@ -1134,4 +1175,15 @@ export interface Package{
         quantity:number
     }[]
 }
+
+export type Institute={
+    IEH: {
+      exists: boolean
+    },
+    _id: string,
+    InstitutionName: string,
+    District:string,
+    State: string,
+    university: string[]
+  }
 

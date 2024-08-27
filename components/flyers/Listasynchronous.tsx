@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react"
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
 import { getBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
-import { ListItem } from "../../types"
+import { ListItem, ServerResponse } from "../../types"
 import { Fonts, Themes } from "../../constants"
-import tick_icon from '../../assets/images/misc/tick.png'
 import { Image } from "expo-image"
 import { setLayoutAnimation } from "../../utils"
 import loading_gif from '../../assets/images/misc/loader.gif'
+import tick_icon from '../../assets/images/misc/tick.png'
 
 const GeneralStyles=StyleSheet.create({
     options_wrapper:{
@@ -40,10 +40,12 @@ const GeneralStyles=StyleSheet.create({
     }
 })
 
-const Dropdownoptions=(props:{basketid:string})=>{
+const Listasynchronous=(props:{basketid:string})=>{
 
     let info=useRef(getBasket(props.basketid)).current
-    const [options,setoptions]=useState(info.options?info.options:[])
+    const [list,setList]=useState([]);
+    const [searchStr,setSearchstr]=useState(info.initialSearchStr?info.initialSearchStr:"");
+    const [page,setPage]=useState(info.initialPage?info.initialPage:1)
     const [selected,setSelected]=useState<ListItem[]>(info.selected?info.selected:[])
     const [path,navigate]=useNavigation()
     const [isLoading,setIsLoading]=useState(false)
@@ -59,18 +61,14 @@ const Dropdownoptions=(props:{basketid:string})=>{
     }
 
     useEffect(()=>{
-
-    },[])
-
-    const apply=()=>{
-        console.log("apply",selected)
-        navigate?navigate({type:"RemoveScreen"}):null;
-        navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:info?.fieldid,newvalue:selected}}}):null
-    }
-
-
-
-    setLayoutAnimation()
+        if(info.listFetcher){
+            setIsLoading(true);
+            info.listFetcher(searchStr,page).then((res:ServerResponse)=>{
+                setIsLoading(false);
+                res.success?setList(res.data):null
+            })
+        }
+    },[searchStr,page])
 
     return(
         <View style={{flex:1,gap:10}}>
@@ -82,6 +80,7 @@ const Dropdownoptions=(props:{basketid:string})=>{
                 null
             }
             <View style={{flex:1}}>
+                <View><TextInput style={{padding:10}} value={searchStr} onChangeText={(text)=>setSearchstr(text)}></TextInput></View>
             {
                 isLoading
                 ?
@@ -89,11 +88,11 @@ const Dropdownoptions=(props:{basketid:string})=>{
                 :
                 <ScrollView style={[GeneralStyles.options_wrapper]} contentContainerStyle={{gap:10,paddingBottom:10}}>
                 {
-                    options.map((item:{label:string,value:string})=>
+                    list.map((item:{label:string,value:string})=>
                     <Pressable key={item.label} onPress={()=>selection(item)} style={[GeneralStyles.option_wrapper]}>
                         <View style={{flex:1}}><Text style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.label}</Text></View>
                         {
-                            selected.find((selecteditem)=>info.id==item.label)
+                            selected.find((selItem)=>selItem.label==item.label)
                             ?
                             <Image source={tick_icon} style={[GeneralStyles.tick]}/>
                             :
@@ -107,6 +106,8 @@ const Dropdownoptions=(props:{basketid:string})=>{
             </View>
         </View>
     )
+
 }
 
-export default Dropdownoptions
+export default Listasynchronous
+
