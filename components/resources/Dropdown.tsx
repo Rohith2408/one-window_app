@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { Dropdown as DropdownType, ListItem, ServerResponse} from "../../types"
+import { Dropdown as DropdownType, Event, ListItem, ServerResponse} from "../../types"
 import { Animated, LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { addToBasket, getBasket, removeFromBasket } from "../../constants/basket"
@@ -7,7 +7,7 @@ import { Fonts, Themes } from "../../constants"
 import arrow_icon from '../../assets/images/misc/back.png'
 import close_icon from '../../assets/images/misc/close.png'
 import { Image } from "expo-image"
-import { setLayoutAnimation } from "../../utils"
+//import { setLayoutAnimation } from "../../utils"
 import loading_gif from '../../assets/images/misc/loader.gif'
 
 const GeneralStyles=StyleSheet.create({
@@ -62,7 +62,7 @@ const GeneralStyles=StyleSheet.create({
 // basketid:string,
 // selectionMode:"single"|"multi",
 
-const Dropdown=(props:DropdownType & {value:any[],id:string})=>{
+const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:Event)=>void})=>{
 
     const [path,navigate]=useNavigation()
     const [loading,setLoading]=useState(false)
@@ -71,7 +71,7 @@ const Dropdown=(props:DropdownType & {value:any[],id:string})=>{
     const onSelect=async ()=>{
         if(props.isAsync)
         {
-            addToBasket(props.basketid+"-dropdownoptionsasync",{optionsFetcher:props.options.fetcher,selectedHandler:props.apply,optionsCard:props.options.card,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value});
+            addToBasket(props.basketid+"-dropdownoptionsasync",{options:props.options,apply:props.apply,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value});
             navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptionsasync",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null
         }
         else
@@ -80,13 +80,13 @@ const Dropdown=(props:DropdownType & {value:any[],id:string})=>{
             let options;
             let res:ServerResponse=props.options.fetcher?await props.options.fetcher():{success:true,data:props.options.list,message:''}
             setLoading(false)
-            res.success?addToBasket(props.basketid+"-dropdownoptions",{options:res.data,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value}):null
+            res.success?addToBasket(props.basketid+"-dropdownoptions",{options:{...props.options,list:res.data},eventHandler:props.eventHandler,apply:props.apply,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value}):null
             res.success?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null:null
         }
     }
 
     const removeSelected=(item:ListItem)=>{
-        setLayoutAnimation()
+        //setLayoutAnimation()
         navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.id,newvalue:props.value.filter((data)=>data.label!=item.label)}}}):null
     }
 
@@ -98,23 +98,23 @@ const Dropdown=(props:DropdownType & {value:any[],id:string})=>{
     })
 
     useEffect(()=>{
-        if(props.value.length>0)
-        {
-            if(props.selectionMode=="single")
-            {
-                addToBasket(props.basketid,props.value[0].value)
-            }
-            else
-            {
-                addToBasket(props.basketid,props.value.map((item)=>item.value))
-            }
-        }
+        // if(props.value.length>0)
+        // {
+        //     if(props.selectionMode=="single")
+        //     {
+        //         addToBasket(props.basketid,props.value[0].value)
+        //     }
+        //     else
+        //     {
+        //         addToBasket(props.basketid,props.value.map((item)=>item.value))
+        //     }
+        // }
     },[props.value])
 
     return(
         <View style={[GeneralStyles.mainWrapper]}>
             <Pressable style={[GeneralStyles.selecttext_wrapper]} onPress={onSelect}>
-                <View style={{flex:1}}><Text style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,fontWeight:"700"}]}>{(props.selectionMode=="single" && props.value.length!=0)?props.value[0].label:"Select"}</Text></View>
+                <View style={{flex:1}}><Text style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,fontWeight:"700"}]}>{(props.selectionMode=="single" && props.value.length!=0)?props.options.labelExtractor(props.value[0]):"Select"}</Text></View>
                 <Image source={loading?loading_gif:arrow_icon} style={{width:10,height:10,resizeMode:"contain",transform:[{rotate:"-90deg"}]}}></Image>
             </Pressable>
             {
@@ -124,7 +124,7 @@ const Dropdown=(props:DropdownType & {value:any[],id:string})=>{
                 {
                     props.value?.map((item)=>
                     <View key={item.label} style={[GeneralStyles.selecteditem_wrapper]}>
-                        <View style={{flex:1}}><Text style={[GeneralStyles.selected,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.label}</Text></View>
+                        <View style={{flex:1}}><Text style={[GeneralStyles.selected,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.options.labelExtractor(item)}</Text></View>
                         <Pressable onPress={()=>removeSelected(item)}><Image source={close_icon} style={[GeneralStyles.close]}/></Pressable>
                     </View>
                     )

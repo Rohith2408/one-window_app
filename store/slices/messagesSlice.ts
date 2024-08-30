@@ -26,7 +26,7 @@ export const messagesSlice=createSlice({
                 //doesnt exists
                 typingMessages.push({_id:action.payload.firstName+"/typing",content:setWordCase(action.payload.firstName)+" is typing",sender:action.payload,type:"typing"})
                 state.data=[...state.data.filter((msg)=>msg.type!="typing"),...typingMessages]
-                console.log("slice",JSON.stringify([...state.data.filter((msg)=>msg.type!="typing"),...typingMessages],null,2))
+                //console.log("slice",JSON.stringify([...state.data.filter((msg)=>msg.type!="typing"),...typingMessages],null,2))
             }
         },
         stopTypingMessage:(state,action:PayloadAction<Participant>)=>{

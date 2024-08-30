@@ -44,15 +44,15 @@ const GeneralStyles=StyleSheet.create({
     }
 })
 
-const Dropdownoptionsasync=(props:{basketid:string})=>{
+const Dropdownoptionsasync=(props:{basketid:string,eventHandler:any})=>{
 
     let info=useRef(getBasket(props.basketid)).current
-    const [options,setOptions]=useState(info.options?info.options:[])
+    const [options,setOptions]=useState(info.options?.list?info.options.list:[])
     const [selected,setSelected]=useState<any[]>(info.selected?info.selected:[])
     const [path,navigate]=useNavigation()
     const [isLoading,setIsLoading]=useState(false)
     const [search,setSearch]=useState(info.initialSearch?info.initialSearch:"")
-    const Card=info.optionsCard
+    const Card=info.options.card
 
     const selection=(data:any)=>{
         if(selected.find((item)=>info.idExtractor(item)==info.idExtractor(data))){
@@ -65,25 +65,28 @@ const Dropdownoptionsasync=(props:{basketid:string})=>{
     }
 
     useEffect(()=>{
-        info.optionsFetcher?info.optionsFetcher(search).then((res:ServerResponse)=>{
+        info.options.fetcher?info.options.fetcher(search).then((res:ServerResponse)=>{
             //console.log("uni",JSON.stringify(res,null,2))
-            res.success?setOptions(res.data.institutions.map((item:any)=>(info.optionsCard?item:{label:item.InstitutionName,value:item.InstitutionName}))):null
+            res.success?setOptions(res.data.institutions.map((item:any)=>(info.options.card?item:{label:item.InstitutionName,value:item.InstitutionName}))):null
         }):null
     },[search])
 
     const apply=()=>{
+        info.eventHandler?info.eventHandler({name:"onSelect",data:selected,triggerBy:"dropdownoptions"}):null
         navigate?navigate({type:"RemoveScreen"}):null;
-        navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:info?.fieldid,newvalue:info.selectedHandler?info.selectedHandler(selected):selected}}}):null
+        navigate?navigate(info.apply?info.apply(selected):{type:"UpdateParam",payload:{param:"formupdate",newValue:{id:info?.fieldid,newvalue:selected}}}):null
     }
 
     setLayoutAnimation()
 
     useEffect(()=>{
-        info.optionsFetcher?info.optionsFetcher("National Institute Of technology").then((res:ServerResponse)=>{
-            console.log("uni",JSON.stringify(res,null,2))
-            res.success?setOptions(res.data.institutions.map((item:any)=>(info.optionsCard?item:{label:item.InstitutionName,value:item.InstitutionName}))):null
+        info.options.fetcher?info.options.fetcher("National Institute Of technology").then((res:ServerResponse)=>{
+            //console.log("uni",JSON.stringify(res,null,2))
+            res.success?setOptions(res.data.institutions.map((item:any)=>(info.options.card?item:{label:item.InstitutionName,value:item.InstitutionName}))):null
         }):null
     },[])
+
+
 
     return(
         <View style={{flex:1,paddingTop:10,gap:10}}>

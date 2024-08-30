@@ -2,17 +2,24 @@ import { ScrollView, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { AdditionalFilterInfo, AppliedFilter } from "../../types"
 import { getBasket } from "../../constants/basket"
-import React, { useRef, useState } from "react"
-import { ListsInfo } from "../../constants/lists"
+import React, { useEffect, useRef, useState } from "react"
+import { lists } from "../../constants"
 
-const Filters=(props:{filtersbasketid:string,filterslistid:string})=>{
+const Filters=(props:{filtersbasketid:string,filterslistid:string,filtersupdate:{id:string,newvalue:any}})=>{
 
     let info=useRef(getBasket(props.filtersbasketid)).current
-    let Filtersinfo=ListsInfo.find((list)=>list.id==props.filterslistid)?.filters
+    let Filtersinfo=lists.find((list)=>list.id==props.filterslistid)?.filters
     const [additionalFilters,setAdditionalFilters]=useState<AppliedFilter[]>(info.additionalFiltersApplied?info.additionalFiltersApplied:[])
-    const [quickFilters,setQuickFilters]=useState<AppliedFilter[]>(info.quickFiltersApplied?info.quickFiltersApplied:[]);
+    //const [quickFilters,setQuickFilters]=useState<AppliedFilter[]>(info.quickFiltersApplied?info.quickFiltersApplied:[]);
 
-    console.log("infff",Filtersinfo?.additional)
+    useEffect(()=>{
+        if(props.filtersupdate)
+        {
+            setAdditionalFilters(additionalFilters.map((item)=>item.type==props.filtersupdate.id?{type:item.type,data:props.filtersupdate.newvalue}:item))
+        }
+    },[props.filtersupdate])
+
+    console.log("lizz",info)
 
     return(
         <View style={{flex:1}}>
@@ -30,7 +37,6 @@ const Filters=(props:{filtersbasketid:string,filterslistid:string})=>{
 const Filercontainer=(props:{info:AdditionalFilterInfo,applied:AppliedFilter|undefined})=>{
 
     const Container:React.FC<any>|undefined=props.info.container?.component
-    //console.log("app",props.info.type,props.info.container)
 
     return(
         <View style={{ flex:1,display:"flex",flexDirection:"column",gap:8}}>
@@ -38,7 +44,7 @@ const Filercontainer=(props:{info:AdditionalFilterInfo,applied:AppliedFilter|und
             {
                 Container
                 ?
-                <Container value={props.applied?props.applied:{type:props.info.type,data:[]}} {...props.info.container?.props}/>
+                <Container id={props.applied?.type} value={props.applied?props.applied.data:[]} {...props.info.container?.props}/>
                 :
                 null
             }

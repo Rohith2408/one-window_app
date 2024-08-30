@@ -6,7 +6,7 @@ import { Fonts, Themes, secureStoreKeys, setComponentInfo } from "../../constant
 import * as SecureStore from 'expo-secure-store'
 import { Image } from "expo-image";
 import sample_pic from '../../assets/images/misc/sampledp.png'
-import { getDevice } from "../../utils";
+import { getDevice, resetStore } from "../../utils";
 import personal_icon from '../../assets/images/profile/personal.png'
 import cart_icon from '../../assets/images/profile/cart.png'
 import expert_icon from '../../assets/images/profile/expert.png'
@@ -320,13 +320,13 @@ const Profile=(props:any)=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const options=useRef([
         {title:"Personal Info",icon:personal_icon,screen:"Personalinfo"},
-        {title:"Experts",icon:expert_icon,screen:"Personalinfo"},
+        {title:"Experts",icon:expert_icon,screen:"Experts"},
         {title:"Preferences",icon:preferences_icon,screen:"Personalinfo"},
-        {title:"Recommended",icon:preferences_icon,screen:"Personalinfo"},
-        {title:"Favourites",icon:favourites_icon,screen:"Personalinfo"},
-        {title:"Cart",icon:cart_icon,screen:"Personalinfo"},
-        {title:"My Orders",icon:orders_icon,screen:"Personalinfo"},
-        {title:"My Products",icon:orders_icon,screen:"Personalinfo"}
+        {title:"Recommended",icon:preferences_icon,screen:""},
+        {title:"Favourites",icon:favourites_icon,screen:""},
+        {title:"Cart",icon:cart_icon,screen:""},
+        {title:"My Orders",icon:orders_icon,screen:""},
+        {title:"My Products",icon:orders_icon,screen:""}
     ]).current
 
     const press=()=>{
@@ -339,8 +339,9 @@ const Profile=(props:any)=>{
     }
 
     const logout=async ()=>{
-        //await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,"");
-        //navigate?navigate({type:"Logout"}):null
+        await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,"");
+        resetStore();
+        navigate?navigate({type:"Logout"}):null
     }
 
     const showDpOptions=()=>{
@@ -375,7 +376,7 @@ const Profile=(props:any)=>{
             }
             </View>
             <View style={[GeneralStyles.logout_wrapper]}>
-                <Pressable style={[GeneralStyles.logout,{backgroundColor:Themes.Light.OnewindowPrimaryBlue(1)}]}><Text style={[GeneralStyles.logout,styles[Device].logout,{fontFamily:Fonts.NeutrifStudio.Medium}]}>Logout</Text></Pressable>
+                <Pressable onPress={logout} style={[GeneralStyles.logout,{backgroundColor:Themes.Light.OnewindowPrimaryBlue(1)}]}><Text style={[GeneralStyles.logout,styles[Device].logout,{fontFamily:Fonts.NeutrifStudio.Medium}]}>Logout</Text></Pressable>
             </View>
             
         </View>

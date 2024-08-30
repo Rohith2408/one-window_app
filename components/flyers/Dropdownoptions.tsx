@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
 import { getBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
 import { ListItem } from "../../types"
@@ -43,14 +43,16 @@ const GeneralStyles=StyleSheet.create({
 const Dropdownoptions=(props:{basketid:string})=>{
 
     let info=useRef(getBasket(props.basketid)).current
-    const [options,setoptions]=useState(info.options?info.options:[])
+    const [options,setoptions]=useState(info.options?.list?info.options.list:[])
     const [selected,setSelected]=useState<ListItem[]>(info.selected?info.selected:[])
     const [path,navigate]=useNavigation()
     const [isLoading,setIsLoading]=useState(false)
+    const Card=info.options.card
 
-    const selection=(data:ListItem)=>{
-        if(selected.find((item)=>item.label==data.label)){
-            setSelected(selected.filter((item)=>item.label!=data.label))
+    const selection=(data:any)=>{
+
+        if(selected.find((item)=>info.options.idExtractor(item)==info.options.idExtractor(data))){
+            setSelected(selected.filter((item)=>info.options.idExtractor(item)!=info.options.idExtractor(data)))
         }
         else
         {
@@ -63,17 +65,18 @@ const Dropdownoptions=(props:{basketid:string})=>{
     },[])
 
     const apply=()=>{
-        console.log("apply",selected)
+        //console.log("apply",info.apply)
+        info.eventHandler?info.eventHandler({name:"onSelect",data:selected,triggerBy:"dropdownoptions"}):null
         navigate?navigate({type:"RemoveScreen"}):null;
-        navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:info?.fieldid,newvalue:selected}}}):null
+        navigate?navigate(info.apply?info.apply(selected):{type:"UpdateParam",payload:{param:"formupdate",newValue:{id:info?.fieldid,newvalue:selected}}}):null
     }
-
-
 
     setLayoutAnimation()
 
+    //console.log("oppp",info.selected,info.options)
+
     return(
-        <View style={{flex:1,gap:10}}>
+        <View style={{flex:1,paddingTop:10,gap:10}}>
             {
                 selected.length>0
                 ?
@@ -87,22 +90,33 @@ const Dropdownoptions=(props:{basketid:string})=>{
                 ?
                 <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Image style={{width:24,height:24,resizeMode:"contain"}} source={loading_gif}></Image></View>
                 :
-                <ScrollView style={[GeneralStyles.options_wrapper]} contentContainerStyle={{gap:10,paddingBottom:10}}>
-                {
-                    options.map((item:{label:string,value:string})=>
-                    <Pressable key={item.label} onPress={()=>selection(item)} style={[GeneralStyles.option_wrapper]}>
-                        <View style={{flex:1}}><Text style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.label}</Text></View>
+                <View style={{flex:1,gap:20,padding:10}}>
+                    {/* <TextInput placeholder="Search..." style={[GeneralStyles.search,{borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)}]} value={search} onChangeText={(text)=>setSearch(text)}></TextInput> */}
+                    <ScrollView style={[GeneralStyles.options_wrapper]} contentContainerStyle={{gap:15,paddingBottom:10}}>
+                    {
+                        options.map((item:any,i:number)=>
+                        <Pressable key={item.label} onPress={()=>selection(item)} style={[GeneralStyles.option_wrapper]}>
                         {
-                            selected.find((selecteditem)=>info.id==item.label)
+                            Card
+                            ?
+                            <Card key={item._id?item._id:i} {...item}/>
+                            :
+                            <View style={{flex:1}}>
+                                <View style={{flex:1}}><Text style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.label}</Text></View>
+                            </View>
+                        }
+                        {
+                            selected.find((selecteditem)=>info.options.idExtractor(selecteditem)==info.options.idExtractor(item))
                             ?
                             <Image source={tick_icon} style={[GeneralStyles.tick]}/>
                             :
                             null
                         }
-                    </Pressable>
-                    )
-                }
-                </ScrollView>
+                        </Pressable>
+                        )
+                    }
+                    </ScrollView>
+                </View>
             }
             </View>
         </View>

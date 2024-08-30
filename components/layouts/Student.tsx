@@ -88,7 +88,7 @@ const Student=(props:{screens:string[],params:any})=>{
             url:getServerRequestURL("profile","GET"),
             reqType: "GET"
         })
-        console.log("ress",res)
+        // console.log("ress",res)
         if(!res.success)
         {
             if(res.message==serverResponses.VerificationFailed || res.message==serverResponses.TokenMissing)
@@ -193,6 +193,7 @@ const Student=(props:{screens:string[],params:any})=>{
             url:getServerRequestURL("dashboard","GET"),
             reqType: "GET"
         })
+        console.log("act",res)
         if(!res.success)
         {
             if(res.message==serverResponses.VerificationFailed || res.message==serverResponses.TokenMissing)
@@ -236,6 +237,7 @@ const Student=(props:{screens:string[],params:any})=>{
                 issue:"",
                 data:res.data.activity.cart
             }))
+            //console.log("meet",res.data.activity.meetings)
             dispatch(initMeetings({
                 requestStatus: "initiated",
                 responseStatus: "recieved",

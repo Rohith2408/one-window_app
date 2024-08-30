@@ -3,17 +3,17 @@ import { useState } from 'react'
 import { Platform, Pressable, Text, View } from "react-native"
 import useNavigation from '../../hooks/useNavigation'
 
-const Datetime=(props:{value:string,id:string})=>{
+const Datetime=(props:{value:string,id:string,mode?:string})=>{
 
     return(
-        <View >
+        <View>
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
             {
                 Platform.OS=="android"
                 ?
-                <AndroidPicker date={props.value} id={props.id}></AndroidPicker>
+                <AndroidPicker mode={props.mode?props.mode:"date"} date={props.value} id={props.id}></AndroidPicker>
                 :
-                <IosPicker date={props.value} id={props.id}></IosPicker>
+                <IosPicker mode={props.mode?props.mode:"date"} date={props.value} id={props.id}></IosPicker>
             }
             </View>
         </View>
@@ -21,7 +21,7 @@ const Datetime=(props:{value:string,id:string})=>{
 
 }
 
-const AndroidPicker=(props:{date:string,id:string})=>{
+const AndroidPicker=(props:{date:string,id:string,mode:string})=>{
 
     //const [state,setState]=useState(props.nonState.initialValue?props.nonState.initialValue:new Date().toISOString());
     const [showPicker, setShowPicker] = useState(false);
@@ -47,7 +47,7 @@ const AndroidPicker=(props:{date:string,id:string})=>{
                 maximumDate={new Date()}
                 testID="dateTimePicker"
                 value={props.date?new Date(props.date):new Date()}
-                mode="date"
+                mode={props.mode}
                 is24Hour={true}
                 //accentColor={THEME.COLOR.SECONDARY.SUNSHINE(1)}
                 style={{transform:[{scale:0.8}]}}
@@ -65,7 +65,7 @@ const AndroidPicker=(props:{date:string,id:string})=>{
 
 }
 
-const IosPicker=(props:{date:string,id:string})=>{
+const IosPicker=(props:{date:string,id:string,mode:string})=>{
 
     const [path,navigate]=useNavigation()
     //const [state,setState]=useState(props.nonState.initialValue?props.nonState.initialValue:new Date().toISOString());
@@ -84,7 +84,7 @@ const IosPicker=(props:{date:string,id:string})=>{
             maximumDate={new Date()}
             testID="dateTimePicker"
             value={props.date?new Date(props.date):new Date()}
-            mode="date"
+            mode={props.mode}
             is24Hour={true}
             //accentColor={THEME.COLOR.SECONDARY.SUNSHINE(1)}
             style={{transform:[{scale:0.8}]}}

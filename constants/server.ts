@@ -8,7 +8,13 @@ const endPoints=[
         id:"login",
         category:"auth",
         tail:"login",
-        type:"GET",
+        type:"POST",
+    },
+    {
+        id:"register",
+        category:"auth",
+        tail:"student-register",
+        type:"POST",
     },
     {
         id:"profile",
@@ -45,11 +51,6 @@ const endPoints=[
         
     },
     {
-        ENUM:"verify-email",
-        TYPE:"student",
-        
-    },
-    {
         id:"otp-request",
         category:"student",
         tail:"send-sms-otp",
@@ -59,6 +60,12 @@ const endPoints=[
         id:"otp-verify",
         category:"student",
         tail:"verify-sms-otp",
+        type:"GET",
+    },
+    {
+        id:"email-verification",
+        category:"student",
+        tail:"verify-email",
         type:"GET",
     },
     {
@@ -80,18 +87,23 @@ const endPoints=[
         
     },
     {
-        ENUM:"counsellor-events",
-        TYPE:"student",
+        id:"vacant-slots",
+        category:"student",
+        tail:"events",
+        type:"GET",
+    },
+    {
+        id:"book-slot",
+        category:"student",
+        tail:"book-slot",
+        type:"POST",
         
     },
     {
-        ENUM:"book-slot",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"modify-slot",
-        TYPE:"student",
+        id:"modify-slot",
+        category:"student",
+        tail:"modify-slot",
+        type:"POST"
         
     },
     {

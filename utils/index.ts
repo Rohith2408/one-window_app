@@ -1,5 +1,5 @@
 import { Dimensions, LayoutAnimation, Platform } from "react-native";
-import { Api, GradingSystems, Tests, baseAppUrl,secureStoreKeys } from "../constants";
+import { Api, GradingSystems, Tests, Themes, baseAppUrl,secureStoreKeys } from "../constants";
 import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem } from "../types";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
@@ -30,6 +30,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import Textbox from "../components/resources/Textbox";
 import Datetime from "../components/resources/Datetime";
 
+
 export const propsMapper=(screens:string[],params:any|undefined)=>{
   return screens.map((screen)=>{
       let requiredKeys=components.find((item)=>item.id==screen)?.props
@@ -38,7 +39,7 @@ export const propsMapper=(screens:string[],params:any|undefined)=>{
 }
 
 export const formatQueryParamsToString=(params:any)=>{
-  console.log("params",params)
+  //console.log("params",params)
     let keys=Object.keys(params);
     let values=Object.values(params);
     return keys.reduce((acc, current, index) => 
@@ -150,7 +151,7 @@ export async function registerForPushNotificationsAsync() {
           projectId,
         })
       ).data;
-      console.log(pushTokenString);
+      //console.log(pushTokenString);
       return pushTokenString;
     } catch (e: unknown) {
       //handleRegistrationError(`${e}`);
@@ -167,25 +168,27 @@ export const serverRequest=async (requestData:ServerRequest)=>{
     data:undefined
   };
   let accessToken=await SecureStore.getItemAsync(secureStoreKeys.ACCESS_TOKEN)
-  if(accessToken?.length==0 && requestData.routeType=="private")
+  if(accessToken?.length==0 && (!requestData.routeType || requestData.routeType=="private"))
   {
     res.success=false
-    res.message="Not allowed"
+    res.message="Access Token Missing"
+    //console.log("AT",accessToken,res);
   }
   else
   {
+      //console.log("aaaallll",requestData)
       let fetchObj:RequestInit={
         headers:{"Authorization":"Bearer "+accessToken},
         method:requestData.reqType,
         body:!requestData.preventStringify?JSON.stringify({...requestData.body}):requestData.body
       }
-      console.log("fetch",fetchObj)
+      //console.log("fetch",fetchObj)
       requestData.routeType=="public"?delete fetchObj.headers:null
       !requestData.body?delete fetchObj.body:null
-      console.log("url",requestData)
+      //console.log("url",requestData)
       let serverRes=await fetch(requestData.url,fetchObj);
       let data:ServerResponse=requestData.responseType=="JSON"||requestData.responseType==undefined?await serverRes.json():{success:true,message:"",data:await serverRes.blob()}
-      console.log("server res",data);
+      //console.log("server res",data);
       if(data.AccessToken)
       {
         await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,data.AccessToken)
@@ -444,7 +447,7 @@ export const pickDocument=async (sizeLimit:number)=>{
       data:null,
       message:""
   };
-  console.log("Doc res",res)
+  //console.log("Doc res",res)
   if(!res.canceled){
       if(res.assets[0].size && res.assets[0].mimeType && (res.assets[0].size/1000000)<=sizeLimit)
       {
@@ -512,7 +515,7 @@ export const fetchStates=async (countryData:string)=>{
       body:JSON.stringify({country:countryData})
   })
   let data=await res.json()
-  console.log("states",JSON.stringify(data,null,2));
+  //console.log("states",JSON.stringify(data,null,2));
   return data.data.states;
 }
 
@@ -545,4 +548,13 @@ export const removeAllSpaces=(str:string)=>{
 
 export const filterAndsearch=(mainList:ListItem[],itemsPerPage:number,searchStr:string,page:number)=>{
   return mainList.filter((item)=>item.label.includes(searchStr)).splice(itemsPerPage*(page-1),itemsPerPage);
+}
+
+export const formatTime=(date:string)=>{
+  return new Date(date).toTimeString().substring(0,5)
+}
+
+export const getThemeColor=(index:number)=>{
+  let colors=[Themes.Light.OnewindowRed(1),Themes.Light.OnewindowPurple(1),Themes.Light.OnewindowYellow(1),Themes.Light.OnewindowTeal(1)];
+  return colors[index]
 }

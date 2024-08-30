@@ -20,11 +20,28 @@ export default function App() {
 
   const [theme,setTheme]=useState<"light"|"dark">("light");
   const [path,navigate]=useReducer(NavigationReducer,"onewindow://Student/Base?tab=home")//"onewindow://Student/Base/Profile?tab=home"
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined);
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
-  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
+
+    registerForPushNotificationsAsync()
+    .then(token =>{
+      console.log("token",token)
+      SecureStore.setItemAsync("devicetoken",token?token:"");
+    }).catch((error: any) => setExpoPushToken(`${error}`));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      alert(notification.request.content.body+" "+notification.request.content.data.someData)
+    })
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
     async function loadFonts() {
       await Font.loadAsync({
         "NeutrifStudio-ExtraBold": require('./assets/fonts/NeutrifStudio-ExtraBold.ttf'),
@@ -41,19 +58,6 @@ export default function App() {
   useEffect(()=>{
     Linking.addEventListener('url', (event: { url: string })=>{
   });
-
-  // registerForPushNotificationsAsync()
-  //   .then(token =>{
-  //     SecureStore.setItemAsync("devicetoken",token);
-  //   }).catch((error: any) => setExpoPushToken(`${error}`));
-
-  // notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-  //   alert(notification.request.content.body+" "+notification.request.content.data.someData)
-  // })
-
-  // responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-  //   console.log(response);
-  // });
 
   // setTimeout(()=>{
   //   navigate({type:"add",payload:{params:{popup:"sample",popupdata:"Rohith"},path:"Popup"}})
@@ -93,3 +97,16 @@ const styles = StyleSheet.create({
     paddingRight:30
   },
 });
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+function handleRegistrationError(errorMessage: string) {
+  alert(errorMessage);
+  throw new Error(errorMessage);
+}

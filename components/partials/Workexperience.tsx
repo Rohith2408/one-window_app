@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { LayoutRectangle, Pressable, StyleSheet, Text, View } from "react-native"
+import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import Loadingview from "../resources/Loadingview"
@@ -75,15 +75,17 @@ const Workexperience=(props:any)=>{
         {
             workExperiences.responseStatus=="not_recieved"
             ?
-            <Loadinglistscreen cardGap={30} cardHeight={Device=="MobileS"?150:(Device=="MobileM"?200:250)}></Loadinglistscreen>
+            <Loadinglistscreen cardGap={30} cardHeight={Device=="MobileS"?175:(Device=="MobileM"?200:250)}></Loadinglistscreen>
             :
             <View style={{flex:1,gap:30}}>
                 <Pressable onPress={add} style={[GeneralStyles.add_wrapper]}><Image style={[styles[Device].add_icon]} source={add_icon}></Image></Pressable>
+                <ScrollView style={{flex:1}} contentContainerStyle={{gap:30}}>
                 {
                     workExperiences.data.map((item,i)=>
-                    <View key={item._id} style={{width:'100%',height:Device=="MobileS"?150:(Device=="MobileM"?170:200)}}><Workexperiencecard data={item} index={i}></Workexperiencecard></View>
+                    <View key={item._id} style={{width:'100%',height:Device=="MobileS"?175:(Device=="MobileM"?200:200)}}><Workexperiencecard data={item} index={i}></Workexperiencecard></View>
                     )
                 }
+                </ScrollView>
             </View>
         }
         </View>

@@ -2,13 +2,13 @@ import { LayoutRectangle, Pressable, StyleSheet, Text, View } from "react-native
 import { WorkExperience } from "../../types"
 import { useRef, useState } from "react"
 import Loadingview from "../resources/Loadingview"
-import clock_icon from '../../assets/images/misc/clock.png'
-import suitcase_icon from '../../assets/images/misc/workexperience.png'
+import clock_icon from '../../assets/images/misc/clock-black.png'
+import suitcase_icon from '../../assets/images/misc/workexperience-black.png'
 import { Image } from "expo-image"
 import { Word2Sentence, formatDate, getDevice, profileUpdator } from "../../utils"
 import { Fonts, Themes } from "../../constants"
-import delete_icon from '../../assets/images/misc/delete.png'
-import edit_icon from '../../assets/images/misc/edit.png'
+import delete_icon from '../../assets/images/misc/delete-black.png'
+import edit_icon from '../../assets/images/misc/edit-black.png'
 import loading_gif from '../../assets/images/misc/loader.gif'
 import { store } from "../../store"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
@@ -62,7 +62,7 @@ const GeneralStyles=StyleSheet.create({
         gap:10,
         right:0,
         top:0,
-        padding:10
+        padding:15
     }
 })
 
@@ -74,7 +74,7 @@ const MobileSStyles=StyleSheet.create({
     wrapper:{
         gap:10,
         padding:15,
-        borderRadius:20
+        borderRadius:30
     },
     sub_wrapper:{
         gap:10
@@ -111,10 +111,13 @@ const MobileMStyles=StyleSheet.create({
     wrapper:{
         gap:10,
         padding:15,
-        borderRadius:25
+        borderRadius:40
     },
     sub_wrapper:{
         gap:10
+    },
+    info_wrapper:{
+        gap:12
     },
     icon:{
         width:24,
@@ -132,6 +135,16 @@ const MobileMStyles=StyleSheet.create({
     },
     timeline:{
         fontSize:12
+    },
+    clock_icon:{
+        width:12,
+        height:12,
+        resizeMode:'contain'
+    },
+    delete_icon:{
+        width:16,
+        height:16,
+        objectFit:'contain'
     }
 })
 const MobileLStyles=StyleSheet.create({
@@ -165,27 +178,29 @@ const Workexperiencecard=(props:{data:WorkExperience,index:number})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Workexperience",forminitialdataid:props.data._id}}}):null
     }
 
+    console.log("ids",props.data)
+
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,padding:5}}>
         {
             dimensions
             ?
-            <View style={[GeneralStyles.wrapper,styles[Device].wrapper,{backgroundColor:props.index%2==0?Themes.Light.OnewindowRed(0.3):Themes.Light.OnewindowYellow(0.3)}]}>
+            <View style={[GeneralStyles.wrapper,styles[Device].wrapper,{backgroundColor:props.index%2==0?Themes.Light.OnewindowRed(0.5):Themes.Light.OnewindowYellow(0.5)}]}>
                 <View style={[GeneralStyles.actions_wrapper]}>
                     <Pressable onPress={edit}><Image source={edit_icon} style={[styles[Device].delete_icon]}></Image></Pressable>
                     <Pressable onPress={()=>!isLoading?remove():null}><Image source={isLoading?loading_gif:delete_icon} style={[styles[Device].delete_icon]}></Image></Pressable>
                 </View>
                 <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper]}>
                     <View style={[GeneralStyles.icon_wrapper]}><Image source={suitcase_icon} style={[styles[Device].icon]}></Image></View>
-                    <View style={[GeneralStyles.info_wrapper]}>
-                        <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.data.companyName}</Text>
+                    <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
+                        <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.data.companyName}</Text>
                         <Text style={[styles[Device].info,GeneralStyles.info,{color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.type,props.data.sector,props.data.designation],""," | ",true)}</Text>
                         <View style={[GeneralStyles.ongoing_wrapper,{backgroundColor:props.index%2==0?Themes.Light.OnewindowRed(0.6):Themes.Light.OnewindowYellow(0.6)}]}><Text style={[styles[Device].ongoing,{color:'white',fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.data.Ongoing?"Ongoing":"Completed"}</Text></View>
                     </View>
                 </View>
                 <View style={[GeneralStyles.timeline_wrapper]}>
                     <Image source={clock_icon} style={[styles[Device].clock_icon]}></Image>
-                    <Text style={[styles[Device].timeline,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{formatDate(props.data.startDate)+" - "+formatDate(props.data.endDate)}</Text>
+                    <Text style={[styles[Device].timeline,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{formatDate(props.data.startDate)+" - "+formatDate(props.data.endDate)}</Text>
                 </View>
             </View>
             :

@@ -5,8 +5,9 @@ import { useAppSelector } from "../../hooks/useAppSelector"
 import { store } from "../../store"
 import { getServerRequestURL, profileUpdator, serverRequest } from "../../utils"
 import { setSharedInfo } from "../../store/slices/sharedinfoSlice"
+import loading_gif from '../../assets/images/misc/loader.gif'
 
-const Emailverification=()=>{
+const Emailverification=(props:{email:string})=>{
 
     const [page,setPage]=useState(0)
     const ref=useRef<any>()
@@ -23,7 +24,7 @@ const Emailverification=()=>{
                 unit
                 ?
                 <ScrollView ref={ref} scrollEnabled={false} horizontal contentContainerStyle={{width:(3*unit)}}>
-                    <Requestotp setPage={setPage}/>
+                    <Requestotp email={props.email} setPage={setPage}/>
                     <Verifyotp setPage={setPage}/>
                     <Verifiedotp status={status}/>
                 </ScrollView>
@@ -34,14 +35,15 @@ const Emailverification=()=>{
     )
 }
 
-const Requestotp=(props:{setPage:any})=>{
+const Requestotp=(props:{email:string,setPage:any})=>{
 
+    const [email,setEmail]=useState(props.email);
     const [request,setRequest]=useState<ServerResponse>()
-    const email=useAppSelector((state)=>state.sharedinfo.data?.email);
+    //const email=useAppSelector((state)=>state.sharedinfo.data?.email);
     const [delay,setDelay]=useState(0)
 
     const updateEmail=async ()=>{
-        let res:ServerResponse=await profileUpdator({email:email},(res)=>res.success?store.dispatch(setSharedInfo({_id:res.data._id,
+        let res:ServerResponse=await profileUpdator({email:props.email},(res)=>res.success?store.dispatch(setSharedInfo({_id:res.data._id,
             firstName:res.data.firstName,
             lastName:res.data.lastName,
             email:res.data.email,
@@ -62,7 +64,7 @@ const Requestotp=(props:{setPage:any})=>{
 
     return(
         <View style={{flex:1,padding:1}}>
-            <TextInput placeholder="Enter you email" value={email} style={{borderWidth:1,padding:10}}></TextInput>
+            <TextInput value={email} onChangeText={(txt)=>setEmail(txt)}></TextInput>
             <Pressable onPress={requestOtp}><Text>Request for OTP</Text></Pressable>
             <Pressable onPress={()=>props.setPage(1)}><Text>Already have a verification code?</Text></Pressable>
         </View>

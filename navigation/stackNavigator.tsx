@@ -72,7 +72,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
         onStartShouldSetPanResponder: () => true,
         onPanResponderGrant: () => {},
         onPanResponderMove: (e,state)=>{
-          console.log("aaaa",getCurrentPosition().x+(state.dx/Dimensions.get("screen").width))
+          //console.log("aaaa",getCurrentPosition().x+(state.dx/Dimensions.get("screen").width))
           if(screenInfo?.swipeDirection=="X")
           {
             animate([{property:translateX,value:getCurrentPosition().x+(state.dx/Dimensions.get("screen").width),duration:10}])
@@ -92,7 +92,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           let removeThreshold=screenInfo?.removalThreshold?screenInfo.removalThreshold:0.5
           let swipeLengthX=state.dx/Dimensions.get("screen").width;
           let swipeLengthY=state.dy/Dimensions.get("screen").height
-          console.log("v",state.vx,state.vy)
+          //console.log("v",state.vx,state.vy)
           if(screenInfo?.swipeDirection=="X")
           {
             if((swipeLengthX+initialState.x)>removeThreshold || state.vx>2)
@@ -168,6 +168,8 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
 
   const Container=getComponent(props.component)?.component
 
+  //console.log(screenInfo)
+
   return(
       <Animated.View key={props.id} style={[styles.screenWrapper,!screenInfo?.occupyFullScreen?{paddingLeft:0.06*Dimensions.get("screen").width,paddingRight:0.06*Dimensions.get("screen").width,}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,screenInfo?.type=="Flyer"?{borderRadius:20,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{},{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
         {
@@ -198,23 +200,23 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           :
           null
         }
-        <View style={[styles.screen,screenInfo?.type=="Flyer"?{shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{}]}>
-          <View style={[{flexDirection:"row",justifyContent:'center',alignItems:'center',position:"relative"},(screenInfo?.type=="Partial")?{paddingBottom:20,paddingTop:30}:{}]}> 
-          {
-            screenInfo?.type=="Partial" && props.index!=0
-            ?
-            <Pressable style={[styles.back]} onPress={()=>{back(200)}}><Image source={back_icon} style={[styles.back_icon]}></Image></Pressable>
-            :
-            null
-          }
+        <View style={[styles.screen,screenInfo?.type=="Flyer"?{shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{}]}> 
           {
             screenInfo?.title
             ?
-            <Text style={[{fontSize:14,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{screenInfo.title}</Text>
+            <View style={[{flexDirection:"row",justifyContent:'center',alignItems:'center',position:"relative"},(screenInfo?.type=="Partial")?{paddingBottom:20,paddingTop:30}:{}]}>
+              <Text style={[{fontSize:13,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{screenInfo.title}</Text>
+            </View>
             :
             null
           }
-          </View>
+          {
+            screenInfo?.type=="Partial" && props.index!=0
+            ?
+            <Pressable style={[styles.back,screenInfo.occupyFullScreen?{left:20,top:30}:{left:-10,top:30}]} onPress={()=>{back(200)}}><Image source={back_icon} style={[styles.back_icon]}></Image></Pressable>
+            :
+            null
+          }
           {
             Container
             ?
@@ -366,28 +368,26 @@ const Presets={
 
 const styles=StyleSheet.create({
     wrapper:{
-        position:"relative",
-        width:"100%",
-        height:"100%",
-        justifyContent:"center",
-        alignItems:'center'
+      width:"100%",
+      height:"100%",
+      justifyContent:"center",
+      alignItems:'center'
     },
     screenWrapper:{
-        position:"absolute",
-        top:0,
-        left:0,
-        width:"100%",
-        height:"100%",
+      position:"absolute",
+      top:0,
+      left:0,
+      width:"100%",
+      height:"100%",
     },
     screen:{
       width:"100%",
-      height:"100%"
+      height:"100%",
+      position:"relative"
     },
     back:{
-      position:"absolute",
-      top:0,
-      left:-10
-      // paddingTop:0.04*Dimensions.get("screen").width
+      position:"absolute"
+      //paddingTop:0.04*Dimensions.get("screen").width
     },
     swipeStripL:{
       height:"100%",
@@ -426,8 +426,8 @@ const styles=StyleSheet.create({
       zIndex:1
     },
     back_icon:{
-      width:12,
-      height:12,
+      width:10,
+      height:10,
       objectFit:'contain'
     }
 })

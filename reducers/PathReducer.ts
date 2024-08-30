@@ -33,6 +33,15 @@ export type NavigationActions=
     }|
     {
         type:"Login",
+    }|
+    {
+        type:"Register",
+    }|
+    {
+        type:"RemoveSpecificScreen",
+        payload:{
+            id:string
+        }
     }
 
 export const NavigationReducer=(state:string,action:NavigationActions)=>{
@@ -61,6 +70,18 @@ export const NavigationReducer=(state:string,action:NavigationActions)=>{
             return decodePath(encodedPath)
             break;
 
+        case "RemoveSpecificScreen":
+            requiredScreenProps=components.find((item)=>item.id==action.payload.id)?.props
+            encodedPath.screens=encodedPath.screens.filter((item)=>item!=action.payload.id)
+            if(requiredScreenProps)
+            {
+                requiredScreenProps.forEach((prop)=>{
+                encodedPath.props?delete encodedPath.props[prop]:null
+                })
+            }
+            return decodePath(encodedPath)
+            break;
+
         case "UpdateParam":
             if(encodedPath.props)
             {
@@ -79,6 +100,10 @@ export const NavigationReducer=(state:string,action:NavigationActions)=>{
 
         case "Login":
             return baseAppUrl+"Student/Base?tab=home"
+            break;
+
+        case "Register":
+            return baseAppUrl+"Register/Registerbase"
             break;
     }
 }

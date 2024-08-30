@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import {Meeting, Request } from "../../misc/typeDefinations";
+import {Meeting, Request } from "../../types/index";
 
 let initialState:Request<Meeting[]>={
     requestStatus:"not_initiated",

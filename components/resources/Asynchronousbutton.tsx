@@ -13,7 +13,7 @@ const GeneralStyles=StyleSheet.create({
         justifyContent:"center",
         borderRadius:100,
         borderWidth:1,
-        padding:15
+        padding:12
     },
     text:{
         position:"absolute"

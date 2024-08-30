@@ -11,11 +11,23 @@ import { store } from "../store";
 import { setEducationHistory } from "../store/slices/educationHistorySlice";
 import { setTests } from "../store/slices/testScoresSlice";
 import { setWorkExperience } from "../store/slices/workexperienceSlice";
-import { EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FormData, FormField, FormInfo, ListItem, ServerResponse, Sharedinfo, Test, WorkExperience } from "../types";
-import { fetchCities, fetchCountries, fetchStates,  getServerRequestURL, profileUpdator, serverRequest, setWordCase} from "../utils";
+import { AdditionalFilterInfo, AppliedFilter, Countrycode, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FormData, FormField, FormInfo, ListInfo, ListItem, Meeting, Phone as PhoneType, ServerResponse, Sharedinfo, Test, WorkExperience } from "../types";
+import { Word2Sentence, fetchCities, fetchCountries, fetchStates,  getServerRequestURL, profileUpdator, serverRequest, setWordCase} from "../utils";
 import { validations} from "../utils/validations";
 import { addToBasket, getBasket, getFullBasket} from "./basket";
-import { GradingSystems, Industries, Tests } from "./misc";
+import { Countries, GradingSystems, Industries, Languages, Tests, disciplines, intakes, studyLevel, subDisciplines } from "./misc";
+import { Countrycodes } from "./misc";
+import Dialcode from "../components/cards/Dialcode";
+import { setSharedInfo } from "../store/slices/sharedinfoSlice";
+import Listbuilder from "../components/resources/Listbuilder";
+import Datetimepro from "../components/resources/Datetimepro";
+import Expertslistcard from "../components/cards/Expertslistcard";
+import { addMeeting, updateMeeting } from "../store/slices/meetingsSlice";
+import sample_icon from '../assets/images/misc/edit.png'
+import Universitycard from "../components/cards/Universitycard";
+import Programcard from "../components/cards/Programcard";
+import { lists } from "./lists";
+import Passwordinput from "../components/resources/Passwordinput";
 
 export const testToForm=(testname:string)=>{
     const testData=store.getState().testscores.data.find((test)=>test.name==testname)
@@ -41,8 +53,6 @@ export const testToForm=(testname:string)=>{
   }
   
   export const testFields=(testname:string)=>{
-  
-    console.log("tests",Tests)
     let testInfo=Tests.find((item)=>item.name==testname)
     return !testInfo?[]:[
       {
@@ -108,57 +118,284 @@ export const testToForm=(testname:string)=>{
   ]
   }
 
-    // firstName?:string,
-    // lastName?:string,
-    // displayPicSrc?:string,
-    // email?:string,
-    // phone?:Phone,
-    // LeadSource?: string,
-    // isPlanningToTakeAcademicTest: boolean,
-    // isPlanningToTakeLanguageTest: boolean,
+    console.log("dropdown-forms",Dropdown);
 
 const forms:FormInfo[]=[
+    {
+        id:"Login",
+        getInitialData:(id:string|undefined)=>{
+            return [
+                {id:"email",value:""},
+                {id:"password",value:""}
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let info={
+                    email:data[data.findIndex((item)=>item.id=="email")].value,
+                    password:data[data.findIndex((item)=>item.id=="password")].value
+                }
+                return info
+            },
+            onSubmit:async (data:{email:string,password:string})=>{
+                let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:data.email,password:data.password}})
+                return res;
+            },
+            redirect:(data:any)=>({type:"Login"}),
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Login"
+        },
+        allFields:[
+            {
+                id:"email",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:"Email"}
+                },
+                title:"Email",
+                validator:(data)=>({
+                    success:validations.EMAIL.regex.test(data),
+                    message:validations.EMAIL.errorMessage,
+                    data:undefined
+                }),
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"password",
+                componentInfo:{
+                    component:Passwordinput,
+                    props:{placeholder:"Should be atleast 8 characters"}
+                },
+                title:"Password",
+                validator:(data:string)=>({
+                    success:validations.PASSWORD.regex.test(data),
+                    message:validations.PASSWORD.errorMessage,
+                    data:undefined
+                }),
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            }
+        ]
+    },
+    {
+        id:"Register",
+        getInitialData:(id:string|undefined)=>{
+            return [
+                {id:"firstname",value:""},
+                {id:"lastname",value:""},
+                {id:"email",value:""},
+                {id:"password",value:""},
+                {id:"confirmpassword",value:""},
+                {id:"preffereddestinations",value:""},
+                {id:"prefferedlanguage",value:""},
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let info={
+                    firstname:data[data.findIndex((item)=>item.id=="firstname")].value,
+                    lastname:data[data.findIndex((item)=>item.id=="lastname")].value,
+                    email:data[data.findIndex((item)=>item.id=="email")].value,
+                    password:data[data.findIndex((item)=>item.id=="password")].value,
+                    confirmpassword:data[data.findIndex((item)=>item.id=="confirmpassword")].value,
+                    preffereddestinations:data[data.findIndex((item)=>item.id=="preffereddestinations")].value,
+                    prefferedlanguage:data[data.findIndex((item)=>item.id=="prefferedlanguage")].value,
+                }
+                return info
+            },
+            onSubmit:async (data:{firstname:string,lastname:string,email:string,password:string,confirmpassword:string,preffereddestinations:string[],prefferedlanguage:string})=>{
+                let res:ServerResponse=await serverRequest({url:getServerRequestURL("register","POST"),reqType:"POST",body:{email:data.email,password:data.password}})
+                return res;
+            },
+            redirect:(data:any)=>({type:"Login"}),
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Login"
+        },
+        allFields:[
+            {
+                id:"firstname",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"First Name",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"lastname",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Last Name",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"email",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:"Email"}
+                },
+                title:"Email",
+                validator:(data)=>({
+                    success:validations.EMAIL.regex.test(data),
+                    message:validations.EMAIL.errorMessage,
+                    data:undefined
+                }),
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"password",
+                componentInfo:{
+                    component:Passwordinput,
+                    props:{placeholder:"Should be atleast 8 characters"}
+                },
+                title:"Password",
+                validator:(data:string)=>({
+                    success:validations.PASSWORD.regex.test(data),
+                    message:validations.PASSWORD.errorMessage,
+                    data:undefined
+                }),
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"confirmpassword",
+                componentInfo:{
+                    component:Passwordinput,
+                    props:{placeholder:""}
+                },
+                title:"Confirm Password",
+                validator:(data:string)=>({
+                    success:validations.PASSWORD.regex.test(data),
+                    message:validations.PASSWORD.errorMessage,
+                    data:undefined
+                }),
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"prefferedlanguage",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:Languages.map((language)=>({label:language,value:language})),
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"prefferedlanguage",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"prefferedlanguage-dropdown"
+                    }
+                },
+                title:"Preffered Language",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"preffereddestinations",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:Countries.map((country)=>({label:country,value:country})),
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        selectionMode:"multi",
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"preffereddestinations",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"preffereddestinations-dropdown"
+                    }
+                },
+                title:"Preffered Destinations",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+        ]
+    },
     {
         id:"Mydetails",
         title:"Please provide your details",
         getInitialData:(id:string|undefined)=>{
             let data:Sharedinfo|undefined=store.getState().sharedinfo.data
-            console.log("sss",data);
+            //console.log("sss",data);
             return [
                 {id:"firstname",value:data?data.firstName:""},
                 {id:"lastname",value:data?data.lastName:""},
-                {id:"email",value:data?data.email:""},
-                {id:"phone",value:data?data.phone:{countryCode:undefined,number:undefined}},
+                {id:"email",value:{email:data?.email,verified:store.getState().verification.data?.find((item)=>item.type=="email")?.status}},
+                {id:"phone",value:{countryCode:data?.phone?.countryCode?([Countrycodes.find((item)=>item.dial_code==data?.phone?.countryCode)]):[],phoneNumber:data?.phone?.number,verified:store.getState().verification.data?.find((item)=>item.type=="phone")?.status}},
                 // {id:"planningtotakeacademictest",value:data?data.isPlanningToTakeAcademicTest:undefined},
                 // {id:"planningtotakelanguagetest",value:data?data.isPlanningToTakeLanguageTest:undefined}
             ]
         },
         submit:{
             dataConverter:(data:FormData[],id?:string)=>{
-                console.log("id",id)
+                //console.log("id",id)
                 let info:Sharedinfo={
-                    _id:id,
+                    _id:store.getState().sharedinfo.data?._id,
                     firstName:data[data.findIndex((item)=>item.id=="firstname")].value,
                     lastName:data[data.findIndex((item)=>item.id=="lastname")].value,
-                    email:data[data.findIndex((item)=>item.id=="email")].value,
-                    phone:data[data.findIndex((item)=>item.id=="firstname")].value,
+                    email:data[data.findIndex((item)=>item.id=="email")].value.email,
+                    phone:{countryCode:data[data.findIndex((item)=>item.id=="phone")].value.countryCode[0].dial_code,number:data[data.findIndex((item)=>item.id=="phone")].value.phoneNumber},
                 }
+                console.log("kkk",info);
                 return info
             },
-            onSubmit:async (data:WorkExperience)=>{
-                console.log("data",data);
-                let updatedWorkexperiences:WorkExperience[]=[]
-                let currentWorkexperiences=store.getState().workexperience.data
-                if(currentWorkexperiences.find((item)=>item._id==data._id))
-                {
-                    updatedWorkexperiences=currentWorkexperiences.map((item)=>item._id==data._id?data:item);
-                }
-                else
-                {
-                    updatedWorkexperiences=[...currentWorkexperiences,data]
-                }
-                console.log("updated",updatedWorkexperiences);
-                let res:ServerResponse=await profileUpdator({workExperience:updatedWorkexperiences},(res)=>res.success?store.dispatch(setWorkExperience(res.data.workExperience)):null)
+            onSubmit:async (data:Sharedinfo)=>{
+                let res:ServerResponse=await profileUpdator({...data},(res)=>res.success?store.dispatch(setSharedInfo({...store.getState().sharedinfo.data,...data})):null)
                 return res
             },
             successText:"Success!",
@@ -203,6 +440,14 @@ const forms:FormInfo[]=[
                     props:{placeholder:""}
                 },
                 title:"Email",
+                validator:(data:{email:string,verified:boolean})=>{
+                    let validationData=validations.EMAIL
+                    return {
+                        success:validationData.regex.test(data.email),
+                        message:validationData.errorMessage,
+                        data:undefined
+                    }
+                },
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
@@ -215,7 +460,22 @@ const forms:FormInfo[]=[
                 id:"phone",
                 componentInfo:{
                     component:Phone,
-                    props:{placeholder:""}
+                    props:{
+                        codes:{
+                            options:{
+                                card:Dialcode,
+                                list:Countrycodes,
+                                labelExtractor:(item:Countrycode)=>item.dial_code,
+                                idExtractor:(item:Countrycode)=>item.code
+                            },
+                            apply:(data:Countrycode[])=>{
+                                let current:PhoneType=getBasket("phone")
+                                return ({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"phone",newvalue:{...current,countryCode:data}}}})
+                            },
+                            selectionMode:"single",
+                            basketid:"phonecodes-dropdown"
+                        }
+                    }
                 },
                 title:"Phone",
                 onUpdate:{
@@ -355,6 +615,7 @@ const forms:FormInfo[]=[
                                 {label:"Flexible",value:"flexible"},
                                 {label:"Shift-work",value:"shift work"}
                             ],
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"worktype",newvalue:data}}}),
@@ -378,7 +639,8 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             list:Industries.map((item)=>({label:setWordCase(item),value:item})),
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            labelExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"sector",newvalue:data}}}),
                         selectionMode:"single",
@@ -540,6 +802,7 @@ const forms:FormInfo[]=[
                                 let countries=await fetchCountries();
                                 return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
@@ -552,10 +815,10 @@ const forms:FormInfo[]=[
                 title:"Country",
                 onUpdate:{
                     event:"onSelect",
-                    handler:(fields:FormData[],data:ListItem[])=>{
-                        let selectedCountry=data[0].value;
-                        addToBasket("country-dropdown",selectedCountry)
-                    }
+                    // handler:(fields:FormData[],data:ListItem[])=>{
+                    //     let selectedCountry=data[0].value;
+                    //     addToBasket("country",selectedCountry)
+                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -568,10 +831,11 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
-                                let selectedCountry=getBasket("country-dropdown")
+                                let selectedCountry=getBasket("country")[0]?.label
                                 let states=selectedCountry?await fetchStates(selectedCountry):undefined
                                 return {success:(selectedCountry && states),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:""}
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
@@ -583,13 +847,13 @@ const forms:FormInfo[]=[
                 title:"State",
                 onUpdate:{
                     event:"onSelect",
-                    handler:(fields:FormData[],data:ListItem[])=>{
-                        if(data.length>0)
-                        {
-                            let selectedCountry=data[0].value;
-                            addToBasket("state-dropdown",selectedCountry)
-                        }
-                    }
+                    // handler:(fields:FormData[],data:ListItem[])=>{
+                    //     if(data.length>0)
+                    //     {
+                    //         let selectedCountry=data[0].value;
+                    //         addToBasket("state",selectedCountry)
+                    //     }
+                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -602,11 +866,12 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
-                                let selectedCountry=getBasket("country-dropdown")
-                                let selectedState=getBasket("state-dropdown")
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let selectedState=getBasket("state")[0]?.label
                                 let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
                                 return {success:(selectedCountry && selectedState && cities),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:""}
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
@@ -638,11 +903,12 @@ const forms:FormInfo[]=[
                                 {label:"other",value:"other"}
                             ],
                             fetcher:async ()=>{
-                                let selectedCountry=getBasket("country-dropdown")
-                                let selectedState=getBasket("state-dropdown")
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let selectedState=getBasket("state")[0]?.label
                                 let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):[]
                                 return cities.map((city:any)=>({label:setWordCase(city),value:city}))
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"board",newvalue:data}}}),
@@ -671,6 +937,7 @@ const forms:FormInfo[]=[
                                 {label:"Telugu",value:"telugu"},
                                 {label:"Other",value:"other"}
                             ],
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"languageofinstruction",newvalue:data}}}),
@@ -694,6 +961,7 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             list:GradingSystems.map((item)=>({label:item,value:item.toLowerCase()})),
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
@@ -720,7 +988,7 @@ const forms:FormInfo[]=[
                     props:{placeholder:""}
                 },
                 validator:(data:any)=>{
-                    let gradingSystemSelected=getBasket("gradingsystem-dropdown");
+                    let gradingSystemSelected=getBasket("gradingsystem")[0]?.label;
                     let validationData=validations[gradingSystemSelected.toUpperCase()]
                     return {
                         success:validationData.regex.test(data),
@@ -888,6 +1156,7 @@ const forms:FormInfo[]=[
                                 let countries=await fetchCountries();
                                 return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
@@ -900,10 +1169,11 @@ const forms:FormInfo[]=[
                 title:"Country",
                 onUpdate:{
                     event:"onSelect",
-                    handler:(fields:FormData[],data:ListItem[])=>{
-                        let selectedCountry=data[0].value;
-                        addToBasket("country-dropdown",selectedCountry)
-                    }
+                    // handler:(fields:FormData[],data:ListItem[])=>{
+                    //     console.log("alll",fields,data)
+                    //     let selectedCountry=data[0].value;
+                    //     addToBasket("country",selectedCountry)
+                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -916,10 +1186,11 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
-                                let selectedCountry=getBasket("country-dropdown")
+                                let selectedCountry=getBasket("country")[0]?.label
                                 let states=selectedCountry?await fetchStates(selectedCountry):undefined
                                 return {success:(selectedCountry && states),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:""}
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
@@ -931,13 +1202,13 @@ const forms:FormInfo[]=[
                 title:"State",
                 onUpdate:{
                     event:"onSelect",
-                    handler:(fields:FormData[],data:ListItem[])=>{
-                        if(data.length>0)
-                        {
-                            let selectedCountry=data[0].value;
-                            addToBasket("state-dropdown",selectedCountry)
-                        }
-                    }
+                    // handler:(fields:FormData[],data:ListItem[])=>{
+                    //     if(data.length>0)
+                    //     {
+                    //         let selectedCountry=data[0].value;
+                    //         addToBasket("state",selectedCountry)
+                    //     }
+                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -950,11 +1221,12 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
-                                let selectedCountry=getBasket("country-dropdown")
-                                let selectedState=getBasket("state-dropdown")
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let selectedState=getBasket("state")[0]?.label
                                 let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
                                 return {success:(selectedCountry && selectedState && cities),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:""}
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
@@ -985,6 +1257,7 @@ const forms:FormInfo[]=[
                                 {label:"AISSCE",value:"AISSCE"},
                                 {label:"other",value:"other"}
                             ],
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"board",newvalue:data}}}),
@@ -1013,6 +1286,7 @@ const forms:FormInfo[]=[
                                 {label:"Telugu",value:"telugu"},
                                 {label:"Other",value:"other"}
                             ],
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"languageofinstruction",newvalue:data}}}),
@@ -1036,6 +1310,7 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             list:GradingSystems.map((item)=>({label:item,value:item.toLowerCase()})),
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
@@ -1062,9 +1337,7 @@ const forms:FormInfo[]=[
                     props:{placeholder:""}
                 },
                 validator:(data:any)=>{
-                    console.log("basket",getBasket("gradingsystem-dropdown"),getFullBasket())
-                    let gradingSystemSelected=getBasket("gradingsystem-dropdown");
-                    console.log("ggg",gradingSystemSelected);
+                    let gradingSystemSelected=getBasket("gradingsystem")[0]?.label;
                     let validationData=validations[gradingSystemSelected.toUpperCase()]
                     return {
                         success:validationData.regex.test(data),
@@ -1252,6 +1525,7 @@ const forms:FormInfo[]=[
                                 let countries=await fetchCountries();
                                 return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
@@ -1264,10 +1538,10 @@ const forms:FormInfo[]=[
                 title:"Country",
                 onUpdate:{
                     event:"onSelect",
-                    handler:(fields:FormData[],data:ListItem[])=>{
-                        let selectedCountry=data[0].value;
-                        addToBasket("country-dropdown",selectedCountry)
-                    }
+                    // handler:(fields:FormData[],data:ListItem[])=>{
+                    //     let selectedCountry=data[0].value;
+                    //     addToBasket("country",selectedCountry)
+                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -1280,10 +1554,11 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
-                                let selectedCountry=getBasket("country-dropdown")
+                                let selectedCountry=getBasket("country")[0]?.label
                                 let states=selectedCountry?await fetchStates(selectedCountry):undefined
                                 return {success:(selectedCountry && states),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:""}
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
@@ -1295,13 +1570,13 @@ const forms:FormInfo[]=[
                 title:"State",
                 onUpdate:{
                     event:"onSelect",
-                    handler:(fields:FormData[],data:ListItem[])=>{
-                        if(data.length>0)
-                        {
-                            let selectedCountry=data[0].value;
-                            addToBasket("state-dropdown",selectedCountry)
-                        }
-                    }
+                    // handler:(fields:FormData[],data:ListItem[])=>{
+                    //     if(data.length>0)
+                    //     {
+                    //         let selectedCountry=data[0].value;
+                    //         addToBasket("state",selectedCountry)
+                    //     }
+                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -1314,11 +1589,12 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
-                                let selectedCountry=getBasket("country-dropdown")
-                                let selectedState=getBasket("state-dropdown")
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let selectedState=getBasket("state")[0]?.label
                                 let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
                                 return {success:(selectedCountry && selectedState && cities),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:""}
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
@@ -1387,6 +1663,7 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             list:GradingSystems.map((item)=>({label:item,value:item.toLowerCase()})),
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
@@ -1410,9 +1687,9 @@ const forms:FormInfo[]=[
                     props:{placeholder:""}
                 },
                 validator:(data:any)=>{
-                    console.log("basket",getBasket("gradingsystem-dropdown"),getFullBasket())
-                    let gradingSystemSelected=getBasket("gradingsystem-dropdown");
-                    console.log("ggg",gradingSystemSelected);
+                    //console.log("basket",getBasket("gradingsystem"),getFullBasket())
+                    let gradingSystemSelected=getBasket("gradingsystem")[0]?.label;
+                    //console.log("ggg",gradingSystemSelected);
                     let validationData=validations[gradingSystemSelected.toUpperCase()]
                     return {
                         success:validationData.regex.test(data),
@@ -1566,6 +1843,7 @@ const forms:FormInfo[]=[
                                 let countries=await fetchCountries();
                                 return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
@@ -1578,10 +1856,10 @@ const forms:FormInfo[]=[
                 title:"Country",
                 onUpdate:{
                     event:"onSelect",
-                    handler:(fields:FormData[],data:ListItem[])=>{
-                        let selectedCountry=data[0].value;
-                        addToBasket("country-dropdown",selectedCountry)
-                    }
+                    // handler:(fields:FormData[],data:ListItem[])=>{
+                    //     let selectedCountry=data[0].value;
+                    //     addToBasket("country",selectedCountry)
+                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -1594,10 +1872,11 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
-                                let selectedCountry=getBasket("country-dropdown")
+                                let selectedCountry=getBasket("country")[0]?.label
                                 let states=selectedCountry?await fetchStates(selectedCountry):undefined
                                 return {success:(selectedCountry && states),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:""}
                             },
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
@@ -1609,13 +1888,13 @@ const forms:FormInfo[]=[
                 title:"State",
                 onUpdate:{
                     event:"onSelect",
-                    handler:(fields:FormData[],data:ListItem[])=>{
-                        if(data.length>0)
-                        {
-                            let selectedCountry=data[0].value;
-                            addToBasket("state-dropdown",selectedCountry)
-                        }
-                    }
+                    // handler:(fields:FormData[],data:ListItem[])=>{
+                    //     if(data.length>0)
+                    //     {
+                    //         let selectedCountry=data[0].value;
+                    //         addToBasket("state",selectedCountry)
+                    //     }
+                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -1628,11 +1907,12 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
-                                let selectedCountry=getBasket("country-dropdown")
-                                let selectedState=getBasket("state-dropdown")
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let selectedState=getBasket("state")[0]?.label
                                 let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
                                 return {success:(selectedCountry && selectedState && cities),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:""}
                             } ,
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
@@ -1701,6 +1981,7 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             list:GradingSystems.map((item)=>({label:item,value:item.toLowerCase()})),
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
@@ -1727,9 +2008,9 @@ const forms:FormInfo[]=[
                     props:{placeholder:""}
                 },
                 validator:(data:any)=>{
-                    console.log("basket",getBasket("gradingsystem-dropdown"),getFullBasket())
-                    let gradingSystemSelected=getBasket("gradingsystem-dropdown");
-                    console.log("ggg",gradingSystemSelected);
+                    //console.log("basket",getBasket("gradingsystem"),getFullBasket())
+                    let gradingSystemSelected=getBasket("gradingsystem")[0]?.label;
+                    //console.log("ggg",gradingSystemSelected);
                     let validationData=validations[gradingSystemSelected.toUpperCase()]
                     return {
                         success:validationData.regex.test(data),
@@ -2033,6 +2314,526 @@ const forms:FormInfo[]=[
             idleText:"Submit"
         },
         allFields:testFields("American College Testing")
+    },
+    {
+        id:"Meeting",
+        title:"Please provide the details to book a slot",
+        getInitialData:(id:string|undefined)=>{
+            //console.log("meetid",id)
+            let data:Meeting|undefined=id?store.getState().meeting.data.find((item)=>item._id==id):undefined
+            return [
+                {id:"expert",value:data?[{name:Word2Sentence([data.member.firstName,data.member.lastName],""," "),id:data.member._id}]:[]},
+                {id:"description",value:data?data.description:""},
+                {id:"attendees",value:data?data.attendees:[]},
+                {id:"datetime",value:data?.startDate.dateTime},
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                const startdate = new Date(data[data.findIndex((item)=>item.id=="datetime")].value);
+                startdate.setMinutes(startdate.getMinutes() + 30);
+                const enddate = startdate.toISOString();
+                let slotdata={
+                    _id:id,
+                    notes:data[data.findIndex((item)=>item.id=="description")].value,
+                    attendees:data[data.findIndex((item)=>item.id=="attendees")].value,
+                    startTime:new Date(data[data.findIndex((item)=>item.id=="datetime")].value),
+                    endTime:enddate,
+                    timeZone: "Asia/Kolkata",
+                    expert:data[data.findIndex((item)=>item.id=="expert")].value
+                }
+                return slotdata
+            },
+            onSubmit:async (data:any)=>{
+                let res:ServerResponse;
+                console.log("ddy",data)
+                if(data._id)
+                {
+                    res=await serverRequest({
+                        url:getServerRequestURL("modify-slot","POST"),
+                        reqType:"POST",
+                        body:{
+                            meetingId: data._id, 
+                            option: "rescheduleEvent",
+                            startTime: data.startTime,  
+                            endTime:data.endTime, 
+                            timeZone:data.timeZone 
+                        }
+                    })
+                }
+                else
+                {
+                    res=await serverRequest({
+                        url:getServerRequestURL("book-slot","POST")+"/"+data.expert[0].id,
+                        reqType:"POST",
+                        body:data
+                    })
+                }
+                console.log("meeting res",res);
+                if(res.success)
+                {
+                    let meetingData={
+                        _id:res.data._id,
+                        description:res.data.data.summary,
+                        attendees:res.data.data.attendees.map((item:any)=>item.email),
+                        link:res.data.data.hangoutLink,
+                        startDate:res.data.data.start,
+                        endDate:res.data.data.end,
+                        status:res.data.data.status,
+                        member:res.data.member
+                    }
+                    store.dispatch(data._id?updateMeeting(meetingData):addMeeting(meetingData))
+                }
+                return res
+            },
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        allFields:[
+            {
+                id:"expert",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                return {success:true,data:store.getState().advisors.data?.map((item)=>({name:Word2Sentence([item.info.firstName,item.info.lastName],""," "),id:item.info._id})),message:""}
+                            },
+                            card:Expertslistcard,
+                            labelExtractor:(item:{name:string,id:string})=>item.name,
+                            idExtractor:(item:{name:string,id:string})=>item.id
+                        },
+                        apply:(data:{name:string,id:string}[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"expert",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"worktype-dropdown"
+                    },
+                },
+                title:"Expert",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"description",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:"Keep it small and simple"}
+                },
+                title:"Purpose",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"attendees",
+                componentInfo:{
+                    component:Listbuilder,
+                    props:{
+                        placeholder:"Enter the Mail-id of the Attendee",
+                        addHandler:(items:string[],current:string)=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"attendees",newvalue:[...items,current]}}})
+                    }
+                },
+                title:"Attendees",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"datetime",
+                componentInfo:{
+                    component:Datetimepro,
+                    props:{
+                        datesFetcher:async ()=>{
+                            let expert=getBasket("expert")
+                            console.log("aaaddd",expert,getServerRequestURL("vacant-slots","GET")+"/"+expert.id);
+                            if(!expert)
+                            {
+                                return {success:false,data:undefined,message:""}
+                            }
+                            else
+                            {
+                                return await serverRequest({
+                                    url:getServerRequestURL("vacant-slots","GET")+"/"+expert[0].id,
+                                    reqType:"GET"
+                                })
+                            }
+                        }
+                    }
+                },
+                title:"Date",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+
+            // {
+            //     id:"date",
+            //     componentInfo:{
+            //         component:Datetime,
+            //         props:undefined
+            //     },
+            //     title:"Date",
+            //     onUpdate:{
+            //         event:"onTextInput",
+            //         handler:undefined
+            //     },
+            //     onFocus:{
+            //         event:"onFocus"
+            //     }
+            // },
+            // {
+            //     id:"time",
+            //     componentInfo:{
+            //         component:Datetime,
+            //         props:{
+            //             mode:"time"
+            //         }
+            //     },
+            //     title:"Time",
+            //     onUpdate:{
+            //         event:"onTextInput",
+            //         handler:undefined
+            //     },
+            //     onFocus:{
+            //         event:"onFocus"
+            //     }
+            // }
+        ]
+    },
+    {
+        id:"Programfilters",
+        title:"",
+        getInitialData:(id:string|undefined)=>{
+            let filtersInfo=lists.find((list)=>list.id=="Programs")?.filters.additional;
+            let data:AppliedFilter[]|undefined=id?getBasket(id):undefined
+            return filtersInfo?filtersInfo.map((item)=>{
+                let applied=data?.find((item2)=>item2.type==item.type)?.data
+                return {id:item.type,value:applied?applied:[]}
+            }):[]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let info:AppliedFilter[]=data.map((item)=>({type:item.id,data:item.value})).filter((item)=>item.data.length!=0)
+                return info
+            },
+            onSubmit:async (data:AppliedFilter[])=>{
+                return {success:true,message:"",data:data}
+            },
+            redirect:(data:AppliedFilter[])=>({type:"UpdateParam",payload:{param:"programsadditionalfilters",newValue:data}}),
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        // {type:"universityId",title:"University",selectionType:"multi",customContainer:{name:"universityidfiltercontainer"},handler:universityIdFilterhandler,focusEventName:"onSearch",filterUpdateEventName:"itemSelected"},
+        // {type:"budget",handler:budgetFilterHandler,selectionType:'custom',customContainer:{name:"budgetfiltercontainer"}},
+        // {type:'openNow',title:"Open now?",selectionType:"custom",customContainer:{name:"opennowfiltercontainer"},handler:openNowFilterhandler,filterUpdateEventName:"onToggle"},
+        // {type:"AcademicTestName",dropdownDirection:"bottom2top",title:"Academic Test",options:["GRE", "GMAT"].map((item)=>({label:item,value:item})),selectionType:"multi",focusEventName:"onToggle",filterUpdateEventName:"onPress",styles:{zIndex:1}},
+        allFields:[
+            {
+                id:"country",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:Countries.map((country)=>({label:country,value:country})),
+                            idExtractor:(item:ListItem)=>item.label,
+                            labelExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"sector-dropdown"
+                    }
+                },
+                isOptional:true,
+                title:"Country",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"studyLevel",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:studyLevel.map((item)=>({label:item,value:item})),
+                            idExtractor:(item:ListItem)=>item.label,
+                            labelExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"studyLevel",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"sector-dropdown"
+                    }
+                },
+                isOptional:true,
+                title:"Study Level",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"discipline",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:disciplines.map((discipline)=>({label:discipline,value:discipline})),
+                            idExtractor:(item:ListItem)=>item.label,
+                            labelExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>{console.log("disci",data);return {type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"discipline",newvalue:data}}}},
+                        selectionMode:"multi",
+                        basketid:"sector-dropdown"
+                    }
+                },
+                isOptional:true,
+                title:"Discipline",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"subDiscipline",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:subDisciplines.map((discipline)=>({label:discipline,value:discipline})),
+                            idExtractor:(item:ListItem)=>item.label,
+                            labelExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"subDiscipline",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"sector-dropdown"
+                    }
+                },
+                isOptional:true,
+                title:"Sub Discipline",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"studyMode",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:["On Campus", "Online", "Blended"].map((item)=>({label:item,value:item})),
+                            idExtractor:(item:ListItem)=>item.label,
+                            labelExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"studyMode",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"sector-dropdown"
+                    }
+                },
+                isOptional:true,
+                title:"Study Mode",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"LanguageTestName",
+                title:"Language Test",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:[
+                                {label:"GRE",value:"GRE"},
+                                {label:"TOEFL",value:"TOEFL"}
+                            ],
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        selectionMode:"single",
+                        basketid:"languagetest-dropdown"
+                    },
+                },
+                isOptional:true,
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"Type",
+                title:"Universaity Type",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:[
+                                {label:"Public",value:"public"},
+                                {label:"Private",value:"private"}
+                            ],
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        selectionMode:"single",
+                        basketid:"unitype-dropdown"
+                    },
+                },
+                isOptional:true,
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"intake",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:intakes,
+                            idExtractor:(item:ListItem)=>item.label,
+                            labelExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"intake",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"sector-dropdown"
+                    }
+                },
+                isOptional:true,
+                title:"Intake",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            }
+        ]
+    },
+    {
+        id:"Universityfilters",
+        title:"",
+        getInitialData:(id:string|undefined)=>{
+            let filtersInfo=lists.find((list)=>list.id=="Universities")?.filters.additional;
+            let data:AppliedFilter[]|undefined=id?getBasket(id):undefined
+            return filtersInfo?filtersInfo.map((item)=>{
+                let applied=data?.find((item2)=>item2.type==item.type)?.data
+                return {id:item.type,value:applied?applied:[]}
+            }):[]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let info:AppliedFilter[]=data.map((item)=>({type:item.id,data:item.value})).filter((item)=>item.data.length!=0)
+                return info
+            },
+            onSubmit:async (data:AppliedFilter[])=>{
+                return {success:true,message:"",data:data}
+            },
+            redirect:(data:AppliedFilter[])=>({type:"UpdateParam",payload:{param:"universitiesadditionalfilters",newValue:data}}),
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        // {type:"universityId",title:"University",selectionType:"multi",customContainer:{name:"universityidfiltercontainer"},handler:universityIdFilterhandler,focusEventName:"onSearch",filterUpdateEventName:"itemSelected"},
+        // {type:"budget",handler:budgetFilterHandler,selectionType:'custom',customContainer:{name:"budgetfiltercontainer"}},
+        // {type:'openNow',title:"Open now?",selectionType:"custom",customContainer:{name:"opennowfiltercontainer"},handler:openNowFilterhandler,filterUpdateEventName:"onToggle"},
+        // {type:"AcademicTestName",dropdownDirection:"bottom2top",title:"Academic Test",options:["GRE", "GMAT"].map((item)=>({label:item,value:item})),selectionType:"multi",focusEventName:"onToggle",filterUpdateEventName:"onPress",styles:{zIndex:1}},
+        allFields:[
+            {
+                id:"country",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:Countries.map((country)=>({label:country,value:country})),
+                            idExtractor:(item:ListItem)=>item.label,
+                            labelExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"sector-dropdown"
+                    }
+                },
+                isOptional:true,
+                title:"Country",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"Type",
+                title:"Universaity Type",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:[
+                                {label:"Public",value:"public"},
+                                {label:"Private",value:"private"}
+                            ],
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        selectionMode:"single",
+                        basketid:"unitype-dropdown"
+                    },
+                },
+                isOptional:true,
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            }
+        ]
     },
 ]
 

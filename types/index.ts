@@ -21,11 +21,13 @@ export type Tabbar={
 export type ListInfo={
     id:string,
     basketid:string,
+    formid:string,
     card:React.FC<any>,
     filters:{
         additional:AdditionalFilterInfo[],
         quick:QuickFilterInfo[]
     },
+    pageUpdator:(page:number)=>NavigationActions
     listFetcher:(search:string,appliedFilters:AppliedFilter[],page:number)=>Promise<ServerResponse>
 }
 
@@ -37,12 +39,12 @@ export type AppliedFilter={
 export type AdditionalFilterInfo={
     type:string,
     title:string,
-    handler?:(currentAppliedFilter:AppliedFilter[],data:any)=>AppliedFilter[]
+    //handler?:(currentAppliedFilter:AppliedFilter[],data:any)=>AppliedFilter[]
     icon:string,
-    container?:{
-        component:React.FC<any>,
-        props?:any
-    }
+    // container?:{
+    //     component:React.FC<any>,
+    //     props?:any
+    // }
 }
 
 export type QuickFilterInfo={
@@ -142,7 +144,7 @@ export type Dropdown={
         card:React.FC<any>,
         fetcher?:(data?:any)=>Promise<any>,
         idExtractor:(item:any)=>string,
-        labelExtractor?:(item:any)=>string
+        labelExtractor:(item:any)=>string
     },
     isAsync?:boolean,
     basketid:string,
@@ -157,12 +159,13 @@ export type Dropdown={
 
 export type FormInfo={
     id:string,
-    title:string,
+    title?:string,
     getInitialData:(id:string|undefined)=>FormData[],
     onLoad?:()=>void,
     submit:{
         dataConverter?:(data:FormData[],id?:string)=>any,
         onSubmit:(data:any)=>Promise<ServerResponse>,
+        redirect?:(data:any)=>NavigationActions,
         successText:string,
         failureText:string,
         idleText:string
@@ -618,6 +621,21 @@ export interface WorkExperience{
     docId?:Document|undefined
 }
 
+export type Location={
+    country: string,
+    state: string,
+    city: string
+}
+
+export interface UniversitySearchObj{
+    _id: string,
+    code: string,
+    community: string, 
+    location: Location,
+    logoSrc: string,
+    name:string
+}
+
 export interface UniversityListObj{
     location: Location,
     currency: {
@@ -918,6 +936,30 @@ export type ResearchPaper={
     publishedDate: Date,
 }
 
+export interface Meeting{
+    _id:string,
+    description:string,
+    attendees:string[],
+    link:string,
+    calenderLink?:string,
+    startDate:{
+        dateTime:  string,
+        timeZone:  string
+      },
+    endDate:{
+        dateTime:  string,
+        timeZone:  string
+      },
+    status:"completed" | "cancelled" | "rescheduled" | "upcoming",
+    member:User
+}
+
+export type Countrycode={
+    name:string,
+    dial_code:string,
+    code:string
+}
+
 export type Preferences={
     degree?: string,
     intake?: Date,
@@ -1186,4 +1228,12 @@ export type Institute={
     State: string,
     university: string[]
   }
+
+export interface AvailableSlot{
+    availableSlots: {
+        endTime: string, 
+        startTime: string
+    }[],
+    date: string
+}
 

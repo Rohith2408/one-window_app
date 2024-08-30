@@ -38,7 +38,7 @@ const styles={
 const Institutionscard=(props:Institute)=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
-    console.log("aa",props)
+    //console.log("aa",props)
 
     return(
         <View style={{flex:1}}>

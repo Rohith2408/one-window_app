@@ -6,7 +6,7 @@ import { Fonts, Themes, forms } from "../../constants";
 import { getDevice } from "../../utils";
 import useNavigation from "../../hooks/useNavigation";
 import Asynchronousbutton from "./Asynchronousbutton";
-import { clearBasket, getFullBasket } from "../../constants/basket";
+import { addToBasket, clearBasket, getFullBasket } from "../../constants/basket";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -98,8 +98,10 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
     const [focussedField,setFocussedField]=useState<string|number|undefined>(undefined);
     const Device=useRef(getDevice()).current
     const [errors,setError]=useState<{id:string,error:undefined|string}[]>([]) 
+    const [path,navigate]=useNavigation()
 
     const eventHandler=async (event:Event)=>{
+        console.log("event",event);
         let field=formInfo?.allFields.find((field)=>field.id==event.triggerBy)
         console.log(field?.onUpdate)
         if(field)
@@ -130,7 +132,6 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
     const onSubmit=async ()=>{ 
         let errors=validate()
         setError(errors);
-        console.log("errors",errors);
         if(errors.length==0)
         {
             let handler=formInfo?.submit.onSubmit;
@@ -141,9 +142,12 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
             };
             if(handler)
             {
-                console.log("ini",typeof props.forminitialdataid)
                 res=await handler(formInfo?.submit.dataConverter?formInfo.submit.dataConverter(fields,props.forminitialdataid):fields);
-                console.log("res",res);
+                if(formInfo?.submit.redirect)
+                {
+                    //console.log("aaa",JSON.stringify(formInfo.submit.redirect(res.data),null,2));
+                    navigate?navigate(formInfo.submit.redirect(res.data)):null
+                }
             }
             return res.success
         }
@@ -169,7 +173,7 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
     }
 
     useEffect(()=>{
-        console.log(props.formupdate)
+        console.log("update form",props.formupdate)
         if(props.formupdate)
         {
             let field=formInfo?.allFields.find((field)=>field.id==props.formupdate?.id);
@@ -180,16 +184,27 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
 
     useEffect(()=>{
         formInfo?.onLoad?formInfo.onLoad():null
-
         return (()=>clearBasket())
     },[])
 
-    //console.log("data",fields);
+    useEffect(()=>{
+        fields.forEach(field => {
+            addToBasket(field.id,field.value);
+        })
+    },[fields])
+
+    console.log("fields",fields);
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.fields_wrapper]}>
-                <Text style={[GeneralStyles.form_title,styles[Device].form_title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{formInfo?.title}</Text>
+                {
+                    formInfo?.title
+                    ?
+                    <Text style={[GeneralStyles.form_title,styles[Device].form_title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{formInfo?.title}</Text>
+                    :
+                    null
+                }
                 <ScrollView style={{flex:1}} contentContainerStyle={[GeneralStyles.fields]}>
                 {
                     fields.map((field,i)=>
@@ -205,7 +220,6 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
 
 const Field=(props:{info:FieldType,data:FormData,isFocussed:boolean,index:number,error:string|undefined,eventHandler:(event:Event)=>void})=>{
 
-    //console.log("info",props.info)
     const Container=props.info.componentInfo.component
     const Device=useRef(getDevice()).current
     const [path,navigate]=useNavigation()

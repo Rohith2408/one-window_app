@@ -113,7 +113,7 @@ const Tab=(props:{title:string,icon?:string,currentTab:string})=>{
     const markerScale=useRef(new Animated.Value(0)).current
 
     useEffect(()=>{
-        console.log(props.title,props.currentTab==props.title?1:0);
+        //console.log(props.title,props.currentTab==props.title?1:0);
         Animated.spring(markerScale,{
             toValue:props.currentTab==props.title?1:0,
             useNativeDriver:true
