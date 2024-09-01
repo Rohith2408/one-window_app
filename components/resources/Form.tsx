@@ -6,7 +6,7 @@ import { Fonts, Themes, forms } from "../../constants";
 import { getDevice } from "../../utils";
 import useNavigation from "../../hooks/useNavigation";
 import Asynchronousbutton from "./Asynchronousbutton";
-import { addToBasket, clearBasket, getFullBasket } from "../../constants/basket";
+import { addToBasket, clearBasket, getBasket, getFullBasket } from "../../constants/basket";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -91,14 +91,16 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate?:{id:string,newvalue:any},forminitialdataid?:string})=>{
+const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate?:{id:string,newvalue:any},forminitialdataid?:string,formbasket:string})=>{
 
+    const additionalInfo=getBasket(props.formbasket);
     const formInfo=useRef(forms.find((form)=>form.id==props.formid)).current
     const [fields,dispatch]=useReducer(FormReducer,formInfo?formInfo.getInitialData(props.forminitialdataid):[]);
     const [focussedField,setFocussedField]=useState<string|number|undefined>(undefined);
     const Device=useRef(getDevice()).current
     const [errors,setError]=useState<{id:string,error:undefined|string}[]>([]) 
     const [path,navigate]=useNavigation()
+    console.log("fodod",additionalInfo,props.formbasket)
 
     const eventHandler=async (event:Event)=>{
         console.log("event",event);
@@ -142,16 +144,22 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
             };
             if(handler)
             {
-                res=await handler(formInfo?.submit.dataConverter?formInfo.submit.dataConverter(fields,props.forminitialdataid):fields);
+                let convertedData=formInfo?.submit.dataConverter?formInfo.submit.dataConverter(fields,props.forminitialdataid):fields
+                res=await handler(convertedData);
                 if(!res.success){
 
                 }
-                if(formInfo?.submit.redirect)
-                {
-                    //console.log("aaa",JSON.stringify(formInfo.submit.redirect(res.data),null,2));
-                    navigate?navigate(formInfo.submit.redirect(res.data)):null
+                else{
+                    if(formInfo?.submit.redirect)
+                    {
+                        navigate?navigate(formInfo.submit.redirect(res.data)):null
+                    }
+                    if(additionalInfo?.callback){
+                        additionalInfo.callback(convertedData);
+                    }
                 }
             }
+            navigate?navigate({type:"RemoveScreen"}):null
             return res.success
         }
         else

@@ -7,6 +7,8 @@ import useNavigation from "../../hooks/useNavigation"
 import { addToBasket } from "../../constants/basket"
 import { getDevice } from "../../utils"
 import { Image } from "expo-image"
+import Listselection from "../resources/Listselection"
+import Quickfiltercard from "../cards/Quickfiltercard"
 
 
 const GeneralStyles=StyleSheet.create({
@@ -21,12 +23,27 @@ const GeneralStyles=StyleSheet.create({
         height:55,
         padding:10,
         gap:10,
-        flexDirection:'row'
+        flexDirection:'row',
+        alignItems:"center"
     }
 })
 
 const TabStyles=StyleSheet.create({
-    
+    card:{
+        height:100,
+        width:"100%"
+    },
+    quickfilter_icon:{
+        width:15,
+        height:15,
+        resizeMode:"contain"
+    },
+    quickfilter:{
+        fontSize:12
+    },
+    allfilters:{
+        fontSize:12
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -48,11 +65,39 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
-    
+    card:{
+        height:150,
+        width:"100%"
+    },
+    quickfilter_icon:{
+        width:15,
+        height:15,
+        resizeMode:"contain"
+    },
+    quickfilter:{
+        fontSize:12
+    },
+    allfilters:{
+        fontSize:12
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
-    
+    card:{
+        height:100,
+        width:"100%"
+    },
+    quickfilter_icon:{
+        width:15,
+        height:15,
+        resizeMode:"contain"
+    },
+    quickfilter:{
+        fontSize:12
+    },
+    allfilters:{
+        fontSize:12
+    }
 })
 
 const styles={
@@ -74,72 +119,82 @@ const Listing=(props:{listid:string,additionalFilters:AppliedFilter[],quickFilte
     const maxPages=useRef(1)
 
     useEffect(()=>{
-        getList().then((res:ServerResponse|undefined)=>(res && res.success)?setList(res.data.list):null)
-    },[props.additionalFilters,props.quickFilters,props.search])
-
-    useEffect(()=>{
         getList().then((res:ServerResponse|undefined)=>{
             maxPages.current=res?.data.totalPages;
-            (res && res.success)?setList([...list,...res.data.list]):null
+            (res && res.success)?props.page==1?setList(res.data.list):setList([...list,...res.data.list]):null
         })
-    },[props.page])
+    },[props.additionalFilters,props.quickFilters,props.search,props.page])
 
     const getList=async ()=>{
         setIsLoading(true);
         let appliedFilters=bakeFilters(props.additionalFilters,props.quickFilters);
-        let res=await ListInfo?.listFetcher(props.search,appliedFilters,props.page)
+        let res=await ListInfo?.listFetcher({search:props.search,filters:appliedFilters,page:props.page})
         setIsLoading(false)
         return res
     }
 
-    const applyQuickFilter=(data:QuickFilterInfo)=>{
-        let arr=props.quickFilters.find((item)=>item.type==data.type)?props.quickFilters.filter((item)=>item.type!=data.type):[...props.quickFilters,{type:data.type,data:data.items}]
+    const applyQuickFilter=(data:QuickFilterInfo[])=>{
+        let arr=data.map((item)=>({type:item.type,data:item.items}));
+        console.log("filters applied",JSON.stringify(arr,null,2));
+        //props.quickFilters.find((item)=>item.type==data.type)?props.quickFilters.filter((item)=>item.type!=data.type):[...props.quickFilters,{type:data.type,data:data.items}]
         navigate?navigate({type:"UpdateParam",payload:{param:props.listid.toLowerCase()+"quickfilters",newValue:arr}}):null
+    }
+
+    const applyAdditionalFilters=(data:AppliedFilter[])=>{
+        navigate?navigate({type:"UpdateParam",payload:{param:props.listid.toLowerCase()+"additionalfilters",newValue:data}}):null
     }
 
     const openAllFilters=()=>{
         addToBasket(props.listid+"filters",{
-            additionalFiltersApplied:props.additionalFilters,
-            quickFiltersApplied:props.quickFilters
+            // additionalFiltersApplied:props.additionalFilters,
+            // quickFiltersApplied:props.quickFilters,
+            callback:applyAdditionalFilters
         })
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:ListInfo?.formid,forminitialid:props.listid+"filters"}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:ListInfo?.formid,forminitialid:props.listid+"filters",formbasket:props.listid+"filters"}}}):null
     }
 
     const onScroll=(e:NativeSyntheticEvent<NativeScrollEvent>)=>{
         if(props.page<maxPages.current)
         {
-            if(!dataRequested.current && !(e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y+10<=e.nativeEvent.contentSize.height))
+            if(!dataRequested.current && (e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y>e.nativeEvent.contentSize.height-20))
             {
                 (navigate && ListInfo?.pageUpdator)?navigate(ListInfo?.pageUpdator(props.page)):null
                 dataRequested.current=true
             }
             else
             {
-                if((e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y+10<=e.nativeEvent.contentSize.height)){
+                if((e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y<=e.nativeEvent.contentSize.height-20)){
                     dataRequested.current=false
                 }
             }
         }
     }
 
-    //console.log("filters",JSON.stringify(props.additionalFilters,null,2))
-
     return(
         <View style={[GeneralStyles.main_wrapper]}>
-        <View style={[GeneralStyles.filter_wrapper]}>
-            <Pressable style={{display:'flex',alignItems:"center",justifyContent:"center"}} onPress={openAllFilters}><Text style={[styles[Device].allfilters]}>All Filters</Text></Pressable>
-            <ScrollView style={{flex:1}} horizontal contentContainerStyle={{gap:20,alignItems:'center'}}>
-            {
-                ListInfo?.filters.quick.map((filterinfo)=>
-                    <Pressable onPress={()=>applyQuickFilter(filterinfo)}>
-                        <Quickfilter focus={props.quickFilters.find((item)=>item.type==filterinfo.type)?true:false} icon={filterinfo.icon} text={filterinfo.title}/>
-                    </Pressable>
-                )
-            }
-            </ScrollView>
-        </View>
+            <View style={[GeneralStyles.filter_wrapper]}>
+                <View style={{flex:1}}>
+                    <Listselection 
+                        direction="horizontal"
+                        selectionStyle="border"
+                        initialSelection={props.quickFilters.map((item)=>ListInfo?.filters.quick.find((item2)=>item.type==item2.type))}
+                        styles={{contentcontainer:{gap:10}}}
+                        onselection={applyQuickFilter}
+                        options={{
+                            list:ListInfo?.filters?.quick,
+                            card:Quickfiltercard,
+                            idExtractor:(data:QuickFilterInfo)=>data.type,
+                            labelExtractor:(data:QuickFilterInfo)=>data.title,
+                            selectionMode:"multi"
+                        }}
+                    />
+                </View>
+                <Pressable style={{display:'flex',alignItems:"center",justifyContent:"center"}} onPress={openAllFilters}><Text style={[styles[Device].allfilters]}>All Filters</Text></Pressable>
+            </View>
         {
             Component
+            ?
+            list.length>0
             ?
             <ScrollView scrollEventThrottle={100} onScroll={(e)=>onScroll(e)} style={[GeneralStyles.sub_wrapper]}>
             {
@@ -148,6 +203,10 @@ const Listing=(props:{listid:string,additionalFilters:AppliedFilter[],quickFilte
                 )
             }
             </ScrollView>
+            :
+            <View style={{flex:1,justifyContent:"center",alignItems:'center'}}>
+                <Text>No items found!</Text>
+            </View>
             :
             null
         }

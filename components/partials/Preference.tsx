@@ -16,13 +16,11 @@ const Preference=(props:{preferenceid:string})=>{
         setPreference(data);
     }
 
-    console.log("puku",preference)
-
     return(
-        <View style={{flex:1}}>
-            <View style={{flex:1}}>
+        <View style={{flex:1,gap:20}}>
+            <View>
                 <Text>Selected</Text>
-                <ScrollView style={{flex:1}}>
+                <ScrollView>
                 {
                     preference.map((item:ListItem)=>
                     <Card {...item}/>
@@ -30,7 +28,7 @@ const Preference=(props:{preferenceid:string})=>{
                 }
                 </ScrollView>
             </View>
-            <View style={{flex:1}}>
+            <View>
                 <Text>All</Text>
                 <Listselection
                 {...{

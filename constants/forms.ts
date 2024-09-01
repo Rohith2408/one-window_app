@@ -2656,7 +2656,7 @@ const forms:FormInfo[]=[
             onSubmit:async (data:AppliedFilter[])=>{
                 return {success:true,message:"",data:data}
             },
-            redirect:(data:AppliedFilter[])=>({type:"UpdateParam",payload:{param:"programsadditionalfilters",newValue:data}}),
+            //redirect:(data:AppliedFilter[])=>({type:"UpdateParam",payload:{param:"programsadditionalfilters",newValue:data}}),
             successText:"Success!",
             failureText:"Failed :(",
             idleText:"Submit"

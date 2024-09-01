@@ -1,6 +1,6 @@
 import { Dimensions, LayoutAnimation, Platform } from "react-native";
-import { Api, GradingSystems, Tests, Themes, baseAppUrl,secureStoreKeys } from "../constants";
-import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem, Product, Package } from "../types";
+import { Api, GradingSystems, Tests, Themes, baseAppUrl,lists,secureStoreKeys } from "../constants";
+import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem, Product, Package, Listquery } from "../types";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
@@ -29,6 +29,7 @@ import {components} from "../constants/components";
 import * as DocumentPicker from 'expo-document-picker';
 import Textbox from "../components/resources/Textbox";
 import Datetime from "../components/resources/Datetime";
+import { getBasket } from "../constants/basket";
 
 
 export const propsMapper=(screens:string[],params:any|undefined)=>{
@@ -610,5 +611,16 @@ export const getAlreadyPurchasedProducts=()=>{
 
 export const compareProducts=(product1:Product,product2:Product)=>{
   return product1.category==product2.category && product1.course.id==product2.course.id && product1.intake==product2.intake
+}
+
+export const listHandler=(id:string,data:Listquery)=>{
+  let listInfo=lists.find((list)=>list.id==id)
+  if(listInfo && listInfo.itemsPerPage && listInfo.searchEvaluator && data.fullList && data.selectedList)
+  {
+    let searchFiltered=data.fullList.filter((item:any)=>listInfo?.searchEvaluator({item:item,query:data.search}));
+    let pageFilteredList=searchFiltered.splice((listInfo?.itemsPerPage)*data.page,listInfo.itemsPerPage)
+    return {success:true,data:pageFilteredList,message:""};
+  }
+  return {success:false,data:data.fullList?data.fullList:[],message:""}
 }
 

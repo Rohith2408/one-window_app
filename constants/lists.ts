@@ -1,11 +1,12 @@
 
 import Listasynchronous from "../components/flyers/Listasynchronous";
-import { AppliedFilter, ListInfo, ListItem, ServerResponse } from "../types";
-import { getServerRequestURL, serverRequest } from "../utils";
+import { AppliedFilter, ListInfo, ListItem, Listquery, ServerResponse } from "../types";
+import { getServerRequestURL, listHandler, serverRequest } from "../utils";
 import sample_icon from '../assets/images/misc/edit.png'
 import Universitycard from "../components/cards/Universitycard";
 import Programcard from "../components/cards/Programcard";
 import Dropdown from "../components/resources/Dropdown";
+import Degreepreferencecard from "../components/cards/Degreepreferencecard";
 
 // {type:"universityId",title:"University",selectionType:"multi",customContainer:{name:"universityidfiltercontainer"},handler:universityIdFilterhandler,focusEventName:"onSearch",filterUpdateEventName:"itemSelected"},
 // {type:"country",title:"Country",options:Countries.map((country)=>({label:country,value:country})),selectionType:"multi",focusEventName:"onToggle",filterUpdateEventName:"onPress"},
@@ -90,19 +91,20 @@ const lists:ListInfo[]=[
         ]
         },
         pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"programspage",newValue:page+1}}),
-        listFetcher:async (search:string,appliedFilters:AppliedFilter[],page:number)=>{
-            //console.log("applied",JSON.stringify([...appliedFilters.map((item)=>({...item,data:item.data.map((val)=>val.value)})),{type:'name',data:[search.trim()]}]));
+        listFetcher:async (query:{search:string,filters:any[],page:number})=>{
+            console.log("query recieved pro",query);
             let res:ServerResponse=await serverRequest({
                     url: getServerRequestURL("programs","POST"),
                     reqType: "POST",
                     body:{
                         //search.trim().length>0?{type:'name',data:[search.trim()]}:{}
-                        filterData:[...appliedFilters.map((item)=>({...item,data:item.data.map((val)=>val.value)}))],
-                        page:page,
+                        filterData:[...query.filters.map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)}))],
+                        page:query.page,
                         currency:"INR"
                     }
                 }
             )
+            //console.log("respon liiist",query.page,res.data.list.length);
             return res
         }
     },
@@ -138,21 +140,52 @@ const lists:ListInfo[]=[
             },
         ]
         },
-        pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"programspage",newValue:page+1}}),
-        listFetcher:async (search:string,appliedFilters:AppliedFilter[],page:number)=>{
-            //console.log("applied",JSON.stringify([...appliedFilters.map((item)=>({...item,data:item.data.map((val)=>val.value)})),{type:'name',data:[search.trim()]}]));
+        pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"universitiespage",newValue:page+1}}),
+        listFetcher:async (query:{search:string,filters:any[],page:number})=>{
+            console.log("query recieved uni",query);
             let res:ServerResponse=await serverRequest({
                     url: getServerRequestURL("universities","POST"),
                     reqType: "POST",
                     body:{
-                        filterData:[...appliedFilters.map((item)=>({...item,data:item.data.map((val)=>val.value)})),search.trim().length>0?{type:'name',data:[search.trim()]}:{}],
-                        page:page,
+                        //search.trim().length>0?{type:'name',data:[search.trim()]}:{}
+                        filterData:[...query.filters.map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)}))],
+                        page:query.page,
                         currency:"INR"
                     }
                 }
             )
             return res
         }
+    },
+    // {
+    //     id:"Programs",
+    //     basketid:"programs",
+    //     formid:"Programfilters",
+    //     card:Programcard,
+    //     pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"programspage",newValue:page+1}}),
+    //     listFetcher:async (search:string,appliedFilters:AppliedFilter[],page:number)=>{
+    //         //console.log("applied",JSON.stringify([...appliedFilters.map((item)=>({...item,data:item.data.map((val)=>val.value)})),{type:'name',data:[search.trim()]}]));
+    //         let res:ServerResponse=await serverRequest({
+    //                 url: getServerRequestURL("programs","POST"),
+    //                 reqType: "POST",
+    //                 body:{
+    //                     //search.trim().length>0?{type:'name',data:[search.trim()]}:{}
+    //                     filterData:[...appliedFilters.map((item)=>({...item,data:item.data.map((val)=>val.value)}))],
+    //                     page:page,
+    //                     currency:"INR"
+    //                 }
+    //             }
+    //         )
+    //         return res
+    //     }
+    // },
+    {
+        id:"degreepreference",
+        basketid:"degreepreference",
+        card:Degreepreferencecard,
+        pagnation:false,
+        showSearch:false,
+        // listFetcher:async (data:Listquery)=>listHandler("degreepreference",data)
     },
 ]
 

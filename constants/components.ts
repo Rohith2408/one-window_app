@@ -52,7 +52,7 @@ const components:ScreenInfo[]=[
     {id:"Loginbase",component:Loginbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
     {id:"Registerbase",component:Registerbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
     {id:"Forgotpassword",component:Forgotpassword,title:"Forgot Password",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",type:"Partial"},
-    {id:"Form",component:Form,type:"Partial",title:"Form",props:["formid","forminitialdataid","formupdate","formerrors"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Form",component:Form,type:"Partial",title:"Form",props:["formid","forminitialdataid","formupdate","formerrors","formbasket"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Flyer",component:Flyer,type:"Flyer",props:["flyerid","flyerdata"],swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Filters",component:Filters,type:"Partial",props:["filtersbasketid","filterslistid"],title:"Filters",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3,swipeDirection:"X"},
     {id:"Explore",component:Explore,type:"Partial",title:"Explore",props:["initialexploretab","programsadditionalfilters","programsquickfilters","universitiesadditionalfilters","universitiesquickfilters","search","universitiespage","programspage"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},

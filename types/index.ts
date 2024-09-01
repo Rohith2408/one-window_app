@@ -21,15 +21,28 @@ export type Tabbar={
 export type ListInfo={
     id:string,
     basketid:string,
-    formid:string,
+    formid?:string,
     card:React.FC<any>,
-    filters:{
+    filters?:{
         additional:AdditionalFilterInfo[],
         quick:QuickFilterInfo[]
     },
-    //propsBuilder(currentProps:{search:string,page:number,}):,
-    pageUpdator:(page:number)=>NavigationActions
-    listFetcher:(search:string,appliedFilters:AppliedFilter[],page:number)=>Promise<ServerResponse>
+    selectionMode?:"single"|"multi",
+    itemsPerPage?:number,
+    showSearch?:boolean,
+    pagnation?:boolean,
+    searchEvaluator?:(data:any)=>boolean,
+    pageUpdator?:(page:number)=>NavigationActions,
+    listFetcher:(data:Listquery)=>Promise<ServerResponse>
+}
+
+export type Listquery={
+    search:string,
+    //appliedFilters:AppliedFilter[],
+    page:number,
+    filters:any[],
+    selectedList?:any[],
+    fullList?:any[]
 }
 
 export type AppliedFilter={
@@ -162,11 +175,12 @@ export type FormInfo={
     id:string,
     title?:string,
     getInitialData:(id:string|undefined)=>FormData[],
-    onLoad?:()=>void,
+    onLoad?:()=>void
     submit:{
         dataConverter?:(data:FormData[],id?:string)=>any,
         onSubmit:(data:any)=>Promise<ServerResponse>,
         redirect?:(data:any)=>NavigationActions,
+        //callback?:(data:any)=>void,
         successText:string,
         failureText:string,
         idleText:string

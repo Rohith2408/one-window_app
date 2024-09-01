@@ -9,8 +9,6 @@ const Listselection=(props:{direction:"horizontal"|"vertical",selectionStyle:"bo
 
     const [selected,setSelected]=useState(props.initialSelection?props.initialSelection:[])
 
-    //console.log("lisssst",props.initialSelection);
-
     const selection=(data:any)=>{
         let updated=[]
         if(selected.find((item)=>props.options.idExtractor(item)==props.options.idExtractor(data))){
@@ -25,8 +23,9 @@ const Listselection=(props:{direction:"horizontal"|"vertical",selectionStyle:"bo
     }
 
     return(
-        <View style={{flex:1}}>
-            <ScrollView style={{flex:1}} horizontal={props.direction=="horizontal"?true:false} contentContainerStyle={[props.styles?.contentcontainer?props.styles.contentcontainer:{}]}>
+        <View>
+
+            <ScrollView horizontal={props.direction=="horizontal"?true:false} contentContainerStyle={[props.styles?.contentcontainer?props.styles.contentcontainer:{}]}>
             {
                 props.options.list.map((item,i)=>
                 <Pressable onPress={()=>selection(item)}><Listitem data={{selected:selected,selectionStyle:props.selectionStyle,index:i,card:props.options.card,idExtractor:props.options.idExtractor,labelExtractor:props.options.labelExtractor,item:item}}/></Pressable>

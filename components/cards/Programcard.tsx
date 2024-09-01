@@ -20,9 +20,7 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:"column",
         flex:1,
         alignSelf:"stretch",
-        gap:0,
-        padding:10,
-        borderRadius:20
+        padding:10
     },
     info_wrapper:{
         flex:1,
@@ -53,6 +51,10 @@ const TabStyles=StyleSheet.create({
 })
 
 const MobileSStyles=StyleSheet.create({
+    sub_wrapper:{
+        gap:5,
+        borderRadius:20
+    },
     name:{
         fontSize:12,
         lineHeight:18
@@ -83,7 +85,37 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
-    
+    sub_wrapper:{
+        gap:7,
+        borderRadius:30
+    },
+    name:{
+        fontSize:14,
+        lineHeight:20
+    },
+    icon:{
+        width:24,
+        height:24,
+        borderRadius:100,
+        resizeMode:"contain"
+    },
+    uni_name:{
+        fontSize:12
+    },
+    misc:{
+        fontSize:14
+    },
+    important:{
+        fontSize:10
+    },
+    stem_banner_text:{
+        fontSize:10
+    },
+    go_icon:{
+        width:10,
+        height:10,
+        resizeMode:"contain"
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
@@ -108,7 +140,7 @@ const Programcard=(props:CourseListObj & {index:number})=>{
 
     return(
         <Pressable onPress={openProgram} style={[GeneralStyles.wrapper]}>
-            <View style={[GeneralStyles.sub_wrapper,{backgroundColor:props.index%4==0?Themes.Light.OnewindowRed(0.6):props.index%4==1?Themes.Light.OnewindowPurple(0.7):props.index%4==2?Themes.Light.OnewindowTeal(0.7):props.index%4==3?Themes.Light.OnewindowYellow(0.7):""}]}>
+            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:props.index%4==0?Themes.Light.OnewindowRed(0.6):props.index%4==1?Themes.Light.OnewindowPurple(0.7):props.index%4==2?Themes.Light.OnewindowTeal(0.7):props.index%4==3?Themes.Light.OnewindowYellow(0.7):""}]}>
                 <View style={[GeneralStyles.important_wrapper]}>
                 {
 
@@ -124,13 +156,13 @@ const Programcard=(props:CourseListObj & {index:number})=>{
                 <View style={{flexDirection:'row',gap:5}}>
                     <View style={[GeneralStyles.info_wrapper]}>
                         <Image source={props.university.logoSrc} style={[styles[Device].icon]}/>
-                        <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.name}</Text>
+                        <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.name}</Text>
                         <Text style={[styles[Device].uni_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.university.name}</Text>
                     </View>
                     <View style={{flexDirection:"row",alignItems:'center'}}><Image source={go_icon} style={[styles[Device].go_icon,{transform:[{scaleX:-1}]}]}/></View>
                 </View>
                 <View style={[GeneralStyles.misc_wrapper]}>
-                    <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Regular}]}>{Word2Sentence([props.duration?props.duration.toString()+" Months":"",props.studyLevel,props.studyMode?Word2Sentence(props.studyMode):""],"","|")}</Text>
+                    <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence([props.duration?props.duration.toString()+" Months":"",props.studyLevel,props.studyMode?Word2Sentence(props.studyMode):""],"","|")}</Text>
                 </View>
             </View>
         </Pressable>
