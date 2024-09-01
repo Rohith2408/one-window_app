@@ -79,9 +79,11 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
             setLoading(true)
             let options;
             let res:ServerResponse=props.options.fetcher?await props.options.fetcher():{success:true,data:props.options.list,message:''}
-            setLoading(false)
+            console.log("resi",res);
+            navigate?navigate({type:"UpdateParam",payload:{param:"formerrors",newValue:{id:props.id,error:res.success?undefined:res.message}}}):null
             res.success?addToBasket(props.basketid+"-dropdownoptions",{options:{...props.options,list:res.data},eventHandler:props.eventHandler,apply:props.apply,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value}):null
             res.success?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null:null
+            setLoading(false)
         }
     }
 
@@ -110,6 +112,8 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
         //     }
         // }
     },[props.value])
+
+    console.log("options",props.id,props.value)
 
     return(
         <View style={[GeneralStyles.mainWrapper]}>

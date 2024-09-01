@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Preference, Preferences, Request } from "../../misc/typeDefinations";
+import { Preferences, Request } from "../../types/index";
 
 let initialState:Request<Preferences|undefined>={
     requestStatus:"not_initiated",
@@ -17,7 +17,7 @@ export const preferencesSlice=createSlice({
     reducers:{
         initPreferences:(state,action:PayloadAction<Request<Preferences>>)=>({...action.payload}),
         setPreference:(state,action:PayloadAction<Preferences>)=>{state.data=action.payload},
-        updatePreferences:(state,action:PayloadAction<Preference>)=>{
+        updatePreferences:(state,action:PayloadAction<string>)=>{
             // state.data
             // ?
             // state.data[action.payload.type]=action.payload.data

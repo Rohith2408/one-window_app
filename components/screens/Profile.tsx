@@ -6,7 +6,7 @@ import { Fonts, Themes, secureStoreKeys, setComponentInfo } from "../../constant
 import * as SecureStore from 'expo-secure-store'
 import { Image } from "expo-image";
 import sample_pic from '../../assets/images/misc/sampledp.png'
-import { getDevice, resetStore } from "../../utils";
+import { Word2Sentence, getDevice, resetStore } from "../../utils";
 import personal_icon from '../../assets/images/profile/personal.png'
 import cart_icon from '../../assets/images/profile/cart.png'
 import expert_icon from '../../assets/images/profile/expert.png'
@@ -15,7 +15,7 @@ import orders_icon from '../../assets/images/profile/orders.png'
 import preferences_icon from '../../assets/images/profile/preferences.png'
 import { useAppSelector } from "../../hooks/useAppSelector";
 import Loadingview from "../resources/Loadingview";
-import defaultDP from '../../assets/images/misc/sampledp.png'
+import defaultDP from '../../assets/images/misc/defaultDP.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -321,10 +321,10 @@ const Profile=(props:any)=>{
     const options=useRef([
         {title:"Personal Info",icon:personal_icon,screen:"Personalinfo"},
         {title:"Experts",icon:expert_icon,screen:"Experts"},
-        {title:"Preferences",icon:preferences_icon,screen:"Personalinfo"},
+        {title:"Preferences",icon:preferences_icon,screen:"Preferences"},
         {title:"Recommended",icon:preferences_icon,screen:""},
         {title:"Favourites",icon:favourites_icon,screen:""},
-        {title:"Cart",icon:cart_icon,screen:""},
+        {title:"Cart",icon:cart_icon,screen:"Cart"},
         {title:"My Orders",icon:orders_icon,screen:""},
         {title:"My Products",icon:orders_icon,screen:""}
     ]).current
@@ -358,8 +358,8 @@ const Profile=(props:any)=>{
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.user_wrapper,styles[Device].user_wrapper]}>
                 <View style={[GeneralStyles.name_wrapper]}>
-                    <Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.name,styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Rohith Kumar</Text></Loadingview>
-                    <Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.email,styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>kumarrohith@gmail.com</Text></Loadingview>
+                    <Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.name,styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{sharedInfo.data?.firstName+" "+sharedInfo.data?.lastName}</Text></Loadingview>
+                    <Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.email,styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{sharedInfo.data?.email}</Text></Loadingview>
                 </View>
                 <Pressable onPress={showDpOptions} style={[GeneralStyles.dp_wrapper]}>
                     <View style={[GeneralStyles.dpBg,styles[Device].dpBg,{backgroundColor:Themes.Light.OnewindowRed(1)}]}></View>

@@ -22,7 +22,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.onewindow",
+      "bundleIdentifier": "com.onewindow.app",
       "infoPlist": {
         "CFBundleURLTypes": [
           {
@@ -31,14 +31,15 @@
             ]
           }
         ]
-      }
+      },
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.onewindow",
+      "package": "com.onewindow.app",
       "intentFilters": [
         {
           "action": "VIEW",
@@ -66,6 +67,17 @@
         }
       ],
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f99993ed-e6d1-4a64-97bb-5ff255bd8f2f"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/f99993ed-e6d1-4a64-97bb-5ff255bd8f2f"
+    }
   }
 }

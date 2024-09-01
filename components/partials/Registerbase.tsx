@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import { getDevice } from "../../utils"
 import Form from "../resources/Form"
 import { Fonts, Themes } from "../../constants"
+import useNavigation from "../../hooks/useNavigation"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -178,6 +179,14 @@ const styles={
 const Registerbase=()=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const [path,navigate]=useNavigation()
+
+    const openLogin=()=>{
+        navigate?navigate({type:"Logout"}):null
+        setTimeout(()=>{
+            navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Register"}}):null
+        },200)
+    }
 
     return(
         <View style={[GeneralStyles.wrapper]}>
@@ -189,11 +198,11 @@ const Registerbase=()=>{
                 <Form formid="Register" />
                 <View style={[GeneralStyles.actions_wrapper]}>
                     <View>
-                        {/* <Pressable onPress={openSignup}><Text style={[styles[Device].noaccount,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Don't have an account?</Text></Pressable> */}
+                        <Pressable onPress={openLogin}><Text style={[styles[Device].noaccount,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Already have an account?</Text></Pressable>
                     </View>
-                    <View>
+                    {/* <View>
                         <Text style={[styles[Device].forgot,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Forgot Password?</Text>
-                    </View>
+                    </View> */}
                 </View>
             </View>
         </View>

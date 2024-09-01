@@ -29,6 +29,12 @@ const endPoints=[
         type:"GET",
     },
     {
+        id:"edit-phone",
+        category:"student",
+        tail:"phone",
+        type:"GET",
+    },
+    {
         id:"post-review",
         category:"student",
         tail:"post-review",
@@ -69,8 +75,16 @@ const endPoints=[
         type:"GET",
     },
     {
-        ENUM:"phone",
-        TYPE:"student"
+        id:"forgot-password-getcode",
+        category:"auth",
+        tail:"forgot-password",
+        type:"POST",
+    },
+    {
+        id:"forgot-password-verifycode",
+        category:"auth",
+        tail:"verify-otp",
+        type:"POST",
     },
     {
         ENUM:"email",
@@ -145,6 +159,12 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"cart",
+        category:"student",
+        tail:"cart",
+        type:"POST",
+    },
+    {
         ENUM:"download",
         TYPE:"student",
         
@@ -213,9 +233,10 @@ const endPoints=[
         
     },
     {
-        ENUM:"single_course",
-        TYPE:"public",
-        
+        id:"program",
+        category:"public",
+        tail:"single_course",
+        type:"POST",
     },
     {
         ENUM:"profile",

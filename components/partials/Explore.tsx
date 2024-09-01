@@ -50,7 +50,6 @@ const Explore=(props:{initialexploretab?:string,programsadditionalfilters?:Appli
         },200)
     }
 
-
     useEffect(()=>{
         addToBasket("search",{searchString:props.search});
         addToBasket("programsadditionalfilters",props.programsadditionalfilters)

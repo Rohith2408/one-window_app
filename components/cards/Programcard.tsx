@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { CourseListObj } from "../../types"
 import { useRef } from "react"
 import { Word2Sentence, getDevice } from "../../utils"
 import { Image } from "expo-image"
 import { Fonts, Themes } from "../../constants"
 import go_icon from '../../assets/images/misc/back.png'
+import useNavigation from "../../hooks/useNavigation"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -99,9 +100,14 @@ const styles={
 const Programcard=(props:CourseListObj & {index:number})=>{
 
     const Device=useRef(getDevice()).current
+    const [path,navigate]=useNavigation()
+
+    const openProgram=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Program",params:{programid:props._id}}}):null
+    }
 
     return(
-        <View style={[GeneralStyles.wrapper]}>
+        <Pressable onPress={openProgram} style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.sub_wrapper,{backgroundColor:props.index%4==0?Themes.Light.OnewindowRed(0.6):props.index%4==1?Themes.Light.OnewindowPurple(0.7):props.index%4==2?Themes.Light.OnewindowTeal(0.7):props.index%4==3?Themes.Light.OnewindowYellow(0.7):""}]}>
                 <View style={[GeneralStyles.important_wrapper]}>
                 {
@@ -127,7 +133,7 @@ const Programcard=(props:CourseListObj & {index:number})=>{
                     <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Regular}]}>{Word2Sentence([props.duration?props.duration.toString()+" Months":"",props.studyLevel,props.studyMode?Word2Sentence(props.studyMode):""],"","|")}</Text>
                 </View>
             </View>
-        </View>
+        </Pressable>
     )
 }
 

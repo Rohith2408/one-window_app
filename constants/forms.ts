@@ -139,6 +139,7 @@ const forms:FormInfo[]=[
             },
             onSubmit:async (data:{email:string,password:string})=>{
                 let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:data.email,password:data.password}})
+                console.log("ressss",res)
                 return res;
             },
             redirect:(data:any)=>({type:"Login"}),
@@ -198,8 +199,8 @@ const forms:FormInfo[]=[
                 {id:"email",value:""},
                 {id:"password",value:""},
                 {id:"confirmpassword",value:""},
-                {id:"preffereddestinations",value:""},
-                {id:"prefferedlanguage",value:""},
+                {id:"preffereddestinations",value:[]},
+                {id:"prefferedlanguage",value:[]},
             ]
         },
         submit:{
@@ -210,19 +211,21 @@ const forms:FormInfo[]=[
                     email:data[data.findIndex((item)=>item.id=="email")].value,
                     password:data[data.findIndex((item)=>item.id=="password")].value,
                     confirmpassword:data[data.findIndex((item)=>item.id=="confirmpassword")].value,
-                    preffereddestinations:data[data.findIndex((item)=>item.id=="preffereddestinations")].value,
-                    prefferedlanguage:data[data.findIndex((item)=>item.id=="prefferedlanguage")].value,
+                    preffereddestinations:data[data.findIndex((item)=>item.id=="preffereddestinations")].value[0].value,
+                    prefferedlanguage:data[data.findIndex((item)=>item.id=="prefferedlanguage")].value[0].value,
                 }
                 return info
             },
             onSubmit:async (data:{firstname:string,lastname:string,email:string,password:string,confirmpassword:string,preffereddestinations:string[],prefferedlanguage:string})=>{
-                let res:ServerResponse=await serverRequest({url:getServerRequestURL("register","POST"),reqType:"POST",body:{email:data.email,password:data.password}})
+                console.log("reg",data);
+                let res:ServerResponse=await serverRequest({url:getServerRequestURL("register","POST"),routeType:"public",reqType:"POST",body:{firstName:data.firstname,lastName:data.lastname,email:data.email,password:data.password,country:data.preffereddestinations,language:data.prefferedlanguage,DeviceToken:""}})
+                console.log("ressss signup",res)
                 return res;
             },
             redirect:(data:any)=>({type:"Login"}),
             successText:"Success!",
             failureText:"Failed :(",
-            idleText:"Login"
+            idleText:"Register"
         },
         allFields:[
             {
@@ -302,11 +305,11 @@ const forms:FormInfo[]=[
                     props:{placeholder:""}
                 },
                 title:"Confirm Password",
-                validator:(data:string)=>({
-                    success:validations.PASSWORD.regex.test(data),
-                    message:validations.PASSWORD.errorMessage,
+                validator:(data:string)=>{console.log("aallkk",data,getBasket("password"));return {
+                    success:getBasket("password")==data,
+                    message:"Password Mismatch",
                     data:undefined
-                }),
+                }},
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
@@ -349,9 +352,8 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        selectionMode:"multi",
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"preffereddestinations",newvalue:data}}}),
                         selectionMode:"single",
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"preffereddestinations",newvalue:data}}}),
                         basketid:"preffereddestinations-dropdown"
                     }
                 },
@@ -364,6 +366,117 @@ const forms:FormInfo[]=[
                     event:"onToggle"
                 }
             },
+        ]
+    },
+    {
+        id:"Forgotpassword",
+        getInitialData:(id:string|undefined)=>{
+            let info=id?getBasket(id):undefined
+            console.log("ssss",info,id)
+            return [
+                {id:"email",value:info?info.email:""},
+                {id:"verificationcode",value:""},
+                {id:"newpassword",value:""},
+                {id:"confirmpassword",value:""}
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let info={
+                    email:data[data.findIndex((item)=>item.id=="email")].value,
+                    verificationcode:data[data.findIndex((item)=>item.id=="verificationcode")].value,
+                    newpassword:data[data.findIndex((item)=>item.id=="newpassword")].value,
+                    confirmpassword:data[data.findIndex((item)=>item.id=="confirmpassword")].value
+                }
+                return info
+            },
+            onSubmit:async (data:{email:string,verificationcode:string,newpassword:string})=>{
+                let res:ServerResponse=await serverRequest({url:getServerRequestURL("","POST"),reqType:"POST",routeType:"public",body:{email:data.email,password:data.newpassword,otp:data.verificationcode}})
+                return res;
+            },
+            redirect:(data:any)=>({type:"RemoveScreen"}),
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Reset Password"
+        },
+        allFields:[
+            {
+                id:"email",
+                componentInfo:{
+                    component:Textbox,
+                    props:{
+                        readonly:true
+                    }
+                },
+                title:"Email",
+                validator:(data)=>({
+                    success:validations.EMAIL.regex.test(data),
+                    message:validations.EMAIL.errorMessage,
+                    data:undefined
+                }),
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"verificationcode",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Verification Code",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"newpassword",
+                componentInfo:{
+                    component:Passwordinput,
+                    props:{placeholder:"Should be atleast 8 characters"}
+                },
+                title:"New Password",
+                validator:(data:string)=>({
+                    success:validations.PASSWORD.regex.test(data),
+                    message:validations.PASSWORD.errorMessage,
+                    data:undefined
+                }),
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"confirmpassword",
+                componentInfo:{
+                    component:Passwordinput,
+                    props:{placeholder:"Should be atleast 8 characters"}
+                },
+                title:"Confirm Password",
+                validator:(data:string)=>({
+                    success:getBasket("newpassword")==data,
+                    message:"Password Mismatch",
+                    data:undefined
+                }),
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            }
         ]
     },
     {
@@ -383,7 +496,6 @@ const forms:FormInfo[]=[
         },
         submit:{
             dataConverter:(data:FormData[],id?:string)=>{
-                //console.log("id",id)
                 let info:Sharedinfo={
                     _id:store.getState().sharedinfo.data?._id,
                     firstName:data[data.findIndex((item)=>item.id=="firstname")].value,
@@ -391,12 +503,19 @@ const forms:FormInfo[]=[
                     email:data[data.findIndex((item)=>item.id=="email")].value.email,
                     phone:{countryCode:data[data.findIndex((item)=>item.id=="phone")].value.countryCode[0].dial_code,number:data[data.findIndex((item)=>item.id=="phone")].value.phoneNumber},
                 }
-                console.log("kkk",info);
                 return info
             },
             onSubmit:async (data:Sharedinfo)=>{
                 let res:ServerResponse=await profileUpdator({...data},(res)=>res.success?store.dispatch(setSharedInfo({...store.getState().sharedinfo.data,...data})):null)
-                return res
+                let res2:ServerResponse=await serverRequest({
+                    url:getServerRequestURL("edit-phone","PUT"),
+                    reqType:"PUT",
+                    body:{
+                        phone:data.phone
+                    }
+                })
+                console.log("reply",res,res2)
+                return {success:res.success && res2.success,data:undefined,message:res.message+" , "+res2.message}
             },
             successText:"Success!",
             failureText:"Failed :(",
@@ -477,6 +596,13 @@ const forms:FormInfo[]=[
                         }
                     }
                 },
+                //isOptional:true,
+                validator:(data:{countryCode:ListItem[],phoneNumber:string,verified:boolean})=>({
+                    success:validations.PHONENUMBER.regex.test(data.phoneNumber),
+                    data:undefined,
+                    message:validations.PHONENUMBER.errorMessage
+                }),
+                emptyChecker:(data:{countryCode:ListItem[],phoneNumber?:string,verified?:boolean})=>({success:!(data.countryCode.length>0 && (data.phoneNumber && data.phoneNumber.length>0)),message:data.countryCode.length?"Dial code cannot be empty":"Phone number cannot be empty",data:undefined}),
                 title:"Phone",
                 onUpdate:{
                     event:"onTextInput",
@@ -745,8 +871,8 @@ const forms:FormInfo[]=[
                 {id:"state",value:data?.state?[{label:setWordCase(data.state),value:data.state}]:[]},
                 {id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
                 {id:"languageofinstruction",value:data?.languageOfInstruction?[{label:setWordCase(data.languageOfInstruction),value:data.languageOfInstruction}]:[]},
-                {id:"board",value:data?.board?[{label:setWordCase(data.board),value:data.board}]:[]},
-                {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
+                {id:"board",value:data?.board?[{label:data.board,value:data.board}]:[]},
+                {id:"gradingsystem",value:data?.gradingSystem?[{label:data.gradingSystem,value:data.gradingSystem}]:[]},
                 {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
                 {id:"startdate",value:data?.startDate?data.startDate:undefined},
                 {id:"enddate",value:data?.endDate?data.endDate:undefined},
@@ -833,7 +959,7 @@ const forms:FormInfo[]=[
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let states=selectedCountry?await fetchStates(selectedCountry):undefined
-                                return {success:(selectedCountry && states),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:""}
+                                return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
@@ -869,7 +995,7 @@ const forms:FormInfo[]=[
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
                                 let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
-                                return {success:(selectedCountry && selectedState && cities),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:""}
+                                return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
@@ -902,12 +1028,6 @@ const forms:FormInfo[]=[
                                 {label:"AISSCE",value:"AISSCE"},
                                 {label:"other",value:"other"}
                             ],
-                            fetcher:async ()=>{
-                                let selectedCountry=getBasket("country")[0]?.label
-                                let selectedState=getBasket("state")[0]?.label
-                                let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):[]
-                                return cities.map((city:any)=>({label:setWordCase(city),value:city}))
-                            },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
@@ -1188,7 +1308,7 @@ const forms:FormInfo[]=[
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let states=selectedCountry?await fetchStates(selectedCountry):undefined
-                                return {success:(selectedCountry && states),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:""}
+                                return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
@@ -1224,7 +1344,7 @@ const forms:FormInfo[]=[
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
                                 let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
-                                return {success:(selectedCountry && selectedState && cities),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:""}
+                                return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
@@ -1556,7 +1676,7 @@ const forms:FormInfo[]=[
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let states=selectedCountry?await fetchStates(selectedCountry):undefined
-                                return {success:(selectedCountry && states),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:""}
+                                return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
@@ -1592,7 +1712,7 @@ const forms:FormInfo[]=[
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
                                 let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
-                                return {success:(selectedCountry && selectedState && cities),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:""}
+                                return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
@@ -1874,7 +1994,7 @@ const forms:FormInfo[]=[
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let states=selectedCountry?await fetchStates(selectedCountry):undefined
-                                return {success:(selectedCountry && states),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:""}
+                                return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
@@ -1910,7 +2030,7 @@ const forms:FormInfo[]=[
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
                                 let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
-                                return {success:(selectedCountry && selectedState && cities),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:""}
+                                return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             } ,
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
@@ -2459,7 +2579,7 @@ const forms:FormInfo[]=[
                         datesFetcher:async ()=>{
                             let expert=getBasket("expert")
                             console.log("aaaddd",expert,getServerRequestURL("vacant-slots","GET")+"/"+expert.id);
-                            if(!expert)
+                            if(expert.length==0)
                             {
                                 return {success:false,data:undefined,message:""}
                             }

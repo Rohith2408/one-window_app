@@ -85,6 +85,7 @@ const Email=(props:{value:{email:string|undefined,verified:boolean},id:string})=
             url:getServerRequestURL("email-verification","POST"),
             reqType: "POST"
         });
+        console.log("email res",res)
         !res.success?setMessage("Something went wrong"):setMessage("Verification link has been sent to your email");
         setIsLoading(false);
         return res

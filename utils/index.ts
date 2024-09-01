@@ -1,6 +1,6 @@
 import { Dimensions, LayoutAnimation, Platform } from "react-native";
 import { Api, GradingSystems, Tests, Themes, baseAppUrl,secureStoreKeys } from "../constants";
-import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem } from "../types";
+import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem, Product, Package } from "../types";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
@@ -117,6 +117,7 @@ export const getAllCharOccurences=(str:string, char:string)=>{
 }
 
 export const getComponent=(id:string)=>{
+  //console.log("componbents",components);
   return components.find((component)=>component.id==id)
 }
 
@@ -558,3 +559,56 @@ export const getThemeColor=(index:number)=>{
   let colors=[Themes.Light.OnewindowRed(1),Themes.Light.OnewindowPurple(1),Themes.Light.OnewindowYellow(1),Themes.Light.OnewindowTeal(1)];
   return colors[index]
 }
+
+export const keyVerifier=(data:any,keys:string[])=>{
+    let givenKeys=Object.keys(data)
+    let nonExistingKeys=keys.filter((item)=>givenKeys.find((item2)=>item2==item)?false:true);
+    return {
+      success:nonExistingKeys.length==0,
+      data:nonExistingKeys,
+      message:Word2Sentence(nonExistingKeys,"Keys that don't exist- ")
+    }
+}
+
+export const ISOtoIntakeformat=(iso:string)=>{
+  const date = new Date(iso);
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+  const formattedDate = `${month}/${day}/${year}`;
+  return formattedDate;
+}
+
+export const PackageProductsValidator=(Package:Package|undefined,Products:Product[])=>{
+  let errors:{id:string,data:any}[]=[];
+  let ordersPlaced=store.getState().orders.data
+  let alreadyPurchasedProducts=Products.filter((Product)=>ordersPlaced.find((order)=>order.products.find((item)=>compareProducts({category:item.category,course:{id:item.course._id,name:item.course.name},intake:item.intake},Product)))?true:false)
+  if(alreadyPurchasedProducts.length!=0)
+  {
+    errors.push({id:"already_purchased",data:alreadyPurchasedProducts});
+  }
+  if(Package!=undefined)
+  {
+    let numberOfProductsAllowed=Package.products.reduce((acc,curr)=>acc+curr.quantity,0);
+    let unfitProducts=Products.filter((product)=>Package.products.find((item)=>item.category==product.category)?false:true)
+    let fitProducts=Products.filter((product)=>Package.products.find((item)=>item.category==product.category)?true:false)
+    if(unfitProducts.length!=0)
+    {
+      errors.push({id:"unfit",data:unfitProducts})
+    }
+    if(fitProducts.length>numberOfProductsAllowed)
+    {
+      errors.push({id:"overflow",data:numberOfProductsAllowed-fitProducts.length})
+    }
+  }
+  return errors;
+}
+
+export const getAlreadyPurchasedProducts=()=>{
+
+}
+
+export const compareProducts=(product1:Product,product2:Product)=>{
+  return product1.category==product2.category && product1.course.id==product2.course.id && product1.intake==product2.intake
+}
+

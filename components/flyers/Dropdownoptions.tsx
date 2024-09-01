@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
-import { getBasket } from "../../constants/basket"
+import { getBasket, removeFromBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
 import { ListItem } from "../../types"
 import { Fonts, Themes } from "../../constants"
@@ -50,7 +50,6 @@ const Dropdownoptions=(props:{basketid:string})=>{
     const Card=info.options.card
 
     const selection=(data:any)=>{
-
         if(selected.find((item)=>info.options.idExtractor(item)==info.options.idExtractor(data))){
             setSelected(selected.filter((item)=>info.options.idExtractor(item)!=info.options.idExtractor(data)))
         }
@@ -61,7 +60,9 @@ const Dropdownoptions=(props:{basketid:string})=>{
     }
 
     useEffect(()=>{
-
+        return ()=>{
+            removeFromBasket(props.basketid)
+        }
     },[])
 
     const apply=()=>{

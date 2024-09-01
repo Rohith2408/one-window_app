@@ -212,6 +212,13 @@ const Loginbase=(props:{auth:string})=>{
 
     const openSignup=()=>{
         navigate?navigate({type:"Register"}):null
+        setTimeout(()=>{
+            navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Login"}}):null
+        },200)
+    }
+
+    const openForgotPassword=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Forgotpassword"}}}):null
     }
 
     const eventHandler=async (event:Event)=>{
@@ -332,7 +339,7 @@ const Loginbase=(props:{auth:string})=>{
                         <Pressable onPress={openSignup}><Text style={[styles[Device].noaccount,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Don't have an account?</Text></Pressable>
                     </View>
                     <View>
-                        <Text style={[styles[Device].forgot,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Forgot Password?</Text>
+                        <Pressable onPress={openForgotPassword}><Text style={[styles[Device].forgot,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Forgot Password?</Text></Pressable>
                     </View>
                 </View>
             </View>

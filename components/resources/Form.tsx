@@ -91,7 +91,7 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitialdataid?:string})=>{
+const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate?:{id:string,newvalue:any},forminitialdataid?:string})=>{
 
     const formInfo=useRef(forms.find((form)=>form.id==props.formid)).current
     const [fields,dispatch]=useReducer(FormReducer,formInfo?formInfo.getInitialData(props.forminitialdataid):[]);
@@ -143,6 +143,9 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
             if(handler)
             {
                 res=await handler(formInfo?.submit.dataConverter?formInfo.submit.dataConverter(fields,props.forminitialdataid):fields);
+                if(!res.success){
+
+                }
                 if(formInfo?.submit.redirect)
                 {
                     //console.log("aaa",JSON.stringify(formInfo.submit.redirect(res.data),null,2));
@@ -165,6 +168,7 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
             let isEmpty=false;
             let validation:ServerResponse={success:false,message:"",data:undefined}
             isEmpty=(info?.emptyChecker)?(info.emptyChecker(field.value).success):(field.value==undefined || field.value?.length==0)
+            console.log("bhai",field.id,isEmpty,field.value,info?.emptyChecker?info.emptyChecker(field.value):"ledu");
             !isEmpty ? validation=(info?.validator)?info.validator(field.value):{success:true,message:"",data:undefined} :null
             error=(isEmpty && !info?.isOptional)?"Field cannot be empty":(!validation.success?validation.message:undefined)
             error?errors.push({id:field.id,error:error}):null
@@ -183,6 +187,31 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
     },[props.formupdate])
 
     useEffect(()=>{
+        if(props.formerrors)
+        {
+            let errorexisting=errors.find((error)=>error.id==props.formerrors?.id)?true:false
+            if(errorexisting)
+            {
+                if(props.formerrors.error!=undefined)
+                {
+                    setError(errors.map((error)=>error.id==props.formerrors?.id?props.formerrors:error))
+                }
+                else
+                {
+                    setError(errors.filter((error)=>error.id!=props.formerrors?.id))
+                }
+            }
+            else
+            {
+                if(props.formerrors!=undefined)
+                {
+                    setError([...errors,props.formerrors])
+                }
+            }
+        }
+    },[props.formerrors])
+
+    useEffect(()=>{
         formInfo?.onLoad?formInfo.onLoad():null
         return (()=>clearBasket())
     },[])
@@ -191,9 +220,10 @@ const Form=(props:{formid:string,formupdate?:{id:string,newvalue:any},forminitia
         fields.forEach(field => {
             addToBasket(field.id,field.value);
         })
+        console.log(getFullBasket())
     },[fields])
 
-    console.log("fields",fields);
+    //console.log("fields",fields);
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>

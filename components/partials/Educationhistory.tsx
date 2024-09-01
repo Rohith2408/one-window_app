@@ -216,11 +216,14 @@ const School=(props:{data:EducationHistory_School|undefined})=>{
                 </View>
             </View>
             :
-            <View>
-                <View style={[GeneralStyles.icon_wrapper]}><Image source={school_icon} style={[styles[Device].card_icon]} /></View>
+            <View style={{flex:1,flexDirection:'row',gap:10}}>
+                <View style={[GeneralStyles.icon_wrapper]}><Image source={inter_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
-                    <Pressable onPress={add}><Image  source={add_icon}/></Pressable>
-                    <Text>Details not added</Text>
+                    <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>School</Text>
+                    <View style={[GeneralStyles.nodetails_wrapper]}>
+                        <Pressable onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
+                        <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
+                    </View>
                 </View>
             </View>
         }

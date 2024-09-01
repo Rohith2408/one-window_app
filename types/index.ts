@@ -27,6 +27,7 @@ export type ListInfo={
         additional:AdditionalFilterInfo[],
         quick:QuickFilterInfo[]
     },
+    //propsBuilder(currentProps:{search:string,page:number,}):,
     pageUpdator:(page:number)=>NavigationActions
     listFetcher:(search:string,appliedFilters:AppliedFilter[],page:number)=>Promise<ServerResponse>
 }
@@ -270,17 +271,19 @@ export type CartItem={
         studyLevel: string,
         duration: number,
         studyMode: string[],
-        startDate: {
-            _id: string,
-            courseStarting: string,
-            Deadline: string,
-            courseStartingMonth: number,
-            deadlineMonth: number
-        }[],
+        startDate: ProgramIntake[],
         elite: true
     },
     intake: string,
     _id: string
+}
+
+export type ProgramIntake={
+    _id: string,
+    courseStarting: string,
+    Deadline: string,
+    courseStartingMonth: number,
+    deadlineMonth: number
 }
 
 export type wishlistItem={
@@ -1119,6 +1122,16 @@ export interface Meeting_Server{
 }
 
 export interface Product{
+    category:string,
+    intake:string,
+    course:{
+        id:string,
+        name:string
+    }
+}
+
+
+export interface PurchasedProduct{
     info: {
         notes: string[],
         questionnaire: string[]
@@ -1185,7 +1198,7 @@ export interface Order{
     },
     _id: string,
     Package:Package,
-    products: Product[],
+    products: PurchasedProduct[],
     status: string,
     logs: {
         action: string,
@@ -1235,5 +1248,26 @@ export interface AvailableSlot{
         startTime: string
     }[],
     date: string
+}
+
+export interface RequestInfo{
+    id:string,
+    inputValidator:(data:any)=>ServerResponse,
+    serverCommunicator:(data:any)=>Promise<ServerResponse>,
+    responseHandler:(data:ServerResponse)=>void
+}
+
+export interface PreferenceInfo{
+    id:string,
+    title:string,
+    options:{
+        list:any[],
+        idExtractor:(item:any)=>any,
+        labelExtractor:(item:any)=>any,
+        card:React.FC<any>,
+        selectionMode:"single"|"multi",
+        selectionLimit?:number
+    },
+    getInitialData:()=>any
 }
 

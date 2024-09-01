@@ -19,10 +19,11 @@ export const cartSlice=createSlice({
             let index=state.data.findIndex((item)=>item._id==action.payload._id);
             state.data[index]=action.payload;
         },
+        setCart:(state,action:PayloadAction<CartItem[]>)=>{state.data=action.payload},
         removeCart:(state,action:PayloadAction<string>)=>{state.data=state.data.filter((item)=>item._id!=action.payload)},
         resetCart:(state,action:PayloadAction)=>({...initialState})
     }
 })
 
-export const {initCart,addCart,removeCart,updateCart,resetCart}=cartSlice.actions;
+export const {initCart,addCart,setCart,removeCart,updateCart,resetCart}=cartSlice.actions;
 export default cartSlice.reducer;
