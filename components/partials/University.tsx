@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
-import { Course, Event, Product, ProgramIntake, ServerResponse } from "../../types"
+import { Course, Event, Product, ProgramIntake, ServerResponse, University as UniversityType } from "../../types"
 import { PackageProductsValidator, Word2Sentence, getDevice, getServerRequestURL, getThemeColor, serverRequest } from "../../utils";
 import { cartRequest } from "../../utils/serverrequests";
 import useNavigation from "../../hooks/useNavigation";
@@ -73,10 +73,6 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:"column",
         gap:7,
         alignItems:'flex-start'
-    },
-    actions_wrapper:{
-        flexDirection:'row',
-        gap:10
     }
 })
 
@@ -138,9 +134,6 @@ const MobileSStyles=StyleSheet.create({
     },
     about_heading:{
         fontSize:14,
-    },
-    add_to_cart:{
-        fontSize:10
     }
 })
 
@@ -197,9 +190,6 @@ const MobileMStyles=StyleSheet.create({
     about:{
         fontSize:14,
         lineHeight:24
-    },
-    add_to_cart:{
-        fontSize:14
     }
 })
 
@@ -216,106 +206,50 @@ const styles={
 }
 
 
-const Program=(props:{programid:string})=>{
+const University=(props:{universityid:string})=>{
 
-    let [programInfo,setProgramInfo]=useState<Course|undefined>();
+    let [universityInfo,setUniversityInfo]=useState<UniversityType|undefined>();
     const [path,navigate]=useNavigation();
-    const freePackageInfo=useRef(store.getState().suggestedpackages.data.find((item)=>item.priceDetails.totalPrice==0)).current;
-    const feePackagePurchased=useRef(store.getState().orders.data.find((order)=>order.Package.priceDetails.totalPrice==0)?true:false).current
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const dashboardInfo=[
-        {icon:fee_icon,label:"Duration",value:programInfo?.duration},
-        {icon:fee_icon,label:"Credits",value:programInfo?.totalCredits},
-        {icon:fee_icon,label:"Fees",value:programInfo?.tuitionFee?.tuitionFee+(programInfo?.tuitionFee?.tuitionFeeType=="year"?"/p.a":"")},
-        {icon:fee_icon,label:"Study Level",value:programInfo?.studyLevel},
-        {icon:fee_icon,label:"Study Mode",value:programInfo?.studyMode},
-        {icon:fee_icon,label:"Currency",value:programInfo?.currency?.symbol}
+        {icon:fee_icon,label:"Acceptance",value:universityInfo?.acceptanceRate},
+        {icon:fee_icon,label:"Graduation",value:universityInfo?.graduationRate},
+        {icon:fee_icon,label:"Mediam Earning",value:universityInfo?.medianEarning},
+        {icon:fee_icon,label:"Type",value:universityInfo?.type},
+        {icon:fee_icon,label:"Code",value:universityInfo?.code},
+        {icon:fee_icon,label:"Courses",value:universityInfo?.courses}
     ]
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
 
-    const order=(event:Event)=>{
-        console.log(event);
-        addToBasket(props.programid,{
-            package:freePackageInfo,
-            products:[{
-                intake:new Date(event.data.year,parseInt(event.data.month)-1,10).toISOString(),
-                category:programInfo?.elite?"elite application":"premium application",
-                course:{name:programInfo?.name,id:programInfo?._id}
-            }]
-        }) 
-        navigate?navigate({type:"AddScreen",payload:{screen:"Order",params:{orderinfoid:props.programid}}}):null
-    }
-
-    const fetchProgram=async ()=>{
-        console.log("id",props.programid)
+    const fetchUniversity=async ()=>{
+        console.log("id",props.universityid)
         const res:ServerResponse=await serverRequest({
-            url:getServerRequestURL("program","GET",{id:props.programid,currency:"INR"}),
+            url:getServerRequestURL("university","GET",{id:props.universityid,currency:"INR"}),
             reqType:"GET"
         });
-        res.success?setProgramInfo(res.data):null
-    }
-
-    const showIntakes=(callback:any)=>{
-        let dropdowndata={
-            list:programInfo?.startDate,
-            onselection:callback
-        }
-        addToBasket("intakes-dropdownoptions",dropdowndata);
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
-    }
-
-    const addToCart=async (event:Event)=>{
-        let data={
-            action:"add",
-            category:programInfo?.elite?"elite application":"premium application",
-            courseId:programInfo?._id,
-            intake:(event.data.month).padStart(2, '0')+"/"+"10"+"/"+event.data.year
-        }
-        let requestInfo=requests.find((item)=>item.id=="addToCart");
-        let validation=requestInfo?.inputValidator(data);
-        if(validation?.success)
-        {
-            let serverRes=await requestInfo?.serverCommunicator(data);
-            if(serverRes?.success)
-            {
-                requestInfo?.responseHandler(serverRes);
-            }
-        }
-    }
-
-    const removeFromCart=async (event:Event)=>{
-        let res:ServerResponse=await cartRequest({
-            action: "remove",
-            category:programInfo?.elite?"elite application":"premium application",
-            course:programInfo?._id,
-            intake:"10"+event.data.month.padStart(2, '0')+"/"+"/"+event.data.year
-        })
-        //res.success?removeCart():null
+        res.success?setUniversityInfo(res.data):null
     }
 
     useEffect(()=>{
-        fetchProgram();
+        fetchUniversity();
     },[])
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
         {
-            programInfo
+            universityInfo
             ?
             <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:40}}>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
-                        <Image source={programInfo.university?.logoSrc} style={[styles[Device].uni_icon]}/>
+                        <Image source={universityInfo.logoSrc} style={[styles[Device].uni_icon]}/>
                         <View style={[styles[Device].uni_icon_bg,{position:"absolute",zIndex:-1,backgroundColor:getThemeColor(0)}]}></View>
                     </View>
                     <View style={[GeneralStyles.uni_info_wrapper]}>
-                        <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{programInfo.name}</Text>
+                        <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{universityInfo.name}</Text>
                         <View style={[GeneralStyles.location_wrapper]}>
                             <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([programInfo.university?.name,programInfo.university?.location?.country],"")}</Text></View>
-                        </View>
-                        <View style={[GeneralStyles.actions_wrapper]}>
-                            <Pressable onPress={showIntakes} style={{borderWidth:1,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}><Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium,padding:7,paddingLeft:15,paddingRight:15}]}>Add to Cart</Text></Pressable>
+                            <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([universityInfo.location.city,universityInfo.location.state,universityInfo.location.country],"")}</Text></View>
                         </View>
                     </View>
                 </View>
@@ -331,14 +265,6 @@ const Program=(props:{programid:string})=>{
                         <Dashboarditem {...dashboardInfo[5]} index={1}/>
                     </View>
                 </View>
-                <View style={[GeneralStyles.about_wrapper]}>
-                    <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>About</Text>
-                    <Text style={[styles[Device].about,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{programInfo.about}</Text>
-                </View>
-                {/* <Text>{programInfo.name}</Text>
-                <Text>{programInfo.university?.name}</Text>
-                <Pressable onPress={()=>showIntakes(addToCart)}><Text>Add to cart</Text></Pressable>
-                <Pressable onPress={()=>showIntakes(order)}><Text>Apply</Text></Pressable> */}
             </ScrollView>
             :
             <Text>Loading</Text>
@@ -362,4 +288,4 @@ const Dashboarditem=(data:{label:string,value:string,icon:string,index:number})=
 
 }
 
-export default Program
+export default University

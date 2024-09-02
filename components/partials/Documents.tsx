@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
-import { Word2Sentence, formatDate, getDevice, getServerRequestURL, pickDocument, serverRequest } from "../../utils"
-import { Documents as DocumentsType, Document as DocumentType, ServerResponse, Request } from "../../types"
+import { Word2Sentence, formatDate, getDevice, getServerRequestURL, pickDocument, serverRequest, setWordCase } from "../../utils"
+import { Documents as DocumentsType, Document as DocumentType, ServerResponse, Request, Event } from "../../types"
 import Tabbar from "../resources/Tabbar"
 import { useRef, useState } from "react"
 import Tabnavigator from "../../navigation/tabNavigator"
@@ -17,6 +17,8 @@ import { setDocuments } from "../../store/slices/documentsSlice"
 import Nestedview from "../resources/Nestedview"
 import add_icon from '../../assets/images/misc/add.png'
 import { store } from "../../store"
+import Docview from "../flyers/Docview"
+import Docviewer from "../resources/Docviewer"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -192,10 +194,10 @@ const Personal=(props:Request<DocumentsType>)=>{
     let documents=props.data.personal
 
     return(
-        <View>
-            <Document title="Resume" fieldPath="personal.resume" doc={documents?.resume}></Document>
-            <Document title="PassportBD" fieldPath="personal.passportBD" doc={documents?.passportBD}></Document>
-            <Document title="PassportADD" fieldPath="personal.passportADD" doc={documents?.passportADD}></Document>
+        <View style={{gap:20}}>
+            <Document docIdentifier="Resume" title="Resume" fieldPath="personal.resume" doc={documents?.resume}></Document>
+            <Document docIdentifier="PassportBD" title="PassportBD" fieldPath="personal.passportBD" doc={documents?.passportBD}></Document>
+            <Document docIdentifier="PassportADD" title="PassportADD" fieldPath="personal.passportADD" doc={documents?.passportADD}></Document>
         </View>
     )
 }
@@ -206,25 +208,25 @@ const Academic=(props:Request<DocumentsType>)=>{
 
     return(
         <View style={{gap:50,padding:10}}>
-            <Document title="Secondary School" fieldPath="academic.secondarySchool" doc={documents?.secondarySchool}></Document>
-            <Document title="Intermediate" fieldPath="academic.plus2" doc={documents?.plus2}></Document>
-            <Document title="Degree" fieldPath="academic.degree" doc={documents?.degree}></Document>
+            <Document docIdentifier="Secondary School" title="Secondary School" fieldPath="academic.secondarySchool" doc={documents?.secondarySchool}></Document>
+            <Document docIdentifier="Intermediate" title="Intermediate" fieldPath="academic.plus2" doc={documents?.plus2}></Document>
+            <Document docIdentifier="Degree" title="Degree" fieldPath="academic.degree" doc={documents?.degree}></Document>
             <Nestedview title="Bachelors" maxHeight={150}>
                 <View style={{gap:15}}>
-                    <Document title="Transcripts" fieldPath="academic.bachelors.transcripts" doc={documents?.bachelors?.transcripts}></Document>
-                    <Document title="Bonafide" fieldPath="academic.bachelors.bonafide" doc={documents?.bachelors?.bonafide}></Document>
-                    <Document title="CMM" fieldPath="academic.bachelors.CMM" doc={documents?.bachelors?.CMM}></Document>
-                    <Document title="PCM" fieldPath="academic.bachelors.PCM" doc={documents?.bachelors?.PCM}></Document>
-                    <Document title="OD" fieldPath="academic.bachelors.OD" doc={documents?.bachelors?.OD}></Document>
+                    <Document docIdentifier="Bachelors Transcripts" title="Transcripts" fieldPath="academic.bachelors.transcripts" doc={documents?.bachelors?.transcripts}></Document>
+                    <Document docIdentifier="Bachelors Bonafide" title="Bonafide" fieldPath="academic.bachelors.bonafide" doc={documents?.bachelors?.bonafide}></Document>
+                    <Document docIdentifier="Bachelors CMM" title="CMM" fieldPath="academic.bachelors.CMM" doc={documents?.bachelors?.CMM}></Document>
+                    <Document docIdentifier="Bachelors PCM" title="PCM" fieldPath="academic.bachelors.PCM" doc={documents?.bachelors?.PCM}></Document>
+                    <Document docIdentifier="Bachelors OD" title="OD" fieldPath="academic.bachelors.OD" doc={documents?.bachelors?.OD}></Document>
                 </View>
             </Nestedview>
             <Nestedview title="Masters" maxHeight={150}>
                 <View style={{gap:15}}>
-                    <Document title="Transcripts" fieldPath="academic.masters.transcripts" doc={documents?.masters?.transcripts}></Document>
-                    <Document title="Bonafide" fieldPath="academic.masters.bonafide" doc={documents?.masters?.bonafide}></Document>
-                    <Document title="CMM" fieldPath="academic.masters.CMM" doc={documents?.masters?.CMM}></Document>
-                    <Document title="PCM" fieldPath="academic.masters.PCM" doc={documents?.masters?.PCM}></Document>
-                    <Document title="OD" fieldPath="academic.masters.OD" doc={documents?.masters?.OD}></Document>
+                    <Document docIdentifier="Masters Transcripts" title="Transcripts" fieldPath="academic.masters.transcripts" doc={documents?.masters?.transcripts}></Document>
+                    <Document docIdentifier="Masters Transcripts" title="Bonafide" fieldPath="academic.masters.bonafide" doc={documents?.masters?.bonafide}></Document>
+                    <Document docIdentifier="Masters Transcripts" title="CMM" fieldPath="academic.masters.CMM" doc={documents?.masters?.CMM}></Document>
+                    <Document docIdentifier="Masters Transcripts" title="PCM" fieldPath="academic.masters.PCM" doc={documents?.masters?.PCM}></Document>
+                    <Document docIdentifier="Masters Transcripts" title="OD" fieldPath="academic.masters.OD" doc={documents?.masters?.OD}></Document>
                 </View>
             </Nestedview>
         </View>
@@ -238,7 +240,7 @@ const Work=(props:Request<DocumentsType>)=>{
     const [isLoading,setIsLoading]=useState<boolean>(false)
     const upload=async ()=>{
         setIsLoading(true);
-        let res=await uploadDoc("workExperiences",updateStore);
+        let res=await uploadDoc("workExperiences","Work Experience Document "+documents.length,updateStore);
         setIsLoading(false)
     }
 
@@ -248,7 +250,7 @@ const Work=(props:Request<DocumentsType>)=>{
             <View style={{gap:15}}>
             {
                 documents?.map((doc)=>
-                <Document key={doc._id} title="Work Document" fieldPath="workExperiences" doc={doc}></Document>
+                <Document docIdentifier="Work Document" key={doc._id} title="Work Document" fieldPath="workExperiences" doc={doc}></Document>
                 )
             } 
             </View>  
@@ -261,9 +263,10 @@ const Test=(props:Request<DocumentsType>)=>{
     let documents=props.data.test
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [isLoading,setIsLoading]=useState<undefined|"language"|"general">(undefined)
+    
     const upload=async (fieldPath:string,type:undefined|"language"|"general")=>{
         setIsLoading(type);
-        let res=await uploadDoc(fieldPath,updateStore);
+        let res=await uploadDoc(fieldPath,setWordCase(type)+" Test Document"+(type=="language"?documents?.languageProf.length:documents?.general?.length),updateStore);
         setIsLoading(undefined)
     }
 
@@ -275,7 +278,7 @@ const Test=(props:Request<DocumentsType>)=>{
                     <View style={{gap:15}}>
                     {
                         documents?.languageProf?.map((doc)=>
-                        <Document key={doc._id} title="Test Document" fieldPath="test.languageProf" doc={doc}></Document>
+                        <Document docIdentifier="Test Document" key={doc._id} title="Test Document" fieldPath="test.languageProf" doc={doc}></Document>
                         )
                     } 
                 </View>  
@@ -287,7 +290,7 @@ const Test=(props:Request<DocumentsType>)=>{
                     <View style={{gap:15}}>
                     {
                         documents?.general?.map((doc)=>
-                        <Document key={doc._id} title="Test Document" fieldPath="test.general" doc={doc}></Document>
+                        <Document docIdentifier="Test Document" key={doc._id} title="Test Document" fieldPath="test.general" doc={doc}></Document>
                         )
                     } 
                 </View>  
@@ -297,7 +300,7 @@ const Test=(props:Request<DocumentsType>)=>{
     )
 }
 
-const Document=(props:{title:string,fieldPath:string,doc:DocumentType|undefined})=>{
+const Document=(props:{title:string,docIdentifier:string,fieldPath:string,doc:DocumentType|undefined})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [isLoading,setIsLoading]=useState(false);
@@ -305,7 +308,8 @@ const Document=(props:{title:string,fieldPath:string,doc:DocumentType|undefined}
 
     const upload=async ()=>{
         setIsLoading(true);
-        let res=await uploadDoc(props.fieldPath,updateStore);
+        let res=await uploadDoc(props.fieldPath,props.docIdentifier,updateStore);
+        return res;
         setIsLoading(false)
     }
 
@@ -320,12 +324,31 @@ const Document=(props:{title:string,fieldPath:string,doc:DocumentType|undefined}
             {
                 dispatch(setDocuments(res.data));
             }   
+            return res
         }
     }
 
+    const eventHandler=async (event:Event)=>{
+        switch(event.name){
+            case "upload":
+                await upload()
+                break;
+
+            case "download":
+                break
+
+            case "delete":
+                await remove()
+                break
+        }
+    }
+
+    console.log("doc",props.doc)
+
     return(
         <View style={[GeneralStyles.document_wrapper]}>
-            <View style={{display:'flex',flex:1,flexDirection:'column',gap:5}}>
+            <Docviewer title={props.title} id={props.doc?._id} eventHandler={eventHandler} value={props.doc}/>
+            {/* <View style={{display:'flex',flex:1,flexDirection:'column',gap:5}}>
                 <Text style={[styles[Device].document_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text>
                 {
                     props.doc
@@ -347,7 +370,7 @@ const Document=(props:{title:string,fieldPath:string,doc:DocumentType|undefined}
                 :
                 <Pressable onPress={upload}><Image style={[styles[Device].upload,{objectFit:"contain"}]} source={upload_icon} ></Image></Pressable>
             }
-            </View>
+            </View> */}
         {/* {
             props.doc
             ?
@@ -362,22 +385,23 @@ const Document=(props:{title:string,fieldPath:string,doc:DocumentType|undefined}
 
 }
 
-const uploadDoc=async (fieldPath:string,callback?:(res:ServerResponse)=>void)=>{
-    console.log("docrs");
+const uploadDoc=async (fieldPath:string,docIdentifier:string,callback?:(res:ServerResponse)=>void)=>{
     let docRes=await pickDocument(40);
-    console.log("docrs",docRes);
+    console.log("Picked",docRes)
     if(docRes.success)
     {
         const data = new FormData()
         data.append('fieldPath', fieldPath)
+        data.append("fileIdentifier",docIdentifier)
         data.append('uploaded_file',docRes.data);
-        console.log("form",data);
+        console.log("uploading ",data);
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("upload-profile","POST"),
             reqType:"POST",
             body:data,
             preventStringify:true,
         })
+        console.log("server",res);
         if(callback)
         {
             callback(res)
@@ -396,6 +420,7 @@ const deleteDoc=async (fieldPath:string,documentId:string)=>{
             fieldPath:fieldPath
         }
     })
+    console.log("delete",res)
     return res; 
 }
 

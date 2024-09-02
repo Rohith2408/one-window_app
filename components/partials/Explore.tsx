@@ -1,46 +1,73 @@
 import { Animated, Dimensions, FlatList, LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
-import { AppliedFilter } from "../../types"
+import { AppliedFilter, ListItem } from "../../types"
 import Listing from "./Listing"
 import { useEffect, useRef, useState } from "react";
 import Tabbarlite from "../resources/Tabbarlite";
 import { Fonts, Themes } from "../../constants";
 import useNavigation from "../../hooks/useNavigation";
 import { addToBasket } from "../../constants/basket";
+import Listselection from "../resources/Listselection";
+import { getDevice } from "../../utils";
 
+const GeneralStyles=StyleSheet.create({
+    main_wrapper:{
+        width:"100%",
+        height:"100%",
+        paddingTop:20,
+        backgroundColor:'white'
+    }
+})
+
+const TabStyles=StyleSheet.create({
+    
+})
+
+const MobileSStyles=StyleSheet.create({
+
+})
+
+const MobileMStyles=StyleSheet.create({
+
+})
+
+const MobileLStyles=StyleSheet.create({
+
+})
 
 const ITEM_WIDTH = Dimensions.get("screen").width * 0.9;  
 const ITEM_MARGIN = 10;   
 
-const Explore=(props:{initialexploretab?:string,programsadditionalfilters?:AppliedFilter[],programsquickfilters?:AppliedFilter[],universitiesadditionalfilters?:AppliedFilter[],universitiesquickfilters?:AppliedFilter[],search?:string,universitiespage?:number,programspage?:number})=>{
-    
+const Explore=(props:{initialexploretab?:string,Programslistquery:{search:string,additionalFilters:AppliedFilter[],quickFilters:AppliedFilter[],page:number},Universitieslistquery:{search:string,additionalFilters:AppliedFilter[],quickFilters:AppliedFilter[],page:number}})=>{
+
     const [contentWidth, setContentWidth] = useState(2);
     const offset=new Animated.Value(0)
-    const [dimensions,setDimensions]=useState<LayoutRectangle>({width:1,height:0,x:0,y:0})
+    const [dimensions,setDimensions]=useState<LayoutRectangle>({width:0,height:0,x:0,y:0})
     const lists=[
         {
             listid:"Programs",
             basketid:"programs-filter",
-            search:props.search?props.search:"",
-            page:props.programspage?props.programspage:1,
-            additionalFilters:props.programsadditionalfilters?props.programsadditionalfilters:[],
-            quickFilters:props.programsquickfilters?props.programsquickfilters:[]
+            search:props.Programslistquery.search,
+            page:props.Programslistquery.page?props.Programslistquery.page:1,
+            additionalFilters:props.Programslistquery.additionalFilters?props.Programslistquery.additionalFilters:[],
+            quickFilters:props.Programslistquery.quickFilters?props.Programslistquery.quickFilters:[]
         },
         {
             listid:"Universities",
             basketid:"universities-filter",
-            search:props.search?props.search:"",
-            page:props.universitiespage?props.universitiespage:1,
-            additionalFilters:props.universitiesadditionalfilters?props.universitiesadditionalfilters:[],
-            quickFilters:props.universitiesquickfilters?props.universitiesquickfilters:[]
+            search:props.Universitieslistquery.search?props.Universitieslistquery.search:"",
+            page:props.Universitieslistquery.page?props.Universitieslistquery.page:1,
+            additionalFilters:props.Universitieslistquery.additionalFilters?props.Universitieslistquery.additionalFilters:[],
+            quickFilters:props.Universitieslistquery.quickFilters?props.Universitieslistquery.quickFilters:[]
         }
     ]
     const ref=useRef<any>()
-    const tabs=useRef(["Programs","Universities"]).current
-    const normalizedOffset = Animated.divide(offset,new Animated.Value(dimensions.width))
+    const tabs=useRef([{label:"Programs",value:"programs"},{label:"Universities",value:"universities"}]).current
     const [path,navigate]=useNavigation()
+    const timer=useRef<any>()
+    const Device=useRef<keyof typeof styles>(getDevice()).current
 
-    const changeTab=(tab:string)=>{
-        ref.current?ref.current.scrollTo(tabs.findIndex((item)=>item==tab)*dimensions.width):null
+    const tabSelected=(selected:ListItem[])=>{
+        ref.current.scrollTo({x:dimensions.width*(tabs.findIndex((tab)=>tab.label==selected[0].label)),animated:true})
     }
 
     const openSearch=()=>{
@@ -51,38 +78,56 @@ const Explore=(props:{initialexploretab?:string,programsadditionalfilters?:Appli
     }
 
     useEffect(()=>{
-        addToBasket("search",{searchString:props.search});
-        addToBasket("programsadditionalfilters",props.programsadditionalfilters)
-        addToBasket("programsquickfilters",props.programsquickfilters)
-        addToBasket("programspage",props.programspage)
-        addToBasket("universitiesadditionalfilters",props.universitiesadditionalfilters)
-        addToBasket("universitiesquickfilters",props.universitiesquickfilters)
-        addToBasket("universitiespage",props.universitiespage)
+        // addToBasket("search",{searchString:props.search});
+        // addToBasket("programsadditionalfilters",props.programsadditionalfilters)
+        // addToBasket("programsquickfilters",props.programsquickfilters)
+        // addToBasket("programspage",props.programspage)
+        // addToBasket("universitiesadditionalfilters",props.universitiesadditionalfilters)
+        // addToBasket("universitiesquickfilters",props.universitiesquickfilters)
+        // addToBasket("universitiespage",props.universitiespage)
     },[props])
 
-    //console.log("filters2",JSON.stringify(props.programspage,null,2))
+    useEffect(()=>{
+        const checkRefAndSync = () => {
+            if (ref.current && dimensions.width!=0) {
+              tabSelected([{ label: props.initialexploretab, value: props.initialexploretab }]);
+            } else {
+              timer.current=setTimeout(checkRefAndSync, 100);
+            }
+          };
+      
+          checkRefAndSync();
+
+          return(()=>clearTimeout(timer.current));
+    },[dimensions.width])
 
     return(
-        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:10}}>
-            {/* <Tabbarlite tabPosition={offset} tabChangeHandler={changeTab} tabs={tabs}></Tabbarlite> */}
-            <Pressable onPress={openSearch}><Text style={{padding:7,fontFamily:Fonts.NeutrifStudio.Bold,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.5),color:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:10}}>{props.search?props.search:"Search..."}</Text></Pressable>
-            <Animated.ScrollView 
+        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:15}}>
+            <Pressable onPress={openSearch}><Text style={{padding:7,fontFamily:Fonts.NeutrifStudio.Bold,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.5),color:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:10}}>{props.Programslistquery.search?props.Programslistquery.search:"Search..."}</Text></Pressable>
+            <Listselection
+                direction="horizontal"
+                selectionStyle="background"
+                initialSelection={[{label:props.initialexploretab,value:props.initialexploretab}]}
+                styles={{contentcontainer:{gap:10}}}
+                onselection={tabSelected}
+                options={{
+                    list:tabs,
+                    idExtractor:(data:ListItem)=>data.label,
+                    labelExtractor:(data:any)=>data.label,
+                    selectionMode:"single"
+                }}
+            />
+            <ScrollView 
+            scrollEnabled={false}
             ref={ref}
-            onContentSizeChange={(width) => setContentWidth(width)}
-            pagingEnabled 
             horizontal 
-            onScroll={Animated.event(
-                [{ nativeEvent: { contentOffset: {x:offset} } }],
-                { useNativeDriver: true}
-            )}
-            scrollEventThrottle={16}
             >
             {
                 lists.map((item)=>
                 <View style={[{width:dimensions.width}]}><Listing basketid={item.basketid} listid={item.listid} search={item.search} page={item.page} additionalFilters={item.additionalFilters} quickFilters={item.quickFilters}></Listing></View>
                 )
             }
-            </Animated.ScrollView>
+            </ScrollView>
             {/* <FlatList 
                 data={lists}
                 onScroll={(e)=>console.log(e.nativeEvent.contentOffset.x/(e.nativeEvent.contentSize.width-e.nativeEvent.layoutMeasurement.width))}

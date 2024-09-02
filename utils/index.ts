@@ -1,5 +1,5 @@
 import { Dimensions, LayoutAnimation, Platform } from "react-native";
-import { Api, GradingSystems, Tests, Themes, baseAppUrl,lists,secureStoreKeys } from "../constants";
+import { Api, GradingSystems, Tests, Themes, andReplacer, baseAppUrl,lists,secureStoreKeys } from "../constants";
 import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem, Product, Package, Listquery } from "../types";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
@@ -48,7 +48,7 @@ export const formatQueryParamsToString=(params:any)=>{
       (current + "=" + 
           (typeof values[index] === "string" 
               ? values[index] 
-              : JSON.stringify(values[index])
+              : JSON.stringify(values[index]).replace(/&/g,andReplacer)
           )
       ) + 
       (index === keys.length - 1 ? "" : "&"), 
@@ -69,7 +69,8 @@ export const formatQueryParamsToObj=(queryString:string)=>{
       const decodedValue = decodeURIComponent(value)
       if(isStringified(decodedValue))
       {
-        result[decodedKey] = JSON.parse(decodedValue);
+        //console.log("decoded",decodedValue,decodedValue.replace(/__AND__/g, '&'))
+        result[decodedKey] = JSON.parse(decodedValue.replace(/__AND__/g, '&'));
       }
       else
       {
@@ -483,7 +484,8 @@ export const pickDocument=async (sizeLimit:number)=>{
 }
 
 export const Word2Sentence=(words:string[],startStr?:string,seperator?:string)=>{
-  return words.reduce((sentence,word,i)=>(word!=undefined && word.length>0)?(i==(words.length-1)?(sentence+setWordCase(word)):(sentence+setWordCase(word)+(seperator?(" "+seperator+" "):" , "))):(sentence+""),startStr!=undefined?startStr:"")
+  //console.log("words",words.filter((word)=>word!=undefined || word!=null));
+  return words.filter((word)=>word!=undefined || word!=null).reduce((sentence,word,i)=>(word.length>0)?(i==(words.length-1)?(sentence+setWordCase(word)):(sentence+setWordCase(word)+(seperator?(" "+seperator+" "):" , "))):(sentence+""),startStr!=undefined?startStr:"")
 }
 
 export const formatDate=(date:string,showWeek?:boolean)=>{
@@ -622,5 +624,13 @@ export const listHandler=(id:string,data:Listquery)=>{
     return {success:true,data:pageFilteredList,message:""};
   }
   return {success:false,data:data.fullList?data.fullList:[],message:""}
+}
+
+export const truncateString=(str:string,requiredLength:number,addDots:boolean)=>{
+  if(str.length>requiredLength)
+  {
+      str=str.substring(0,requiredLength)+(addDots?" ...":"")
+  }
+  return str;
 }
 

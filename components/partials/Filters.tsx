@@ -19,7 +19,7 @@ const Filters=(props:{filtersbasketid:string,filterslistid:string,filtersupdate:
         }
     },[props.filtersupdate])
 
-    console.log("lizz",info)
+    console.log("flyyyyyyyy")
 
     return(
         <View style={{flex:1}}>

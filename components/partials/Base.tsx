@@ -7,6 +7,8 @@ import Home from "../screens/Home"
 import Profile from "../screens/Profile"
 import Invalidpath from "./Invalidpath"
 import Navbar from "../resources/Navbar"
+import Community from "../screens/Community"
+import Chats from "../screens/Chats"
 
 const Base=(props:{tab:string})=>{
 
@@ -19,13 +21,21 @@ const Base=(props:{tab:string})=>{
         {
             id:"profile",
             component:Profile,
+        },
+        {
+            id:"community",
+            component:Community,
+        },
+        {
+            id:"chats",
+            component:Chats,
         }
     ]).current
 
     console.log("base props",props)
 
     return(
-        <View style={{width:"100%",height:"100%",backgroundColor:'green'}}>
+        <View style={{width:"100%",height:"100%"}}>
             <View style={[styles.screenWrapper]}><Tabnavigator screens={Screens} currentTab={{id:props.tab,props:undefined}} invalidPathScreen={Invalidpath}></Tabnavigator></View>
             <View style={[styles.navWrapper]}><Navbar tab={props.tab}></Navbar></View>
         </View>

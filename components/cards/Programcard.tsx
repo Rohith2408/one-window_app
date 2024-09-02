@@ -140,18 +140,18 @@ const Programcard=(props:CourseListObj & {index:number})=>{
 
     return(
         <Pressable onPress={openProgram} style={[GeneralStyles.wrapper]}>
-            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:props.index%4==0?Themes.Light.OnewindowRed(0.6):props.index%4==1?Themes.Light.OnewindowPurple(0.7):props.index%4==2?Themes.Light.OnewindowTeal(0.7):props.index%4==3?Themes.Light.OnewindowYellow(0.7):""}]}>
+            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{elevation:4,shadowColor:"black",shadowOpacity:0.15,shadowRadius:5,shadowOffset:{width:5,height:5}},{backgroundColor:props.index%4==0?Themes.Light.OnewindowRed(0.7):props.index%4==1?Themes.Light.OnewindowPurple(0.7):props.index%4==2?Themes.Light.OnewindowTeal(0.7):props.index%4==3?Themes.Light.OnewindowYellow(0.7):""}]}>
                 <View style={[GeneralStyles.important_wrapper]}>
                 {
 
                 }
-                {
+                {/* {
                     props.stemDetails?.stem
                     ?
                     <Banner color="#FF9900" text="STEM"/>
                     :
                     null
-                }
+                } */}
                 </View> 
                 <View style={{flexDirection:'row',gap:5}}>
                     <View style={[GeneralStyles.info_wrapper]}>
@@ -174,7 +174,7 @@ const Banner=(props:{text:string,color:string})=>{
     const Device=useRef(getDevice()).current
 
     return(
-        <View style={[{backgroundColor:"#FFDAA1",borderRadius:100}]}><Text style={[{color:props.color,fontFamily:Fonts.NeutrifStudio.Regular,padding:3,paddingLeft:15,paddingRight:15},styles[Device].stem_banner_text]}>{props.text}</Text></View>
+        <View style={[{backgroundColor:"#FFDAA1",borderRadius:100}]}><Text style={[{color:props.color,fontFamily:Fonts.NeutrifStudio.Bold,padding:3,paddingLeft:15,paddingRight:15},styles[Device].stem_banner_text]}>{props.text}</Text></View>
     )
 }
 

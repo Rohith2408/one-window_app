@@ -92,19 +92,19 @@ const lists:ListInfo[]=[
         },
         pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"programspage",newValue:page+1}}),
         listFetcher:async (query:{search:string,filters:any[],page:number})=>{
-            console.log("query recieved pro",query);
+            console.log("query recieved pro",JSON.stringify(query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),null,2));
             let res:ServerResponse=await serverRequest({
                     url: getServerRequestURL("programs","POST"),
                     reqType: "POST",
                     body:{
                         //search.trim().length>0?{type:'name',data:[search.trim()]}:{}
-                        filterData:[...query.filters.map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)}))],
+                        filterData:query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),
                         page:query.page,
                         currency:"INR"
                     }
                 }
             )
-            //console.log("respon liiist",query.page,res.data.list.length);
+            console.log("respon liiist",res.data.list?JSON.stringify(res.data.list.splice(0,2),null,2):"")
             return res
         }
     },

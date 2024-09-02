@@ -15,6 +15,7 @@ import { Provider as StoreProvider } from 'react-redux';
 import { store } from './store';
 import Appcontext from './contexts/AppContext';
 import * as Font from 'expo-font';
+import { secureStoreKeys } from './constants';
 
 export default function App() {
 
@@ -31,7 +32,7 @@ export default function App() {
     registerForPushNotificationsAsync()
     .then(token =>{
       console.log("token",token)
-      SecureStore.setItemAsync("devicetoken",token?token:"");
+      SecureStore.setItemAsync(secureStoreKeys.DEVICE_TOKEN,token?token:"");
     }).catch((error: any) => setExpoPushToken(`${error}`));
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
@@ -65,10 +66,10 @@ export default function App() {
 
   return () => {
     Linking.removeAllListeners("url")
-    // notificationListener.current &&
-    // Notifications.removeNotificationSubscription(notificationListener.current);
-    // responseListener.current &&
-    // Notifications.removeNotificationSubscription(responseListener.current);
+    notificationListener.current &&
+    Notifications.removeNotificationSubscription(notificationListener.current);
+    responseListener.current &&
+    Notifications.removeNotificationSubscription(responseListener.current);
   };
   },[])
 

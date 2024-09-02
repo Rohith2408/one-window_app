@@ -146,7 +146,7 @@ const MobileSStyles=StyleSheet.create({
         fontSize:22,
     },
     email:{
-        fontSize:14
+        fontSize:12
     },
     dp:{
         width:65,
@@ -161,8 +161,8 @@ const MobileSStyles=StyleSheet.create({
         right:0
     },
     option_icon:{
-        width:40,
-        height:40,
+        width:34,
+        height:34,
         objectFit:'contain'
     },
     options_text:{
@@ -199,10 +199,10 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     name:{
-        fontSize:20,
+        fontSize:26,
     },
     email:{
-        fontSize:12
+        fontSize:14
     },
     dp:{
         width:75,
@@ -212,11 +212,13 @@ const MobileMStyles=StyleSheet.create({
     dpBg:{
         width:75,
         height:75,
-        objectFit:"contain"
+        objectFit:"contain",
+        bottom:10,
+        right:0
     },
     option_icon:{
-        width:20,
-        height:20,
+        width:40,
+        height:40,
         objectFit:'contain'
     },
     options_text:{
@@ -226,14 +228,14 @@ const MobileMStyles=StyleSheet.create({
         flex:1
     },
     options_wrapper:{
-        flex:5
+        flex:6,
     },
     logout:{
-        fontSize:12,
-        paddingTop:4,
-        paddingBottom:4,
-        paddingLeft:8,
-        paddingRight:8,
+        fontSize:14,
+        paddingTop:6,
+        paddingBottom:6,
+        paddingLeft:15,
+        paddingRight:15,
         fontWeight:"500"
     },
     loadingview_name:{

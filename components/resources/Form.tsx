@@ -150,6 +150,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
 
                 }
                 else{
+                    navigate?navigate({type:"RemoveScreen"}):null
                     if(formInfo?.submit.redirect)
                     {
                         navigate?navigate(formInfo.submit.redirect(res.data)):null
@@ -159,7 +160,6 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                     }
                 }
             }
-            navigate?navigate({type:"RemoveScreen"}):null
             return res.success
         }
         else
@@ -176,7 +176,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
             let isEmpty=false;
             let validation:ServerResponse={success:false,message:"",data:undefined}
             isEmpty=(info?.emptyChecker)?(info.emptyChecker(field.value).success):(field.value==undefined || field.value?.length==0)
-            console.log("bhai",field.id,isEmpty,field.value,info?.emptyChecker?info.emptyChecker(field.value):"ledu");
+            //console.log("bhai",field.id,isEmpty,field.value,info?.emptyChecker?info.emptyChecker(field.value):"ledu");
             !isEmpty ? validation=(info?.validator)?info.validator(field.value):{success:true,message:"",data:undefined} :null
             error=(isEmpty && !info?.isOptional)?"Field cannot be empty":(!validation.success?validation.message:undefined)
             error?errors.push({id:field.id,error:error}):null

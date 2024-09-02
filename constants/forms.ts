@@ -28,6 +28,8 @@ import Universitycard from "../components/cards/Universitycard";
 import Programcard from "../components/cards/Programcard";
 import { lists } from "./lists";
 import Passwordinput from "../components/resources/Passwordinput";
+import { secureStoreKeys } from "./securestore";
+import * as SecureStore from 'expo-secure-store'
 
 export const testToForm=(testname:string)=>{
     const testData=store.getState().testscores.data.find((test)=>test.name==testname)
@@ -218,7 +220,8 @@ const forms:FormInfo[]=[
             },
             onSubmit:async (data:{firstname:string,lastname:string,email:string,password:string,confirmpassword:string,preffereddestinations:string[],prefferedlanguage:string})=>{
                 console.log("reg",data);
-                let res:ServerResponse=await serverRequest({url:getServerRequestURL("register","POST"),routeType:"public",reqType:"POST",body:{firstName:data.firstname,lastName:data.lastname,email:data.email,password:data.password,country:data.preffereddestinations,language:data.prefferedlanguage,DeviceToken:""}})
+                let deviceToken=await SecureStore.getItemAsync(secureStoreKeys.DEVICE_TOKEN);
+                let res:ServerResponse=await serverRequest({url:getServerRequestURL("register","POST"),routeType:"public",reqType:"POST",body:{firstName:data.firstname,lastName:data.lastname,email:data.email,password:data.password,country:data.preffereddestinations,language:data.prefferedlanguage,DeviceToken:deviceToken}})
                 console.log("ressss signup",res)
                 return res;
             },
@@ -2642,9 +2645,9 @@ const forms:FormInfo[]=[
         title:"",
         getInitialData:(id:string|undefined)=>{
             let filtersInfo=lists.find((list)=>list.id=="Programs")?.filters.additional;
-            let data:AppliedFilter[]|undefined=id?getBasket(id):undefined
+            let data:{additionalFiltersApplied:AppliedFilter[]}|undefined=id?getBasket(id):undefined
             return filtersInfo?filtersInfo.map((item)=>{
-                let applied=data?.find((item2)=>item2.type==item.type)?.data
+                let applied=data?.additionalFiltersApplied?.find((item2)=>item2.type==item.type)?.data
                 return {id:item.type,value:applied?applied:[]}
             }):[]
         },

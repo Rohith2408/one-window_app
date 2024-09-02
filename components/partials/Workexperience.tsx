@@ -13,7 +13,10 @@ const GeneralStyles=StyleSheet.create({
     add_wrapper:{
         position:'absolute',
         bottom:20,
-        right:0
+        right:0,
+        zIndex:1,
+        backgroundColor:"white",
+        borderRadius:100
     }
 })
 
@@ -66,7 +69,8 @@ const Workexperience=(props:any)=>{
 
     },[])
 
-    const add=()=>{
+    const addWork=()=>{
+        console.log("called");
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Workexperience"}}}):null
     }
 
@@ -78,7 +82,7 @@ const Workexperience=(props:any)=>{
             <Loadinglistscreen cardGap={30} cardHeight={Device=="MobileS"?175:(Device=="MobileM"?200:250)}></Loadinglistscreen>
             :
             <View style={{flex:1,gap:30}}>
-                <Pressable onPress={add} style={[GeneralStyles.add_wrapper]}><Image style={[styles[Device].add_icon]} source={add_icon}></Image></Pressable>
+                <Pressable onPress={addWork} style={[GeneralStyles.add_wrapper]}><Image style={[styles[Device].add_icon]} source={add_icon}></Image></Pressable>
                 <ScrollView style={{flex:1}} contentContainerStyle={{gap:30}}>
                 {
                     workExperiences.data.map((item,i)=>

@@ -5,8 +5,9 @@ import { Word2Sentence, getDevice, getServerRequestURL, serverRequest } from "..
 import { validations } from "../../utils/validations"
 import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, secureStoreKeys } from "../../constants"
 import Form from "../resources/Form"
+import * as SecureStore from 'expo-secure-store'
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -124,7 +125,7 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     header_wrapper:{
-        height:125,
+        height:155,
         width:"100%",
         display:"flex",
     },
@@ -195,7 +196,8 @@ const Loginbase=(props:{auth:string})=>{
         let validPassword=validations.PASSWORD.regex.test(password)
         if(validEmail && validPassword)
         {
-            let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:email,password:password}})
+            let deviceToken=await SecureStore.getItemAsync(secureStoreKeys.DEVICE_TOKEN);
+            let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:email,password:password,DeviceToken:deviceToken}})
             if(res.success)
             {
                 navigate?navigate({type:"Login"}):null

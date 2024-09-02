@@ -5,11 +5,6 @@ import { getComponent } from "../../utils"
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         flex:1,
-        // backgroundColor:'white',
-        // elevation:3,
-        // shadowOffset:{width:0,height:-5},
-        // shadowOpacity:0.2,
-        // borderRadius:15,
         padding:10
     }
 })

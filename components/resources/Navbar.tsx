@@ -40,7 +40,8 @@ const GeneralStyles=StyleSheet.create({
     },
     text:{
         alignSelf:"center",
-        fontWeight:"700"
+        fontWeight:"700",
+        color:"black"
     }
 })
 
@@ -143,7 +144,7 @@ const Navitem=(props:{device:Device,icon:string,color:string,title:string,isFocu
 
     return(
         <Pressable onPress={()=>navigate?navigate({type:"UpdateParam",payload:{param:"tab",newValue:props.title.toLowerCase()}}):null} style={[GeneralStyles.nav_item]}>
-            <Animated.View style={[props.device?styles[props.device].highlighter:{},{backgroundColor:props.color},GeneralStyles.highlighter,{transform:[{scale:scale}]}]}><Text style={[props.device?styles[props.device].text:{},GeneralStyles.text,{color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text></Animated.View>
+            <Animated.View style={[props.device?styles[props.device].highlighter:{},{backgroundColor:props.color},GeneralStyles.highlighter,{transform:[{scale:scale}]}]}><Text style={[props.device?styles[props.device].text:{},GeneralStyles.text,{color:"black"}]}>{props.title}</Text></Animated.View>
             <Animated.Image source={props.icon} style={[props.device?styles[props.device].icon:{},{transform:[{scale:Animated.subtract(1,scale)}]}]}></Animated.Image>
         </Pressable>
     )

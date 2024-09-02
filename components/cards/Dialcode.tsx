@@ -4,8 +4,6 @@ import { Word2Sentence } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 
 
-
-
 const Dialcode=(props:Countrycode)=>{
 
     return(

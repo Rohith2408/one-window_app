@@ -1,5 +1,6 @@
 const secureStoreKeys={
-    ACCESS_TOKEN:"AccessToken"
+    ACCESS_TOKEN:"AccessToken",
+    DEVICE_TOKEN:"devicetoken"
 }
 
 const AccessToken={

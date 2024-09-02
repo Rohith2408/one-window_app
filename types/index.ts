@@ -210,7 +210,7 @@ export type List<type>={
     direction:"Horizontal"|"Vertical",
     mode:"Swipe"|"Scroll",
     card:React.FC<type>,
-    cardDimensions?:{width:number,height:number},
+    cardStyles?:any,
     list:type[]
 }
 
@@ -873,11 +873,22 @@ export interface User {
     role?:UserRoles
 }
 
+export type PickedDoc={
+    _id?:string,
+    name?:string|null,
+    uri:string,
+    type?:string
+}
+
 export interface Document{
-    _id:string,
-    name: string,
-    contentType: string,
-    createdAt: string
+    _id: string,
+    data: {
+        FileName: string,
+        resource_id: string,
+        mimetype: string,
+        originalname: string,
+        preview_url:string
+    }
 }
 
 export interface Documents{

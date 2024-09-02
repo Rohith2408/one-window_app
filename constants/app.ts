@@ -1,4 +1,5 @@
 const baseAppUrl="onewindow://"
+const andReplacer="__AND__";
 const Themes={
     Light:{
         OnewindowPrimaryBlue:(opacity:number)=>"rgba(48,51,99,"+opacity+")",
@@ -19,4 +20,4 @@ const Fonts={
     }
 }
 
-export {baseAppUrl,Themes,Fonts}
+export {baseAppUrl,Themes,Fonts,andReplacer}

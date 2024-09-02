@@ -47,7 +47,17 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
-    
+    text:{
+        fontSize:14
+    },
+    verified_icon:{
+        width:16,
+        height:16,
+        resizeMode:'contain'
+    },
+    verify:{
+        fontSize:10
+    }
 })
 
 const MobileLStyles=StyleSheet.create({

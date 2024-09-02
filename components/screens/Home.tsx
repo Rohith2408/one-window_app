@@ -17,12 +17,12 @@ const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         width:"100%",
         height:"100%",
+        paddingTop:20,
         backgroundColor:'white'
     },
     sub_wrapper:{
         width:"100%",
-        height:"100%",
-        gap:20
+        height:"100%"
     },
     welcome_message:{
    
@@ -64,7 +64,6 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-
     sub_wrapper:{
         maxWidth:500
     },
@@ -92,7 +91,8 @@ const TabStyles=StyleSheet.create({
 const MobileSStyles=StyleSheet.create({
 
     sub_wrapper:{
-        maxWidth:500
+        maxWidth:500,
+        gap:30
     },
     welcome_message:{
         fontSize:20,
@@ -109,39 +109,46 @@ const MobileSStyles=StyleSheet.create({
         fontSize:10
     },
     products_wrapper:{
-        height:200
+        gap:20
     },
     products_title:{
         fontSize:14
+    },
+    card:{
+        width:230,
+        height:160
     }
 })
+
 const MobileMStyles=StyleSheet.create({
 
     sub_wrapper:{
-        maxWidth:500
+        maxWidth:500,
+        gap:34
     },
     welcome_message:{
-        fontSize:20,
+        fontSize:22,
         fontWeight:"700"
     },
     search_text:{
-        fontSize:12
+        fontSize:14
     },
     explore_icon:{
-        width:50,
-        height:50
-        
+        width:44,
+        height:44
     },
     explore_text:{
         fontSize:12
     },
-    products_wrapper:{
-        height:200
-    },
     products_title:{
-        fontSize:14
+        fontSize:15
+    },
+    card:{
+        width:230,
+        height:180
     }
 })
+
 const MobileLStyles=StyleSheet.create({
 
     sub_wrapper:{
@@ -183,10 +190,14 @@ const Home=(props:undefined|{name:string})=>{
     const [path,navigate]=useNavigation();
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const exploreTabs=useRef([
-        {text:"Destinations",icon:destinations_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"destinations",destinationsadditionalfilters:[],destinationsquickfilters:[],search:"",destinationspage:1}}}):null},
-        {text:"Universities",icon:universities_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"universities",universitiesadditionalfilters:[],universitiesquickfilters:[],search:"harv",universitiespage:1}}}):null},
-        {text:"Programs",icon:programs_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"programs",programsadditionalfilters:[],programsquickfilters:[],search:"",programspage:1}}}):null}
+        {text:"Destinations",icon:destinations_icon,handler:()=>{}},//navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Destinations",destinationsadditionalfilters:[],destinationsquickfilters:[],search:"",destinationspage:1}}}):null
+        {text:"Universities",icon:universities_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",Programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},Universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null},
+        {text:"Programs",icon:programs_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",Programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},Universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null}
     ]).current
+
+    const openSearch=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Search"}}):null
+    }
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
@@ -194,7 +205,7 @@ const Home=(props:undefined|{name:string})=>{
                 <View>
                     <Text style={[{color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , Rohith!</Text>
                 </View>
-                <Pressable style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'}]}>
+                <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'}]}>
                     <Text style={[GeneralStyles.search_text,styles[Device].search_text]}>Search for "Harvard University"</Text>
                 </Pressable>
                 <View style={[GeneralStyles.explore_wrapper]}>
@@ -206,7 +217,7 @@ const Home=(props:undefined|{name:string})=>{
                 </View>
                 <View style={[GeneralStyles.products_wrapper,styles[Device].products_wrapper]}>
                     <Text style={[GeneralStyles.products_title,styles[Device].products_title,{color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
-                    <List list={products.data} card={Product} direction="Horizontal" mode="Scroll"></List>
+                    <List cardStyles={styles[Device].card} list={products.data} card={Product} direction="Horizontal" mode="Scroll"></List>
                 </View>
             </View>
             {/* <Text>Home</Text>

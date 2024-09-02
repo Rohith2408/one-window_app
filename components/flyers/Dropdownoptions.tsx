@@ -6,7 +6,7 @@ import { ListItem } from "../../types"
 import { Fonts, Themes } from "../../constants"
 import tick_icon from '../../assets/images/misc/tick.png'
 import { Image } from "expo-image"
-import { setLayoutAnimation } from "../../utils"
+import { getDevice, setLayoutAnimation } from "../../utils"
 import loading_gif from '../../assets/images/misc/loader.gif'
 
 const GeneralStyles=StyleSheet.create({
@@ -26,7 +26,6 @@ const GeneralStyles=StyleSheet.create({
         borderWidth:1
     },
     apply_text:{
-        fontSize:12,
         paddingTop:4,
         paddingBottom:4,
         paddingLeft:8,
@@ -40,6 +39,49 @@ const GeneralStyles=StyleSheet.create({
     }
 })
 
+const TabStyles=StyleSheet.create({
+    apply_text:{
+        fontSize:16
+    },
+    item_text:{
+        fontSize:16
+    }
+})
+
+const MobileSStyles=StyleSheet.create({
+    apply_text:{
+        fontSize:14
+    },
+    item_text:{
+        fontSize:16
+    }
+})
+
+const MobileMStyles=StyleSheet.create({
+    apply_text:{
+        fontSize:14
+    },
+    item_text:{
+        fontSize:16
+    }
+})
+
+const MobileLStyles=StyleSheet.create({
+    apply_text:{
+        fontSize:16
+    },
+    item_text:{
+        fontSize:16
+    }
+})
+
+const styles={
+    Tab:TabStyles,
+    MobileS:MobileSStyles,
+    MobileM:MobileMStyles,
+    MobileL:MobileLStyles
+}
+
 const Dropdownoptions=(props:{basketid:string})=>{
 
     let info=useRef(getBasket(props.basketid)).current
@@ -48,6 +90,7 @@ const Dropdownoptions=(props:{basketid:string})=>{
     const [path,navigate]=useNavigation()
     const [isLoading,setIsLoading]=useState(false)
     const Card=info.options.card
+    const Device=useRef<keyof typeof styles>(getDevice()).current
 
     const selection=(data:any)=>{
         if(selected.find((item)=>info.options.idExtractor(item)==info.options.idExtractor(data))){
@@ -103,7 +146,7 @@ const Dropdownoptions=(props:{basketid:string})=>{
                             <Card key={item._id?item._id:i} {...item}/>
                             :
                             <View style={{flex:1}}>
-                                <View style={{flex:1}}><Text style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.label}</Text></View>
+                                <View style={{flex:1}}><Text style={[styles[Device].item_text,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.label}</Text></View>
                             </View>
                         }
                         {

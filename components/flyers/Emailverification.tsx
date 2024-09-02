@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { Animated, Pressable, ScrollView, Text, TextInput, View } from "react-native"
+import { Animated, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
 import { ServerResponse } from "../../types"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { store } from "../../store"

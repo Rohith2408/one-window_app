@@ -1,30 +1,63 @@
 import { Image } from "expo-image"
 import React, { useEffect, useRef, useState } from "react"
-import { Animated, LayoutRectangle, Pressable, ScrollView, Text, View } from "react-native"
+import { Animated, LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import tick_icon from '../../assets/images/misc/tick.png'
 import { Fonts, Themes } from "../../constants"
+import { getDevice } from "../../utils"
 
+const GeneralStyles=StyleSheet.create({
+    
+})
 
-const Listselection=(props:{direction:"horizontal"|"vertical",selectionStyle:"border"|"tick",initialSelection?:any[],styles?:{contentcontainer:any},onselection:(data:any)=>void,options:{list:any[],card?:React.FC<any>,idExtractor:(data:any)=>any,labelExtractor?:(data:any)=>any,selectionMode:"single"|"multi"}})=>{
+const TabStyles=StyleSheet.create({
+    
+})
 
+const MobileSStyles=StyleSheet.create({
+    text:{
+        fontSize:12
+    }
+})
+
+const MobileMStyles=StyleSheet.create({
+    text:{
+        fontSize:14
+    }
+    
+})
+
+const MobileLStyles=StyleSheet.create({
+
+    
+})
+
+const styles={
+    Tab:TabStyles,
+    MobileS:MobileSStyles,
+    MobileM:MobileMStyles,
+    MobileL:MobileLStyles
+}
+
+const Listselection=(props:{direction:"horizontal"|"vertical",selectionStyle:"background"|"border"|"tick",initialSelection?:any[],styles?:{contentcontainer:any},onselection:(data:any)=>void,options:{list:any[],card?:React.FC<any>,idExtractor:(data:any)=>any,labelExtractor?:(data:any)=>any,selectionMode:"single"|"multi"}})=>{
+
+    const Device=useRef<keyof typeof styles>(getDevice()).current
     const [selected,setSelected]=useState(props.initialSelection?props.initialSelection:[])
 
     const selection=(data:any)=>{
         let updated=[]
         if(selected.find((item)=>props.options.idExtractor(item)==props.options.idExtractor(data))){
-            updated=(selected.filter((item)=>props.options.idExtractor(item)!=props.options.idExtractor(data)))
+            updated=(props.options.selectionMode=="single"?selected:selected.filter((item)=>props.options.idExtractor(item)!=props.options.idExtractor(data)))
         }
         else
         {
             updated=(props.options.selectionMode=="single"?[data]:[...selected,data])
         }
-        setSelected(updated);
+        setSelected(updated)
         props.onselection?props.onselection(updated):null
     }
 
     return(
         <View>
-
             <ScrollView horizontal={props.direction=="horizontal"?true:false} contentContainerStyle={[props.styles?.contentcontainer?props.styles.contentcontainer:{}]}>
             {
                 props.options.list.map((item,i)=>
@@ -39,6 +72,7 @@ const Listselection=(props:{direction:"horizontal"|"vertical",selectionStyle:"bo
 
 const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick",index:number,card?:any,idExtractor:any,labelExtractor:any,item:any}})=>{
 
+    const Device=useRef<keyof typeof styles>(getDevice()).current
     const scale=useRef(new Animated.Value(1)).current;
     const Card=props.data.card
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
@@ -52,20 +86,24 @@ const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick",index
 
 
     return(
-        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{position:"relative",flexDirection:'row'}}>
+        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{position:"relative",flexDirection:'row',padding:5,paddingLeft:15,paddingRight:15}}>
         {
             props.data.card
             ?
             <View style={{flex:1}}><Card {...props.data.item} index={props.data.index}/></View>
             :
-            <View style={{flex:1}}><Text style={[{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1),padding:10}]}>{props.data.labelExtractor(props.data.item)}</Text></View>
+            <View style={{flex:1}}><Text style={[styles[Device].text,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1),padding:10}]}>{props.data.labelExtractor(props.data.item)}</Text></View>
         }
         {
             props.data.selectionStyle=="tick"
             ?
             <Animated.Image source={tick_icon} style={{width:14,height:14,resizeMode:"contain",transform:[{scale:scale}]}}/>
             :
-            <Animated.View style={{position:"absolute",width:dimensions?dimensions.width:0,height:dimensions?dimensions.height:0,borderWidth:1,top:0,left:0,borderRadius:10,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),transform:[{scale:scale}]}}/>
+            props.data.selectionStyle=="border"
+            ?
+            <Animated.View style={{position:"absolute",width:dimensions?dimensions.width:0,height:dimensions?dimensions.height:0,borderWidth:1,top:0,left:0,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),transform:[{scale:scale}]}}/>
+            :
+            <Animated.View style={{position:"absolute",width:dimensions?dimensions.width:0,height:dimensions?dimensions.height:0,top:0,left:0,borderRadius:100,backgroundColor:Themes.Light.OnewindowLightBlue,zIndex:-1,transform:[{scale:scale}]}}/>
         }
         </View>
     )

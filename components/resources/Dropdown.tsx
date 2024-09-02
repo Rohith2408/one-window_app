@@ -113,7 +113,7 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
         // }
     },[props.value])
 
-    console.log("options",props.id,props.value)
+    //console.log("options",props.id,props.value)
 
     return(
         <View style={[GeneralStyles.mainWrapper]}>

@@ -3,10 +3,10 @@ import { LayoutRectangle, ScrollView, StyleSheet, View } from "react-native"
 import { List as ListType} from "../../types"
 
 const GeneralStyles=StyleSheet.create({
-    main_wrapper:{
-        width:"100%",
-        height:"100%"
-    }
+    // main_wrapper:{
+    //     width:"100%",
+    //     height:"100%"
+    // }
 })
 
 const List=(props:ListType<any>)=>{
@@ -37,11 +37,11 @@ const List=(props:ListType<any>)=>{
     let cardDimensions=getDimension()
 
     return(
-        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={[GeneralStyles.main_wrapper]}>
-            <ScrollView style={{flex:1}} pagingEnabled={props.mode=="Swipe"} horizontal={props.direction=="Horizontal"} contentContainerStyle={{gap:30}}>
+        <View>
+            <ScrollView indicatorStyle="black" pagingEnabled={props.mode=="Swipe"} horizontal={props.direction=="Horizontal"} contentContainerStyle={{gap:30,padding:15}}>
             {
                 props.list.map((item,i)=>
-                <View key={item.id?item.id:i} style={[{width:cardDimensions.width,height:cardDimensions.height}]}><Component {...item} index={i}/></View>
+                <View key={item.id?item.id:i} style={[props.cardStyles]}><Component {...item} index={i}/></View>
                 )
             }
             </ScrollView>

@@ -136,6 +136,7 @@ const Student=(props:{screens:string[],params:any})=>{
                 issue:"",
                 data:res.data.documents
             }))
+            console.log("documents",res.data.documents);
             dispatch(initPreferences({
                 requestStatus:"initiated",
                 responseStatus:"recieved",

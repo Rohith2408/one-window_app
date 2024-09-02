@@ -239,6 +239,12 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"university",
+        category:"public",
+        tail:"single_university",
+        type:"POST",
+    },
+    {
         ENUM:"profile",
         TYPE:"public",
         
