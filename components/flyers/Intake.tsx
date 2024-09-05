@@ -1,13 +1,44 @@
-import { Pressable, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import Listselection from "../resources/Listselection"
 import { getBasket } from "../../constants/basket"
 import { ListItem, ProgramIntake } from "../../types";
 import Intakecard from "../cards/Intakecard";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import useNavigation from "../../hooks/useNavigation";
 import { Fonts, Themes } from "../../constants";
+import { getDevice } from "../../utils";
+import Asynchronousbutton from "../resources/Asynchronousbutton";
 
+const GeneralStyles=StyleSheet.create({
+    
+})
 
+const TabStyles=StyleSheet.create({
+    
+})
+
+const MobileSStyles=StyleSheet.create({
+    apply:{
+        fontSize:12
+    }
+})
+
+const MobileMStyles=StyleSheet.create({
+    apply:{
+        fontSize:14
+    }
+})
+
+const MobileLStyles=StyleSheet.create({
+
+})
+
+const styles={
+    Tab:TabStyles,
+    MobileS:MobileSStyles,
+    MobileM:MobileMStyles,
+    MobileL:MobileLStyles
+}
 
 const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
 
@@ -15,6 +46,8 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     const [intake,setIntake]=useState<{year:undefined|string,month:undefined|string}>({year:info.selected?new Date(info.selected).getFullYear().toString():undefined,month:info.selected?(new Date(info.selected).getMonth()+1).toString():undefined})
     const [path,navigate]=useNavigation()
     const [error,setError]=useState<string|undefined>(undefined)
+    const Device=useRef<keyof typeof styles>(getDevice()).current
+    const [isLoading,setIsloading]=useState(false)
 
     const yearSelected=(data:ListItem[])=>{
         setIntake({...intake,year:data.length==0?undefined:data[0].value})
@@ -24,9 +57,13 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
         setIntake({...intake,month:data.length==0?undefined:(data[0].courseStartingMonth+1).toString()})
     }
 
-    const apply=()=>{
+    const apply=async ()=>{
+        await info.onselection({name:"apply",data:intake});
         navigate?navigate({type:"RemoveScreen"}):null
-        info.onselection({name:"apply",data:intake});
+        setTimeout(()=>{
+            navigate?navigate({type:"AddScreen",payload:{screen:"Successfull"}}):null;
+        },100)
+        return true;
     }
 
     const checkIfAlreadyExists=()=>{
@@ -80,7 +117,12 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
             {
                 intake.month && intake.year
                 ?
-                <Pressable style={{padding:10,alignSelf:"stretch",alignItems:'center',justifyContent:'center'}} onPress={apply}><Text>Apply</Text></Pressable>
+                <View style={{alignSelf:'stretch'}}><Asynchronousbutton successText="Added Succesfully" idleText="Apply" failureText="Something went wront" callback={apply}/></View>
+                // <Pressable style={{padding:10,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),borderRadius:100,alignSelf:"stretch",alignItems:'center',justifyContent:'center'}} onPress={apply}>
+                // {
+                //     <Ima
+                // }
+                // </Pressable>
                 :
                 null
             }   

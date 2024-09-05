@@ -29,6 +29,13 @@ export type NavigationActions=
         }
     }|
     {
+        type:"UpdateParams",
+        payload:{
+            param:string,
+            newValue:any
+        }[]
+    }|
+    {
         type:"Logout",
     }|
     {
@@ -86,6 +93,20 @@ export const NavigationReducer=(state:string,action:NavigationActions)=>{
             if(encodedPath.props)
             {
                 encodedPath.props[action.payload.param]=action.payload.newValue
+                return decodePath(encodedPath)
+            }
+            else
+            {
+                return state
+            }
+            break;
+
+        case "UpdateParams":
+            if(encodedPath.props)
+            {
+                action.payload.forEach((item)=>{
+                    encodedPath.props[item.param]=item.newValue
+                })
                 return decodePath(encodedPath)
             }
             else

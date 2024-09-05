@@ -1,6 +1,6 @@
 export const validations={
     EMAIL:{regex:/^[^\s@]+@[^\s@]+\.[^\s@]+$/,errorMessage:"Please enter a valid email"},
-    PASSWORD:{regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{9,}$/,errorMessage:"Password neeeds to be greater than 8 characters,have atleast one upper and lowercase alphabet,have atleast one special character"},
+    PASSWORD:{regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/,errorMessage:"Password neeeds to be greater than 8 characters,have atleast one upper and lowercase alphabet,have atleast one special character"},
     FIRSTNAME:{regex:/^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/,errorMessage:"Invalid first name"},
     LASTNAME:{regex:/^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/,errorMessage:"Invalid last name"},
     PHONENUMBER:{regex:/^\+?(\d{1,3})?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$/,errorMessage:"Please enter a valid contact number"},

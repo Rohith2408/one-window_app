@@ -11,7 +11,7 @@ const GeneralStyles=StyleSheet.create({
         alignSelf:'stretch',
         display:"flex",
         flexDirection:"row",
-        gap:5,
+        gap:7.5,
         justifyContent:"center",
         alignItems:"flex-start",
         padding:10
@@ -77,15 +77,17 @@ const Intakecard=(props:ProgramIntake & {index:number})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
+    // console.log(props.deadlineMonth)
+
     return(
         <View style={[GeneralStyles.uni_wrapper]}>
             <View style={[styles[Device].uni_icon_bg,{position:"absolute",backgroundColor:getThemeColor(props.index%4)}]}></View>
             <Image source={intake_icon} style={[{position:'relative'},styles[Device].uni_icon]}/>
             <View style={[styles[Device].uni_info_wrapper,GeneralStyles.uni_info_wrapper]}>
-                <Text style={[styles[Device].intakemonth,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{formatDate(props.courseStarting)}</Text>
+                <Text style={[styles[Device].intakemonth,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{getMonth(props.courseStartingMonth+1,true)}</Text>
                 <View style={{flexDirection:"row",gap:3}}>
                     {/* <Image source={intake_icon} style={[styles[Device].intake_icon,{opacity:0.5}]}/> */}
-                    <Text style={[styles[Device].deadline,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Application Deadline: "+getMonth(props.deadlineMonth,true)}</Text>
+                    <Text style={[styles[Device].deadline,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Application Deadline: "+getMonth(props.deadlineMonth+1,true)}</Text>
                 </View>
             </View>
             {/* <Image source={go_icon} style={[styles[Device].go_icon,{transform:[{scaleX:-1}]}]}/> */}

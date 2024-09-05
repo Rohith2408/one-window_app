@@ -197,10 +197,15 @@ const Search=()=>{
 
     const select=(item:ListItem,type:string)=>{
         console.log("data",item,type);
+
         navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}}):null
+        // navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{courselistid:props.courselistid,courseadditionalFilters:[...props.courseadditionalFilters,...data],coursequickFilters:props.coursequickFilters,coursesearch:props.coursesearch,coursepage:props.coursepage}}}):null
+
+        // navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}}):null
         setTimeout(()=>{
+            navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{courselistid:"Programs",courseadditionalFilters:[{type:type,data:[item]}],coursequickFilters:[],coursesearch:search,coursepage:1}}}):null
             //navigate?navigate({type:"UpdateParam",payload:{param:props.listid+"listquery",newValue:{search:props.search,page:props.page,additionalFilters:correctAdditionalFilters(data,props.quickFilters),quickFilters:props.quickFilters}}}):null
-            navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"programs",Programslistquery:{search:search,page:1,additionalFilters:[{type:type,data:[item]}],quickFilters:[]},Universitieslistquery:{search:search,page:1,additionalFilters:[],quickFilters:[]}}}}):null
+            //navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"programs",Programslistquery:{search:search,page:1,additionalFilters:[{type:type,data:[item]}],quickFilters:[]},Universitieslistquery:{search:search,page:1,additionalFilters:[],quickFilters:[]}}}}):null
         },200)
     }
 

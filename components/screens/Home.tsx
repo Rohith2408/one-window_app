@@ -186,13 +186,16 @@ const styles={
 const Home=(props:undefined|{name:string})=>{
 
     const products=useAppSelector((state)=>state.products)
+    const personalinfo=useAppSelector((state)=>state.sharedinfo)
     const [theme,setTheme]=useTheme();
     const [path,navigate]=useNavigation();
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const exploreTabs=useRef([
         {text:"Destinations",icon:destinations_icon,handler:()=>{}},//navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Destinations",destinationsadditionalfilters:[],destinationsquickfilters:[],search:"",destinationspage:1}}}):null
-        {text:"Universities",icon:universities_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",Programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},Universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null},
-        {text:"Programs",icon:programs_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",Programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},Universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null}
+        //{text:"Universities",icon:universities_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",Programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},Universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null},
+        {text:"Universities",icon:universities_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{courselistid:"Programs",courseadditionalFilters:[],coursequickFilters:[],coursesearch:"",coursepage:1}}}):null},
+        {text:"Programs",icon:universities_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{courselistid:"Programs",courseadditionalFilters:[],coursequickFilters:[],coursesearch:"",coursepage:1}}}):null},
+        //{text:"Programs",icon:programs_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",Programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},Universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null}
     ]).current
 
     const openSearch=()=>{
@@ -203,7 +206,7 @@ const Home=(props:undefined|{name:string})=>{
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper]}>
                 <View>
-                    <Text style={[{color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , Rohith!</Text>
+                    <Text style={[{color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {personalinfo.data?.firstName}!</Text>
                 </View>
                 <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'}]}>
                     <Text style={[GeneralStyles.search_text,styles[Device].search_text]}>Search for "Harvard University"</Text>

@@ -10,7 +10,7 @@ const GeneralStyles=StyleSheet.create({
         // flex:1,
         display:'flex',
         flexDirection:'column',
-        gap:5
+        gap:5,
     },
     arrow:{
         transform:[{rotate:"-90deg"}]

@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native"
+import { Dimensions, StyleSheet, View } from "react-native"
 import { ComponentInfo } from "../../types"
 import { getComponent } from "../../utils"
 
@@ -12,7 +12,6 @@ const GeneralStyles=StyleSheet.create({
 const Flyer=(props:{flyerid:string,flyerdata:any})=>{
 
     const Container:React.FC<any>|undefined=getComponent(props.flyerid)?.component
-    //let params=typeof props.flyerdata == "string"?{data:props.flyerdata}:JSON.parse(props.flyerdata)
     let params=props.flyerdata
     if(typeof props.flyerdata=="string")
     {
@@ -21,6 +20,7 @@ const Flyer=(props:{flyerid:string,flyerdata:any})=>{
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
+            {/* <View style={{position:"absolute",backgroundColor:'red',top:"-100%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}}></View> */}
         {
             Container
             ?

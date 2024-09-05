@@ -65,6 +65,7 @@ const Datetimepro=(props:{datesFetcher:any,value:string,id:string})=>{
     const openSelector=async ()=>{
         setIsloading(true)
         let res:ServerResponse=await props.datesFetcher();
+        console.log("date fetcher response",res);
         setIsloading(false)
         if(res.success)
         {

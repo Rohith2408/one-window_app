@@ -100,7 +100,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     const Device=useRef(getDevice()).current
     const [errors,setError]=useState<{id:string,error:undefined|string}[]>([]) 
     const [path,navigate]=useNavigation()
-    console.log("fodod",additionalInfo,props.formbasket)
+    //console.log("fodod",additionalInfo,props.formbasket)
 
     const eventHandler=async (event:Event)=>{
         console.log("event",event);
@@ -134,6 +134,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     const onSubmit=async ()=>{ 
         let errors=validate()
         setError(errors);
+        console.log("Submitting");
         if(errors.length==0)
         {
             let handler=formInfo?.submit.onSubmit;
@@ -155,6 +156,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                     {
                         navigate?navigate(formInfo.submit.redirect(res.data)):null
                     }
+                    console.log("Form callback",additionalInfo.callback)
                     if(additionalInfo?.callback){
                         additionalInfo.callback(convertedData);
                     }

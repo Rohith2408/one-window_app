@@ -17,6 +17,11 @@
       "channel": "ios_production",
       "distribution":"store"
     },
+    "iosAdhoc":{
+      "autoIncrement": true,
+      "channel": "ios_adhoc",
+      "distribution":"internal"
+    },
     "androidTest":{
       "autoIncrement": true,
       "channel": "android_test",

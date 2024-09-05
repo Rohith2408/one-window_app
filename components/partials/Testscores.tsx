@@ -77,7 +77,54 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
 
-    
+    add_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    edit_icon:{
+        width:14,
+        height:14,
+        resizeMode:"contain"
+    },
+    delete_icon:{
+        width:14,
+        height:14,
+        resizeMode:"contain"
+    },
+    test_icon:{
+        width:16,
+        height:16,
+        resizeMode:"contain",
+        position:"relative"
+    },
+    test_icon_bg:{
+        width:16,
+        height:16,
+        borderRadius:100,
+        position:"absolute",
+        zIndex:-1,
+        left:-5,
+        top:4
+    },
+    test_name:{
+        fontSize:13
+    },
+    section_name:{
+        fontSize:11
+    },
+    score:{
+        fontSize:11
+    },
+    total_heading:{
+        fontSize:11
+    },
+    total:{
+        fontSize:11
+    },
+    test_date:{
+        fontSize:10
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -131,11 +178,105 @@ const MobileSStyles=StyleSheet.create({
     }
 })
 const MobileMStyles=StyleSheet.create({
-
+    add_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    edit_icon:{
+        width:14,
+        height:14,
+        resizeMode:"contain"
+    },
+    delete_icon:{
+        width:14,
+        height:14,
+        resizeMode:"contain"
+    },
+    test_icon:{
+        width:16,
+        height:16,
+        resizeMode:"contain",
+        position:"relative"
+    },
+    test_icon_bg:{
+        width:16,
+        height:16,
+        borderRadius:100,
+        position:"absolute",
+        zIndex:-1,
+        left:-5,
+        top:4
+    },
+    test_name:{
+        fontSize:13
+    },
+    section_name:{
+        fontSize:11
+    },
+    score:{
+        fontSize:11
+    },
+    total_heading:{
+        fontSize:11
+    },
+    total:{
+        fontSize:11
+    },
+    test_date:{
+        fontSize:10
+    }
     
 })
 const MobileLStyles=StyleSheet.create({
-
+    add_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    edit_icon:{
+        width:14,
+        height:14,
+        resizeMode:"contain"
+    },
+    delete_icon:{
+        width:14,
+        height:14,
+        resizeMode:"contain"
+    },
+    test_icon:{
+        width:16,
+        height:16,
+        resizeMode:"contain",
+        position:"relative"
+    },
+    test_icon_bg:{
+        width:16,
+        height:16,
+        borderRadius:100,
+        position:"absolute",
+        zIndex:-1,
+        left:-5,
+        top:4
+    },
+    test_name:{
+        fontSize:13
+    },
+    section_name:{
+        fontSize:11
+    },
+    score:{
+        fontSize:11
+    },
+    total_heading:{
+        fontSize:11
+    },
+    total:{
+        fontSize:11
+    },
+    test_date:{
+        fontSize:10
+    }
     
 })
 

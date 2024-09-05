@@ -88,10 +88,10 @@ const Student=(props:{screens:string[],params:any})=>{
             url:getServerRequestURL("profile","GET"),
             reqType: "GET"
         })
-        // console.log("ress",res)
+        console.log("ress",res)
         if(!res.success)
         {
-            if(res.message==serverResponses.VerificationFailed || res.message==serverResponses.TokenMissing)
+            if(res.message==serverResponses.VerificationFailed || res.message==serverResponses.InvalidTokens || res.message==serverResponses.TokenMissing)
             {
                 navigate?navigate({type:"Logout"}):null
             }

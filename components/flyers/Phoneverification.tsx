@@ -123,7 +123,14 @@ const Requestotp=(props:{phone:Phone,setPage:any})=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     const updatePhone=async ()=>{
-        let res:ServerResponse=await profileUpdator({phone:props.phone},(res)=>res.success?store.dispatch(setSharedInfo({...store.getState().sharedinfo.data,phone:props.phone})):null)
+        let res:ServerResponse=await serverRequest({
+            url:getServerRequestURL("phone","PUT"),
+            body:{
+                phone: props.phone
+            },
+            reqType:"PUT"
+        })
+         //profileUpdator({phone:props.phone},(res)=>res.success?store.dispatch(setSharedInfo({...store.getState().sharedinfo.data,phone:props.phone})):null)
         return res
     }
 

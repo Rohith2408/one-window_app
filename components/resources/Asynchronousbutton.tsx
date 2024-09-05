@@ -17,7 +17,7 @@ const GeneralStyles=StyleSheet.create({
     },
     text:{
         position:"absolute"
-    }   
+    }
 })
 
 const TabStyles=StyleSheet.create({

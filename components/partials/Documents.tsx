@@ -212,7 +212,7 @@ const Academic=(props:Request<DocumentsType>)=>{
             <Document docIdentifier="Intermediate" title="Intermediate" fieldPath="academic.plus2" doc={documents?.plus2}></Document>
             <Document docIdentifier="Degree" title="Degree" fieldPath="academic.degree" doc={documents?.degree}></Document>
             <Nestedview title="Bachelors" maxHeight={150}>
-                <View style={{gap:15}}>
+                <View style={{gap:30}}>
                     <Document docIdentifier="Bachelors Transcripts" title="Transcripts" fieldPath="academic.bachelors.transcripts" doc={documents?.bachelors?.transcripts}></Document>
                     <Document docIdentifier="Bachelors Bonafide" title="Bonafide" fieldPath="academic.bachelors.bonafide" doc={documents?.bachelors?.bonafide}></Document>
                     <Document docIdentifier="Bachelors CMM" title="CMM" fieldPath="academic.bachelors.CMM" doc={documents?.bachelors?.CMM}></Document>
@@ -221,7 +221,7 @@ const Academic=(props:Request<DocumentsType>)=>{
                 </View>
             </Nestedview>
             <Nestedview title="Masters" maxHeight={150}>
-                <View style={{gap:15}}>
+                <View style={{gap:30}}>
                     <Document docIdentifier="Masters Transcripts" title="Transcripts" fieldPath="academic.masters.transcripts" doc={documents?.masters?.transcripts}></Document>
                     <Document docIdentifier="Masters Transcripts" title="Bonafide" fieldPath="academic.masters.bonafide" doc={documents?.masters?.bonafide}></Document>
                     <Document docIdentifier="Masters Transcripts" title="CMM" fieldPath="academic.masters.CMM" doc={documents?.masters?.CMM}></Document>
@@ -343,7 +343,7 @@ const Document=(props:{title:string,docIdentifier:string,fieldPath:string,doc:Do
         }
     }
 
-    console.log("doc",props.doc)
+    console.log("docssss",props.docIdentifier,props.doc)
 
     return(
         <View style={[GeneralStyles.document_wrapper]}>

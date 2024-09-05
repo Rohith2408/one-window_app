@@ -123,7 +123,7 @@ const Meetingcard=(props:{data:Meeting,index:number})=>{
     }
 
     const reschedule=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Meeting",forminitialdataid:props.data._id}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"UpdateMeeting",forminitialdataid:props.data._id}}}):null
     }
 
     const cancel=async ()=>{
@@ -144,7 +144,6 @@ const Meetingcard=(props:{data:Meeting,index:number})=>{
                 description:res.data.data.summary,
                 attendees:res.data.data.attendees.map((item:any)=>item.email),
                 link:res.data.data.hangoutLink,
-                //calenderLink:res.data.data.,
                 startDate:res.data.data.start,
                 endDate:res.data.data.end,
                 status:res.data.status,
@@ -152,6 +151,8 @@ const Meetingcard=(props:{data:Meeting,index:number})=>{
             }))
         }
     }
+
+    console.log("meeting",props.data._id,props.status);
 
     return(
         <View style={[GeneralStyles.wrapper]}>

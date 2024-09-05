@@ -84,6 +84,7 @@ const styles={
 
 const Dropdownoptions=(props:{basketid:string})=>{
 
+    const [search,setSearch]=useState("");
     let info=useRef(getBasket(props.basketid)).current
     const [options,setoptions]=useState(info.options?.list?info.options.list:[])
     const [selected,setSelected]=useState<ListItem[]>(info.selected?info.selected:[])
@@ -101,6 +102,10 @@ const Dropdownoptions=(props:{basketid:string})=>{
             setSelected(info.selectionMode=="single"?[data]:[...selected,data])
         }
     }
+
+    useEffect(()=>{
+        //search.length>0?info.options.searchEvaluator?setoptions(options.map((item)=>info.options.searchEvaluator(item,search))):null:setoptions(info.options?.list?info.options.list:[])
+    },[search])
 
     useEffect(()=>{
         return ()=>{
@@ -135,7 +140,13 @@ const Dropdownoptions=(props:{basketid:string})=>{
                 <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Image style={{width:24,height:24,resizeMode:"contain"}} source={loading_gif}></Image></View>
                 :
                 <View style={{flex:1,gap:20,padding:10}}>
-                    {/* <TextInput placeholder="Search..." style={[GeneralStyles.search,{borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)}]} value={search} onChangeText={(text)=>setSearch(text)}></TextInput> */}
+                    {
+                        options.length>10 && info.options.searchEvaluator
+                        ?
+                        <TextInput placeholder="Search..." style={[GeneralStyles.search,{borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)}]} value={search} onChangeText={(text)=>setSearch(text)}></TextInput>
+                        :
+                        null
+                    }
                     <ScrollView style={[GeneralStyles.options_wrapper]} contentContainerStyle={{gap:15,paddingBottom:10}}>
                     {
                         options.map((item:any,i:number)=>

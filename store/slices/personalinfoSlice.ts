@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import * as SecureStore from 'expo-secure-store';
-import { Personalinfo, Request} from "../../misc/typeDefinations";
+import { Personalinfo, Request} from "../../types/index";
 
 let initialState:Request<Personalinfo|undefined>={
     requestStatus:"not_initiated",
@@ -29,5 +29,5 @@ const personalinfoSlice=createSlice({
     }
 })
 
-export const {initPersonalInfo,updatePersonalInfo,setPersonalInfo,resetPersonalInfo}=personalinfoSlice.actions;
+export const {initPersonalInfo,setPersonalInfo,resetPersonalInfo}=personalinfoSlice.actions;
 export default personalinfoSlice.reducer;

@@ -125,7 +125,7 @@ const Expert=(props:{expertid:string})=>{
     const [path,navigate]=useNavigation()
 
     const bookslot=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Meeting"}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"AddMeeting",forminitialdataid:props.expertid}}}):null
     }
 
     return(
@@ -152,7 +152,7 @@ const Expert=(props:{expertid:string})=>{
                     <ScrollView style={{flex:1}} contentContainerStyle={{gap:10}}>
                     {
                         meetings.map((meeting,i)=>
-                        <Pressable onPress={()=>{}} key={meeting._id} style={[styles[Device].card_wrapper]}><Meetingcard data={meeting} index={i}/></Pressable>
+                        <View key={meeting._id} style={[styles[Device].card_wrapper]}><Meetingcard data={meeting} index={i}/></View>
                         )
                     }
                     </ScrollView>

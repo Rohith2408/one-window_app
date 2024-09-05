@@ -69,11 +69,11 @@ const Datetimeproselector=(props:{id:string})=>{
     const [isLoading,setIsloading]=useState(false);
 
     const book=()=>{
-        //console.log(getdate(selected))
-        //2024-05-01T13:27:11.449Z
         navigate?navigate({type:"RemoveScreen"}):null
         navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:info.fieldid,newvalue:getdate(selected)}}}):null
     }
+
+    console.log()
 
     useEffect(()=>{
         let available=selected.date?availableSlots.find((item)=>formatDate(item.date)==formatDate(selected.date))?.availableSlots:[]

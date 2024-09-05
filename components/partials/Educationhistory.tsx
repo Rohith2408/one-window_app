@@ -194,6 +194,7 @@ const Educationhistory=()=>{
 
     const education=useAppSelector((state)=>state.educationhistory)
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    
 
     return(
         <View style={{flex:1}}>
@@ -203,8 +204,8 @@ const Educationhistory=()=>{
             <View style={{flex:1,display:"flex",padding:5,flexDirection:'column',gap:50,paddingTop:30}}>
                 <View style={[styles[Device].card_wrapper]}><School data={education.data.school}/></View>
                 <View style={[styles[Device].card_wrapper]}><Intermediate data={education.data.plus2}/></View>
-                {/* <View style={[styles[Device].card_wrapper]}><Undergraduation data={education.data.underGraduation}/></View>
-                <View style={[styles[Device].card_wrapper]}><Postgraduation data={education.data.postGraduation}/></View> */}
+                <View style={[styles[Device].card_wrapper]}><Undergraduation data={education.data.underGraduation}/></View>
+                <View style={[styles[Device].card_wrapper]}><Postgraduation data={education.data.postGraduation}/></View>
             </View>
             :
             <Loadinglistscreen cardGap={30} cardHeight={150}></Loadinglistscreen>
@@ -429,6 +430,9 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
 
     const [path,navigate]=useNavigation()
     const [isLoading,setIsLoading]=useState(false)
+    const Device=useRef<keyof typeof styles>(getDevice()).current
+    const titleTranslate=useRef(new Animated.Value(0)).current
+    const titleHeight=useRef().current
 
     const add=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Postgraduation"}}}):null
@@ -441,22 +445,43 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
         return res
     }
 
+    const animate=(y:number)=>{
+        Animated.spring(titleTranslate,{
+            toValue:y,
+            useNativeDriver:false
+        }).start()
+    }
+
+    const checkIfEmpty=(data:EducationHistory_UnderGraduation|undefined)=>{
+        return (!data || Object.keys(data).length==0 || Object.keys(data).length==1 && data.custom!=undefined)?true:false
+    }
+
     const edit=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Postgraduation"}}}):null
     }
 
     return(
-        <View>
+        <View style={{flex:1}}>
         {
-            props.data && Object.keys(props.data).length!=0
+            !checkIfEmpty(props.data)
             ?
-            <View>
-                <Pressable onPress={edit}><Image style={{width:20,height:20,objectFit:'contain'}} source={edit_icon}></Image></Pressable>
-                <Pressable onPress={remove}><Image style={{width:20,height:20,objectFit:'contain'}} source={isLoading?loading_gif:delete_icon}></Image></Pressable>
-                <View>
-                    <Text>{props.data?.instituteName}</Text>
-                    <Text>{props.data?.city}</Text>
-                    <Text>{props.data?.country}</Text>
+            <View style={{flex:1,flexDirection:'row',gap:10}}>
+                <View style={[GeneralStyles.icon_wrapper]}><Image source={ug_icon} style={[styles[Device].card_icon]} /></View>
+                <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
+                    <Animated.Text onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.25)} style={[styles[Device].title,GeneralStyles.title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5),transform:[{translateY:titleTranslate}]}]}>Postgraduation</Animated.Text>
+                    <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Word2Sentence([props.data.instituteName,props.data.degreeProgram],"","|")}</Text>
+                    <View style={{flexDirection:"row",gap:5}}>
+                        <Image style={[styles[Device].location_icon,{opacity:0.5}]} source={location_icon}/>
+                        <Text style={[styles[Device].text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.city,props.data.state,props.data.country],"",",")}</Text>
+                    </View>
+                    <View style={{flexDirection:"row",gap:5}}>
+                        <Image style={[styles[Device].info_icon,{opacity:0.5}]} source={info_icon}/>
+                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.programMajor,props.data.gradingSystem,props.data.totalScore?.toString()],"","|")}</Text>
+                    </View>
+                </View>
+                <View style={[GeneralStyles.actions_wrapper]}>
+                    <Pressable onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
+                    <Pressable onPress={!isLoading?remove:undefined} style={{flex:1,display:"flex",justifyContent:"flex-end"}}><Image source={isLoading?loading_gif:delete_icon} style={[styles[Device].delete_icon]} /></Pressable>
                 </View>
             </View>
             :

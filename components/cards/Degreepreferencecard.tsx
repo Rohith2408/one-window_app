@@ -52,7 +52,7 @@ const Degreepreferencecard=(props:ListItem)=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
-        <View style={{padding:10,gap:5,flexDirection:'row',justifyContent:"center",alignItems:"center"}}>
+        <View style={{padding:5,gap:5,flexDirection:'row',justifyContent:"center",alignItems:"center"}}>
             <Image style={[styles[Device].icon]} source={icon}/>
             <View style={{flex:1}}><Text style={[styles[Device].text,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.label}</Text></View>
         </View>

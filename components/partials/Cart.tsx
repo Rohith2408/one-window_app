@@ -1,87 +1,72 @@
-import { Pressable, ScrollView, Text, View } from "react-native"
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { CartItem, Event, ProgramIntake } from "../../types";
 import { requests } from "../../constants/requests";
 import { useRef, useState } from "react";
 import useNavigation from "../../hooks/useNavigation";
 import { store } from "../../store";
-import { ISOtoIntakeformat, formatDate } from "../../utils";
+import { ISOtoIntakeformat, formatDate, getDevice } from "../../utils";
 import { addToBasket } from "../../constants/basket";
+import Cartcard from "../cards/Cartcard";
+import { Fonts, Themes } from "../../constants";
+
+const GeneralStyles=StyleSheet.create({
+    
+})
+
+const TabStyles=StyleSheet.create({
+    checkout:{
+        fontSize:12
+    }
+})
+
+const MobileSStyles=StyleSheet.create({
+    checkout:{
+        fontSize:12
+    }
+})
+
+const MobileMStyles=StyleSheet.create({
+    checkout:{
+        fontSize:12
+    }
+})
+
+const MobileLStyles=StyleSheet.create({
+    checkout:{
+        fontSize:12
+    }
+})
+
+const styles={
+    Tab:TabStyles,
+    MobileS:MobileSStyles,
+    MobileM:MobileMStyles,
+    MobileL:MobileLStyles
+}
 
 const Cart=()=>{
 
     const [path,navigate]=useNavigation()
     const cart=useAppSelector((state)=>state.cart);
-    const [isLoading,setIsLoading]=useState(false)
     const currentSelection=useRef<CartItem|undefined>()
-
-    const deleteItem=async (item:CartItem)=>{
-        setIsLoading(true);
-        let data={
-            action:"remove",
-            itemId:item._id
-        }
-        let serverRes;
-        let requestInfo=requests.find((item)=>item.id=="removeFromCart");
-        let validation=requestInfo?.inputValidator(data);
-        if(validation?.success)
-        {
-            serverRes=await requestInfo?.serverCommunicator(data);
-            if(serverRes?.success)
-            {
-                requestInfo?.responseHandler(serverRes);
-            }
-        }
-        console.log("res",validation,serverRes);
-        setIsLoading(false)
-    }
-
-    const updateItem=async (event:Event)=>{
-        console.log("selllll",event.data);
-        setIsLoading(true);
-        let data={
-            action:"update",
-            itemId:currentSelection.current?._id,
-            courseId:currentSelection.current?.course._id,
-            intake:(event.data.month).padStart(2, '0')+"/"+"10"+"/"+event.data.year
-        }
-        let serverRes;
-        let requestInfo=requests.find((item)=>item.id=="updateCart");
-        let validation=requestInfo?.inputValidator(data);
-        if(validation?.success)
-        {
-            serverRes=await requestInfo?.serverCommunicator(data);
-            if(serverRes?.success)
-            {
-                requestInfo?.responseHandler(serverRes);
-            }
-        }
-        console.log("res",validation,serverRes);
-        setIsLoading(false)
-    }
-
-    const showIntakes=(item:CartItem)=>{
-        currentSelection.current=item;
-        let dropdowndata={
-            list:item?.course.startDate,
-            onselection:updateItem,
-            selected:item.intake
-        }
-        addToBasket("intakes-dropdownoptions",dropdowndata);
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
-    }
+    const Device=useRef<keyof typeof styles>(getDevice()).current
 
     const order=()=>{
-        console.log()
         addToBasket("orderinfo",{
             package:undefined,
             products:cart.data.map((item)=>({
                 intake:item?.intake,
                 category:item?.course.elite?"elite application":"premium application",
-                course:{name:item?.course?.name,id:item.course._id}
+                course:{name:item?.course?.name,id:item.course._id,icon:item.course.university.logoSrc}
             }))
         }) 
         navigate?navigate({type:"AddScreen",payload:{screen:"Order",params:{orderinfoid:"orderinfo"}}}):null
+    }
+
+    const openExplore=()=>{
+        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}}):null;
+        navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",Programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},Universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null
     }
 
     return(
@@ -91,28 +76,32 @@ const Cart=()=>{
             ?
             <Text>Loading</Text>
             :
-            <View style={{flex:1}}>
-                <Pressable onPress={order}><Text>Checkout</Text></Pressable>
-                <ScrollView style={{flex:1}}>
+            <View style={{flex:1,gap:20}}>
                 {
-                    cart.data.map((item)=>
-                    <View style={{flexDirection:'row',gap:10}}>
-                        <Text>{item.course.name}</Text>
-                        <Text>{item.course.university.name}</Text>
-                        {
-                            isLoading
-                            ?
-                            <Text>Loading</Text>
-                            :
-                            <View style={{flexDirection:"row"}}>
-                                <Pressable onPress={()=>deleteItem(item)}><Text>Delete</Text></Pressable>
-                                <Pressable onPress={()=>showIntakes(item)}><Text>Update</Text></Pressable>
-                            </View>
-                        }
-                    </View>
-                    )
+                    cart.data.length>0
+                    ?
+                    <Pressable style={{alignSelf:'flex-end',borderRadius:100,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1)}} onPress={order}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Checkout</Text></Pressable>
+                    :
+                    null
                 }
-                </ScrollView>
+                <View style={{flex:1}}>
+                {
+                    cart.data.length==0
+                    ?
+                    <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+                        <Text>No items added to cart</Text>
+                        <Pressable onPress={openExplore}><Text>Explore</Text></Pressable>
+                    </View>
+                    :
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:20,padding:10}}>
+                    {
+                        cart.data.map((item,i)=>
+                        <Cartcard key={item._id} {...item} index={i}/>
+                        )
+                    }
+                    </ScrollView>
+                }
+                </View>
             </View>
         }
         </View>

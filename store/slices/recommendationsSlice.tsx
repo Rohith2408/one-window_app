@@ -1,12 +1,12 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Recommendation, Request } from "../../misc/typeDefinations";
+import { Recommendation, Request } from "../../types/index";
 
 type RecommendationType={
     criteria: {
     ug_gpa?:number,
     gre?:number,
     sub_discipline?: string[]
-}|undefined,
+    }|undefined,
 data:Recommendation[]
 }
 

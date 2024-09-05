@@ -78,15 +78,26 @@ const lists:ListInfo[]=[
             ],
             quick:[{
                 type:"rating",
-                title:"Rating 4+ ?",
+                title:"Data Science in US?",
                 icon:sample_icon,
-                items:[{label:"4",value:'4'}]
+                filters:[{
+                    type:"subDiscipline",
+                    data:[{label:"Data Science & Big Data",value:'Data Science & Big Data'}]
+                },
+                {
+                    type:"country",
+                    data:[{label:"United States of America",value:'United States of America'}]
+                },
+            ]
             },
             {
                 type:"studyLevel",
                 title:"M.Sc ?",
                 icon:sample_icon,
-                items:[{label:"M.Sc",value:"M.Sc."}]
+                filters:[{
+                    type:"studyLevel",
+                    data:[{label:"M.Sc",value:"M.Sc."}]
+                }]
             },
         ]
         },
@@ -137,8 +148,7 @@ const lists:ListInfo[]=[
                 title:"M.Sc ?",
                 icon:sample_icon,
                 items:[{label:"M.Sc",value:"M.Sc."}]
-            },
-        ]
+            }]
         },
         pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"universitiespage",newValue:page+1}}),
         listFetcher:async (query:{search:string,filters:any[],page:number})=>{

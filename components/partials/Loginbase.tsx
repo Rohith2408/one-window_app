@@ -190,6 +190,7 @@ const Loginbase=(props:{auth:string})=>{
     const [password,setPassword]=useState("Rohith@24")
     const [path,navigate]=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const [errors,setErrors]=useState([]);
 
     const login=async (email:string,password:string)=>{
         let validEmail=validations.EMAIL.regex.test(email)
@@ -198,9 +199,13 @@ const Loginbase=(props:{auth:string})=>{
         {
             let deviceToken=await SecureStore.getItemAsync(secureStoreKeys.DEVICE_TOKEN);
             let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:email,password:password,DeviceToken:deviceToken}})
+            console.log("err",res);
             if(res.success)
             {
                 navigate?navigate({type:"Login"}):null
+            }
+            else{
+                //setErrors([{id:"password",error:res.message}]);
             }
         }
         if(validEmail && !validPassword)
@@ -329,7 +334,7 @@ const Loginbase=(props:{auth:string})=>{
     }
 
     useEffect(()=>{
-        // login(email,password)
+        //login(email,password)
     },[])
 
     return(
@@ -339,7 +344,7 @@ const Loginbase=(props:{auth:string})=>{
                 <Text style={[styles[Device].login,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Login</Text>
             </View>
             <View style={[GeneralStyles.body_wrapper]}>
-                <Form formid="Login" />
+                <Form formid="Login" formerrors={errors}/>
                 <View style={[GeneralStyles.actions_wrapper]}>
                     <View>
                         <Pressable onPress={openSignup}><Text style={[styles[Device].noaccount,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Don't have an account?</Text></Pressable>

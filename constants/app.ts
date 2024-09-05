@@ -8,6 +8,12 @@ const Themes={
         OnewindowTeal:(opacity:number)=>"rgba(117, 236, 229,"+opacity+")",
         OnewindowYellow:(opacity:number)=>"rgba(250, 234, 208,"+opacity+")",
         OnewindowLightBlue:"#F7F6FB"
+    },
+    ExtraLight:{
+        OnewindowRed:"#FFD8D3",
+        OnewindowPurple:"#F4F4FF",
+        OnewindowTeal:"#B6FFFB",
+        OnewindowYellow:"#FEF7E9",
     }
 }
 const Fonts={

@@ -1,6 +1,6 @@
 import { Dimensions, LayoutAnimation, Platform } from "react-native";
 import { Api, GradingSystems, Tests, Themes, andReplacer, baseAppUrl,lists,secureStoreKeys } from "../constants";
-import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem, Product, Package, Listquery } from "../types";
+import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem, Product, Package, Listquery, AppliedFilter, AppliedQuickFilter, Order } from "../types";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
@@ -563,6 +563,11 @@ export const getThemeColor=(index:number)=>{
   return colors[index]
 }
 
+export const getLightThemeColor=(index:number)=>{
+  let colors=[Themes.ExtraLight.OnewindowRed,Themes.ExtraLight.OnewindowPurple,Themes.ExtraLight.OnewindowYellow,Themes.ExtraLight.OnewindowTeal];
+  return colors[index]
+}
+
 export const keyVerifier=(data:any,keys:string[])=>{
     let givenKeys=Object.keys(data)
     let nonExistingKeys=keys.filter((item)=>givenKeys.find((item2)=>item2==item)?false:true);
@@ -582,33 +587,92 @@ export const ISOtoIntakeformat=(iso:string)=>{
   return formattedDate;
 }
 
+// export const PackageProductsValidator=(Package:Package|undefined,Products:Product[])=>{
+//   let errors:{id:string,data:any}[]=[];
+//   let ordersPlaced=store.getState().orders.data
+//   let alreadyPurchasedProducts=Products.filter((Product)=>ordersPlaced.find((order)=>order.products.find((item)=>compareProducts({category:item.category,course:{id:item.course._id,name:item.course.name},intake:item.intake},Product)))?true:false)
+//   if(alreadyPurchasedProducts.length!=0)
+//   {
+//     errors.push({id:"already_purchased",data:alreadyPurchasedProducts});
+//   }
+//   if(Package!=undefined)
+//   {
+//     let numberOfProductsAllowed=Package.products.reduce((acc,curr)=>acc+curr.quantity,0);
+//     let unfitProducts=Products.filter((product)=>Package.products.find((item)=>item.category==product.category)?false:true)
+//     let fitProducts=Products.filter((product)=>Package.products.find((item)=>item.category==product.category)?true:false)
+//     if(unfitProducts.length!=0)
+//     {
+//       errors.push({id:"unfit",data:unfitProducts})
+//     }
+//     if(fitProducts.length>numberOfProductsAllowed)
+//     {
+//       errors.push({id:"overflow",data:numberOfProductsAllowed-fitProducts.length})
+//     }
+//   }
+//   return errors;
+// }
+
 export const PackageProductsValidator=(Package:Package|undefined,Products:Product[])=>{
-  let errors:{id:string,data:any}[]=[];
-  let ordersPlaced=store.getState().orders.data
-  let alreadyPurchasedProducts=Products.filter((Product)=>ordersPlaced.find((order)=>order.products.find((item)=>compareProducts({category:item.category,course:{id:item.course._id,name:item.course.name},intake:item.intake},Product)))?true:false)
-  if(alreadyPurchasedProducts.length!=0)
+  let orders=store.getState().orders.data
+  let categories=getCategoriesFromProducts(Products);
+  let categoryErrors:{category:string,error:string}[]=[];
+  let productsErrors:{product:Product,error:string}[]=[];
+  let generalErrors:string[]=[];
+  if(Products.length==0)
   {
-    errors.push({id:"already_purchased",data:alreadyPurchasedProducts});
+    generalErrors.push("Products cannot be empty");
   }
-  if(Package!=undefined)
-  {
-    let numberOfProductsAllowed=Package.products.reduce((acc,curr)=>acc+curr.quantity,0);
-    let unfitProducts=Products.filter((product)=>Package.products.find((item)=>item.category==product.category)?false:true)
-    let fitProducts=Products.filter((product)=>Package.products.find((item)=>item.category==product.category)?true:false)
-    if(unfitProducts.length!=0)
+  else{
+    let purchasedProducts=Products.filter((product)=>orders.find((order:Order)=>order.products.find((item)=>compareProducts({category:item.category,
+      intake:item.intake,
+      course:{
+          id:item.course._id,
+          name:item.course.name,
+          icon:item.course.university.logoSrc
+      }},product))))
+    productsErrors=purchasedProducts.map((item)=>({product:item,error:"Already purchased"}))
+    if(purchasedProducts.length==0)
     {
-      errors.push({id:"unfit",data:unfitProducts})
-    }
-    if(fitProducts.length>numberOfProductsAllowed)
-    {
-      errors.push({id:"overflow",data:numberOfProductsAllowed-fitProducts.length})
+      categories.forEach((category)=>{
+        let categoryproducts=Products.filter((item)=>item.category==category)
+        let categoryInPackage=Package?.products.find((item)=>item.category==category)
+        console.log("products",Products)
+          if(Package!=undefined)
+          {
+            if(categoryInPackage==undefined)
+          {
+            productsErrors=[...productsErrors,...categoryproducts.map((item)=>({product:item,error:"Not allowed in the current package"}))]
+          }
+          else
+          {
+            if(categoryproducts.length>categoryInPackage.quantity)
+            {
+              categoryErrors.push({category:category,error:"Only "+categoryInPackage.quantity+" "+category+" allowed "})
+            }
+            else
+            {
+              console.log(category+" is perfect")
+            }
+          }
+          }
+      });
     }
   }
-  return errors;
+  return {categoryErrors,productsErrors,generalErrors}
 }
 
 export const getAlreadyPurchasedProducts=()=>{
 
+}
+
+export const getCategoriesFromProducts=(products: Product[])=>{
+    const categoriesSet = new Set<string>();
+  
+    products.forEach(product => {
+      categoriesSet.add(product.category);
+    });
+  
+    return Array.from(categoriesSet);
 }
 
 export const compareProducts=(product1:Product,product2:Product)=>{
@@ -629,8 +693,72 @@ export const listHandler=(id:string,data:Listquery)=>{
 export const truncateString=(str:string,requiredLength:number,addDots:boolean)=>{
   if(str.length>requiredLength)
   {
-      str=str.substring(0,requiredLength)+(addDots?" ...":"")
+    str=str.substring(0,requiredLength)+(addDots?" ...":"")
   }
   return str;
 }
 
+const getRazorPayScreenData=(orderid:string,amount:number,callback:any)=>{
+  var options = `{
+    "key": "rzp_test_TldsbrWlP8NUF5",
+    "amount": "${amount}", 
+    "currency": "INR",
+    "name":"One Window",
+    "description": "Test Transaction",
+    "order_id": "${orderid}", 
+    "handler": responseHandler,
+    "prefill": {
+      "name": "Customer Name",
+      "email": "customer@example.com",
+      "contact": "9999999999"
+    },
+    "theme": {
+      "color": "#3399cc"
+    }
+  }
+  var rzp1 = new Razorpay(options);
+  rzp1.open();
+  `;
+}
+
+// function (response){
+//   window.ReactNativeWebView.postMessage(JSON.stringify(response));
+// }
+
+export const chopOff=(additionalFilter:AppliedFilter,baseFilter:AppliedFilter)=>{
+  additionalFilter.data=additionalFilter.data.filter((item)=>baseFilter.data.find((item2)=>item.label==item2.label))
+  return additionalFilter
+}
+
+export const bakeFilters=(additionalFilters:AppliedFilter[],baseFilters:AppliedQuickFilter[])=>{
+  
+  //console.log("addi",JSON.stringify(additionalFilters,null,2))
+  //console.log("quick",JSON.stringify(baseFilters,null,2))
+  console.log("merged",getMergedFilters(baseFilters));
+
+  return [
+      ...getMergedFilters(baseFilters).filter((item)=>additionalFilters.find((item2)=>item2.type==item.type)==undefined?true:false),
+      ...additionalFilters
+  ]
+}
+
+export function getMergedFilters(quickfilters: AppliedQuickFilter[]): AppliedFilter[] {
+  const mergedFilters: { [key: string]: ListItem[] } = {};
+
+  quickfilters.forEach((quickFilter) => {
+    quickFilter.data.forEach((filter) => {
+      if (!mergedFilters[filter.type]) {
+        mergedFilters[filter.type] = [...filter.data];
+      } else {
+        mergedFilters[filter.type] = mergedFilters[filter.type].filter(item =>
+          filter.data.some(fItem => fItem.value === item.value)
+        );
+      }
+    });
+  });
+
+  return Object.keys(mergedFilters).map(type => ({
+    type,
+    data: mergedFilters[type]
+  }));
+}

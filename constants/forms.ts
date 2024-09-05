@@ -11,8 +11,8 @@ import { store } from "../store";
 import { setEducationHistory } from "../store/slices/educationHistorySlice";
 import { setTests } from "../store/slices/testScoresSlice";
 import { setWorkExperience } from "../store/slices/workexperienceSlice";
-import { AdditionalFilterInfo, AppliedFilter, Countrycode, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FormData, FormField, FormInfo, ListInfo, ListItem, Meeting, Phone as PhoneType, ServerResponse, Sharedinfo, Test, WorkExperience } from "../types";
-import { Word2Sentence, fetchCities, fetchCountries, fetchStates,  getServerRequestURL, profileUpdator, serverRequest, setWordCase} from "../utils";
+import { AdditionalFilterInfo, Advisor, AppliedFilter, Countrycode, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FormData, FormField, FormInfo, ListInfo, ListItem, Meeting, Phone as PhoneType, ServerResponse, Sharedinfo, Test, WorkExperience } from "../types";
+import { Word2Sentence, fetchCities, fetchCountries, fetchStates,  getMergedFilters,  getServerRequestURL, profileUpdator, serverRequest, setWordCase} from "../utils";
 import { validations} from "../utils/validations";
 import { addToBasket, getBasket, getFullBasket} from "./basket";
 import { Countries, GradingSystems, Industries, Languages, Tests, disciplines, intakes, studyLevel, subDisciplines } from "./misc";
@@ -30,6 +30,8 @@ import { lists } from "./lists";
 import Passwordinput from "../components/resources/Passwordinput";
 import { secureStoreKeys } from "./securestore";
 import * as SecureStore from 'expo-secure-store'
+import Textitem from "../components/resources/Textitem";
+import Checkbox from "../components/resources/Checkbox";
 
 export const testToForm=(testname:string)=>{
     const testData=store.getState().testscores.data.find((test)=>test.name==testname)
@@ -38,7 +40,7 @@ export const testToForm=(testname:string)=>{
     return [
       {id:"testname",value:testInfo?.name},
       {id:"testdate",value:testData?testData.testDate:""},
-      {id:"testdocument",value:undefined},
+    //   {id:"testdocument",value:undefined},
       ...scores
     ]
   }
@@ -87,21 +89,21 @@ export const testToForm=(testname:string)=>{
             event:"onFocus"
         }
       },
-      {
-        id:"testdocument",
-        componentInfo:{
-            component:Textbox,
-            props:{placeholder:undefined}
-        },
-        title:"Test Doc",
-        onUpdate:{
-            event:"onTextInput",
-            handler:undefined
-        },
-        onFocus:{
-            event:"onFocus"
-        }
-      },
+    //   {
+    //     id:"testdocument",
+    //     componentInfo:{
+    //         component:Textbox,
+    //         props:{placeholder:undefined}
+    //     },
+    //     title:"Test Doc",
+    //     onUpdate:{
+    //         event:"onTextInput",
+    //         handler:undefined
+    //     },
+    //     onFocus:{
+    //         event:"onFocus"
+    //     }
+    //   },
       ...testInfo?.sections.map((item)=>({
         id:item.name,
         componentInfo:{
@@ -221,7 +223,7 @@ const forms:FormInfo[]=[
             onSubmit:async (data:{firstname:string,lastname:string,email:string,password:string,confirmpassword:string,preffereddestinations:string[],prefferedlanguage:string})=>{
                 console.log("reg",data);
                 let deviceToken=await SecureStore.getItemAsync(secureStoreKeys.DEVICE_TOKEN);
-                let res:ServerResponse=await serverRequest({url:getServerRequestURL("register","POST"),routeType:"public",reqType:"POST",body:{firstName:data.firstname,lastName:data.lastname,email:data.email,password:data.password,country:data.preffereddestinations,language:data.prefferedlanguage,DeviceToken:deviceToken}})
+                let res:ServerResponse=await serverRequest({url:getServerRequestURL("register","POST"),routeType:"public",reqType:"POST",body:{firstName:data.firstname,lastName:data.lastname,email:data.email,password:data.password,country:data.preffereddestinations,language:data.prefferedlanguage}})
                 console.log("ressss signup",res)
                 return res;
             },
@@ -509,6 +511,7 @@ const forms:FormInfo[]=[
                 return info
             },
             onSubmit:async (data:Sharedinfo)=>{
+                console.log("Submitting data",data);
                 let res:ServerResponse=await profileUpdator({...data},(res)=>res.success?store.dispatch(setSharedInfo({...store.getState().sharedinfo.data,...data})):null)
                 let res2:ServerResponse=await serverRequest({
                     url:getServerRequestURL("edit-phone","PUT"),
@@ -651,14 +654,16 @@ const forms:FormInfo[]=[
         id:"Workexperience",
         title:"Please provide your Work Experience",
         getInitialData:(id:string|undefined)=>{
+            
             let data:WorkExperience|undefined=id?store.getState().workexperience.data.find((item)=>item._id==id):undefined
+            console.log("init",data)
             return [
                 {id:"companyname",value:data?data.companyName:""},
                 {id:"sector",value:data?[{label:setWordCase(data.sector),value:data.sector}]:[]},
                 {id:"designation",value:data?data.designation:""},
-                {id:"ongoing",value:data?data.Ongoing:""},
+                {id:"ongoing",value:data?data.Ongoing?"yes":"no":"no"},
                 {id:"worktype",value:data?[{label:setWordCase(data.type),value:data.type}]:[]},
-                {id:"document",value:data?data.docId:""},
+                // {id:"document",value:data?data.docId:""},
                 {id:"startdate",value:data?data.startDate:undefined},
                 {id:"enddate",value:data?data.endDate:undefined},
             ]
@@ -719,17 +724,6 @@ const forms:FormInfo[]=[
                 }
             },
             {
-                // options:{
-                //     list?:any[],
-                //     card:React.FC<any>,
-                //     fetcher?:(data?:any)=>Promise<any>,
-                //     idExtractor:(item:any)=>string,
-                //     labelExtractor?:(item:any)=>string
-                // },
-                // isAsync?:boolean,
-                // basketid:string,
-                // selectionMode:"single"|"multi",
-                // apply:(data:any[])=>FormAction
                 id:"worktype",
                 componentInfo:{
                     component:Dropdown,
@@ -803,9 +797,15 @@ const forms:FormInfo[]=[
             {
                 id:"ongoing",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Checkbox,
+                    props:{
+                        options:{
+                            yes:{label:"Yes",value:"yes"},
+                            no:{label:"No",value:"no"}
+                        }
+                    }
                 },
+                //emptyChecker:data,
                 title:"Ongoing?",
                 onUpdate:{
                     event:"onTextInput",
@@ -845,22 +845,22 @@ const forms:FormInfo[]=[
                     event:"onFocus"
                 }
             },
-            {
-                id:"document",
-                componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
-                },
-                title:"Document",
-                isOptional:true,
-                onUpdate:{
-                    event:"onTextInput",
-                    handler:undefined
-                },
-                onFocus:{
-                    event:"onFocus"
-                }
-            }
+            // {
+            //     id:"document",
+            //     componentInfo:{
+            //         component:Textbox,
+            //         props:{placeholder:""}
+            //     },
+            //     title:"Document",
+            //     isOptional:true,
+            //     onUpdate:{
+            //         event:"onTextInput",
+            //         handler:undefined
+            //     },
+            //     onFocus:{
+            //         event:"onFocus"
+            //     }
+            // }
         ]
     },
     {
@@ -1554,27 +1554,354 @@ const forms:FormInfo[]=[
             }
         ]
     },
+    // {
+    //     id:"Undergraduation",
+    //     title:"Please provide your Undergraduation Details",
+    //     getInitialData:(id:string|undefined)=>{
+    //         let data:EducationHistory_UnderGraduation|undefined=store.getState().educationhistory.data.underGraduation
+    //         return [
+    //             {id:"institute",value:{
+    //                 instituteName:data?.instituteName,
+    //                 city:data?.city,
+    //                 state:data?.state,
+    //                 country:data?.country,
+    //                 affiliatedUniversity:data?.affiliatedUniversity}},
+    //             {id:"programmajor",value:data?.instituteName?data.programMajor:""},
+    //             {id:"degreeprogram",value:data?.instituteName?data.degreeProgram:""},
+    //             {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
+    //             {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
+    //             //{id:"affiliatedUniversity",value:data?.affiliatedUniversity?data.affiliatedUniversity:""},
+    //             {id:"startdate",value:data?.startDate?data.startDate:undefined},
+    //             {id:"enddate",value:data?.endDate?data.endDate:undefined},
+    //             {id:"backlogs",value:data?.backlogs?data.backlogs.toString():undefined},
+    //             {id:"completed",value:data?.isCompleted?(data.isCompleted?"yes":"no"):undefined}
+    //         ]
+    //     },
+    //     submit:{
+    //         dataConverter:(data:FormData[],id?:string)=>{
+    //             let ugdetail:EducationHistory_UnderGraduation={
+    //                 instituteName:data[data.findIndex((item)=>item.id=="institute")].value.instituteName,
+    //                 custom:data[data.findIndex((item)=>item.id=="institutename")].value.isCustom?true:false,
+    //                 city: data[data.findIndex((item)=>item.id=="city")].value[0].value,
+    //                 state: data[data.findIndex((item)=>item.id=="state")].value[0].value,
+    //                 country: data[data.findIndex((item)=>item.id=="country")].value[0].value,
+    //                 degreeProgram:data[data.findIndex((item)=>item.id=="degreeprogram")].value,
+    //                 programMajor:data[data.findIndex((item)=>item.id=="programmajor")].value,
+    //                 gradingSystem: data[data.findIndex((item)=>item.id=="gradingsystem")].value[0].value,
+    //                 affiliatedUniversity:data[data.findIndex((item)=>item.id=="affiliateduniversity")].value,
+    //                 totalScore: data[data.findIndex((item)=>item.id=="totalscore")].value,
+    //                 startDate: data[data.findIndex((item)=>item.id=="startdate")].value,
+    //                 endDate: data[data.findIndex((item)=>item.id=="enddate")].value,
+    //                 backlogs:data[data.findIndex((item)=>item.id=="backlogs")].value,
+    //                 isCompleted:data[data.findIndex((item)=>item.id=="completed")].value=="yes"?true:false
+    //             }
+    //             return ugdetail
+    //         },
+    //         onSubmit:async (data:EducationHistory_UnderGraduation)=>{
+    //             let res:ServerResponse=await profileUpdator({education:{...store.getState().educationhistory.data,underGraduation:data}},(res)=>res.success?store.dispatch(setEducationHistory(res.data.education)):null)
+    //             return res
+    //         },
+    //         successText:"Success!",
+    //         failureText:"Failed :(",
+    //         idleText:"Submit"
+    //     },
+    //     allFields:[
+    //         // {
+    //         //     id:"institutename",
+    //         //     componentInfo:{
+    //         //         component:Institutename,
+    //         //         props:{
+    //         //             selectionMode:"single",
+    //         //             isAsync:true,
+    //         //             optionsCard:Institutionscard,
+    //         //             selectedHandler:(data:any)=>({selected:data,isCustom:false}),
+    //         //             basketid:"institutename-dropdown",
+    //         //             optionsFetcher:async (search:string)=>{
+    //         //                 let res:ServerResponse=await serverRequest({
+    //         //                     url:getServerRequestURL("regex","GET",{search:search,institutions:1}),
+    //         //                     reqType: "GET"
+    //         //                 })
+    //         //                 return res
+    //         //             }
+    //         //         }
+    //         //     },
+    //         //     title:"Institute Name",
+    //         //     onUpdate:{
+    //         //         event:"onTextInput",
+    //         //         handler:undefined
+    //         //     },
+    //         //     onFocus:{
+    //         //         event:"onFocus"
+    //         //     }
+    //         // },
+    //         {
+    //             id:"country",
+    //             componentInfo:{
+    //                 component:Countrydropdown,
+    //                 props:{
+    //                     options:{
+    //                         fetcher:async ()=>{
+    //                             let countries=await fetchCountries();
+    //                             return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
+    //                         },
+    //                         labelExtractor:(item:ListItem)=>item.label,
+    //                         idExtractor:(item:ListItem)=>item.label
+    //                     },
+    //                     apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+    //                     selectionMode:"single",
+    //                     basketid:"country-dropdown",
+    //                     cityFieldId:"city",
+    //                     stateFieldId:"state"
+    //                 }
+    //             },
+    //             title:"Country",
+    //             onUpdate:{
+    //                 event:"onSelect",
+    //                 // handler:(fields:FormData[],data:ListItem[])=>{
+    //                 //     let selectedCountry=data[0].value;
+    //                 //     addToBasket("country",selectedCountry)
+    //                 // }
+    //             },
+    //             onFocus:{
+    //                 event:"onToggle"
+    //             }
+    //         },
+    //         {
+    //             id:"state",
+    //             componentInfo:{
+    //                 component:Statedropdown,
+    //                 props:{
+    //                     options:{
+    //                         fetcher:async ()=>{
+    //                             let selectedCountry=getBasket("country")[0]?.label
+    //                             let states=selectedCountry?await fetchStates(selectedCountry):undefined
+    //                             return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
+    //                         },
+    //                         labelExtractor:(item:ListItem)=>item.label,
+    //                         idExtractor:(item:ListItem)=>item.label
+    //                     },
+    //                     apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+    //                     selectionMode:"single",
+    //                     basketid:"state-dropdown",
+    //                     cityFieldId:"city"
+    //                 }
+    //             },
+    //             title:"State",
+    //             onUpdate:{
+    //                 event:"onSelect",
+    //                 // handler:(fields:FormData[],data:ListItem[])=>{
+    //                 //     if(data.length>0)
+    //                 //     {
+    //                 //         let selectedCountry=data[0].value;
+    //                 //         addToBasket("state",selectedCountry)
+    //                 //     }
+    //                 // }
+    //             },
+    //             onFocus:{
+    //                 event:"onToggle"
+    //             }
+    //         },
+    //         {
+    //             id:"city",
+    //             componentInfo:{
+    //                 component:Dropdown,
+    //                 props:{
+    //                     options:{
+    //                         fetcher:async ()=>{
+    //                             let selectedCountry=getBasket("country")[0]?.label
+    //                             let selectedState=getBasket("state")[0]?.label
+    //                             let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
+    //                             return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
+    //                         },
+    //                         labelExtractor:(item:ListItem)=>item.label,
+    //                         idExtractor:(item:ListItem)=>item.label
+    //                     },
+    //                     apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+    //                     selectionMode:"single",
+    //                     basketid:"city-dropdown",
+    //                  }
+    //             },
+    //             title:"City",
+    //             onUpdate:{
+    //                 event:"onSelect",
+    //                 handler:undefined
+    //             },
+    //             onFocus:{
+    //                 event:"onToggle"
+    //             }
+    //         },
+    //         {
+    //             id:"degreeprogram",
+    //             componentInfo:{
+    //                 component:Textbox,
+    //                 props:{placeholder:""}
+    //             },
+    //             title:"Degree Program",
+    //             onUpdate:{
+    //                 event:"onTextInput",
+    //                 handler:undefined
+    //             },
+    //             onFocus:{
+    //                 event:"onFocus"
+    //             }
+    //         },
+    //         {
+    //             id:"affiliatedUniversity",
+    //             componentInfo:{
+    //                 component:Textbox,
+    //                 props:{placeholder:""}
+    //             },
+    //             title:"Affiliated University",
+    //             onUpdate:{
+    //                 event:"onTextInput",
+    //                 handler:undefined
+    //             },
+    //             onFocus:{
+    //                 event:"onFocus"
+    //             }
+    //         },
+    //         {
+    //             id:"programmajor",
+    //             componentInfo:{
+    //                 component:Textbox,
+    //                 props:{placeholder:""}
+    //             },
+    //             title:"Program Major",
+    //             onUpdate:{
+    //                 event:"onTextInput",
+    //                 handler:undefined
+    //             },
+    //             onFocus:{
+    //                 event:"onFocus"
+    //             }
+    //         },
+    //         {
+    //             id:"gradingsystem",
+    //             componentInfo:{
+    //                 component:Dropdown,
+    //                 props:{
+    //                     options:{
+    //                         list:GradingSystems.map((item)=>({label:item,value:item.toLowerCase()})),
+    //                         labelExtractor:(item:ListItem)=>item.label,
+    //                         idExtractor:(item:ListItem)=>item.label
+    //                     },
+    //                     apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
+    //                     selectionMode:"single",
+    //                     basketid:"gradingsystem-dropdown"
+    //                 }
+    //             },
+    //             title:"Grading System",
+    //             onUpdate:{
+    //                 event:"onSelect",
+    //                 handler:undefined
+    //             },
+    //             onFocus:{
+    //                 event:"onToggle"
+    //             }
+    //         },
+    //         {
+    //             id:"totalscore",
+    //             componentInfo:{
+    //                 component:Textbox,
+    //                 props:{placeholder:""}
+    //             },
+    //             validator:(data:any)=>{
+    //                 //console.log("basket",getBasket("gradingsystem"),getFullBasket())
+    //                 let gradingSystemSelected=getBasket("gradingsystem")[0]?.label;
+    //                 //console.log("ggg",gradingSystemSelected);
+    //                 let validationData=validations[gradingSystemSelected.toUpperCase()]
+    //                 return {
+    //                     success:validationData.regex.test(data),
+    //                     message:validationData.errorMessage,
+    //                     data:undefined
+    //                 }
+    //             },
+    //             title:"Total Score",
+    //             onUpdate:{
+    //                 event:"onTextInput",
+    //                 handler:undefined
+    //             },
+    //             onFocus:{
+    //                 event:"onFocus"
+    //             }
+    //         },
+    //         {
+    //             id:"startdate",
+    //             componentInfo:{
+    //                 component:Datetime,
+    //                 props:undefined
+    //             },
+    //             title:"Start Date",
+    //             onUpdate:{
+    //                 event:"onTextInput",
+    //                 handler:undefined
+    //             },
+    //             onFocus:{
+    //                 event:"onFocus"
+    //             }
+    //         },
+    //         {
+    //             id:"enddate",
+    //             componentInfo:{
+    //                 component:Datetime,
+    //                 props:undefined
+    //             },
+    //             title:"End Date",
+    //             onUpdate:{
+    //                 event:"onTextInput",
+    //                 handler:undefined
+    //             },
+    //             onFocus:{
+    //                 event:"onFocus"
+    //             }
+    //         },
+    //         {
+    //             id:"backlogs",
+    //             componentInfo:{
+    //                 component:Textbox,
+    //                 props:{placeholder:""}
+    //             },
+    //             title:"Backlogs",
+    //             onUpdate:{
+    //                 event:"onTextInput",
+    //                 handler:undefined
+    //             },
+    //             onFocus:{
+    //                 event:"onFocus"
+    //             }
+    //         },
+    //         {
+    //             id:"completed",
+    //             componentInfo:{
+    //                 component:Textbox,
+    //                 props:{placeholder:""}
+    //             },
+    //             title:"Completed?",
+    //             onUpdate:{
+    //                 event:"onTextInput",
+    //                 handler:undefined
+    //             },
+    //             onFocus:{
+    //                 event:"onFocus"
+    //             }
+    //         }
+    //     ]
+    // },
     {
         id:"Undergraduation",
         title:"Please provide your Undergraduation Details",
         getInitialData:(id:string|undefined)=>{
             let data:EducationHistory_UnderGraduation|undefined=store.getState().educationhistory.data.underGraduation
             return [
-                {id:"institute",value:{
-                    instituteName:data?.instituteName,
-                    city:data?.city,
-                    state:data?.state,
-                    country:data?.country,
-                    affiliatedUniversity:data?.affiliatedUniversity}},
-                //{id:"institutename",value:{instituteName:data?.instituteName,isCustom:data?.custom}},
-                //{id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
-                //{id:"state",value:data?.state?[{label:setWordCase(data.state),value:data.state}]:[]},
-                //{id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
+                {id:"institutename",value:data?.instituteName?data.instituteName:""},
+                {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
+                {id:"state",value:data?.state?[{label:setWordCase(data.state),value:data.state}]:[]},
+                {id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
+                {id:"affiliateduniversity",value:data?.instituteName?data.affiliatedUniversity:""},
                 {id:"programmajor",value:data?.instituteName?data.programMajor:""},
                 {id:"degreeprogram",value:data?.instituteName?data.degreeProgram:""},
                 {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
                 {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
-                //{id:"affiliatedUniversity",value:data?.affiliatedUniversity?data.affiliatedUniversity:""},
                 {id:"startdate",value:data?.startDate?data.startDate:undefined},
                 {id:"enddate",value:data?.endDate?data.endDate:undefined},
                 {id:"backlogs",value:data?.backlogs?data.backlogs.toString():undefined},
@@ -1584,15 +1911,14 @@ const forms:FormInfo[]=[
         submit:{
             dataConverter:(data:FormData[],id?:string)=>{
                 let ugdetail:EducationHistory_UnderGraduation={
-                    instituteName:data[data.findIndex((item)=>item.id=="institute")].value.instituteName,
-                    custom:data[data.findIndex((item)=>item.id=="institutename")].value.isCustom?true:false,
+                    instituteName:data[data.findIndex((item)=>item.id=="institutename")].value,
                     city: data[data.findIndex((item)=>item.id=="city")].value[0].value,
                     state: data[data.findIndex((item)=>item.id=="state")].value[0].value,
                     country: data[data.findIndex((item)=>item.id=="country")].value[0].value,
                     degreeProgram:data[data.findIndex((item)=>item.id=="degreeprogram")].value,
+                    affiliatedUniversity:data[data.findIndex((item)=>item.id=="affiliateduniversity")].value,
                     programMajor:data[data.findIndex((item)=>item.id=="programmajor")].value,
                     gradingSystem: data[data.findIndex((item)=>item.id=="gradingsystem")].value[0].value,
-                    affiliatedUniversity:data[data.findIndex((item)=>item.id=="affiliateduniversity")].value,
                     totalScore: data[data.findIndex((item)=>item.id=="totalscore")].value,
                     startDate: data[data.findIndex((item)=>item.id=="startdate")].value,
                     endDate: data[data.findIndex((item)=>item.id=="enddate")].value,
@@ -1603,6 +1929,7 @@ const forms:FormInfo[]=[
             },
             onSubmit:async (data:EducationHistory_UnderGraduation)=>{
                 let res:ServerResponse=await profileUpdator({education:{...store.getState().educationhistory.data,underGraduation:data}},(res)=>res.success?store.dispatch(setEducationHistory(res.data.education)):null)
+                console.log("Server res",res);
                 return res
             },
             successText:"Success!",
@@ -1610,34 +1937,22 @@ const forms:FormInfo[]=[
             idleText:"Submit"
         },
         allFields:[
-            // {
-            //     id:"institutename",
-            //     componentInfo:{
-            //         component:Institutename,
-            //         props:{
-            //             selectionMode:"single",
-            //             isAsync:true,
-            //             optionsCard:Institutionscard,
-            //             selectedHandler:(data:any)=>({selected:data,isCustom:false}),
-            //             basketid:"institutename-dropdown",
-            //             optionsFetcher:async (search:string)=>{
-            //                 let res:ServerResponse=await serverRequest({
-            //                     url:getServerRequestURL("regex","GET",{search:search,institutions:1}),
-            //                     reqType: "GET"
-            //                 })
-            //                 return res
-            //             }
-            //         }
-            //     },
-            //     title:"Institute Name",
-            //     onUpdate:{
-            //         event:"onTextInput",
-            //         handler:undefined
-            //     },
-            //     onFocus:{
-            //         event:"onFocus"
-            //     }
-            // },
+            {
+                id:"institutename",
+                componentInfo:{
+                    component:Textbox,
+                    props:{
+                    }
+                },
+                title:"Institute Name",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
             {
                 id:"country",
                 componentInfo:{
@@ -1661,10 +1976,6 @@ const forms:FormInfo[]=[
                 title:"Country",
                 onUpdate:{
                     event:"onSelect",
-                    // handler:(fields:FormData[],data:ListItem[])=>{
-                    //     let selectedCountry=data[0].value;
-                    //     addToBasket("country",selectedCountry)
-                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -1693,13 +2004,6 @@ const forms:FormInfo[]=[
                 title:"State",
                 onUpdate:{
                     event:"onSelect",
-                    // handler:(fields:FormData[],data:ListItem[])=>{
-                    //     if(data.length>0)
-                    //     {
-                    //         let selectedCountry=data[0].value;
-                    //         addToBasket("state",selectedCountry)
-                    //     }
-                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -1716,7 +2020,7 @@ const forms:FormInfo[]=[
                                 let selectedState=getBasket("state")[0]?.label
                                 let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
                                 return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
-                            },
+                            } ,
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
@@ -1735,22 +2039,7 @@ const forms:FormInfo[]=[
                 }
             },
             {
-                id:"degreeprogram",
-                componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
-                },
-                title:"Degree Program",
-                onUpdate:{
-                    event:"onTextInput",
-                    handler:undefined
-                },
-                onFocus:{
-                    event:"onFocus"
-                }
-            },
-            {
-                id:"affiliatedUniversity",
+                id:"affiliateduniversity",
                 componentInfo:{
                     component:Textbox,
                     props:{placeholder:""}
@@ -1770,7 +2059,22 @@ const forms:FormInfo[]=[
                     component:Textbox,
                     props:{placeholder:""}
                 },
-                title:"Program Major",
+                title:"Programmajor",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"degreeprogram",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Degree Program",
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
@@ -1798,6 +2102,9 @@ const forms:FormInfo[]=[
                 onUpdate:{
                     event:"onSelect",
                     handler:undefined
+                    // (formdata:FormData[],data:ListItem[])=>{
+                    //     addToBasket("gradingsystem-dropdown",data[0].value)
+                    // }
                 },
                 onFocus:{
                     event:"onToggle"
@@ -1810,9 +2117,7 @@ const forms:FormInfo[]=[
                     props:{placeholder:""}
                 },
                 validator:(data:any)=>{
-                    //console.log("basket",getBasket("gradingsystem"),getFullBasket())
                     let gradingSystemSelected=getBasket("gradingsystem")[0]?.label;
-                    //console.log("ggg",gradingSystemSelected);
                     let validationData=validations[gradingSystemSelected.toUpperCase()]
                     return {
                         success:validationData.regex.test(data),
@@ -1877,9 +2182,15 @@ const forms:FormInfo[]=[
             {
                 id:"completed",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Checkbox,
+                    props:{
+                        options:{
+                            yes:{label:"Yes",value:"yes"},
+                            no:{label:"No",value:"no"}
+                        }
+                    }
                 },
+                //emptyChecker:data,
                 title:"Completed?",
                 onUpdate:{
                     event:"onTextInput",
@@ -1929,9 +2240,11 @@ const forms:FormInfo[]=[
                     backlogs:data[data.findIndex((item)=>item.id=="backlogs")].value,
                     isCompleted:data[data.findIndex((item)=>item.id=="completed")].value=="yes"?true:false
                 }
+                console.log("converted Data",pgdetail);
                 return pgdetail
             },
-            onSubmit:async (data:EducationHistory_UnderGraduation)=>{
+            onSubmit:async (data:EducationHistory_PostGraduation)=>{
+                console.log("Server",data);
                 let res:ServerResponse=await profileUpdator({education:{...store.getState().educationhistory.data,postGraduation:data}},(res)=>res.success?store.dispatch(setEducationHistory(res.data.education)):null)
                 return res
             },
@@ -2198,8 +2511,13 @@ const forms:FormInfo[]=[
             {
                 id:"completed",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Checkbox,
+                    props:{
+                        options:{
+                            yes:{label:"Yes",value:"yes"},
+                            no:{label:"No",value:"no"}
+                        }
+                    }
                 },
                 title:"Completed?",
                 onUpdate:{
@@ -2439,16 +2757,19 @@ const forms:FormInfo[]=[
         allFields:testFields("American College Testing")
     },
     {
-        id:"Meeting",
+        id:"AddMeeting",
         title:"Please provide the details to book a slot",
         getInitialData:(id:string|undefined)=>{
-            //console.log("meetid",id)
-            let data:Meeting|undefined=id?store.getState().meeting.data.find((item)=>item._id==id):undefined
+            console.log("expert id",id)
+            let data:Advisor|undefined=id?store.getState().advisors.data.find((item)=>item.info._id==id):undefined
             return [
-                {id:"expert",value:data?[{name:Word2Sentence([data.member.firstName,data.member.lastName],""," "),id:data.member._id}]:[]},
-                {id:"description",value:data?data.description:""},
-                {id:"attendees",value:data?data.attendees:[]},
-                {id:"datetime",value:data?.startDate.dateTime},
+                {id:"expert",value:{
+                        label:Word2Sentence([data.info.firstName,data.info.lastName],""," "),
+                        value:data.info._id
+                }},
+                {id:"description",value:""},
+                {id:"attendees",value:[]},
+                {id:"datetime",value:new Date().toISOString()},
             ]
         },
         submit:{
@@ -2463,36 +2784,19 @@ const forms:FormInfo[]=[
                     startTime:new Date(data[data.findIndex((item)=>item.id=="datetime")].value),
                     endTime:enddate,
                     timeZone: "Asia/Kolkata",
-                    expert:data[data.findIndex((item)=>item.id=="expert")].value
+                    expert:data[data.findIndex((item)=>item.id=="expert")].value.value
                 }
                 return slotdata
             },
             onSubmit:async (data:any)=>{
+                console.log("submit data",data);
                 let res:ServerResponse;
-                console.log("ddy",data)
-                if(data._id)
-                {
-                    res=await serverRequest({
-                        url:getServerRequestURL("modify-slot","POST"),
-                        reqType:"POST",
-                        body:{
-                            meetingId: data._id, 
-                            option: "rescheduleEvent",
-                            startTime: data.startTime,  
-                            endTime:data.endTime, 
-                            timeZone:data.timeZone 
-                        }
-                    })
-                }
-                else
-                {
-                    res=await serverRequest({
-                        url:getServerRequestURL("book-slot","POST")+"/"+data.expert[0].id,
-                        reqType:"POST",
-                        body:data
-                    })
-                }
-                console.log("meeting res",res);
+                res=await serverRequest({
+                    url:getServerRequestURL("book-slot","POST")+"/"+data.expert,
+                    reqType:"POST",
+                    body:data
+                })
+                console.log("Server response",res);
                 if(res.success)
                 {
                     let meetingData={
@@ -2505,7 +2809,7 @@ const forms:FormInfo[]=[
                         status:res.data.data.status,
                         member:res.data.member
                     }
-                    store.dispatch(data._id?updateMeeting(meetingData):addMeeting(meetingData))
+                    store.dispatch(addMeeting(meetingData))
                 }
                 return res
             },
@@ -2517,28 +2821,16 @@ const forms:FormInfo[]=[
             {
                 id:"expert",
                 componentInfo:{
-                    component:Dropdown,
-                    props:{
-                        options:{
-                            fetcher:async ()=>{
-                                return {success:true,data:store.getState().advisors.data?.map((item)=>({name:Word2Sentence([item.info.firstName,item.info.lastName],""," "),id:item.info._id})),message:""}
-                            },
-                            card:Expertslistcard,
-                            labelExtractor:(item:{name:string,id:string})=>item.name,
-                            idExtractor:(item:{name:string,id:string})=>item.id
-                        },
-                        apply:(data:{name:string,id:string}[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"expert",newvalue:data}}}),
-                        selectionMode:"single",
-                        basketid:"worktype-dropdown"
-                    },
+                    component:Textitem,
+                    props:undefined,
                 },
                 title:"Expert",
                 onUpdate:{
-                    event:"onSelect",
+                    event:"onTextInput",
                     handler:undefined
                 },
                 onFocus:{
-                    event:"onToggle"
+                    event:"onFocus"
                 }
             },
             {
@@ -2581,15 +2873,15 @@ const forms:FormInfo[]=[
                     props:{
                         datesFetcher:async ()=>{
                             let expert=getBasket("expert")
-                            console.log("aaaddd",expert,getServerRequestURL("vacant-slots","GET")+"/"+expert.id);
-                            if(expert.length==0)
+                            console.log("aaaddd",expert,getServerRequestURL("vacant-slots","GET")+"/"+expert.value);
+                            if(expert.value.length==0)
                             {
                                 return {success:false,data:undefined,message:""}
                             }
                             else
                             {
                                 return await serverRequest({
-                                    url:getServerRequestURL("vacant-slots","GET")+"/"+expert[0].id,
+                                    url:getServerRequestURL("vacant-slots","GET")+"/"+expert.value,
                                     reqType:"GET"
                                 })
                             }
@@ -2605,45 +2897,161 @@ const forms:FormInfo[]=[
                     event:"onFocus"
                 }
             },
-
-            // {
-            //     id:"date",
-            //     componentInfo:{
-            //         component:Datetime,
-            //         props:undefined
-            //     },
-            //     title:"Date",
-            //     onUpdate:{
-            //         event:"onTextInput",
-            //         handler:undefined
-            //     },
-            //     onFocus:{
-            //         event:"onFocus"
-            //     }
-            // },
-            // {
-            //     id:"time",
-            //     componentInfo:{
-            //         component:Datetime,
-            //         props:{
-            //             mode:"time"
-            //         }
-            //     },
-            //     title:"Time",
-            //     onUpdate:{
-            //         event:"onTextInput",
-            //         handler:undefined
-            //     },
-            //     onFocus:{
-            //         event:"onFocus"
-            //     }
-            // }
+        ]
+    },
+    {
+        id:"UpdateMeeting",
+        title:"Please provide the details to update the slot",
+        getInitialData:(id:string|undefined)=>{
+            let data:Meeting|undefined=id?store.getState().meeting.data.find((item)=>item._id==id):undefined
+            return [
+                {id:"expert",value:{
+                    label:Word2Sentence([data?.member.firstName,data?.member.lastName],""," "),
+                    value:data?.member._id
+                }},
+                {id:"description",value:data?data.description:""},
+                {id:"attendees",value:data?data.attendees:[]},
+                {id:"datetime",value:data?.startDate.dateTime},
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                const startdate = new Date(data[data.findIndex((item)=>item.id=="datetime")].value);
+                startdate.setMinutes(startdate.getMinutes() + 30);
+                const enddate = startdate.toISOString();
+                let slotdata={
+                    _id:id,
+                    notes:data[data.findIndex((item)=>item.id=="description")].value,
+                    attendees:data[data.findIndex((item)=>item.id=="attendees")].value,
+                    startTime:new Date(data[data.findIndex((item)=>item.id=="datetime")].value),
+                    endTime:enddate,
+                    timeZone: "Asia/Kolkata",
+                    expert:data[data.findIndex((item)=>item.id=="expert")].value.value
+                }
+                return slotdata
+            },
+            onSubmit:async (data:any)=>{
+                let res:ServerResponse;
+                console.log("update meeting input",data);
+                res=await serverRequest({
+                    url:getServerRequestURL("modify-slot","POST"),
+                    reqType:"POST",
+                    body:{
+                        meetingId: data._id, 
+                        option: "rescheduleEvent",
+                        startTime: data.startTime,  
+                        endTime:data.endTime, 
+                        timeZone:data.timeZone 
+                    }
+                })
+                console.log("update meeting res",res);
+                if(res.success)
+                {
+                    let meetingData={
+                        _id:res.data._id,
+                        description:res.data.data.summary,
+                        attendees:res.data.data.attendees.map((item:any)=>item.email),
+                        link:res.data.data.hangoutLink,
+                        startDate:res.data.data.start,
+                        endDate:res.data.data.end,
+                        status:res.data.status,
+                        member:res.data.member
+                    }
+                    store.dispatch(updateMeeting(meetingData))
+                }
+                return res
+            },
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        allFields:[
+            {
+                id:"expert",
+                componentInfo:{
+                    component:Textitem,
+                    props:undefined,
+                },
+                title:"Expert",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"description",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:"Keep it small and simple"}
+                },
+                title:"Purpose",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"attendees",
+                componentInfo:{
+                    component:Listbuilder,
+                    props:{
+                        placeholder:"Enter the Mail-id of the Attendee",
+                        addHandler:(items:string[],current:string)=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"attendees",newvalue:[...items,current]}}})
+                    }
+                },
+                title:"Attendees",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"datetime",
+                componentInfo:{
+                    component:Datetimepro,
+                    props:{
+                        datesFetcher:async ()=>{
+                            let expert=getBasket("expert")
+                            console.log("aaaddd",expert,getServerRequestURL("vacant-slots","GET")+"/"+expert.value);
+                            if(expert.value.length==0)
+                            {
+                                return {success:false,data:undefined,message:""}
+                            }
+                            else
+                            {
+                                return await serverRequest({
+                                    url:getServerRequestURL("vacant-slots","GET")+"/"+expert.value,
+                                    reqType:"GET"
+                                })
+                            }
+                        }
+                    }
+                },
+                title:"Date",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
         ]
     },
     {
         id:"Programfilters",
         title:"",
         getInitialData:(id:string|undefined)=>{
+            console.log("id",id);
             let filtersInfo=lists.find((list)=>list.id=="Programs")?.filters.additional;
             let data:{additionalFiltersApplied:AppliedFilter[]}|undefined=id?getBasket(id):undefined
             return filtersInfo?filtersInfo.map((item)=>{
@@ -2657,6 +3065,7 @@ const forms:FormInfo[]=[
                 return info
             },
             onSubmit:async (data:AppliedFilter[])=>{
+                console.log("Form data",JSON.stringify(data,null,2));
                 return {success:true,message:"",data:data}
             },
             //redirect:(data:AppliedFilter[])=>({type:"UpdateParam",payload:{param:"programsadditionalfilters",newValue:data}}),
@@ -2675,13 +3084,18 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
-                            list:Countries.map((country)=>({label:country,value:country})),
+                            fetcher:(data:AppliedFilter)=>{
+                                //let appliedData=getBasket("Programsfilters");
+                                //let quickFilter=getMergedFilters()
+                                //let options=Countries.filter((item)=>appliedData.quickFiltersApplied.find((item2)=>item.type==item2.type)).map((country)=>({label:country,value:country}))
+                                let options=Countries.map((country)=>({label:country,value:country}))
+                                return  {success:true,data:options,messsage:""}
+                            },
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
-                        basketid:"sector-dropdown"
                     }
                 },
                 isOptional:true,
@@ -2752,7 +3166,8 @@ const forms:FormInfo[]=[
                         options:{
                             list:subDisciplines.map((discipline)=>({label:discipline,value:discipline})),
                             idExtractor:(item:ListItem)=>item.label,
-                            labelExtractor:(item:ListItem)=>item.label
+                            labelExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,query:string)=>item.label.includes(query)
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"subDiscipline",newvalue:data}}}),
                         selectionMode:"single",
@@ -2823,7 +3238,7 @@ const forms:FormInfo[]=[
             },
             {
                 id:"Type",
-                title:"Universaity Type",
+                title:"University Type",
                 componentInfo:{
                     component:Dropdown,
                     props:{

@@ -50,6 +50,11 @@ export type AppliedFilter={
     data:ListItem[]
 }
 
+export type AppliedQuickFilter={
+    type:string,
+    data:AppliedFilter[]
+}
+
 export type AdditionalFilterInfo={
     type:string,
     title:string,
@@ -64,9 +69,8 @@ export type AdditionalFilterInfo={
 export type QuickFilterInfo={
     type:string,
     title:string,
-    //handler?:(currentAppliedFilter:AppliedFilter[],data:any)=>AppliedFilter[]
     icon:string,
-    items:ListItem[]
+    filters:AppliedFilter[]
 }
 
 // export type FilterInfo={
@@ -101,6 +105,7 @@ export type ScreenInfo={
     swipeDirection?:"X"|"Y"|"XY",
     shiftOriginToCenter?:boolean,
     isTransparent?:boolean,
+    showTouchCaptureScreen?:boolean,
     occupyFullScreen?:boolean,
     animationStyle?:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTopPartial"|"VerticalSlideToTop"|"CenterPopIn"|"CenterFadeIn"|"FadeIn"|"Custom",
     removalThreshold?:number,
@@ -158,7 +163,8 @@ export type Dropdown={
         card:React.FC<any>,
         fetcher?:(data?:any)=>Promise<any>,
         idExtractor:(item:any)=>string,
-        labelExtractor:(item:any)=>string
+        labelExtractor:(item:any)=>string,
+        searchEvaluator:(item:any,query:string)=>boolean
     },
     isAsync?:boolean,
     basketid:string,
@@ -1151,10 +1157,18 @@ export interface Product{
     intake:string,
     course:{
         id:string,
-        name:string
+        name:string,
+        icon?:string
     }
 }
 
+export interface UG_Institutes{
+    instituteName:string,
+    city:string,
+    state:string,
+    country:string,
+    affiliatedUniversity:string
+}
 
 export interface PurchasedProduct{
     info: {
@@ -1275,10 +1289,50 @@ export interface AvailableSlot{
     date: string
 }
 
+export type Recommendation={
+    university: {
+      location: Location,
+      _id:string,
+      name: string,
+      logoSrc: string,
+      type: string,
+      establishedYear:number
+    },
+    course: {
+      tuitionFee: {
+        tuitionFee: number,
+        tuitionFeeType: string
+      },
+      currency: {
+        symbol: string,
+        code: string
+      },
+      _id: string,
+      name: string,
+      subDiscipline: string,
+      schoolName: string,
+      discipline: string,
+      studyLevel: string,
+      duration:string,
+      studyMode: string[]
+    },
+    possibilityOfAdmit: string,
+    _id: string
+}
+
+export type RecommendationType={
+    criteria: {
+    ug_gpa?:string,
+    gre?:string,
+    sub_discipline?: string[]
+    }|undefined,
+    data:Recommendation[]
+}
+
 export interface RequestInfo{
     id:string,
     inputValidator:(data:any)=>ServerResponse,
-    serverCommunicator:(data:any)=>Promise<ServerResponse>,
+    serverCommunicator:(data?:any)=>Promise<ServerResponse>,
     responseHandler:(data:ServerResponse)=>void
 }
 
@@ -1293,6 +1347,9 @@ export interface PreferenceInfo{
         selectionMode:"single"|"multi",
         selectionLimit?:number
     },
+    dataConverter:(data:any[])=>any,
+    responseHandler:(data:any)=>void,
+    serverCommunicator:(data:any)=>Promise<ServerResponse>,
     getInitialData:()=>any
 }
 

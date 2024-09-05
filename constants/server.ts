@@ -1,6 +1,7 @@
 const serverResponses={
     VerificationFailed:"Token Verification Failed",
-    TokenMissing:"Access Token Missing"
+    TokenMissing:"Access Token Missing",
+    InvalidTokens:"Invalid Tokens"
 }
 
 const endPoints=[
@@ -87,6 +88,24 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"checkout",
+        category:"student",
+        tail:"checkout",
+        type:"POST",
+    },
+    {
+        id:"payment-verification",
+        category:"student",
+        tail:"payment-verification",
+        type:"POST",
+    },
+    {
+        id:"generate-recommendations",
+        category:"student",
+        tail:"generate-recommendations",
+        type:"PUT",
+    },
+    {
         ENUM:"email",
         TYPE:"student"
     },
@@ -96,9 +115,10 @@ const endPoints=[
         
     },
     {
-        ENUM:"phone",
-        TYPE:"student",
-        
+        id:"phone",
+        category:"student",
+        tail:"phone",
+        type:"PUT",
     },
     {
         id:"vacant-slots",
@@ -242,6 +262,12 @@ const endPoints=[
         id:"university",
         category:"public",
         tail:"single_university",
+        type:"POST",
+    },
+    {
+        id:"order-info",
+        category:"student",
+        tail:"order",
         type:"POST",
     },
     {

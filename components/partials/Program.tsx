@@ -265,6 +265,7 @@ const Program=(props:{programid:string})=>{
     }
 
     const addToCart=async (event:Event)=>{
+        console.log("res",event);
         let data={
             action:"add",
             category:programInfo?.elite?"elite application":"premium application",
@@ -315,7 +316,7 @@ const Program=(props:{programid:string})=>{
                             <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([programInfo.university?.name,programInfo.university?.location?.country],"")}</Text></View>
                         </View>
                         <View style={[GeneralStyles.actions_wrapper]}>
-                            <Pressable onPress={showIntakes} style={{borderWidth:1,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}><Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium,padding:7,paddingLeft:15,paddingRight:15}]}>Add to Cart</Text></Pressable>
+                            <Pressable onPress={()=>showIntakes(addToCart)} style={{borderWidth:1,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}><Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium,padding:7,paddingLeft:15,paddingRight:15}]}>Add to Cart</Text></Pressable>
                         </View>
                     </View>
                 </View>

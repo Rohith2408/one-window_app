@@ -8,6 +8,7 @@ import Loadinglistscreen from "../resources/Loadinglistscreen"
 import add_icon from '../../assets/images/misc/add.png'
 import { Image } from "expo-image"
 import { getDevice } from "../../utils"
+import { Fonts, Themes } from "../../constants"
 
 const GeneralStyles=StyleSheet.create({
     add_wrapper:{
@@ -25,6 +26,12 @@ const TabStyles=StyleSheet.create({
         width:34,
         height:34,
         resizeMode:"contain"
+    },
+    no_workexperience:{
+        fontSize:14
+    },
+    click_message:{
+        fontSize:12
     }
 })
 
@@ -33,6 +40,13 @@ const MobileSStyles=StyleSheet.create({
         width:34,
         height:34,
         resizeMode:"contain"
+    },
+    no_workexperience:{
+        fontSize:14
+    },
+    click_message:{
+        fontSize:10,
+        lineHeight:16
     }
 })
 const MobileMStyles=StyleSheet.create({
@@ -40,6 +54,13 @@ const MobileMStyles=StyleSheet.create({
         width:38,
         height:38,
         resizeMode:"contain"
+    },
+    no_workexperience:{
+        fontSize:16
+    },
+    click_message:{
+        fontSize:12,
+        lineHeight:20
     }
 })
 const MobileLStyles=StyleSheet.create({
@@ -47,6 +68,12 @@ const MobileLStyles=StyleSheet.create({
         width:34,
         height:34,
         resizeMode:"contain"
+    },
+    no_workexperience:{
+        fontSize:16
+    },
+    click_message:{
+        fontSize:12
     }
     
 })
@@ -61,6 +88,7 @@ const styles={
 const Workexperience=(props:any)=>{
 
     const workExperiences=useAppSelector((state)=>state.workexperience)
+
     const [path,navigate]=useNavigation()
     const [dimensions,setDimesnions]=useState<LayoutRectangle>()
     const Device=useRef<keyof typeof styles>(getDevice()).current
@@ -83,13 +111,24 @@ const Workexperience=(props:any)=>{
             :
             <View style={{flex:1,gap:30}}>
                 <Pressable onPress={addWork} style={[GeneralStyles.add_wrapper]}><Image style={[styles[Device].add_icon]} source={add_icon}></Image></Pressable>
-                <ScrollView style={{flex:1}} contentContainerStyle={{gap:30}}>
+                <View style={{flex:1}}>
                 {
-                    workExperiences.data.map((item,i)=>
-                    <View key={item._id} style={{width:'100%',height:Device=="MobileS"?175:(Device=="MobileM"?200:200)}}><Workexperiencecard data={item} index={i}></Workexperiencecard></View>
-                    )
+                    workExperiences.data.length==0
+                    ?
+                    <View style={{flex:1,gap:7.5,justifyContent:"center",alignItems:"center"}}>
+                        <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>It's awfully quiet in here...!</Text>
+                        <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button below to start adding your work experience</Text>
+                    </View>
+                    :
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:30}}>
+                    {
+                        workExperiences.data.map((item,i)=>
+                        <View key={item._id} style={{width:'100%',height:Device=="MobileS"?175:(Device=="MobileM"?200:200)}}><Workexperiencecard data={item} index={i}></Workexperiencecard></View>
+                        )
+                    }
+                    </ScrollView>
                 }
-                </ScrollView>
+                </View>
             </View>
         }
         </View>

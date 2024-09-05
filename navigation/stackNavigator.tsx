@@ -200,6 +200,13 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           :
           null
         }
+        {
+          screenInfo?.type=="Flyer" || screenInfo?.type=="Popup"
+          ?
+          <Pressable onPress={()=>back(200)} style={{position:"absolute",zIndex:-1,top:"-100%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}}></Pressable>
+          :
+          null
+        }
         <View style={[styles.screen,screenInfo?.type=="Flyer"?{shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{}]}> 
           {
             screenInfo?.title

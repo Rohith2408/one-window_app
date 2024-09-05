@@ -324,10 +324,10 @@ const Profile=(props:any)=>{
         {title:"Personal Info",icon:personal_icon,screen:"Personalinfo"},
         {title:"Experts",icon:expert_icon,screen:"Experts"},
         {title:"Preferences",icon:preferences_icon,screen:"Preferences"},
-        {title:"Recommended",icon:preferences_icon,screen:""},
+        {title:"Recommended",icon:preferences_icon,screen:"Recommendations"},
         {title:"Favourites",icon:favourites_icon,screen:""},
         {title:"Cart",icon:cart_icon,screen:"Cart"},
-        {title:"My Orders",icon:orders_icon,screen:""},
+        {title:"My Orders",icon:orders_icon,screen:"Myorders"},
         {title:"My Products",icon:orders_icon,screen:""}
     ]).current
 

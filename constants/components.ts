@@ -42,6 +42,10 @@ import Preference from "../components/partials/Preference"
 import University from "../components/partials/University"
 import Community from "../components/screens/Community"
 import Docview from "../components/flyers/Docview"
+import Myorders from "../components/partials/Myorders"
+import Payment from "../components/partials/Payment"
+import Recommendations from "../components/partials/Recommendations"
+import Successfull from "../components/flyers/Successfull"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -56,9 +60,9 @@ const components:ScreenInfo[]=[
     {id:"Registerbase",component:Registerbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
     {id:"Forgotpassword",component:Forgotpassword,title:"Forgot Password",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",type:"Partial"},
     {id:"Form",component:Form,type:"Partial",title:"Form",props:["formid","forminitialdataid","formupdate","formerrors","formbasket"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
-    {id:"Flyer",component:Flyer,type:"Flyer",props:["flyerid","flyerdata"],swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Flyer",component:Flyer,type:"Flyer",props:["flyerid","flyerdata"],showTouchCaptureScreen:true,swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Filters",component:Filters,type:"Partial",props:["filtersbasketid","filterslistid"],title:"Filters",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3,swipeDirection:"X"},
-    {id:"Explore",component:Explore,type:"Partial",title:"Explore",props:["initialexploretab","Programslistquery","Universitieslistquery"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},//["initialexploretab","programsadditionalfilters","programsquickfilters","universitiesadditionalfilters","universitiesquickfilters","search","universitiespage","programspage"]
+    {id:"Explore",component:Explore,type:"Partial",title:"Explore",props:["initialexploretab","courselistid","courseadditionalFilters","coursequickFilters","coursesearch","coursepage"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},//,"Programslistquery","Universitieslistquery"  //["initialexploretab","programsadditionalfilters","programsquickfilters","universitiesadditionalfilters","universitiesquickfilters","search","universitiespage","programspage"]
     {id:"Dropdownoptions",component:Dropdownoptions,type:"Flyer"},
     {id:"Dropdownoptionsasync",component:Dropdownoptionsasync,type:"Flyer"},
     {id:"Emailverification",component:Emailverification,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
@@ -75,6 +79,7 @@ const components:ScreenInfo[]=[
     {id:"Testoptions",component:Testoptions,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Mydetails",component:Mydetails,type:"Partial",title:"My Details",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Datetimeproselector",component:Datetimeproselector,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Successfull",component:Successfull,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Search",component:Search,type:"Partial",title:"Search",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Program",component:Program,title:"Program",props:["programid"],type:"Partial",occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"University",component:University,title:"University",props:["universityid"],type:"Partial",occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -86,6 +91,9 @@ const components:ScreenInfo[]=[
     {id:"Preferences",component:Preferences,type:"Partial",title:"Preferences",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Preference",component:Preference,props:["preferenceid"],type:"Partial",title:"Preferences",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Community",component:Community,type:"Partial",title:"Community",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Myorders",component:Myorders,type:"Partial",title:"My Orders",props:["ordersummaryid"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Payment",component:Payment,type:"Partial",title:"Payment",props:["orderId"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Recommendations",component:Recommendations,type:"Partial",title:"Recommendations",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
 ]
 
 const setComponentInfo=(id:string,key:keyof ScreenInfo,value:any)=>{

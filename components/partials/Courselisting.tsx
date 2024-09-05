@@ -4,7 +4,7 @@ import { ListReducer } from "../../reducers/ListReducer"
 import {Fonts, Themes, lists} from "../../constants"
 import { AppliedFilter, AppliedQuickFilter, ListItem, QuickFilterInfo, ServerResponse } from "../../types"
 import useNavigation from "../../hooks/useNavigation"
-import { addToBasket, getBasket, removeFromBasket } from "../../constants/basket"
+import { addToBasket, getBasket } from "../../constants/basket"
 import { bakeFilters, chopOff, getDevice, getMergedFilters } from "../../utils"
 import { Image } from "expo-image"
 import Listselection from "../resources/Listselection"
@@ -121,9 +121,9 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Listing=(props:{listid:string,basketid:string})=>{//,additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[],search:string,page:number
+const Courselisting=(props:{courselistid:string,courseadditionalFilters:AppliedFilter[],coursequickFilters:AppliedQuickFilter[],coursesearch:string,coursepage:number})=>{
 
-    const ListInfo=useRef(lists.find((list)=>list.id==props.listid)).current
+    const ListInfo=useRef(lists.find((list)=>list.id==props.courselistid)).current
     const [list,setList]=useState<any[]>([]);
     const [path,navigate]=useNavigation()
     const [isLoading,setIsLoading]=useState(false)
@@ -131,49 +131,62 @@ const Listing=(props:{listid:string,basketid:string})=>{//,additionalFilters:App
     const dataRequested=useRef(false);
     const Device=useRef(getDevice()).current
     const maxPages=useRef(1)
-    const lisbasket=getBasket(props.basketid);
+    //const lisbasket=getBasket(props.basketid);
 
     useEffect(()=>{
-        //console.log("Fetching List",);
-        //console.log("Filters Applied",JSON.stringify(props.additionalFilters,null,2),JSON.stringify(props.quickFilters,null,2));
+        console.log("Filters Applied",JSON.stringify(props.courseadditionalFilters,null,2),JSON.stringify(props.coursequickFilters,null,2));
         getList().then((res:ServerResponse|undefined)=>{
-            //console.log("list recieved",JSON.stringify(res?.data.list,null,2))
             maxPages.current=res?.data.totalPages;
-            (res && res.success)?props.page==1?setList([...res.data.list]):setList([...list,...res.data.list]):null
+            (res && res.success)?props.coursepage==1?setList([...res.data.list]):setList([...list,...res.data.list]):null
         })
-    },[props.additionalFilters,props.quickFilters,props.search,props.page])
+    },[props.courseadditionalFilters,props.coursequickFilters,props.coursesearch,props.coursepage])
 
     const getList=async ()=>{
         //console.log("list reacher",JSON.stringify(props.additionalFilters,null,2))
         setIsLoading(true);
-        let appliedFilters=bakeFilters(props.additionalFilters,props.quickFilters);
-        let res=await ListInfo?.listFetcher({search:props.search,filters:appliedFilters,page:props.page})
+        let appliedFilters=bakeFilters(props.courseadditionalFilters,props.coursequickFilters);
+        let res=await ListInfo?.listFetcher({search:props.coursesearch,filters:appliedFilters,page:props.page})
         setIsLoading(false)
         return res
     }
 
     const applyQuickFilter=(data:QuickFilterInfo[])=>{
-        //console.log("apply",data)
         let arr=data.map((item)=>({type:item.type,data:item.filters}));
-        navigate?navigate({type:"UpdateParam",payload:{param:props.listid+"listquery",newValue:{search:props.search,page:props.page,additionalFilters:correctAdditionalFilters(props.additionalFilters,arr),quickFilters:arr}}}):null
+        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{courselistid:props.courselistid,courseadditionalFilters:correctAdditionalFilters(props.courseadditionalFilters,arr),coursequickFilters:arr,coursesearch:props.coursesearch,coursepage:props.coursepage}}}):null
+        // navigate?navigate({type:"UpdateParams",payload:[
+        //     {param:"courseadditionalFilters",newValue:correctAdditionalFilters(props.courseadditionalFilters,arr)},
+        //     {param:"coursepage",newValue:props.coursepage},
+        //     {param:"coursequickFilters",newValue:arr},
+        //     {param:"coursesearch",newValue:props.coursesearch}
+        //      ]}):null
+        //navigate?navigate({type:"UpdateParam",payload:{param:,newValue:{search:props.coursesearch,page:props.coursepage,additionalFilters:,quickFilters:arr}}}):null
     }
 
     const applyAdditionalFilters=(data:AppliedFilter[])=>{
-        lisbasket.listhandler({search:props.search,page:props.page,additionalFilters:correctAdditionalFilters([...props.additionalFilters,...data],props.quickFilters),quickFilters:props.quickFilters});
-        //console.log("Additional",data)
+        //lisbasket.listhandler({search:props.coursesearch,page:props.coursepage,additionalFilters:correctAdditionalFilters([...props.courseadditionalFilters,...data],props.coursequickFilters),quickFilters:props.coursequickFilters});
+        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{courselistid:props.courselistid,courseadditionalFilters:[...props.courseadditionalFilters,...data],coursequickFilters:props.coursequickFilters,coursesearch:props.coursesearch,coursepage:props.coursepage}}}):null
+        // navigate?navigate({type:"UpdateParams",payload:[
+        //     //{param:"courseadditionalFilters",newValue:correctAdditionalFilters([...props.courseadditionalFilters,...data],props.coursequickFilters)},
+        //     {param:"courseadditionalFilters",newValue:[...props.courseadditionalFilters,...data]},
+        //     {param:"coursepage",newValue:props.coursepage},
+        //     {param:"coursequickFilters",newValue:props.coursequickFilters},
+        //     {param:"coursesearch",newValue:props.coursesearch}
+        // ]}):null;
         //navigate?navigate({type:"UpdateParam",payload:{param:props.listid+"listquery",newValue:{search:props.search,page:props.page,additionalFilters:correctAdditionalFilters([...props.additionalFilters,...data],props.quickFilters),quickFilters:props.quickFilters}}}):null;
     }
 
     const openAllFilters=()=>{
         //console.log("iddd",props.listid+"filters");
-        addToBasket(props.listid+"filters",{
-            additionalFiltersApplied:props.additionalFilters,
-            quickFiltersApplied:getMergedFilters(props.quickFilters),
+        addToBasket(props.courselistid+"filters",{
+            additionalFiltersApplied:props.courseadditionalFilters,
+            quickFiltersApplied:getMergedFilters(props.coursequickFilters),
             callback:applyAdditionalFilters
         })
-        console.log("dyataaa",getBasket(props.listid+"filters"));
+        console.log("dyataaa",props.courselistid,getBasket(props.courselistid+"filters"));
         //console.log(props.listid)
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:ListInfo?.formid,forminitialdataid:props.listid+"filters",formbasket:props.listid+"filters"}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:ListInfo?.formid,forminitialdataid:props.courselistid+"filters",formbasket:props.courselistid+"filters"}}}):null
     }
 
     const onScroll=(e:NativeSyntheticEvent<NativeScrollEvent>)=>{
@@ -194,15 +207,7 @@ const Listing=(props:{listid:string,basketid:string})=>{//,additionalFilters:App
         }
     }
 
-
-    useEffect(()=>{
-        return ()=>{
-            removeFromBasket(props.listid+"filters")
-        }
-    },[])
-
-
-    console.log("props",JSON.stringify(props,null,2));
+    console.log("props",ListInfo,JSON.stringify(props,null,2));
 
     //console.log("Additional",JSON.stringify(props.additionalFilters,null,2));
     //console.log("Quick",JSON.stringify(props.quickFilters,null,2));
@@ -214,7 +219,7 @@ const Listing=(props:{listid:string,basketid:string})=>{//,additionalFilters:App
                     <Listselection 
                         direction="horizontal"
                         selectionStyle="border"
-                        initialSelection={props.quickFilters.map((item)=>ListInfo?.filters.quick.find((item2)=>item.type==item2.type))}
+                        initialSelection={props.coursequickFilters.map((item)=>ListInfo?.filters.quick.find((item2)=>item.type==item2.type))}
                         styles={{contentcontainer:{gap:10}}}
                         onselection={applyQuickFilter}
                         options={{
@@ -298,4 +303,4 @@ const Quickfilter=(props:{icon:string,text:string,focus:boolean})=>{
 
 
 
-export default Listing
+export default Courselisting

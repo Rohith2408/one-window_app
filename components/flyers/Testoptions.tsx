@@ -10,7 +10,10 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-
+    text:{
+        fontSize:12,
+        padding:10
+    }
     
 })
 
@@ -22,10 +25,16 @@ const MobileSStyles=StyleSheet.create({
 })
 const MobileMStyles=StyleSheet.create({
 
-    
+    text:{
+        fontSize:14,
+        padding:10
+    }
 })
 const MobileLStyles=StyleSheet.create({
-
+    text:{
+        fontSize:12,
+        padding:10
+    }
     
 })
 
