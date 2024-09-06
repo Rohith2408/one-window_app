@@ -3,7 +3,7 @@ import { useAppSelector } from "../../hooks/useAppSelector"
 import { Recommendation, ServerResponse } from "../../types"
 import Loadingview from "../resources/Loadingview"
 import Recommendationcard from "../cards/Recommendationcard"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getDevice } from "../../utils"
 import Loadinglistscreen from "../resources/Loadinglistscreen"
 import useNavigation from "../../hooks/useNavigation"
@@ -91,6 +91,7 @@ const Recommendations=()=>{
     const generationStatus=!(recommendations.data?.criteria==undefined || Object.keys(recommendations.data.criteria).length==0)
     const profileCompletionStatus=Object.keys(store.getState().educationhistory.data.underGraduation).length!=0 && store.getState().testscores.data.find((test)=>test.name=="Graduate Record Examination")!=undefined
     const profileChangeStatus=true
+    const [loadPage,setLoadPage]=useState(false)
     const [isLoading,setIsloading]=useState(false);
 
     const generateRecommendations=async ()=>{
@@ -101,36 +102,54 @@ const Recommendations=()=>{
         setIsloading(false)
     }
 
+    useEffect(()=>{
+       setTimeout(()=>{
+        setLoadPage(true)
+       },200)
+    },[])
+
+
     return(
         <View style={{flex:1}}>
             {
-                recommendations.responseStatus!="recieved"
+                loadPage
                 ?
-                <Loadinglistscreen cardGap={30} cardHeight={Device=="MobileS"?175:(Device=="MobileM"?200:250)}></Loadinglistscreen>
+                <View style={{flex:1}}>
+                    {
+                        recommendations.responseStatus!="recieved"
+                        ?
+                        <Loadinglistscreen cardGap={30} cardHeight={Device=="MobileS"?175:(Device=="MobileM"?200:250)}></Loadinglistscreen>
+                        :
+                        null
+                    }
+                    {
+                        generationStatus && profileChangeStatus && profileCompletionStatus
+                        ?
+                        <Pressable style={{flexDirection:"column",alignItems:"center",justifyContent:"center"}} onPress={generateRecommendations}>
+                            <Text style={{alignSelf:"center",fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}}>Regenerate</Text>
+                            <Loader loaderStyles={styles[Device].loader} isLoading={isLoading}/>
+                        </Pressable>
+                        :
+                        !generationStatus && profileCompletionStatus
+                        ?
+                        <Pressable onPress={generateRecommendations}><Text>Generate</Text></Pressable>
+                        :
+                        <Text>Please add your GRE test details and Undergraduation details to start generating recommendations</Text>
+                    }
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:60,paddingTop:30,paddingBottom:30}}>
+                    {
+                        recommendations.data?.data.map((item,i)=>
+                        <Recommendationcard {...item} index={i}/>
+                        )
+                    }
+                    </ScrollView>
+                </View>
                 :
-                null
+                <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+                    <Loader loaderStyles={styles[Device].loader} isLoading={!loadPage}/>
+                </View>
             }
-            {
-                generationStatus && profileChangeStatus && profileCompletionStatus
-                ?
-                <Pressable onPress={generateRecommendations}>
-                    <Text style={{alignSelf:"center",fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}}>Regenerate</Text>
-                    <Loader loaderStyles={styles[Device].loader} isLoading={isLoading}/>
-                </Pressable>
-                :
-                !generationStatus && profileCompletionStatus
-                ?
-                <Pressable onPress={generateRecommendations}><Text>Generate</Text></Pressable>
-                :
-                <Text>Please add your GRE test details and Undergraduation details to start generating recommendations</Text>
-            }
-            <ScrollView style={{flex:1}} contentContainerStyle={{gap:60,paddingTop:30,paddingBottom:30}}>
-            {
-                recommendations.data?.data.map((item,i)=>
-                <Recommendationcard {...item} index={i}/>
-                )
-            }
-            </ScrollView>
+            
         </View>
     )
 

@@ -10,6 +10,7 @@ import { Image } from "expo-image"
 import Listselection from "../resources/Listselection"
 import Quickfiltercard from "../cards/Quickfiltercard"
 import filter_icon from '../../assets/images/misc/filter.png'
+import close_icon from '../../assets/images/misc/close.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -65,6 +66,14 @@ const MobileSStyles=StyleSheet.create({
         width:15,
         height:15,
         resizeMode:"contain"
+    },
+    applied:{
+        fontSize:12
+    },
+    close:{
+        width:12,
+        height:12,
+        resizeMode:"contain"
     }
 })
 
@@ -88,6 +97,14 @@ const MobileMStyles=StyleSheet.create({
         width:15,
         height:15,
         resizeMode:"contain"
+    },
+    applied:{
+        fontSize:12
+    },
+    close:{
+        width:12,
+        height:12,
+        resizeMode:"contain"
     }
 })
 
@@ -110,6 +127,14 @@ const MobileLStyles=StyleSheet.create({
     filter_icon:{
         width:15,
         height:15,
+        resizeMode:"contain"
+    },
+    applied:{
+        fontSize:12
+    },
+    close:{
+        width:12,
+        height:12,
         resizeMode:"contain"
     }
 })
@@ -152,8 +177,8 @@ const Courselisting=(props:{courselistid:string,courseadditionalFilters:AppliedF
 
     const applyQuickFilter=(data:QuickFilterInfo[])=>{
         let arr=data.map((item)=>({type:item.type,data:item.filters}));
-        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}}):null
-        navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{courselistid:props.courselistid,courseadditionalFilters:correctAdditionalFilters(props.courseadditionalFilters,arr),coursequickFilters:arr,coursesearch:props.coursesearch,coursepage:props.coursepage}}}):null
+        // navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}}):null
+        // navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{courselistid:props.courselistid,courseadditionalFilters:correctAdditionalFilters(props.courseadditionalFilters,arr),coursequickFilters:arr,coursesearch:props.coursesearch,coursepage:props.coursepage}}}):null
         // navigate?navigate({type:"UpdateParams",payload:[
         //     {param:"courseadditionalFilters",newValue:correctAdditionalFilters(props.courseadditionalFilters,arr)},
         //     {param:"coursepage",newValue:props.coursepage},
@@ -165,6 +190,7 @@ const Courselisting=(props:{courselistid:string,courseadditionalFilters:AppliedF
 
     const applyAdditionalFilters=(data:AppliedFilter[])=>{
         //lisbasket.listhandler({search:props.coursesearch,page:props.coursepage,additionalFilters:correctAdditionalFilters([...props.courseadditionalFilters,...data],props.coursequickFilters),quickFilters:props.coursequickFilters});
+        
         navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}}):null
         navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{courselistid:props.courselistid,courseadditionalFilters:[...props.courseadditionalFilters,...data],coursequickFilters:props.coursequickFilters,coursesearch:props.coursesearch,coursepage:props.coursepage}}}):null
         // navigate?navigate({type:"UpdateParams",payload:[
@@ -207,7 +233,13 @@ const Courselisting=(props:{courselistid:string,courseadditionalFilters:AppliedF
         }
     }
 
-    console.log("props",ListInfo,JSON.stringify(props,null,2));
+    const deleteFilter=(type:string,selecteditem:ListItem)=>{
+        let filter=props.courseadditionalFilters.map((item:AppliedFilter)=>item.type==type?({...item,data:item.data.filter((item3)=>selecteditem.label!=item3.label)}):item)
+        console.log("filters",JSON.stringify(filter));
+        applyAdditionalFilters(filter)
+    }
+
+    console.log("props",mergeAdditionalFilters(props.courseadditionalFilters));
 
     //console.log("Additional",JSON.stringify(props.additionalFilters,null,2));
     //console.log("Quick",JSON.stringify(props.quickFilters,null,2));
@@ -215,7 +247,17 @@ const Courselisting=(props:{courselistid:string,courseadditionalFilters:AppliedF
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.filter_wrapper]}>
-                <View style={{flex:1,backgroundColor:Themes.Light.OnewindowLightBlue,borderRadius:100}}>
+                <ScrollView horizontal style={{flex:1}}>
+                {/* {
+                    mergeAdditionalFilters(props.courseadditionalFilters).map((filteritem:{type:string,item:ListItem})=>
+                    <View style={{flexDirection:'row',padding:7,gap:5,alignItems:'center',borderWidth:1,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.35)}}>
+                        <Text style={[styles[Device].applied,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular,borderRadius:10}]}>{filteritem.item.label}</Text>
+                        <Pressable onPress={()=>deleteFilter(filteritem)}><Image source={close_icon} style={[styles[Device].close]}/></Pressable>
+                    </View>
+                    )
+                } */}
+                </ScrollView>
+                {/* <View style={{flex:1,backgroundColor:Themes.Light.OnewindowLightBlue,borderRadius:100}}>
                     <Listselection 
                         direction="horizontal"
                         selectionStyle="border"
@@ -230,7 +272,7 @@ const Courselisting=(props:{courselistid:string,courseadditionalFilters:AppliedF
                             selectionMode:"multi"
                         }}
                     />
-                </View>
+                </View> */}
                 <Pressable style={{display:'flex',flexDirection:'row',alignItems:"center",justifyContent:"center"}} onPress={openAllFilters}>
                     <Image style={[styles[Device].filter_icon]} source={filter_icon}/>
                     {/* <Text style={[styles[Device].allfilters]}>All Filters</Text> */}
@@ -301,6 +343,10 @@ const Quickfilter=(props:{icon:string,text:string,focus:boolean})=>{
     )
 }
 
+const mergeAdditionalFilters=(data:AppliedFilter[])=>{
+    console.log("filters",JSON.stringify(data.reduce((acc,filter)=>[...acc,...filter.data.map((item)=>({type:filter.type,item:data}))],[]),null,2))
+    return data.reduce((acc,filter)=>[...acc,...filter.data.map((item)=>({type:filter.type,item:item}))],[])
+}
 
 
 export default Courselisting

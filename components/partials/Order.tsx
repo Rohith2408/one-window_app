@@ -133,6 +133,8 @@ const Order=(props:{orderinfoid:string})=>{
 
     // }
     
+    console.log(Package)
+    
     return(
         <View style={{flex:1}}>
             <View style={{padding:10,gap:15}}>

@@ -3,7 +3,7 @@ import { Recommendation } from "../../types"
 import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
 import { Fonts, Themes } from "../../constants"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { getDevice, setWordCase } from "../../utils"
 import upload_icon from '../../assets/images/misc/upload.png'
 

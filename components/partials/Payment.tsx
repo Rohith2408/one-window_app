@@ -16,7 +16,8 @@ const Payment = () => {
   const dispatch=useAppDispatch()
 
   //console.log("payment ",paymentData)
-  console.log("profile",profile);
+  //console.log("profile",profile);
+  
   const paymentOptions = useRef({
     key: 'rzp_test_TldsbrWlP8NUF5',
     amount: paymentData.amount*100,
@@ -35,7 +36,7 @@ const Payment = () => {
   }).current;
 
   const handlePayment = async (response: any) => {
-    console.log("razor pay response",JSON.stringify(response,null,2));
+    //console.log("razor pay response",JSON.stringify(response,null,2));
     try {
       let res:ServerResponse=await serverRequest({
         reqType:"POST",
@@ -50,7 +51,7 @@ const Payment = () => {
         })
         console.log("order response",JSON.stringify(response1,null,2));
         if (response1) {
-          dispatch()
+          //dispatch()
           dispatch(updateOrder(response1.data));
       }
       } 
@@ -72,7 +73,7 @@ const Payment = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'red' }}>
+    <View style={{ flex: 1}}>
       {showRazorpayPage ? (
         <WebView
           style={{ flex: 1 }}
@@ -95,7 +96,7 @@ const Payment = () => {
             `,
           }}
           onMessage={(event) => {
-            console.log("Response from razzzz",event)
+            // console.log("Response from razzzz",event)
             const data = JSON.parse(event.nativeEvent.data);
             handlePayment(data); 
             setShowRazorpayPage(false); 

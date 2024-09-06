@@ -156,7 +156,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                     {
                         navigate?navigate(formInfo.submit.redirect(res.data)):null
                     }
-                    console.log("Form callback",additionalInfo.callback)
+                    //console.log("Form callback",additionalInfo.callback)
                     if(additionalInfo?.callback){
                         additionalInfo.callback(convertedData);
                     }
