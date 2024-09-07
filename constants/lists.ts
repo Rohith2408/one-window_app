@@ -1,7 +1,7 @@
 
 import Listasynchronous from "../components/flyers/Listasynchronous";
 import { AppliedFilter, ListInfo, ListItem, Listquery, ServerResponse } from "../types";
-import { getServerRequestURL, listHandler, serverRequest } from "../utils";
+import { getServerRequestURL, getUpcomingIntakeData, listHandler, serverRequest } from "../utils";
 import sample_icon from '../assets/images/misc/edit.png'
 import Universitycard from "../components/cards/Universitycard";
 import Programcard from "../components/cards/Programcard";
@@ -31,7 +31,7 @@ const lists:ListInfo[]=[
     {
         id:"Programs",
         basketid:"programs",
-        formid:"Programfilters",
+        formid:"Programsfilter",
         card:Programcard,
         filters:{
             additional:[
@@ -77,7 +77,7 @@ const lists:ListInfo[]=[
                 }
             ],
             quick:[{
-                type:"rating",
+                type:"quickfilter1",
                 title:"Data Science in US?",
                 icon:sample_icon,
                 filters:[{
@@ -91,15 +91,30 @@ const lists:ListInfo[]=[
             ]
             },
             {
-                type:"studyLevel",
-                title:"M.Sc ?",
+                type:"quickfilter2",
+                title:"M.Sc in US?",
                 icon:sample_icon,
                 filters:[{
                     type:"studyLevel",
                     data:[{label:"M.Sc",value:"M.Sc."}]
-                }]
+                },
+                {
+                    type:"country",
+                    data:[{label:"United States of America",value:'United States of America'}]
+                },
+            ]
             },
-        ]
+            {
+                type:"quickfilter3",
+                title:"Upcoming Intake?",
+                icon:sample_icon,
+                filters:[{
+                    type:"intake",
+                    data:getUpcomingIntakeData()
+                }
+            ]
+            },
+        ]// {label: "January-March", value: 0 },
         },
         pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"programspage",newValue:page+1}}),
         listFetcher:async (query:{search:string,filters:any[],page:number})=>{
@@ -108,7 +123,6 @@ const lists:ListInfo[]=[
                     url: getServerRequestURL("programs","POST"),
                     reqType: "POST",
                     body:{
-                        //search.trim().length>0?{type:'name',data:[search.trim()]}:{}
                         filterData:query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),
                         page:query.page,
                         currency:"INR"

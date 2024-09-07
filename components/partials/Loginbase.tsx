@@ -8,6 +8,9 @@ import { Image } from "expo-image"
 import { Fonts, Themes, secureStoreKeys } from "../../constants"
 import Form from "../resources/Form"
 import * as SecureStore from 'expo-secure-store'
+import airplane from '../../assets/images/props/airplane.png'
+import passport from '../../assets/images/props/passport.png'
+import logo from '../../assets/images/logo.png'
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -58,6 +61,8 @@ const GeneralStyles=StyleSheet.create({
     },
     body_wrapper:{
         flex:1,
+        display:"flex",
+        flexDirection:"column",
         padding:20,
         gap:20,
         backgroundColor:'white',
@@ -79,7 +84,7 @@ const TabStyles=StyleSheet.create({
 
 const MobileSStyles=StyleSheet.create({
     header_wrapper:{
-        height:125,
+        height:100,
         width:"100%",
         display:"flex",
     },
@@ -120,12 +125,30 @@ const MobileSStyles=StyleSheet.create({
     },
     noaccount:{
         fontSize:14
+    },
+    logo:{
+        width: 150,
+        resizeMode: "contain"
+    },
+    airplane:{
+        width:40,
+        height:40,
+        top:-25,
+        left:-75,
+        resizeMode:"contain"
+    },
+    passport:{
+        width:30,
+        height:30,
+        top:25,
+        left:185,
+        resizeMode:"contain"
     }
 })
 
 const MobileMStyles=StyleSheet.create({
     header_wrapper:{
-        height:155,
+        height:100,
         width:"100%",
         display:"flex",
     },
@@ -147,6 +170,24 @@ const MobileMStyles=StyleSheet.create({
     },
     noaccount:{
         fontSize:14
+    },
+    logo:{
+        width: 175,
+        resizeMode: "contain"
+    },
+    airplane:{
+        width:50,
+        height:50,
+        top:-25,
+        left:-80,
+        resizeMode:"contain"
+    },
+    passport:{
+        width:30,
+        height:30,
+        top:35,
+        left:210,
+        resizeMode:"contain"
     }
 })
 
@@ -341,9 +382,14 @@ const Loginbase=(props:{auth:string})=>{
         <View style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.header_wrapper,styles[Device].header_wrapper]}>
                 <View style={[GeneralStyles.header_wrapper_bg,{backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
-                <Text style={[styles[Device].login,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Login</Text>
+                {/* <Text style={[styles[Device].login,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Login</Text> */}
             </View>
             <View style={[GeneralStyles.body_wrapper]}>
+                <View style={{alignSelf:'center',margin:20,position:"relative"}}>
+                    <Image style={[styles[Device].airplane,{position:"absolute",transform:[{rotate:"-20deg"}]}]} source={airplane}/>
+                    <Image style={[styles[Device].passport,{position:"absolute",transform:[{rotate:"20deg"}]}]} source={passport}/>
+                    <Image style={[styles[Device].logo,{aspectRatio:5}]} source={logo}/>
+                </View>
                 <Form formid="Login" formerrors={errors}/>
                 <View style={[GeneralStyles.actions_wrapper]}>
                     <View>

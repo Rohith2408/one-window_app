@@ -1564,10 +1564,10 @@ export const subDisciplines=[
 ]
 
 export const intakes=[
-    {label: "January-March", value: 0 },
-    {label: "April-June", value:  1 },
-    {label: "July-September", value: 2},
-    {label: "October-December", value:  3},
+    {label: "January-March", value: "0" },
+    {label: "April-June", value:  "1" },
+    {label: "July-September", value: "2"},
+    {label: "October-December", value:  '3'},
 ]
 
 export const studyLevel=[

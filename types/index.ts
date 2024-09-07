@@ -36,9 +36,10 @@ export type ListInfo={
     listFetcher:(data:Listquery)=>Promise<ServerResponse>
 }
 
+
+
 export type Listquery={
     search:string,
-    //appliedFilters:AppliedFilter[],
     page:number,
     filters:any[],
     selectedList?:any[],

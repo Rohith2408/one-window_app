@@ -11,7 +11,7 @@ import { store } from "../store";
 import { setEducationHistory } from "../store/slices/educationHistorySlice";
 import { setTests } from "../store/slices/testScoresSlice";
 import { setWorkExperience } from "../store/slices/workexperienceSlice";
-import { AdditionalFilterInfo, Advisor, AppliedFilter, Countrycode, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FormData, FormField, FormInfo, ListInfo, ListItem, Meeting, Phone as PhoneType, ServerResponse, Sharedinfo, Test, WorkExperience } from "../types";
+import { AdditionalFilterInfo, Advisor, AppliedFilter, AppliedQuickFilter, Countrycode, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FormData, FormField, FormInfo, ListInfo, ListItem, Meeting, Phone as PhoneType, ServerResponse, Sharedinfo, Test, WorkExperience } from "../types";
 import { Word2Sentence, fetchCities, fetchCountries, fetchStates,  getMergedFilters,  getServerRequestURL, profileUpdator, serverRequest, setWordCase} from "../utils";
 import { validations} from "../utils/validations";
 import { addToBasket, getBasket, getFullBasket} from "./basket";
@@ -3048,14 +3048,14 @@ const forms:FormInfo[]=[
         ]
     },
     {
-        id:"Programfilters",
-        title:"",
+        id:"Programsfilter",
+        title:"Program Filters",
         getInitialData:(id:string|undefined)=>{
             console.log("id",id);
             let filtersInfo=lists.find((list)=>list.id=="Programs")?.filters.additional;
-            let data:{additionalFiltersApplied:AppliedFilter[]}|undefined=id?getBasket(id):undefined
+            let data:{additionalFilters:AppliedFilter[]}|undefined=id?getBasket(id):undefined
             return filtersInfo?filtersInfo.map((item)=>{
-                let applied=data?.additionalFiltersApplied?.find((item2)=>item2.type==item.type)?.data
+                let applied=data?.additionalFilters?.find((item2)=>item2.type==item.type)?.data
                 return {id:item.type,value:applied?applied:[]}
             }):[]
         },
@@ -3085,11 +3085,9 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:(data:AppliedFilter)=>{
-                                //let appliedData=getBasket("Programsfilters");
-                                //let quickFilter=getMergedFilters()
-                                //let options=Countries.filter((item)=>appliedData.quickFiltersApplied.find((item2)=>item.type==item2.type)).map((country)=>({label:country,value:country}))
+                                let baseFilter:AppliedQuickFilter|undefined=getBasket("Programsfilter").baseFilters.find((item)=>item.type=="country");
                                 let options=Countries.map((country)=>({label:country,value:country}))
-                                return  {success:true,data:options,messsage:""}
+                                return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
                             },
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label
@@ -3114,7 +3112,12 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
-                            list:studyLevel.map((item)=>({label:item,value:item})),
+                            fetcher:()=>{
+                                let baseFilter=getBasket("Programsfilter").baseFilters.find((item)=>item.type=="studyLevel");
+                                let options=studyLevel.map((item)=>({label:item,value:item}))
+                                return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
+                            },
+                            //list:studyLevel.map((item)=>({label:item,value:item})),
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label
                         },
@@ -3139,7 +3142,12 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
-                            list:disciplines.map((discipline)=>({label:discipline,value:discipline})),
+                            fetcher:()=>{
+                                let baseFilter=getBasket("Programsfilter").baseFilters.find((item)=>item.type=="discipline");
+                                let options=disciplines.map((discipline)=>({label:discipline,value:discipline}))
+                                return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
+                            },
+                            //list:disciplines.map((discipline)=>({label:discipline,value:discipline})),
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label
                         },
@@ -3164,7 +3172,12 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
-                            list:subDisciplines.map((discipline)=>({label:discipline,value:discipline})),
+                            fetcher:()=>{
+                                let baseFilter=getBasket("Programsfilter").baseFilters.find((item)=>item.type=="subDiscipline");
+                                let options=subDisciplines.map((discipline)=>({label:discipline,value:discipline}));
+                                return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
+                            },
+                            //list:subDisciplines.map((discipline)=>({label:discipline,value:discipline})),
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,query:string)=>item.label.includes(query)
@@ -3190,7 +3203,12 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
-                            list:["On Campus", "Online", "Blended"].map((item)=>({label:item,value:item})),
+                            fetcher:()=>{
+                                let baseFilter=getBasket("Programsfilter").baseFilters.find((item)=>item.type=="studyMode");
+                                let options=["On Campus", "Online", "Blended"].map((item)=>({label:item,value:item}));
+                                return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
+                            },
+                            //list:["On Campus", "Online", "Blended"].map((item)=>({label:item,value:item})),
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label
                         },
@@ -3269,7 +3287,13 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
-                            list:intakes,
+                            fetcher:()=>{
+                                let baseFilter=getBasket("Programsfilter").baseFilters.find((item)=>item.type=="intake");
+                                let options=intakes;
+                                console.log("intakes base",baseFilter);
+                                return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
+                            },
+                            //list:intakes,
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label
                         },
@@ -3291,7 +3315,7 @@ const forms:FormInfo[]=[
         ]
     },
     {
-        id:"Universityfilters",
+        id:"Universitiesfilter",
         title:"",
         getInitialData:(id:string|undefined)=>{
             let filtersInfo=lists.find((list)=>list.id=="Universities")?.filters.additional;

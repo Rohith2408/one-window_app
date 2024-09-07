@@ -91,6 +91,7 @@ const MobileSStyles=StyleSheet.create({
         height:20 
     }
 })
+
 const MobileMStyles=StyleSheet.create({
     tabbar_wrapper:{
         height:100
@@ -120,6 +121,7 @@ const MobileMStyles=StyleSheet.create({
         height:20 
     }
 })
+
 const MobileLStyles=StyleSheet.create({
     tabbar_wrapper:{
         height:100
@@ -401,7 +403,7 @@ const uploadDoc=async (fieldPath:string,docIdentifier:string,callback?:(res:Serv
             body:data,
             preventStringify:true,
         })
-        console.log("server",res);
+        console.log("server",JSON.stringify(res,null,2));
         if(callback)
         {
             callback(res)

@@ -43,6 +43,7 @@ export const formatQueryParamsToString=(params:any)=>{
   //console.log("params",params)
     let keys=Object.keys(params);
     let values=Object.values(params);
+    console.log("paraqms",JSON.stringify(keys,null,2),JSON.stringify(values,null,2));
     return keys.reduce((acc, current, index) => 
       acc + 
       (current + "=" + 
@@ -725,21 +726,17 @@ const getRazorPayScreenData=(orderid:string,amount:number,callback:any)=>{
 //   window.ReactNativeWebView.postMessage(JSON.stringify(response));
 // }
 
-export const chopOff=(additionalFilter:AppliedFilter,baseFilter:AppliedFilter)=>{
-  additionalFilter.data=additionalFilter.data.filter((item)=>baseFilter.data.find((item2)=>item.label==item2.label))
-  return additionalFilter
-}
-
 export const bakeFilters=(additionalFilters:AppliedFilter[],baseFilters:AppliedQuickFilter[])=>{
-  
-  //console.log("addi",JSON.stringify(additionalFilters,null,2))
-  //console.log("quick",JSON.stringify(baseFilters,null,2))
-  console.log("merged",getMergedFilters(baseFilters));
 
   return [
       ...getMergedFilters(baseFilters).filter((item)=>additionalFilters.find((item2)=>item2.type==item.type)==undefined?true:false),
       ...additionalFilters
   ]
+}
+
+export const chopOff=(additionalFilter:AppliedFilter,baseFilter:AppliedFilter)=>{
+  additionalFilter.data=additionalFilter.data.filter((item)=>baseFilter.data.find((item2)=>item.label==item2.label))
+  return additionalFilter
 }
 
 export function getMergedFilters(quickfilters: AppliedQuickFilter[]): AppliedFilter[] {
@@ -762,3 +759,37 @@ export function getMergedFilters(quickfilters: AppliedQuickFilter[]): AppliedFil
     data: mergedFilters[type]
   }));
 }
+
+export const getAdditionalFilters=(quickFilters:AppliedQuickFilter[],additionalFilters:AppliedFilter[])=>{
+    let mergedFilters=mergeQuickFilters(quickFilters);
+    return additionalFilters.map((item)=>{
+      let mergedItem=mergedFilters.find((item2)=>item2.type==item.type);
+      return mergedItem?{...item,data:item.data.filter((opt:ListItem)=>mergedItem?.data.find((opt2)=>opt2.label==opt.label)?true:false)}:item
+  }).filter((item)=>item.data.length!=0);
+}
+
+export const mergeQuickFilters=(quickFilters:AppliedQuickFilter[])=>{
+    return quickFilters.reduce((acc:AppliedFilter[],curr)=>{
+      return curr.data.reduce((acc2:AppliedFilter[],curr2)=>acc2.find((item)=>item.type==curr2.type)?acc2.map((item2)=>item2.type==curr2.type?{...item2,data:unionOfStringArrays(item2.data,curr2.data)}:item2):[...acc2,curr2],acc)
+    },[])
+}
+
+export const unionOfStringArrays=(arr1:ListItem[],arr2:ListItem[])=>{
+  return arr2.reduce((acc,curr)=>acc.find((item)=>item.label==curr.label)?acc:[...acc,curr],arr1)
+}
+
+export const getUpcomingIntakeData=()=>{
+  const intakes=[
+    {label: "January-March", value: "0" },
+    {label: "April-June", value:  "1" },
+    {label: "July-September", value: "2"},
+    {label: "October-December", value:  '3'},
+]
+    return [intakes[Math.floor((new Date().getMonth())/3)]]
+}
+
+
+// export const bakeFilters=(additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[])=>{
+
+// }
+
