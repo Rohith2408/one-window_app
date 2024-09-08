@@ -31,7 +31,7 @@
     },
     "androidProduction":{
       "autoIncrement": true,
-      "channel": "android_test",
+      "channel": "android_production",
       "android": {
         "buildType": "app-bundle"
       }

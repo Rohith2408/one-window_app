@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { CourseListObj } from "../../types"
 import { useRef } from "react"
-import { Word2Sentence, getDevice } from "../../utils"
+import { Word2Sentence, getDevice, getLightThemeColor, getThemeColor } from "../../utils"
 import { Image } from "expo-image"
 import { Fonts, Themes } from "../../constants"
 import go_icon from '../../assets/images/misc/back.png'
@@ -13,7 +13,14 @@ const GeneralStyles=StyleSheet.create({
         flex:1,
         justifyContent:"center",
         alignItems:'center',
-        padding:10
+        padding:10,
+        position:"relative"
+    },
+    bg_wrapper:{
+        position:"absolute",
+        width:"100%",
+        height:"100%",
+        zIndex:-1,
     },
     sub_wrapper:{
         display:"flex",
@@ -30,7 +37,7 @@ const GeneralStyles=StyleSheet.create({
         justifyContent:"center",
         padding:5,
         paddingBottom:25,
-        gap:7
+        gap:5,
     },
     important_wrapper:{
         display:"flex",
@@ -54,6 +61,11 @@ const MobileSStyles=StyleSheet.create({
     sub_wrapper:{
         gap:5,
         borderRadius:20
+    },
+    bg_wrapper:{
+        borderRadius:20,
+        left:15,
+        top:15,
     },
     name:{
         fontSize:12,
@@ -86,8 +98,13 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     sub_wrapper:{
-        gap:7,
+        gap:10,
         borderRadius:30
+    },
+    bg_wrapper:{
+        borderRadius:30,
+        left:17.5,
+        top:17.5,
     },
     name:{
         fontSize:14,
@@ -140,7 +157,8 @@ const Programcard=(props:CourseListObj & {index:number})=>{
 
     return(
         <Pressable onPress={openProgram} style={[GeneralStyles.wrapper]}>
-            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{elevation:4,shadowColor:"black",shadowOpacity:0.15,shadowRadius:5,shadowOffset:{width:5,height:5}},{backgroundColor:props.index%4==0?Themes.Light.OnewindowRed(0.7):props.index%4==1?Themes.Light.OnewindowPurple(0.7):props.index%4==2?Themes.Light.OnewindowTeal(0.7):props.index%4==3?Themes.Light.OnewindowYellow(0.7):""}]}>
+            <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
+            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:getLightThemeColor(props.index%4)}]}>
                 <View style={[GeneralStyles.important_wrapper]}>
                 {
 
@@ -148,7 +166,7 @@ const Programcard=(props:CourseListObj & {index:number})=>{
                 {/* {
                     props.stemDetails?.stem
                     ?
-                    <Banner color="#FF9900" text="STEM"/>
+                    <Banner color={getThemeColor(props.index%4)} text="STEM"/>
                     :
                     null
                 } */}
@@ -174,7 +192,7 @@ const Banner=(props:{text:string,color:string})=>{
     const Device=useRef(getDevice()).current
 
     return(
-        <View style={[{backgroundColor:"#FFDAA1",borderRadius:100}]}><Text style={[{color:props.color,fontFamily:Fonts.NeutrifStudio.Bold,padding:3,paddingLeft:15,paddingRight:15},styles[Device].stem_banner_text]}>{props.text}</Text></View>
+        <View style={[{borderWidth:1,borderColor:"white",borderRadius:100}]}><Text style={[{color:props.color,fontFamily:Fonts.NeutrifStudio.Bold,padding:3,paddingLeft:15,paddingRight:15},styles[Device].stem_banner_text]}>{props.text}</Text></View>
     )
 }
 
