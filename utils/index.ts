@@ -1,6 +1,6 @@
 import { Dimensions, LayoutAnimation, Platform } from "react-native";
 import { Api, GradingSystems, Tests, Themes, andReplacer, baseAppUrl,lists,secureStoreKeys } from "../constants";
-import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem, Product, Package, Listquery, AppliedFilter, AppliedQuickFilter, Order } from "../types";
+import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem, Product, Package, Listquery, AppliedFilter, AppliedQuickFilter, Order, Listqueryadv } from "../types";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
@@ -786,6 +786,10 @@ export const getUpcomingIntakeData=()=>{
     {label: "October-December", value:  '3'},
 ]
     return [intakes[Math.floor((new Date().getMonth())/3)]]
+}
+
+export const getListQuery=(currentData:Listqueryadv,newData:any)=>{
+  
 }
 
 

@@ -36,7 +36,12 @@ export type ListInfo={
     listFetcher:(data:Listquery)=>Promise<ServerResponse>
 }
 
-
+export type Listqueryadv={
+    search:string,
+    page:number,
+    additionalFilters:AppliedFilter[],
+    quickFilters:AppliedQuickFilter[]
+}
 
 export type Listquery={
     search:string,

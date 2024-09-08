@@ -82,7 +82,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
     const openSearch=()=>{
         navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Search"}}):null
         setTimeout(()=>{
-            navigate?navigate({type:"AddScreen",payload:{screen:"Search"}}):null
+            navigate?navigate({type:"AddScreen",payload:{screen:"Search",params:{initialSearch:props.programslistquery.search}}}):null
         },200)
     }
 
@@ -94,7 +94,6 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
                 setTimeout(()=>{
                     let programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,additionalFilters:event.data}:props.programslistquery
                     let universitieslistquery=event.triggerBy=="Universities"?{...props.universitieslistquery,additionalFilters:event.data}:props.universitieslistquery
-                    console.log("additional ",programslistquery,universitieslistquery)
                     navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:props.initialexploretab,programslistquery:programslistquery,universitieslistquery:universitieslistquery}}})
                 },100)
                 break;
@@ -143,7 +142,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
 
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:15}}>
-            <Pressable onPress={openSearch}><Text style={{padding:7,fontFamily:Fonts.NeutrifStudio.Bold,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.5),color:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:10}}>{props.coursesearch?props.coursesearch:"Search..."}</Text></Pressable>
+            <Pressable onPress={openSearch}><Text style={{padding:7,fontFamily:Fonts.NeutrifStudio.Bold,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.5),color:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:10}}>{props.programslistquery.search?props.programslistquery.search:"Search..."}</Text></Pressable>
             {/* <Listselection
                 direction="horizontal"
                 selectionStyle="background"
