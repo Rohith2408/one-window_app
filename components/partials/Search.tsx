@@ -196,6 +196,7 @@ const Search=(props:{initialSearch:string})=>{
     }
 
     const select=(item:ListItem,type:string)=>{
+        console.log("Selected",JSON.stringify([{type:type,data:[item]}],null,2));
         navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}})
         setTimeout(()=>{
             let programslistquery={search:search,additionalFilters:[{type:type,data:[item]}],quickFilters:[],page:1}

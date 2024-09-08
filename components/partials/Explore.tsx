@@ -87,12 +87,14 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
     }
 
     const eventHandler=(event:Event)=>{
-        console.log("Event",event);
+        console.log("Event Recieved",JSON.stringify(event.data,null,2));
         navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}})
         switch(event.name){
             case "applyAdditionalFilters":
+                let universityFilter=props.programslistquery.additionalFilters.find((item)=>item.type=="universityId")
+                console.log("univertsityID",universityFilter);
                 setTimeout(()=>{
-                    let programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,additionalFilters:event.data}:props.programslistquery
+                    let programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,additionalFilters:universityFilter?[...event.data,universityFilter]:event.data}:props.programslistquery
                     let universitieslistquery=event.triggerBy=="Universities"?{...props.universitieslistquery,additionalFilters:event.data}:props.universitieslistquery
                     navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:props.initialexploretab,programslistquery:programslistquery,universitieslistquery:universitieslistquery}}})
                 },100)
