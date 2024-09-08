@@ -119,23 +119,23 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     uni_icon:{
-        width:15,
-        height:15,
+        width:19,
+        height:19,
         resizeMode:"contain",
         borderRadius:100
     },
     uni_icon_bg:{
-        width:15,
-        height:15,
+        width:19,
+        height:19,
         borderRadius:100,
         left:3,
         top:10
     },
     uni_text1:{
-        fontSize:12
+        fontSize:14
     },
     uni_text2:{
-        fontSize:10
+        fontSize:12
     },
     location_icon:{
         width:10,
@@ -143,8 +143,8 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     go_icon:{
-        width:7,
-        height:7,
+        width:9,
+        height:9,
         resizeMode:"contain"
     },
     discipline_icon:{
@@ -153,10 +153,10 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     discipline:{
-        fontSize:12
+        fontSize:14
     },
     subdiscipline:{
-        fontSize:12
+        fontSize:14
     }
 })
 const MobileLStyles=StyleSheet.create({
@@ -313,10 +313,9 @@ const Search=(props:{initialSearch:string})=>{
                         :
                         null
                     }
-                    <View style={[styles[Device].list_heading_wrapper]}>
+                    {/* <View style={[styles[Device].list_heading_wrapper]}>
                         <Text style={[styles[Device].list_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Universities</Text>
-                    </View>
-                    
+                    </View> */}
                 </View>
             </View>
         </View>
