@@ -88,31 +88,60 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
 
     const eventHandler=(event:Event)=>{
         console.log("Event Recieved",JSON.stringify(event.data,null,2));
-        navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}})
+        let programslistquery,universitieslistquery;
         switch(event.name){
             case "applyAdditionalFilters":
                 let universityFilter=props.programslistquery.additionalFilters.find((item)=>item.type=="universityId")
                 console.log("univertsityID",universityFilter);
+                navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}})
                 setTimeout(()=>{
                     let programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,additionalFilters:universityFilter?[...event.data,universityFilter]:event.data}:props.programslistquery
                     let universitieslistquery=event.triggerBy=="Universities"?{...props.universitieslistquery,additionalFilters:event.data}:props.universitieslistquery
                     navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:props.initialexploretab,programslistquery:programslistquery,universitieslistquery:universitieslistquery}}})
                 },100)
+                // let universityFilter=props.programslistquery.additionalFilters.find((item)=>item.type=="universityId")
+                // programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,additionalFilters:universityFilter?[...event.data,universityFilter]:event.data}:props.programslistquery
+                // universitieslistquery=event.triggerBy=="Universities"?{...props.universitieslistquery,additionalFilters:event.data}:props.universitieslistquery;
+                // navigate({
+                //     type:"UpdateParams",
+                //     payload:[
+                //         {
+                //             param:"programslistquery",
+                //             newValue:programslistquery
+                //         },
+                //         {
+                //             param:"universitieslistquery",
+                //             newValue:universitieslistquery
+                //         }
+                // ]})
                 break;
 
             case "applyQuickFilters":
+                navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}})
                 setTimeout(()=>{
-                    let programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,quickFilters:event.data,additionalFilters:getAdditionalFilters(event.data,props.programslistquery.additionalFilters)}:props.programslistquery
-                    let universitieslistquery=event.triggerBy=="Universities"?{...props.universitieslistquery,quickFilters:event.data,additionalFilters:getAdditionalFilters(event.data,props.universitieslistquery.additionalFilters)}:props.universitieslistquery
+                    programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,quickFilters:event.data,additionalFilters:getAdditionalFilters(event.data,props.programslistquery.additionalFilters)}:props.programslistquery
+                    universitieslistquery=event.triggerBy=="Universities"?{...props.universitieslistquery,quickFilters:event.data,additionalFilters:getAdditionalFilters(event.data,props.universitieslistquery.additionalFilters)}:props.universitieslistquery
                     console.log("quick ",programslistquery,universitieslistquery)
                     navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:props.initialexploretab,programslistquery:programslistquery,universitieslistquery:universitieslistquery}}})
                 },100)
                 break;
             
             case "setPage":
-                let programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,page:event.data}:props.programslistquery
-                let universitieslistquery=event.triggerBy=="Universities"?{...props.universitieslistquery,page:event.data}:props.universitieslistquery
-                navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:props.initialexploretab,programslistquery:programslistquery,universitieslistquery:universitieslistquery}}})
+                programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,page:event.data}:props.programslistquery
+                universitieslistquery=event.triggerBy=="Universities"?{...props.universitieslistquery,page:event.data}:props.universitieslistquery
+                navigate({
+                    type:"UpdateParams",
+                    payload:[
+                        {
+                            param:"programslistquery",
+                            newValue:programslistquery
+                        },
+                        {
+                            param:"universitieslistquery",
+                            newValue:universitieslistquery
+                        }
+                ]})
+                        //params:{initialexploretab:props.initialexploretab,programslistquery:programslistquery,universitieslistquery:universitieslistquery}}})
             break;
         }
     }

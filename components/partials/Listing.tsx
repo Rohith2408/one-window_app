@@ -152,21 +152,10 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     const applyQuickFilter=(data:QuickFilterInfo[])=>{
         let arr=data.map((item)=>({type:item.type,data:item.filters}));
         props.eventHandler({name:"applyQuickFilters",triggerBy:props.listid,data:arr});
-        // let additionalFilters=getAdditionalFilters(arr,props.additionalFilters);
-        // console.log("Quick Filters",JSON.stringify(arr,null,2));
-        // console.log("Applied Filters",JSON.stringify(additionalFIlters,null,2));
-        //navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}}):null
-        //navigate?navigate({type:"AddScreen",payload:{params:{initialexploretab:},screen:"Explore"}}):null
-        //navigate?navigate({type:"UpdateParam",payload:{param:props.listid+"listquery",newValue:{search:props.search,page:props.page,additionalFilters:correctAdditionalFilters(props.additionalFilters,arr),quickFilters:arr}}}):null
     }
 
     const applyAdditionalFilters=(data:AppliedFilter[])=>{
-        console.log("Applied Filters",JSON.stringify(data,null,2));
         props.eventHandler({name:"applyAdditionalFilters",triggerBy:props.listid,data:data});
-        //navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}}):null
-        //navigate?navigate({type:"AddScreen",payload:{params:{initialexploretab:props,programslistquery:,universitieslistquery:},screen:"Explore"}}):null
-        //lisbasket.listhandler({search:props.search,page:props.page,additionalFilters:correctAdditionalFilters([...props.additionalFilters,...data],props.quickFilters),quickFilters:props.quickFilters});
-        //navigate?navigate({type:"UpdateParam",payload:{param:props.listid+"listquery",newValue:{search:props.search,page:props.page,additionalFilters:correctAdditionalFilters([...props.additionalFilters,...data],props.quickFilters),quickFilters:props.quickFilters}}}):null;
     }
 
     const openAllFilters=()=>{
@@ -175,8 +164,6 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
             baseFilters:mergeQuickFilters(props.quickFilters),
             callback:applyAdditionalFilters
         })
-        console.log("dyataaa",getBasket(props.listid+"filter"));
-        //console.log(props.listid)
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:ListInfo?.formid,forminitialdataid:props.listid+"filter",formbasket:props.listid+"filter"}}}):null
     }
 
@@ -185,8 +172,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
         {
             if(!dataRequested.current && (e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y>e.nativeEvent.contentSize.height-20))
             {
-                
-                navigate?navigate({type:"UpdateParam",payload:{param:props.listid+"listquery",newValue:{search:props.search,page:props.page+1,additionalFilters:props.additionalFilters,quickFilters:props.quickFilters}}}):null
+                props.eventHandler({name:"setPage",triggerBy:props.listid,data:props.page+1});
                 dataRequested.current=true
             }
             else
