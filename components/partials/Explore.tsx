@@ -60,14 +60,14 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
             additionalFilters:props.programslistquery.additionalFilters?props.programslistquery.additionalFilters:[],
             quickFilters:props.programslistquery.quickFilters?props.programslistquery.quickFilters:[]
         },
-        // {
-        //     listid:"Universities",
-        //     basketid:"universities-filter",
-        //     search:props.universitieslistquery.search?props.universitieslistquery.search:"",
-        //     page:props.universitieslistquery.page?props.universitieslistquery.page:1,
-        //     additionalFilters:props.universitieslistquery.additionalFilters?props.universitieslistquery.additionalFilters:[],
-        //     quickFilters:props.universitieslistquery.quickFilters?props.universitieslistquery.quickFilters:[]
-        // }
+        {
+            listid:"Universities",
+            basketid:"universities-filter",
+            search:props.universitieslistquery.search?props.universitieslistquery.search:"",
+            page:props.universitieslistquery.page?props.universitieslistquery.page:1,
+            additionalFilters:props.universitieslistquery.additionalFilters?props.universitieslistquery.additionalFilters:[],
+            quickFilters:props.universitieslistquery.quickFilters?props.universitieslistquery.quickFilters:[]
+        }
     ]
     const ref=useRef<any>()
     const tabs=useRef([{label:"Programs",value:"programs"},{label:"Universities",value:"universities"}]).current
@@ -125,6 +125,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
                 //     navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:props.initialexploretab,programslistquery:programslistquery,universitieslistquery:universitieslistquery}}})
                 // },100)
                 //let universityFilter=props.programslistquery.additionalFilters.find((item)=>item.type=="universityId")
+                console.log("quick",event.data);
                 programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,quickFilters:event.data,additionalFilters:getAdditionalFilters(event.data,props.programslistquery.additionalFilters)}:props.programslistquery
                 universitieslistquery=event.triggerBy=="Universities"?{...props.universitieslistquery,quickFilters:event.data,additionalFilters:getAdditionalFilters(event.data,props.universitieslistquery.additionalFilters)}:props.universitieslistquery
                 navigate({
@@ -189,7 +190,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:15}}>
             <Pressable onPress={openSearch}><Text style={{padding:7,fontFamily:Fonts.NeutrifStudio.Bold,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.5),color:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:10}}>{props.programslistquery.search?props.programslistquery.search:"Search..."}</Text></Pressable>
-            {/* <Listselection
+            <Listselection
                 direction="horizontal"
                 selectionStyle="background"
                 initialSelection={[{label:"Programs",value:"programs"}]}
@@ -201,7 +202,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
                     labelExtractor:(data:any)=>data.label,
                     selectionMode:"single"
                 }}
-            /> */}
+            />
             {/* <View style={{flex:1}}>
             <Courselisting courselistid={props.courselistid} coursepage={props.coursepage} courseadditionalFilters={props.courseadditionalFilters} coursequickFilters={props.coursequickFilters} coursesearch={props.coursesearch}/>
             </View> */}

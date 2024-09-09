@@ -3051,7 +3051,7 @@ const forms:FormInfo[]=[
         id:"Programsfilter",
         title:"Program Filters",
         getInitialData:(id:string|undefined)=>{
-            console.log("id",id);
+            console.log("filter idd",getBasket(id));
             let filtersInfo=lists.find((list)=>list.id=="Programs")?.filters.additional;
             let data:{additionalFilters:AppliedFilter[]}|undefined=id?getBasket(id):undefined
             return filtersInfo?filtersInfo.map((item)=>{
@@ -3318,10 +3318,11 @@ const forms:FormInfo[]=[
         id:"Universitiesfilter",
         title:"",
         getInitialData:(id:string|undefined)=>{
+            console.log("filter idd",getBasket(id));
             let filtersInfo=lists.find((list)=>list.id=="Universities")?.filters.additional;
-            let data:AppliedFilter[]|undefined=id?getBasket(id):undefined
+            let data:{additionalFilters:AppliedFilter[]}|undefined=id?getBasket(id):undefined
             return filtersInfo?filtersInfo.map((item)=>{
-                let applied=data?.find((item2)=>item2.type==item.type)?.data
+                let applied=data?.additionalFilters?.find((item2)=>item2.type==item.type)?.data
                 return {id:item.type,value:applied?applied:[]}
             }):[]
         },

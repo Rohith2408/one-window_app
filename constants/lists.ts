@@ -136,7 +136,7 @@ const lists:ListInfo[]=[
     {
         id:"Universities",
         basketid:"universities",
-        formid:"Universityfilters",
+        formid:"Universitiesfilter",
         card:Universitycard,
         filters:{
             additional:[
@@ -152,32 +152,51 @@ const lists:ListInfo[]=[
                 }
             ],
             quick:[{
-                type:"rating",
-                title:"Rating 4+ ?",
+                type:"quickfilter1",
+                title:"Top Universities in US?",
                 icon:sample_icon,
-                items:[{label:"4",value:'4'}]
+                filters:[{
+                    type:"country",
+                    data:[{label:"United States of America",value:'United States of America'}]
+                },
+            ]
             },
             {
-                type:"studyLevel",
-                title:"M.Sc ?",
+                type:"quickfilter2",
+                title:"Top Universities in Canada?",
                 icon:sample_icon,
-                items:[{label:"M.Sc",value:"M.Sc."}]
-            }]
+                filters:[{
+                    type:"country",
+                    data:[{label:"Canada",value:'Canada'}]
+                },
+            ]
+            },
+            {
+                type:"quickfilter3",
+                title:"Top Universities in United Kingdom?",
+                icon:sample_icon,
+                filters:[{
+                    type:"country",
+                    data:[{label:"United Kingdom",value:'United Kingdom'}]
+                },
+            ]
+            },
+        ]// {label: "January-March", value: 0 },
         },
-        pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"universitiespage",newValue:page+1}}),
+        pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"programspage",newValue:page+1}}),
         listFetcher:async (query:{search:string,filters:any[],page:number})=>{
-            console.log("query recieved uni",query);
+            console.log("query recieved uni",JSON.stringify(query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),null,2));
             let res:ServerResponse=await serverRequest({
                     url: getServerRequestURL("universities","POST"),
                     reqType: "POST",
                     body:{
-                        //search.trim().length>0?{type:'name',data:[search.trim()]}:{}
-                        filterData:[...query.filters.map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)}))],
+                        filterData:query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),
                         page:query.page,
                         currency:"INR"
                     }
                 }
             )
+            //console.log("respon liiist",res.data.list?JSON.stringify(res.data.list.splice(0,2),null,2):"")
             return res
         }
     },

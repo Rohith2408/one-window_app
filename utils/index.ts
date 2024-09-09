@@ -728,8 +728,10 @@ const getRazorPayScreenData=(orderid:string,amount:number,callback:any)=>{
 
 export const bakeFilters=(additionalFilters:AppliedFilter[],baseFilters:AppliedQuickFilter[])=>{
 
+
+
   return [
-      ...getMergedFilters(baseFilters).filter((item)=>additionalFilters.find((item2)=>item2.type==item.type)==undefined?true:false),
+      ...mergeQuickFilters(baseFilters).filter((item)=>additionalFilters.find((item2)=>item2.type==item.type)==undefined?true:false),
       ...additionalFilters
   ]
 }
