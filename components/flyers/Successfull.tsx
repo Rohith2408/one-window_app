@@ -65,7 +65,7 @@ const Successfull=()=>{
 
     useEffect(()=>{
         setTimeout(()=>{
-            navigate?navigate({type:"RemoveScreen"}):null
+            navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
         },1500)
     },[])
 

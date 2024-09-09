@@ -65,7 +65,7 @@ const Error=(props:{error:string})=>{
 
     useEffect(()=>{
         setTimeout(()=>{
-            navigate?navigate({type:"RemoveScreen"}):null
+            navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
         },2500)
     },[])
 
