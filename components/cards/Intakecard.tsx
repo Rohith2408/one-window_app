@@ -60,10 +60,64 @@ const MobileSStyles=StyleSheet.create({
     }
 })
 const MobileMStyles=StyleSheet.create({
-    
+    uni_icon:{
+        width:19,
+        height:19,
+        resizeMode:"contain"
+    },
+    uni_icon_bg:{
+        width:17,
+        height:17,
+        borderRadius:100,
+        left:5,
+        top:15
+    },
+    intake_icon:{
+        width:14,
+        height:14,
+        resizeMode:"contain"
+    },
+    intakemonth:{
+        fontSize:15
+    },
+    deadline:{
+        fontSize:13
+    },
+    go_icon:{
+        width:7,
+        height:7,
+        resizeMode:"contain"
+    }
 })
 const MobileLStyles=StyleSheet.create({
-    
+    uni_icon:{
+        width:19,
+        height:19,
+        resizeMode:"contain"
+    },
+    uni_icon_bg:{
+        width:17,
+        height:17,
+        borderRadius:100,
+        left:5,
+        top:15
+    },
+    intake_icon:{
+        width:14,
+        height:14,
+        resizeMode:"contain"
+    },
+    intakemonth:{
+        fontSize:14
+    },
+    deadline:{
+        fontSize:12
+    },
+    go_icon:{
+        width:7,
+        height:7,
+        resizeMode:"contain"
+    }
 })
 
 const styles={

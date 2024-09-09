@@ -61,7 +61,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
         await info.onselection({name:"apply",data:intake});
         navigate?navigate({type:"RemoveScreen"}):null
         setTimeout(()=>{
-            navigate?navigate({type:"AddScreen",payload:{screen:"Successfull"}}):null;
+            navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Item added to cart successfully!"}}}}):null;
         },100)
         return true;
     }
@@ -73,11 +73,11 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     console.log("info",info);
 
     return(
-        <View style={{flex:1,flexDirection:'column',justifyContent:"center",alignItems:'center',gap:15,padding:10}}>
+        <View style={{flex:1,flexDirection:'column',justifyContent:"center",alignItems:'center',gap:30,padding:10}}>
             {/* <Text style={[{margin:15,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Please select the Intake</Text> */}
-            <View style={{flex:1,alignSelf:'stretch',gap:7}}>
+            <View style={{alignSelf:'stretch',gap:7}}>
                 <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the year</Text>
-                <View style={{flex:1}}>
+                <View>
                     <Listselection 
                         {...{
                             direction:"horizontal",
@@ -94,9 +94,9 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
                     />
                 </View>
             </View>
-            <View style={{flex:2,alignSelf:'stretch',gap:7}}>
+            <View style={{alignSelf:'stretch',gap:7}}>
                 <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the Month</Text>
-                <View style={{flex:1}}>
+                <View>
                     <Listselection 
                     {...{
                         direction:"vertical",

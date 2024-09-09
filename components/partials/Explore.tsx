@@ -76,6 +76,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     const tabSelected=(selected:ListItem[])=>{
+        //console.log("selected scsc",ref.current.scrollTo,dimensions.width,tabs.findIndex((tab)=>tab.label==selected[0].label));
         ref.current.scrollTo({x:dimensions.width*(tabs.findIndex((tab)=>tab.label==selected[0].label)),animated:true})
     }
 
@@ -173,18 +174,19 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
     },[props])
 
     useEffect(()=>{
-        // const checkRefAndSync = () => {
-        //     if (ref.current && dimensions.width!=0) {
-        //       tabSelected([{ label: props.initialexploretab, value: props.initialexploretab }]);
-        //     } else {
-        //       timer.current=setTimeout(checkRefAndSync, 100);
-        //     }
-        //   };
-      
-        //   checkRefAndSync();
-
-        //   return(()=>clearTimeout(timer.current));
-    },[dimensions.width])
+        setTimeout(()=>{
+            const checkRefAndSync = () => {
+                if (ref.current && dimensions.width!=0) {
+                    console.log("Called2");
+                    tabSelected([{ label: props.initialexploretab, value: props.initialexploretab }]);
+                } else {
+                    timer.current=setTimeout(checkRefAndSync, 100);
+                }
+              };
+              checkRefAndSync();
+              return(()=>clearTimeout(timer.current));
+        },100)
+    },[dimensions])
     //[{label:props.initialexploretab,value:props.initialexploretab}]
 
     return(
@@ -193,7 +195,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
             <Listselection
                 direction="horizontal"
                 selectionStyle="background"
-                initialSelection={[{label:"Programs",value:"programs"}]}
+                initialSelection={[{label:props.initialexploretab,value:props.initialexploretab}]}
                 styles={{contentcontainer:{gap:10}}}
                 onselection={tabSelected}
                 options={{

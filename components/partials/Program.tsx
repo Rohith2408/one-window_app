@@ -294,6 +294,10 @@ const Program=(props:{programid:string})=>{
         //res.success?removeCart():null
     }
 
+    const openUniversity=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"University",params:{universityid:programInfo?.university?._id}}}):null
+    }
+
     useEffect(()=>{
         fetchProgram();
     },[])
@@ -313,7 +317,7 @@ const Program=(props:{programid:string})=>{
                         <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{programInfo.name}</Text>
                         <View style={[GeneralStyles.location_wrapper]}>
                             <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([programInfo.university?.name,programInfo.university?.location?.country],"")}</Text></View>
+                            <Pressable onPress={openUniversity} style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([programInfo.university?.name,programInfo.university?.location?.country],"")}</Text></Pressable>
                         </View>
                         <View style={[GeneralStyles.actions_wrapper]}>
                             <Pressable onPress={()=>showIntakes(addToCart)} style={{borderWidth:1,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}><Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium,padding:7,paddingLeft:15,paddingRight:15}]}>Add to Cart</Text></Pressable>

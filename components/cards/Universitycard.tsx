@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { CourseListObj, UniversityListObj } from "../../types"
 import { useRef } from "react"
-import { Word2Sentence, getDevice } from "../../utils"
+import { Word2Sentence, getDevice, getLightThemeColor, getThemeColor } from "../../utils"
 import { Image } from "expo-image"
 import { Fonts, Themes } from "../../constants"
 import go_icon from '../../assets/images/misc/back.png'
@@ -13,7 +13,14 @@ const GeneralStyles=StyleSheet.create({
         flex:1,
         justifyContent:"center",
         alignItems:'center',
-        padding:10
+        padding:10,
+        position:"relative"
+    },
+    bg_wrapper:{
+        position:"absolute",
+        width:"100%",
+        height:"100%",
+        zIndex:-1,
     },
     sub_wrapper:{
         display:"flex",
@@ -55,6 +62,11 @@ const MobileSStyles=StyleSheet.create({
         gap:5,
         borderRadius:20
     },
+    bg_wrapper:{
+        borderRadius:20,
+        left:15,
+        top:15,
+    },
     name:{
         fontSize:12,
         lineHeight:18
@@ -88,6 +100,11 @@ const MobileMStyles=StyleSheet.create({
     sub_wrapper:{
         gap:7,
         borderRadius:30
+    },
+    bg_wrapper:{
+        borderRadius:30,
+        left:15,
+        top:15,
     },
     name:{
         fontSize:14,
@@ -140,7 +157,8 @@ const Universitycard=(props:UniversityListObj & {index:number})=>{
 
     return(
         <Pressable onPress={openUniversity} style={[GeneralStyles.wrapper]}>
-            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:props.index%4==0?Themes.Light.OnewindowRed(0.6):props.index%4==1?Themes.Light.OnewindowPurple(0.7):props.index%4==2?Themes.Light.OnewindowTeal(0.7):props.index%4==3?Themes.Light.OnewindowYellow(0.7):""}]}>
+            <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
+            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:getLightThemeColor(props.index%4)}]}>
                 <View style={[GeneralStyles.important_wrapper]}>
                 {
 

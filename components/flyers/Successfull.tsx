@@ -58,7 +58,7 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Successfull=()=>{
+const Successfull=(props:{message:string})=>{
 
     const [path,navigate]=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
@@ -72,7 +72,7 @@ const Successfull=()=>{
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <Text style={[styles[Device].text,{color:"green",fontFamily:Fonts.NeutrifStudio.Bold}]}>Success!</Text>
-            <Text style={[styles[Device].subtext,{color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>Items added to cart successfully!</Text>
+            <Text style={[styles[Device].subtext,{color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.message}</Text>
         </View>
     )
 }

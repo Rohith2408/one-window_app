@@ -76,11 +76,11 @@ const Cart=()=>{
             ?
             <Text>Loading</Text>
             :
-            <View style={{flex:1,gap:20}}>
+            <View style={{flex:1,gap:10}}>
                 {
                     cart.data.length>0
                     ?
-                    <Pressable style={{alignSelf:'flex-end',borderRadius:100,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1)}} onPress={order}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Checkout</Text></Pressable>
+                    <Pressable style={{alignSelf:"center",paddingLeft:20,paddingRight:20,borderRadius:100,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1)}} onPress={order}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Checkout</Text></Pressable>
                     :
                     null
                 }

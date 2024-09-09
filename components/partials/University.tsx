@@ -214,7 +214,7 @@ const University=(props:{universityid:string})=>{
     const dashboardInfo=[
         {icon:fee_icon,label:"Acceptance",value:universityInfo?.acceptanceRate},
         {icon:fee_icon,label:"Graduation",value:universityInfo?.graduationRate},
-        {icon:fee_icon,label:"Mediam Earning",value:universityInfo?.medianEarning},
+        {icon:fee_icon,label:"Median Earning",value:universityInfo?.medianEarning?(Object.values(universityInfo.medianEarning)[0]+"/"+Object.keys(universityInfo.medianEarning)[0]):null},
         {icon:fee_icon,label:"Type",value:universityInfo?.type},
         {icon:fee_icon,label:"Code",value:universityInfo?.code},
         {icon:fee_icon,label:"Courses",value:universityInfo?.courses}
@@ -227,6 +227,7 @@ const University=(props:{universityid:string})=>{
             url:getServerRequestURL("university","GET",{id:props.universityid,currency:"INR"}),
             reqType:"GET"
         });
+        console.log("res",res);
         res.success?setUniversityInfo(res.data):null
     }
 

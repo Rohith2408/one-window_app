@@ -9,29 +9,32 @@ import Asynchronousbutton from "../resources/Asynchronousbutton"
 import Loader from "../resources/Loader"
 import { Image } from "expo-image"
 import go_icon from '../../assets/images/misc/back.png'
+import loader from '../../assets/images/misc/loader.gif'
 import { Fonts, Themes } from "../../constants"
 import delete_icon from '../../assets/images/misc/delete-black.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        // width:"100%",
-        // height:"100%",
         padding:10,
         backgroundColor:'white',
         borderRadius:30,
         display:"flex",
         flexDirection:"column",
-        gap:25,
-        position:"relative",
-        zIndex:1
+        gap:20,
+        position:"relative"
     },
     bg_wrapper:{
         position:"absolute",
-        width:"110%",
-        height:"110%",
-        borderRadius:30,
-        top:10,
-        zIndex:-1
+        width:"100%",
+        height:"100%",
+        zIndex:-1,
+    },
+    sub_wrapper:{
+        display:"flex",
+        flexDirection:"column",
+        flex:1,
+        alignSelf:"stretch",
+        padding:10
     },
     superset_wrapper:{
         display:"flex",
@@ -58,7 +61,7 @@ const GeneralStyles=StyleSheet.create({
     footer_wrapper:{
         display:'flex',
         flexDirection:"row",
-        justifyContent:"center",
+        justifyContent:"flex-end",
         alignItems:"center"
     }
 })
@@ -70,6 +73,15 @@ const TabStyles=StyleSheet.create({
 const MobileSStyles=StyleSheet.create({
     main_wrapper:{
 
+    },
+    sub_wrapper:{
+        gap:20,
+        borderRadius:25
+    },
+    bg_wrapper:{
+        borderRadius:25,
+        left:15,
+        top:15,
     },
     superset_text:{
         fontSize:10
@@ -86,7 +98,7 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     footer:{
-        fontSize:11
+        fontSize:12
     },
     go_icon:{
         width:10,
@@ -98,6 +110,15 @@ const MobileSStyles=StyleSheet.create({
 const MobileMStyles=StyleSheet.create({
     superset_text:{
         fontSize:13
+    },
+    sub_wrapper:{
+        gap:20,
+        borderRadius:30
+    },
+    bg_wrapper:{
+        borderRadius:30,
+        left:16,
+        top:16,
     },
     icon:{
         width:24,
@@ -111,7 +132,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:13
     },
     footer:{
-        fontSize:11
+        fontSize:13
     }
 })
 
@@ -163,6 +184,7 @@ const Cartcard=(props:CartItem & {index:number})=>{
             action:"remove",
             itemId:props._id
         }
+        setIsloading(true);
         let serverRes={success:false,message:"",data:undefined};
         let requestInfo=requests.find((item)=>item.id=="removeFromCart");
         let validation=requestInfo?.inputValidator(data);
@@ -171,6 +193,7 @@ const Cartcard=(props:CartItem & {index:number})=>{
             serverRes=await requestInfo?.serverCommunicator(data);
             if(serverRes?.success)
             {
+                setIsloading(false);
                 requestInfo?.responseHandler(serverRes);
             }
         }
@@ -204,28 +227,28 @@ const Cartcard=(props:CartItem & {index:number})=>{
         }
     },[])
 
-    console.log(props.category)
-
     return(
-        <View style={[GeneralStyles.main_wrapper,{backgroundColor:getThemeColor(props.index)},{elevation:4,shadowColor:"black",shadowOpacity:0.1,shadowRadius:5,shadowOffset:{width:3,height:5}}]}>
-            {/* <View style={[GeneralStyles.bg_wrapper,{backgroundColor:getLightThemeColor(props.index)}]}></View> */}
-            <View style={[GeneralStyles.superset_wrapper]}>
-                <View style={{borderRadius:100,borderWidth:1,borderColor:"white"}}>
-                    <Text style={[GeneralStyles.superset_text,styles[Device].superset_text,{color:"white",padding:5}]}>{setWordCase(props.category)}</Text>
+        <View style={[GeneralStyles.main_wrapper]}>
+            <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
+            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:getLightThemeColor(props.index%4)}]}>
+                <View style={[GeneralStyles.superset_wrapper]}>
+                    <View style={{borderRadius:100,backgroundColor:getThemeColor(props.index%4)}}>
+                        <Text style={[GeneralStyles.superset_text,styles[Device].superset_text,{color:"white",fontFamily:Fonts.NeutrifStudio.Regular,padding:5}]}>{setWordCase(props.category)}</Text>
+                    </View>
+                    <Pressable onPress={!isLoading?deleteItem:null}>
+                        <Image style={{width:14,height:14,resizeMode:'contain'}} source={isLoading?loader:delete_icon}/>
+                    </Pressable>
                 </View>
-                <Pressable onPress={deleteItem}>
-                    <Image style={{width:14,height:14,resizeMode:'contain'}} source={delete_icon}/>
-                </Pressable>
-            </View>
-            <View style={[GeneralStyles.info_wrapper]}>
-                <View style={[GeneralStyles.info_subwrapper]}>
-                    <Image style={[styles[Device].icon,{borderRadius:100}]} source={props.course.university.logoSrc}/>
-                    <Text style={[styles[Device].course_name,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.course.name}</Text>
-                    <Text style={[styles[Device].uni_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.course.university.name}</Text>
+                <View style={[GeneralStyles.info_wrapper]}>
+                    <View style={[GeneralStyles.info_subwrapper]}>
+                        <Image style={[styles[Device].icon,{borderRadius:100}]} source={props.course.university.logoSrc}/>
+                        <Text style={[styles[Device].course_name,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.course.name}</Text>
+                        <Text style={[styles[Device].uni_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.course.university.name}</Text>
+                    </View>
+                    <View style={{display:"flex",flexDirection:"row",alignItems:'center',transform:[{scaleX:-1}]}}><Image source={go_icon} style={[styles[Device].go_icon]}/></View>
                 </View>
-                <View style={{display:"flex",flexDirection:"row",alignItems:'center',transform:[{scaleX:-1}]}}><Image source={go_icon} style={[styles[Device].go_icon]}/></View>
+                <View style={[GeneralStyles.footer_wrapper]}><Text style={[styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{"Intake - "+formatDate(props.intake)}</Text></View>
             </View>
-            <View style={[GeneralStyles.footer_wrapper]}><Text style={[styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Intake - "+formatDate(props.intake)}</Text></View>
         </View>
     )
 

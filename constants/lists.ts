@@ -129,7 +129,7 @@ const lists:ListInfo[]=[
                     }
                 }
             )
-            console.log("respon liiist",res.data.list?JSON.stringify(res.data.list.splice(0,2),null,2):"")
+            //console.log("respon liiist",res.data.list?JSON.stringify(res.data.list.splice(0,2),null,2):"")
             return res
         }
     },
