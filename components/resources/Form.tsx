@@ -148,7 +148,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                 let convertedData=formInfo?.submit.dataConverter?formInfo.submit.dataConverter(fields,props.forminitialdataid):fields
                 res=await handler(convertedData);
                 if(!res.success){
-
+                    navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Error",flyerdata:{error:res.message}}}})
                 }
                 else{
                     navigate?navigate({type:"RemoveScreen"}):null

@@ -231,7 +231,7 @@ const Loginbase=(props:{auth:string})=>{
     const [password,setPassword]=useState("Rohith@24")
     const [path,navigate]=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
-    const [errors,setErrors]=useState([]);
+    const [errors,setErrors]=useState<{id:string,error:string}>();
 
     const login=async (email:string,password:string)=>{
         let validEmail=validations.EMAIL.regex.test(email)

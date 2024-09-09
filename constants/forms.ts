@@ -143,7 +143,7 @@ const forms:FormInfo[]=[
             },
             onSubmit:async (data:{email:string,password:string})=>{
                 let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:data.email,password:data.password}})
-                console.log("ressss",res)
+                
                 return res;
             },
             redirect:(data:any)=>({type:"Login"}),

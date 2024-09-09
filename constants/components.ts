@@ -5,7 +5,6 @@ import Student from "../components/layouts/Student"
 import Login from "../components/layouts/Login"
 import Base from "../components/partials/Base"
 import Popup from "../components/partials/Popup"
-import Error from "../components/popups/Error"
 import Loginbase from "../components/partials/Loginbase"
 import Workexperience from "../components/partials/Workexperience"
 import Form from "../components/resources/Form"
@@ -46,6 +45,7 @@ import Myorders from "../components/partials/Myorders"
 import Payment from "../components/partials/Payment"
 import Recommendations from "../components/partials/Recommendations"
 import Successfull from "../components/flyers/Successfull"
+import Error from "../components/flyers/Error"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -80,6 +80,7 @@ const components:ScreenInfo[]=[
     {id:"Mydetails",component:Mydetails,type:"Partial",title:"My Details",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Datetimeproselector",component:Datetimeproselector,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Successfull",component:Successfull,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Error",component:Error,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Search",component:Search,props:["initialSearch"],type:"Partial",title:"Search",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Program",component:Program,title:"Program",props:["programid"],type:"Partial",occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"University",component:University,title:"University",props:["universityid"],type:"Partial",occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
