@@ -173,6 +173,10 @@ const Registerbase=()=>{
         },200)
     }
 
+    const forgotPassword=()=>{
+        navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Forgotpassword"}}})
+    }
+
     return(
         <View style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.header_wrapper,styles[Device].header_wrapper]}>
@@ -182,12 +186,8 @@ const Registerbase=()=>{
             <View style={[GeneralStyles.body_wrapper]}>
                 <Form formid="Register" />
                 <View style={[GeneralStyles.actions_wrapper]}>
-                    <View>
-                        <Pressable onPress={openLogin}><Text style={[styles[Device].noaccount,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Already have an account?</Text></Pressable>
-                    </View>
-                    {/* <View>
-                        <Text style={[styles[Device].forgot,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Forgot Password?</Text>
-                    </View> */}
+                    <Pressable onPress={openLogin}><Text style={[styles[Device].noaccount,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Already have an account?</Text></Pressable>
+                    <Pressable onPress={forgotPassword}><Text style={[styles[Device].forgot,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Forgot Password?</Text></Pressable>
                 </View>
             </View>
         </View>

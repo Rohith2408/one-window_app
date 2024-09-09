@@ -217,7 +217,9 @@ const Verifiedotp=(props:{status:ServerResponse})=>{
 
     return(
         <View style={[GeneralStyles.request_otp_wrapper]}>
-            <Text style={[styles[Device].verification_status,{fontFamily:Fonts.NeutrifStudio.Bold,color:props.status.success?"green":"red"}]}>{"Verification Succesfull"}</Text>
+            <Text style={[styles[Device].verification_status,{fontFamily:Fonts.NeutrifStudio.Bold,color:props.status.success?"green":"red"}]}>
+                {props.status.success?"Verification Succesfull":"Verification Failed"}
+            </Text>
         </View>
     )
 

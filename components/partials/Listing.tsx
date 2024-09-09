@@ -123,7 +123,7 @@ const styles={
 
 const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[],page:number,search:string})=>{//,additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[],search:string,page:number
 
-    console.log("listfilters props",props);
+    //console.log("listfilters props",props);
     const ListInfo=useRef(lists.find((list)=>list.id==props.listid)).current
     const [list,setList]=useState<any[]>([]);
     const [path,navigate]=useNavigation()
@@ -135,11 +135,12 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     //const lisbasket=getBasket(props.basketid);
 
     useEffect(()=>{
+        //if()
         getList().then((res:ServerResponse|undefined)=>{
             maxPages.current=res?.data.totalPages;
             (res && res.success)?setList(props.page==1?[...res.data.list]:[...list,...res.data.list]):null
         })
-    },[props.additionalFilters,props.quickFilters,props.search,props.page])
+    },[JSON.stringify(props.additionalFilters),JSON.stringify(props.quickFilters),props.search,props.page])
 
     const getList=async ()=>{
         setIsLoading(true);
@@ -192,7 +193,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     },[])
 
 
-    console.log("props",JSON.stringify(props,null,2));
+    //console.log("props",JSON.stringify(props,null,2));
 
     //console.log("Additional",JSON.stringify(props.additionalFilters,null,2));
     //console.log("Quick",JSON.stringify(props.quickFilters,null,2));
