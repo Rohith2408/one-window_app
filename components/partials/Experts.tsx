@@ -7,6 +7,8 @@ import Expertcard from "../cards/Expertcard"
 import { Themes } from "../../constants"
 import { Advisor } from "../../types"
 import useNavigation from "../../hooks/useNavigation"
+import { store } from "../../store"
+import Requestcounsellorcard from "../cards/Requestcounsellorcard"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -35,11 +37,19 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
-    
+    card_wrapper:{
+        width:"100%",
+        height:150,
+        borderRadius:25
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
-    
+    card_wrapper:{
+        width:"100%",
+        height:150,
+        borderRadius:25
+    }
 })
 
 const styles={
@@ -68,7 +78,16 @@ const Experts=()=>{
             <Loadinglistscreen cardGap={30} cardHeight={Device=="MobileS"?100:(Device=="MobileM"?130:170)}></Loadinglistscreen>
             :
             <View style={{flex:1}}>
-                <ScrollView style={{flex:1}} contentContainerStyle={{gap:30,paddingBottom:20}}>
+                <ScrollView style={{flex:1}} contentContainerStyle={{gap:40,paddingBottom:20}}>
+                {
+                    store.getState().preferences.data?.country?.map((country)=>
+                    !alreadyAssigned(experts.data,country)
+                    ?
+                    <Requestcounsellorcard country={country}/>
+                    :
+                    null
+                    )
+                }
                 {
                     experts.data?.map((expert,i)=>
                     <Pressable onPress={()=>showDetails(expert)} key={expert.info._id} style={[styles[Device].card_wrapper]}><Expertcard index={i} {...expert}/></Pressable>
@@ -80,6 +99,12 @@ const Experts=()=>{
         </View>
     )
 
+}
+
+const alreadyAssigned=(experts:Advisor[],country:string)=>{
+    console.log(country,experts);
+    let assignedCountries=experts.reduce((acc,curr)=>[...acc,...curr.assignedCountries],[])
+    return assignedCountries?.find((item)=>item==country)?true:false
 }
 
 export default Experts

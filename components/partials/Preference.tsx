@@ -9,6 +9,7 @@ import { Fonts, Themes } from "../../constants";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { store } from "../../store";
 import delete_icon from '../../assets/images/misc/delete-black.png'
+import tick_icon from '../../assets/images/misc/tick.png'
 import { Image } from "expo-image";
 
 const GeneralStyles=StyleSheet.create({
@@ -102,6 +103,16 @@ const Preference=(props:{preferenceid:string})=>{
             </View>
             <View>
                 <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>All</Text>
+                {/* {
+                    info.options.map((item)=>
+                    <View style={{padding:10,flexDirection:'row'}}>
+                        <View style={{flex:1}}><Card {...item}/></View>
+                        <Pressable onPress={()=>deleteItem(item)}>
+                            <Image style={{width:14,height:14,resizeMode:'contain'}} source={tick_icon}/>
+                        </Pressable>
+                    </View>
+                    )
+                } */}
                 <Listselection
                 {...{
                     direction:"vertical",

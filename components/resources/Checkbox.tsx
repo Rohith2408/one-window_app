@@ -37,11 +37,37 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
-  
+    check:{
+        width:12,
+        height:12,
+        borderRadius:100,
+        backgroundColor:"white"
+    },
+    highlighter:{
+        width:10,
+        height:10,
+        borderRadius:100
+    },
+    label:{
+        fontSize:14
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
-
+    check:{
+        width:12,
+        height:12,
+        borderRadius:100,
+        backgroundColor:"white"
+    },
+    highlighter:{
+        width:10,
+        height:10,
+        borderRadius:100
+    },
+    label:{
+        fontSize:14
+    }
 })
 
 const styles={

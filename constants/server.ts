@@ -152,6 +152,13 @@ const endPoints=[
         
     },
     {
+        id:"request-counsellor",
+        category:"student",
+        tail:"request-counsellor",
+        type:"POST"
+        
+    },
+    {
         ENUM:"request-counsellor",
         TYPE:"student",
         
