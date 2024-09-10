@@ -56,7 +56,7 @@ const Requestcounsellorcard=(props:{country:string})=>{
     }
 
     return(
-        <View style={{gap:10}}>
+        <View style={{gap:10,padding:10}}>
             <Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}}>Seems like you are interested to go {setWordCase(props.country)}</Text>
             <Pressable onPress={!isLoading?requestForCounsellor:null} style={{alignSelf:"flex-end"}}>
                 {
