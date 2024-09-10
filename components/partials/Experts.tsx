@@ -102,7 +102,7 @@ const Experts=()=>{
 }
 
 const alreadyAssigned=(experts:Advisor[],country:string)=>{
-    console.log(country,experts);
+   //console.log(country,experts);
     let assignedCountries=experts.reduce((acc,curr)=>[...acc,...curr.assignedCountries],[])
     return assignedCountries?.find((item)=>item==country)?true:false
 }

@@ -2,7 +2,7 @@ import { useRef } from "react"
 import { Product as ProductType, PurchasedProduct} from "../../types"
 import { StyleSheet, Text, View } from "react-native"
 import { Fonts, Themes } from "../../constants"
-import { formatDate, getDevice, setWordCase, truncateString } from "../../utils"
+import { formatDate, getDevice, getLightThemeColor, getThemeColor, setWordCase, truncateString } from "../../utils"
 import { Image } from "expo-image"
 import clock from '../../assets/images/misc/clock-black.png'
 import processing_icon from '../../assets/images/products/processing.png'
@@ -12,21 +12,27 @@ const GeneralStyles=StyleSheet.create({
         width:"100%",
         height:"100%",
         borderRadius:20,
-        padding:20
+        //padding:20
+    },
+    bg_wrapper:{
+        position:"absolute",
+        width:"100%",
+        height:"100%",
+        zIndex:-1,
     },
     sub_wrapper:{
         display:'flex',
         flex:1,
         flexDirection:"column",
-        padding:0,
+        padding:10,
         alignSelf:"stretch",
-        justifyContent:'center'
+        justifyContent:'center',
     },
     category_wrapper:{
         display:"flex",
         flexDirection:"row",
         alignItems:"center",
-        justifyContent:"flex-start",
+        justifyContent:"flex-end",
     },
     category:{
         borderRadius:100,
@@ -121,7 +127,13 @@ const TabStyles=StyleSheet.create({
 
 const MobileSStyles=StyleSheet.create({
     sub_wrapper:{
-        gap:20
+        gap:20,
+        borderRadius:25
+    },
+    bg_wrapper:{
+        borderRadius:30,
+        left:7.5,
+        top:7.5,
     },
     category_text:{
         fontSize:11
@@ -164,6 +176,11 @@ const MobileMStyles=StyleSheet.create({
     sub_wrapper:{
         gap:27
     },
+    bg_wrapper:{
+        borderRadius:30,
+        left:12,
+        top:12,
+    },
     category_text:{
         fontSize:12
     },
@@ -204,6 +221,11 @@ const MobileMStyles=StyleSheet.create({
 const MobileLStyles=StyleSheet.create({
     sub_wrapper:{
         gap:20
+    },
+    bg_wrapper:{
+        borderRadius:30,
+        left:12,
+        top:12,
     },
     category_text:{
         fontSize:11
@@ -261,10 +283,11 @@ const Product=(props:PurchasedProduct & {index:number})=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
-        <View style={[GeneralStyles.main_wrapper,{elevation:4,shadowColor:"black",shadowOpacity:0.2,shadowRadius:5,shadowOffset:{width:5,height:5}},{backgroundColor:bgColors[props.index%4]}]}>
-            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper]}>
+            <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
+            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:getLightThemeColor(props.index%4)}]}>
                 <View style={[GeneralStyles.category_wrapper]}>
-                    <View style={[GeneralStyles.category]}><Text style={[styles[Device].category_text,{color:"white",fontFamily:Fonts.NeutrifStudio.Medium}]}>{setWordCase(props.category)}</Text></View>
+                    <View style={[GeneralStyles.category]}><Text style={[styles[Device].category_text,{color:getThemeColor(props.index%4),fontFamily:Fonts.NeutrifStudio.Bold}]}>{setWordCase(props.category)}</Text></View>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <Text style={[styles[Device].product_name,{color:"black",fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.course.name}</Text>

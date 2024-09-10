@@ -29,7 +29,7 @@ const GeneralStyles=StyleSheet.create({
     },
     search:{
         borderRadius:100,
-        borderWidth:1,
+        borderWidth:1.5,
         padding:10
     },
     search_text:{
@@ -102,14 +102,14 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     explore_icon:{
-        width:40,
-        height:40
+        width:32,
+        height:32
     },
     explore_text:{
-        fontSize:10
+        fontSize:11
     },
     products_wrapper:{
-        gap:20
+        gap:5
     },
     products_title:{
         fontSize:14
@@ -134,17 +134,20 @@ const MobileMStyles=StyleSheet.create({
         fontSize:14
     },
     explore_icon:{
-        width:44,
-        height:44
+        width:34,
+        height:34
     },
     explore_text:{
         fontSize:12
+    },
+    products_wrapper:{
+        gap:7.5
     },
     products_title:{
         fontSize:15
     },
     card:{
-        width:230,
+        width:235,
         height:180
     }
 })
@@ -152,27 +155,32 @@ const MobileMStyles=StyleSheet.create({
 const MobileLStyles=StyleSheet.create({
 
     sub_wrapper:{
-        maxWidth:500
+        maxWidth:500,
+        gap:34
     },
     welcome_message:{
-        fontSize:20,
+        fontSize:22,
         fontWeight:"700"
     },
     search_text:{
-        fontSize:12
+        fontSize:14
     },
     explore_icon:{
-        width:50,
-        height:50
+        width:34,
+        height:34
     },
     explore_text:{
         fontSize:12
     },
     products_wrapper:{
-        height:200
+        gap:10
     },
     products_title:{
-        fontSize:14
+        fontSize:15
+    },
+    card:{
+        width:240,
+        height:180
     }
 })
 
@@ -208,7 +216,7 @@ const Home=(props:undefined|{name:string})=>{
                 <View>
                     <Text style={[{color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {personalinfo.data?.firstName}!</Text>
                 </View>
-                <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'}]}>
+                <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
                     <Text style={[GeneralStyles.search_text,styles[Device].search_text]}>Search for "Harvard University"</Text>
                 </Pressable>
                 <View style={[GeneralStyles.explore_wrapper]}>
@@ -233,7 +241,7 @@ const Home=(props:undefined|{name:string})=>{
 const Exploreitem=(props:{icon:string,text:string,theme:"light"|"dark",device:Device,handler:any})=>{
 
     return(
-        <Pressable onPress={()=>props.handler()} style={[GeneralStyles.explore_item]}>
+        <Pressable onPress={()=>props.handler()} style={[GeneralStyles.explore_item,{gap:5}]}>
             <Image source={props.icon} style={[GeneralStyles.explore_icon,styles[props.device].explore_icon]}></Image>
             <Text style={[GeneralStyles.explore_text, {color:Themes.Light.OnewindowPrimaryBlue(1)} ,styles[props.device].explore_text]}>{props.text}</Text>
         </Pressable>

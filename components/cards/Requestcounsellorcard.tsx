@@ -24,11 +24,11 @@ const Requestcounsellorcard=(props:{country:string})=>{
             }
         })
         setIsloading(false);
-        console.log("Response",serverRes);
+        console.log("Request Response",serverRes);
         if(serverRes.success)
         {
-            dispatch(setAdvisors(serverRes.data.advisors))
-            dispatch(addChats(serverRes.data.chat));
+            //dispatch(setAdvisors(serverRes.data.advisors))
+            //dispatch(addChats(serverRes.data.chat));
         }
         // let accessTokenRes=await checkAccessToken();
         // setLayoutAnimation()
