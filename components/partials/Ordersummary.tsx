@@ -10,7 +10,8 @@ import { Image } from "expo-image"
 import Packagecard from "../cards/Packagecard"
 import Unpurchasedproductscard from "../cards/Unpurchasedproductcard"
 import { Fonts, Themes } from "../../constants"
-import { useRef } from "react"
+import { useRef, useState } from "react"
+import loader from '../../assets/images/misc/loader.gif'
 
 const GeneralStyles=StyleSheet.create({
     
@@ -33,6 +34,14 @@ const MobileSStyles=StyleSheet.create({
     },
     continue:{
         fontSize:14
+    },
+    products_wrapper:{
+        gap:25
+    },
+    loader:{
+        width:18,
+        height:18,
+        resizeMode:"contain"
     }
 })
 
@@ -47,6 +56,14 @@ const MobileMStyles=StyleSheet.create({
     },
     continue:{
         fontSize:15
+    },
+    products_wrapper:{
+        gap:45
+    },
+    loader:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
     }
 })
 
@@ -61,6 +78,14 @@ const MobileLStyles=StyleSheet.create({
     },
     continue:{
         fontSize:14
+    },
+    products_wrapper:{
+        gap:25
+    },
+    loader:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
     }
 })
 
@@ -77,8 +102,10 @@ const Ordersummary=(props:{ordersummaryid:string})=>{
     let orderInfo:{package:Package|undefined,products:Product[]}=getBasket(props.ordersummaryid)
     const [path,navigate]=useNavigation()
     const dispatch=useAppDispatch()
+    const [isLoading,setIsloading]=useState(false);
 
     const placeOrder=async ()=>{
+        setIsloading(true);
         let requestInfo=requests.find((item)=>item.id=="placeorder");
         let inputvalidation=requestInfo?.inputValidator({packageId:orderInfo.package?._id,products:orderInfo.products.map((item)=>({
             category: item.category,
@@ -90,9 +117,10 @@ const Ordersummary=(props:{ordersummaryid:string})=>{
             let serverRes=await requestInfo?.serverCommunicator(inputvalidation.data);
             if(serverRes?.success)
             {
-                dispatch(addOrders(serverRes.data));
-                console.log("order res",JSON.stringify(serverRes.data,null,2));
-                await requestInfo?.responseHandler(serverRes.data.order);
+                //dispatch(addOrders(serverRes.data));
+                //console.log("order res",JSON.stringify(serverRes.data,null,2));
+                setIsloading(false);
+                await requestInfo?.responseHandler(serverRes);
                 addToBasket("payment_options",serverRes.data.order.paymentDetails);
                 navigate?navigate({type:"AddScreen",payload:{screen:"Payment"}}):null
             }
@@ -135,7 +163,7 @@ const Ordersummary=(props:{ordersummaryid:string})=>{
             </View>
             <View style={{flex:1,gap:15,padding:10}}>
             <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
-                <ScrollView contentContainerStyle={{gap:25,padding:5,paddingTop:20,paddingBottom:20}}>
+                <ScrollView contentContainerStyle={[styles[Device].products_wrapper,{padding:5,paddingTop:20,paddingBottom:20}]}>
                 {
                     orderInfo.products.map((product,i)=>
                     <Unpurchasedproductscard hideDelete={true} data={product} index={i}/>
@@ -143,7 +171,16 @@ const Ordersummary=(props:{ordersummaryid:string})=>{
                 }
                 </ScrollView>
             </View>
-            <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={placeOrder}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Place Order</Text></Pressable>
+            <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={!isLoading?placeOrder:null}>
+                {
+                    !isLoading
+                    ?
+                    <Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Place Order</Text>
+                    :
+                    <Image style={[styles[Device].loader]} source={loader}/>
+                }
+                
+            </Pressable>
         </View>
     )
 

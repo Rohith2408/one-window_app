@@ -5,6 +5,7 @@ import { Image } from "expo-image"
 import { useRef, useState } from "react"
 import { Word2Sentence, formatDate, formatTime, getDevice, getServerRequestURL, serverRequest, setWordCase } from "../../utils"
 import delete_icon from '../../assets/images/misc/delete.png'
+import loader from '../../assets/images/misc/loader.gif'
 import edit_icon from '../../assets/images/misc/edit.png'
 import { Fonts, Themes } from "../../constants"
 import clock_icon from '../../assets/images/misc/date.png'
@@ -18,7 +19,7 @@ const GeneralStyles=StyleSheet.create({
         display:"flex",
         justifyContent:"center",
         alignItems:'center',
-        padding:10
+        padding:0
     },
     sub_wrapper:{
         display:"flex",
@@ -67,14 +68,19 @@ const MobileSStyles=StyleSheet.create({
         fontSize:11
     },
     icon:{
-        width:16,
-        height:16,
+        width:20,
+        height:20,
         resizeMode:"contain",
         borderRadius:100
     },
     clock_icon:{
         width:10,
         height:10,
+        resizeMode:"contain",
+    },
+    loader:{
+        width:16,
+        height:16,
         resizeMode:"contain",
     }
 })
@@ -91,14 +97,19 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     icon:{
-        width:18,
-        height:18,
+        width:24,
+        height:24,
         resizeMode:"contain",
         borderRadius:100
     },
     clock_icon:{
         width:10,
         height:10,
+        resizeMode:"contain",
+    },
+    loader:{
+        width:16,
+        height:16,
         resizeMode:"contain",
     }
 })
@@ -151,6 +162,12 @@ const Unpurchasedproductscard=(props:{data:Product,index:number,hideDelete?:bool
     }
     console.log(props.data)
 
+    const deleteItem=()=>{
+        setIsloading(true);
+        props.deleteHandler(props.data)
+
+    }
+
     return(
         <View style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.sub_wrapper]}>
@@ -171,8 +188,8 @@ const Unpurchasedproductscard=(props:{data:Product,index:number,hideDelete?:bool
                 {
                     !props.hideDelete
                     ?
-                    <Pressable onPress={()=>props.deleteHandler(props.data)} style={{display:"flex",flexDirection:"row",alignItems:"flex-start"}}>
-                        <Image style={{width:14,height:14,resizeMode:"contain"}} source={delete_icon}/>
+                    <Pressable onPress={!isLoading?deleteItem:null} style={{display:"flex",flexDirection:"row",alignItems:"flex-start"}}>
+                        <Image style={[styles[Device].loader,{resizeMode:"contain"}]} source={isLoading?loader:delete_icon}/>
                     </Pressable>
                     :
                     null

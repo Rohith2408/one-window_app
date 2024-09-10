@@ -220,8 +220,9 @@ const Program=(props:{programid:string})=>{
 
     let [programInfo,setProgramInfo]=useState<Course|undefined>();
     const [path,navigate]=useNavigation();
-    const freePackageInfo=useRef(store.getState().suggestedpackages.data.find((item)=>item.priceDetails.totalPrice==0)).current;
-    const feePackagePurchased=useRef(store.getState().orders.data.find((order)=>order.Package.priceDetails.totalPrice==0)?true:false).current
+    //console.log("Orders",store.getState().orders.data)
+    //const freePackageInfo=useRef(store.getState().suggestedpackages.data.find((item)=>item.priceDetails.totalPrice==0)).current;
+    //const feePackagePurchased=useRef(store.getState().orders.data.find((order)=>order.Package.priceDetails.totalPrice==0)?true:false).current
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const dashboardInfo=[
         {icon:fee_icon,label:"Duration",value:programInfo?.duration},

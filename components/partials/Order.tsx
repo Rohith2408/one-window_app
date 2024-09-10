@@ -175,7 +175,7 @@ const Order=(props:{orderinfoid:string})=>{
             {
                 (categoryError!=undefined && productErrors!=undefined && categoryError.length==0 && productErrors.length==0 && generalErrors!=undefined && generalErrors.length==0)
                 ?
-                <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={showOrderSummary}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Continue</Text></Pressable>
+                <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={showOrderSummary}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Continue</Text></Pressable>
                 :
                 null
             }

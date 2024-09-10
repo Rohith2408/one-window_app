@@ -28,7 +28,7 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     checkout:{
-        fontSize:12
+        fontSize:14
     }
 })
 
@@ -70,17 +70,17 @@ const Cart=()=>{
     }
 
     return(
-        <View style={{flex:1}}>
+        <View style={{flex:1,paddingTop:20}}>
         {
             cart.responseStatus=="not_recieved"
             ?
             <Text>Loading</Text>
             :
-            <View style={{flex:1,gap:10}}>
+            <View style={{flex:1,gap:20}}>
                 {
                     cart.data.length>0
                     ?
-                    <Pressable style={{alignSelf:"center",paddingLeft:20,paddingRight:20,borderRadius:100,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1)}} onPress={order}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Checkout</Text></Pressable>
+                    <Pressable style={{alignSelf:"center",padding:5,paddingLeft:20,paddingRight:20,borderRadius:100,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1)}} onPress={order}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Checkout</Text></Pressable>
                     :
                     null
                 }
@@ -93,7 +93,7 @@ const Cart=()=>{
                         <Pressable onPress={openExplore}><Text>Explore</Text></Pressable>
                     </View>
                     :
-                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:20,padding:10}}>
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:20,padding:5}}>
                     {
                         cart.data.map((item,i)=>
                         <Cartcard key={item._id} {...item} index={i}/>

@@ -49,6 +49,12 @@ export type NavigationActions=
         payload:{
             id:string
         }
+    }|
+    {
+        type:"RemovePages",
+        payload:{
+            id:string
+        }[]
     }
 
 export const NavigationReducer=(state:string,action:NavigationActions)=>{
@@ -86,6 +92,20 @@ export const NavigationReducer=(state:string,action:NavigationActions)=>{
                 encodedPath.props?delete encodedPath.props[prop]:null
                 })
             }
+            return decodePath(encodedPath)
+            break;
+
+        case "RemovePages":
+            action.payload.forEach((screenitem)=>{
+                requiredScreenProps=components.find((item)=>item.id==screenitem.id)?.props
+                encodedPath.screens=encodedPath.screens.filter((item)=>item!=screenitem.id)
+                if(requiredScreenProps)
+                {
+                    requiredScreenProps.forEach((prop)=>{
+                    encodedPath.props?delete encodedPath.props[prop]:null
+                    })
+                }
+            })
             return decodePath(encodedPath)
             break;
 

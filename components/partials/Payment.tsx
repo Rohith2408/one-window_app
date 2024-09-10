@@ -2,11 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native"
 import WebView from "react-native-webview";
 import { store } from "../../store";
-import {  Request, ServerResponse } from "../../types";
-import { getServerRequestURL, serverRequest } from "../../utils";
+import {  Order, Request, ServerResponse } from "../../types";
+import { compareProducts, getServerRequestURL, serverRequest } from "../../utils";
 import { getBasket } from "../../constants/basket";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { updateOrder } from "../../store/slices/ordersSlice";
+import { setCart } from "../../store/slices/cartSlice";
+import useNavigation from "../../hooks/useNavigation";
+import { Fonts, Themes } from "../../constants";
 
 const Payment = () => {
 
@@ -14,9 +17,7 @@ const Payment = () => {
   const profile = useRef({ ...store.getState().personalinfo.data, ...store.getState().sharedinfo.data }).current;
   const [showRazorpayPage, setShowRazorpayPage] = useState(true);
   const dispatch=useAppDispatch()
-
-  //console.log("payment ",paymentData)
-  //console.log("profile",profile);
+  const [path,navigate]=useNavigation()
   
   const paymentOptions = useRef({
     key: 'rzp_test_TldsbrWlP8NUF5',
@@ -52,8 +53,30 @@ const Payment = () => {
         console.log("order response",JSON.stringify(response1,null,2));
         if (response1) {
           //dispatch()
+          let order:Order=response1.data
           dispatch(updateOrder(response1.data));
-      }
+          dispatch(setCart(store.getState().cart.data.filter((cartitem)=>!order.products.find((orderitem)=>
+            compareProducts({
+              category:cartitem.category,
+              intake:cartitem.intake,
+              course:{
+                  id:cartitem.course._id,
+                  name:cartitem.course.name,
+                  icon:""
+              }
+            },
+            {
+              category:orderitem.category,
+              intake:orderitem.intake,
+              course:{
+                  id:orderitem.course._id,
+                  name:orderitem.course.name,
+                  icon:""
+              }
+            }
+          )))))
+          navigate({type:"RemovePages",payload:[{id:"Payment"},{id:"Order"},{id:"Ordersummary"}]})
+        }
       } 
       else {
         console.log('Payment verification failed');
@@ -106,8 +129,9 @@ const Payment = () => {
           }}
         />
       ) : (
-        <View>
-          {/* You can show some status or confirmation here */}
+        <View style={{flex:1,alignItems:"center",justifyContent:"center",gap:10}}>
+          <Text style={[{fontSize:24,fontFamily:Fonts.NeutrifStudio.Bold,color:"green"}]}>Payment Successfull</Text>
+          <Text style={[{fontSize:14,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Order details can be viewed from My Orders section!</Text>
         </View>
       )}
     </View>

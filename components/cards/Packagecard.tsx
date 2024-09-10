@@ -80,7 +80,15 @@ const Packagecard=(props:Package & {index:number})=>{
     return(
         <View style={[GeneralStyles.wrapper,styles[Device].wrapper,{gap:5,backgroundColor:getThemeColor(props.index)}]}>
             <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Regular,maxWidth:"90%"}]}>{props.name}</Text>
-            <Text style={[styles[Device].price,{fontFamily:Fonts.NeutrifStudio.Medium,maxWidth:"90%"}]}>{props.priceDetails.currency.symbol+" "+props.priceDetails.totalPrice}</Text>
+            <Text style={[styles[Device].price,{fontFamily:Fonts.NeutrifStudio.Medium,maxWidth:"90%"}]}>
+            {
+                props.priceDetails.totalPrice==0
+                ?
+                "Free"
+                :
+                props.priceDetails.currency.symbol+" "+props.priceDetails.totalPrice
+            }
+            </Text>
         </View>
     )
 }

@@ -15,8 +15,7 @@ import delete_icon from '../../assets/images/misc/delete-black.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        padding:10,
-        backgroundColor:'white',
+        padding:5,
         borderRadius:30,
         display:"flex",
         flexDirection:"column",
@@ -117,8 +116,8 @@ const MobileMStyles=StyleSheet.create({
     },
     bg_wrapper:{
         borderRadius:30,
-        left:16,
-        top:16,
+        left:12,
+        top:12,
     },
     icon:{
         width:24,
