@@ -1,7 +1,8 @@
 import { useRef } from "react";
-import { View } from "react-native"
+import { Text, View } from "react-native"
 import WebView from "react-native-webview"
 import { getBasket } from "../../constants/basket";
+import { Fonts, Themes } from "../../constants";
 
 const Docview=(props:{docpreviewurl:string})=>{
 
@@ -10,7 +11,8 @@ const Docview=(props:{docpreviewurl:string})=>{
 
     return(
         <View style={{flex:1}}>
-            <View style={{width:"70%",height:"70%",alignSelf:"center",paddingTop:50}}>
+            <Text style={{alignSelf:"center",padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}}>Document</Text>
+            <View style={{width:"80%",height:"80%",alignSelf:"center",paddingTop:50}}>
             <WebView
                 source={{ uri: docurl}} 
                 style={{ flex:1,padding:10}}

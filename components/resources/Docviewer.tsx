@@ -1,5 +1,6 @@
 import { Animated, Pressable, StyleSheet, Text, View } from "react-native"
 import { Document, PickedDoc } from "../../types"
+import loader from '../../assets/images/misc/loader.gif'
 import upload_icon from '../../assets/images/misc/upload.png'
 import delete_icon from '../../assets/images/misc/delete.png'
 import { formatDate, getDevice } from "../../utils"
@@ -48,6 +49,7 @@ const GeneralStyles=StyleSheet.create({
         alignItems:'center'
     }
 })
+
 const TabStyles=StyleSheet.create({
     name:{
         lineHeight:20,
@@ -179,6 +181,7 @@ const Docviewer=(props:{value:Document|undefined,title:string,id:string,eventHan
     const [pickedDoc,setPickedDoc]=useState<PickedDoc|undefined>(undefined)
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const translate=useRef(new Animated.Value(0)).current
+    const [isLoading,setIsLoading]=useState(false);
 
     const showProgram=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Program",params:{programid:props.course._id}}}):null
@@ -200,39 +203,61 @@ const Docviewer=(props:{value:Document|undefined,title:string,id:string,eventHan
         }
     }
 
-    console.log("Document",props.value?.data.preview_url,props.title);
+    const remove=async ()=>{
+        setIsLoading(true);
+        await props.eventHandler({name:"delete"})
+        setIsLoading(false);
+    }
+
+    const upload=async ()=>{
+        setIsLoading(true);
+        await props.eventHandler({name:"upload"})
+        setIsLoading(false);
+    }
+
+    //console.log("Document",props.value?.data.preview_url,props.title);
 
     return(
-            <View style={[GeneralStyles.sub_wrapper]}>
-                <View style={[GeneralStyles.icon_wrapper]}>
-                    <Image source={document_icon} style={[styles[Device].icon]}/>
-                </View>
-                <View style={[GeneralStyles.info_wrapper]}>
-                    {
-                        props.value
-                        ?
-                        <View>
-                            <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
-                                <View style={{width:5,height:5,borderRadius:10,backgroundColor:"#69FF6F"}}></View>
-                                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.title}</Text>
-                            </Animated.View>
-                            <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.value?.data.FileName}</Text>
-                        </View>
-                        :
-                        null
-                    }
-                    {
-                    props.value==undefined
+        <View style={[GeneralStyles.sub_wrapper]}>
+            <View style={[GeneralStyles.icon_wrapper]}>
+                <Image source={document_icon} style={[styles[Device].icon]}/>
+            </View>
+            <View style={[GeneralStyles.info_wrapper]}>
+                {
+                    props.value
                     ?
-                    <View style={{flex:1,flexDirection:'row'}}>
-                        <View style={{flex:1}}><Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text></View>
-                        <Pressable onPress={()=>props.eventHandler({name:"upload"})}><Image style={[styles[Device].upload_icon]} source={upload_icon}/></Pressable>
+                    <View style={{flexDirection:"row"}}>
+                        <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
+                            <View style={{width:5,height:5,borderRadius:10,backgroundColor:"#69FF6F"}}></View>
+                            <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.title}</Text>
+                        </Animated.View>
+                        <View style={{flex:1}}><Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.value?.data.FileName}</Text></View>
+                        <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
+                            <Pressable onPress={viewDoc} style={{borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),borderRadius:100,padding:5}}>
+                                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>View</Text>
+                            </Pressable>
+                            <Pressable onPress={!isLoading?remove:null}>
+                                <Image style={[styles[Device].upload_icon]} source={isLoading?loader:delete_icon}/>
+                            </Pressable>
+                        </View>
                     </View>
                     :
                     null
                 }
-                </View>    
-            </View>
+                {
+                props.value==undefined
+                ?
+                <View style={{flex:1,flexDirection:'row'}}>
+                    <View style={{flex:1}}><Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text></View>
+                    <Pressable onPress={!isLoading?upload:null}>
+                        <Image style={[styles[Device].upload_icon]} source={isLoading?loader:upload_icon}/>
+                    </Pressable>
+                </View>
+                :
+                null
+            }
+            </View>    
+        </View>
 
         /* {
             props.value!=undefined

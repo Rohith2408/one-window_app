@@ -196,7 +196,7 @@ const Personal=(props:Request<DocumentsType>)=>{
     let documents=props.data.personal
 
     return(
-        <View style={{gap:20}}>
+        <View style={{gap:40}}>
             <Document docIdentifier="Resume" title="Resume" fieldPath="personal.resume" doc={documents?.resume}></Document>
             <Document docIdentifier="PassportBD" title="PassportBD" fieldPath="personal.passportBD" doc={documents?.passportBD}></Document>
             <Document docIdentifier="PassportADD" title="PassportADD" fieldPath="personal.passportADD" doc={documents?.passportADD}></Document>
