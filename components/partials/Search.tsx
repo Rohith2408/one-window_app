@@ -258,7 +258,7 @@ const Search=(props:{initialSearch:string})=>{
                     {
                         dimensions
                         ?
-                        <ScrollView horizontal ref={scrollRef} style={{flex:1}}>
+                        <ScrollView scrollEnabled={false} horizontal ref={scrollRef} style={{flex:1}}>
                             <View style={{width:dimensions.width,height:dimensions.height}}>
                             {
                                 lists.universities
