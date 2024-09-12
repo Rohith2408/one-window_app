@@ -19,12 +19,13 @@ const GeneralStyles=StyleSheet.create({
         width:"100%",
         height:"100%",
         zIndex:-1,
+        transform:[{rotate:"1.5deg"}]
     },
     sub_wrapper:{
         display:'flex',
         flex:1,
         flexDirection:"column",
-        padding:10,
+        padding:15,
         alignSelf:"stretch",
         justifyContent:'center',
     },
@@ -44,7 +45,7 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:"column",
         alignItems:"flex-start",
         justifyContent:"center",
-        gap:10
+        gap:12
     },
     misc_wrapper:{
         display:"flex",
@@ -126,14 +127,17 @@ const TabStyles=StyleSheet.create({
 })
 
 const MobileSStyles=StyleSheet.create({
+    main_wrapper:{
+        paddingBottom:6
+    },
     sub_wrapper:{
         gap:20,
         borderRadius:25
     },
     bg_wrapper:{
         borderRadius:30,
-        left:7.5,
-        top:7.5,
+        left:6,
+        top:6,
     },
     category_text:{
         fontSize:11
@@ -172,14 +176,19 @@ const MobileSStyles=StyleSheet.create({
         height:13
     }
 })
+
 const MobileMStyles=StyleSheet.create({
+    main_wrapper:{
+        paddingBottom:10
+    },
     sub_wrapper:{
-        gap:27
+        gap:27,
+        borderRadius:30
     },
     bg_wrapper:{
         borderRadius:30,
-        left:12,
-        top:12,
+        left:6,
+        top:6,
     },
     category_text:{
         fontSize:12
@@ -188,7 +197,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:14
     },
     uni_name:{
-        fontSize:11,
+        fontSize:12,
         lineHeight:13
     },
     intake:{
@@ -218,6 +227,7 @@ const MobileMStyles=StyleSheet.create({
         height:13
     }
 })
+
 const MobileLStyles=StyleSheet.create({
     sub_wrapper:{
         gap:20
@@ -282,26 +292,32 @@ const Product=(props:PurchasedProduct & {index:number})=>{
     ]).current
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
+    console.log("products",props.status);
+
     return(
-        <View style={[GeneralStyles.main_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>
             <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
             <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:getLightThemeColor(props.index%4)}]}>
                 <View style={[GeneralStyles.category_wrapper]}>
                     <View style={[GeneralStyles.category]}><Text style={[styles[Device].category_text,{color:getThemeColor(props.index%4),fontFamily:Fonts.NeutrifStudio.Bold}]}>{setWordCase(props.category)}</Text></View>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
-                    <Text style={[styles[Device].product_name,{color:"black",fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.course.name}</Text>
+                    <Text style={[styles[Device].product_name,{color:"black",fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.course.name}</Text>
                     <View style={[GeneralStyles.misc_wrapper]}>
                         <View style={[GeneralStyles.uni_wrapper]}>
                             <Image source={props.course.university.logoSrc} style={[styles[Device].uni_icon,GeneralStyles.uni_icon]}/>
                             <View style={{flex:1}}><Text style={[styles[Device].uni_name,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{truncateString(props.course.university.name,30,true)}</Text></View>
                         </View>
-                        <View style={[{backgroundColor:'black',borderRadius:10},styles[Device].seperator]}></View>
+                        {/* <View style={[{backgroundColor:'black',borderRadius:10},styles[Device].seperator]}></View>
                         <View style={[GeneralStyles.intake_wrapper]}>
                             <Image source={clock} style={[styles[Device].intake_icon]}/>
                             <Text style={[styles[Device].intake,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{formatDate(props.intake)}</Text>
-                        </View>
-                    </View>
+                        </View> */}
+                    </View> 
+                </View>
+                <View style={[GeneralStyles.intake_wrapper,{alignSelf:"flex-end"}]}>
+                    <Image source={clock} style={[styles[Device].intake_icon]}/>
+                    <Text style={[styles[Device].intake,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Intake: "+formatDate(props.intake)}</Text>
                 </View>
                 <View style={[GeneralStyles.status_wrapper]}>
                     <View style={[GeneralStyles.status]}>

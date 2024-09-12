@@ -21,6 +21,7 @@ const GeneralStyles=StyleSheet.create({
         width:"100%",
         height:"100%",
         zIndex:-1,
+        transform:[{rotate:"1deg"}]
     },
     sub_wrapper:{
         display:"flex",
@@ -64,8 +65,8 @@ const MobileSStyles=StyleSheet.create({
     },
     bg_wrapper:{
         borderRadius:20,
-        left:15,
-        top:15,
+        left:14,
+        top:14,
     },
     name:{
         fontSize:12,
@@ -103,8 +104,8 @@ const MobileMStyles=StyleSheet.create({
     },
     bg_wrapper:{
         borderRadius:30,
-        left:17.5,
-        top:17.5,
+        left:15,
+        top:15,
     },
     name:{
         fontSize:14,

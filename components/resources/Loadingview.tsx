@@ -13,20 +13,22 @@ const Loadingview=(props:{isLoading:boolean,style:ViewStyle[],children:React.Rea
     useEffect(()=>{
         if(props.isLoading)
         {
-            Animated.loop(
-                Animated.sequence([
-                  Animated.timing(gradientProgress, {
-                    toValue: 1,
-                    duration: 500,
-                    useNativeDriver: false,
-                  }),
-                  Animated.timing(gradientProgress, {
-                    toValue: 0,
-                    duration: 500,
-                    useNativeDriver: false,
-                  }),
-                ])
-              ).start();
+            setTimeout(()=>{
+                Animated.loop(
+                    Animated.sequence([
+                      Animated.timing(gradientProgress, {
+                        toValue: 1,
+                        duration: 500,
+                        useNativeDriver: false,
+                      }),
+                      Animated.timing(gradientProgress, {
+                        toValue: 0,
+                        duration: 500,
+                        useNativeDriver: false,
+                      }),
+                    ])
+                ).start();
+            },150) 
         }
         Animated.parallel([
             Animated.spring(loadingScale,{
@@ -39,8 +41,6 @@ const Loadingview=(props:{isLoading:boolean,style:ViewStyle[],children:React.Rea
             })
         ]).start()
     },[props.isLoading])
-
-    console.log("loading",props.isLoading);
 
     return(
         <View style={{position:"relative",display:"flex"}}>

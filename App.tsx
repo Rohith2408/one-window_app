@@ -16,6 +16,7 @@ import { store } from './store';
 import Appcontext from './contexts/AppContext';
 import * as Font from 'expo-font';
 import { secureStoreKeys } from './constants';
+import NetInfo from '@react-native-community/netinfo';
 
 export default function App() {
 
@@ -64,13 +65,29 @@ export default function App() {
   //   navigate({type:"add",payload:{params:{popup:"sample",popupdata:"Rohith"},path:"Popup"}})
   // },2000)
 
+  const unsubscribe = NetInfo.addEventListener(state => {
+    if(!state.isConnected)
+    {
+      navigate({type:"RemoveSpecificScreen",payload:{id:"Nointernet"}})
+      navigate({type:"AddScreen",payload:{screen:"Nointernet"}})
+    }
+    else
+    {
+      navigate({type:"RemoveSpecificScreen",payload:{id:"Nointernet"}})
+    }
+  });
+
+  // Cleanup the subscription on unmount
+
   return () => {
+    unsubscribe();
     Linking.removeAllListeners("url")
     notificationListener.current &&
     Notifications.removeNotificationSubscription(notificationListener.current);
     responseListener.current &&
     Notifications.removeNotificationSubscription(responseListener.current);
-  };
+  }
+
   },[])
 
   const encodedData:{screens:string[],props:any}=encodePath(path)

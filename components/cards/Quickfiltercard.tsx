@@ -48,8 +48,8 @@ const Quickfiltercard=(props:QuickFilterInfo)=>{
 
     return(
         <View style={{display:'flex',flexDirection:'row',alignItems:"center",gap:5,padding:5}}>
-            <Image style={[styles[Device].icon]} source={props.icon}/>
-            <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text>
+            {/* <Image style={[styles[Device].icon]} source={props.icon}/> */}
+            <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text>
         </View>
     )
 

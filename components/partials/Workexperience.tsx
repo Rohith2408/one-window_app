@@ -107,7 +107,7 @@ const Workexperience=(props:any)=>{
         {
             workExperiences.responseStatus=="not_recieved"
             ?
-            <Loadinglistscreen cardGap={30} cardHeight={Device=="MobileS"?175:(Device=="MobileM"?200:250)}></Loadinglistscreen>
+            <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?175:(Device=="MobileM"?200:250)}} cardGap={30} count={3} direction="vertical"/>
             :
             <View style={{flex:1,gap:30}}>
                 <Pressable onPress={addWork} style={[GeneralStyles.add_wrapper]}><Image style={[styles[Device].add_icon]} source={add_icon}></Image></Pressable>

@@ -208,7 +208,7 @@ const Educationhistory=()=>{
                 <View style={[styles[Device].card_wrapper]}><Postgraduation data={education.data.postGraduation}/></View>
             </View>
             :
-            <Loadinglistscreen cardGap={30} cardHeight={150}></Loadinglistscreen>
+            <Loadinglistscreen cardStyles={{width:"100%",height:150}} cardGap={30} count={3} direction="vertical"/>
         }
         </View>
     )

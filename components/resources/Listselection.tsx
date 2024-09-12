@@ -38,7 +38,7 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Listselection=(props:{direction:"horizontal"|"vertical",selectionStyle:"background"|"border"|"tick",initialSelection?:any[],styles?:{contentcontainer:any},onselection:(data:any)=>void,options:{list:any[],card?:React.FC<any>,idExtractor:(data:any)=>any,labelExtractor?:(data:any)=>any,selectionMode:"single"|"multi"}})=>{
+const Listselection=(props:{direction:"horizontal"|"vertical",blurUnSelected?:boolean,selectionStyle:"background"|"border"|"tick",initialSelection?:any[],styles?:{contentcontainer:any},onselection:(data:any)=>void,options:{list:any[],card?:React.FC<any>,idExtractor:(data:any)=>any,labelExtractor?:(data:any)=>any,selectionMode:"single"|"multi"}})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [selected,setSelected]=useState(props.initialSelection?props.initialSelection:[])
@@ -61,7 +61,7 @@ const Listselection=(props:{direction:"horizontal"|"vertical",selectionStyle:"ba
             <ScrollView horizontal={props.direction=="horizontal"?true:false} contentContainerStyle={[props.styles?.contentcontainer?props.styles.contentcontainer:{}]}>
             {
                 props.options.list.map((item,i)=>
-                <Pressable onPress={()=>selection(item)}><Listitem data={{selected:selected,selectionStyle:props.selectionStyle,index:i,card:props.options.card,idExtractor:props.options.idExtractor,labelExtractor:props.options.labelExtractor,item:item}}/></Pressable>
+                <Pressable onPress={()=>selection(item)}><Listitem data={{selected:selected,blurUnSelected:props.blurUnSelected,selectionStyle:props.selectionStyle,index:i,card:props.options.card,idExtractor:props.options.idExtractor,labelExtractor:props.options.labelExtractor,item:item}}/></Pressable>
                 )
             }
             </ScrollView>
@@ -70,7 +70,7 @@ const Listselection=(props:{direction:"horizontal"|"vertical",selectionStyle:"ba
 
 }
 
-const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick",index:number,card?:any,idExtractor:any,labelExtractor:any,item:any}})=>{
+const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick"|"background",blurUnSelected?:boolean,index:number,card?:any,idExtractor:any,labelExtractor:any,item:any}})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const scale=useRef(new Animated.Value(1)).current;
@@ -92,7 +92,9 @@ const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick",index
             ?
             <View style={{flex:1}}><Card {...props.data.item} index={props.data.index}/></View>
             :
-            <View style={{flex:1}}><Text style={[styles[Device].text,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1),padding:10}]}>{props.data.labelExtractor(props.data.item)}</Text></View>
+            <View style={{flex:1}}>
+                <Text style={[styles[Device].text,{opacity:props.data.blurUnSelected?0.5:1,fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:10}]}>{props.data.labelExtractor(props.data.item)}</Text>
+            </View>
         }
         {
             props.data.selectionStyle=="tick"
@@ -101,7 +103,7 @@ const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick",index
             :
             props.data.selectionStyle=="border"
             ?
-            <Animated.View style={{position:"absolute",width:dimensions?dimensions.width:0,height:dimensions?dimensions.height:0,borderWidth:1,top:0,left:0,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),transform:[{scale:scale}]}}/>
+            <Animated.View style={{position:"absolute",width:dimensions?dimensions.width:0,height:dimensions?dimensions.height:0,borderWidth:1.25,top:0,left:0,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),transform:[{scale:scale}]}}/>
             :
             <Animated.View style={{position:"absolute",width:dimensions?dimensions.width:0,height:dimensions?dimensions.height:0,top:0,left:0,borderRadius:100,backgroundColor:Themes.Light.OnewindowLightBlue,zIndex:-1,transform:[{scale:scale}]}}/>
         }

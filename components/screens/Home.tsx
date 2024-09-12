@@ -12,11 +12,13 @@ import { Device } from "../../types"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import List from "../resources/List"
 import Product from "../cards/Product"
+import Loadinglistscreen from "../resources/Loadinglistscreen"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         width:"100%",
         height:"100%",
+        padding:5,
         paddingTop:20,
         backgroundColor:'white'
     },
@@ -55,8 +57,7 @@ const GeneralStyles=StyleSheet.create({
     },
     products_wrapper:{
         width:"100%",
-        display:'flex',
-        gap:5
+        display:'flex'
     },
     products_title:{
         fontWeight:"700"
@@ -89,7 +90,13 @@ const TabStyles=StyleSheet.create({
 })
 
 const MobileSStyles=StyleSheet.create({
-
+    prop:{
+        top:7,
+        left:-7,
+        width:22,
+        height:22,
+        resizeMode:"contain"
+    },
     sub_wrapper:{
         maxWidth:500,
         gap:30
@@ -117,17 +124,28 @@ const MobileSStyles=StyleSheet.create({
     card:{
         width:230,
         height:160
-    }
+    },
+    loader_card:{
+        width:230,
+        height:160
+    },
 })
 
 const MobileMStyles=StyleSheet.create({
 
+    prop:{
+        top:10,
+        left:-10,
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
     sub_wrapper:{
         maxWidth:500,
-        gap:34
+        gap:40
     },
     welcome_message:{
-        fontSize:22,
+        fontSize:26,
         fontWeight:"700"
     },
     search_text:{
@@ -141,19 +159,30 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     products_wrapper:{
-        gap:7.5
+        gap:10
     },
     products_title:{
-        fontSize:15
+        fontSize:18
     },
     card:{
-        width:235,
-        height:180
-    }
+        width:250,
+        height:205
+    },
+    loader_card:{
+        width:250,
+        height:205
+    },
 })
 
 const MobileLStyles=StyleSheet.create({
 
+    prop:{
+        top:10,
+        left:-10,
+        width:26,
+        height:26,
+        resizeMode:"contain"
+    },
     sub_wrapper:{
         maxWidth:500,
         gap:34
@@ -180,8 +209,12 @@ const MobileLStyles=StyleSheet.create({
     },
     card:{
         width:240,
-        height:180
-    }
+        height:185
+    },
+    loader_card:{
+        width:240,
+        height:185
+    },
 })
 
 const styles={
@@ -213,7 +246,8 @@ const Home=(props:undefined|{name:string})=>{
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper]}>
-                <View>
+                <View style={{position:"relative"}}>
+                    <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
                     <Text style={[{color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {personalinfo.data?.firstName}!</Text>
                 </View>
                 <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
@@ -228,7 +262,17 @@ const Home=(props:undefined|{name:string})=>{
                 </View>
                 <View style={[GeneralStyles.products_wrapper,styles[Device].products_wrapper]}>
                     <Text style={[GeneralStyles.products_title,styles[Device].products_title,{color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
-                    <List cardStyles={styles[Device].card} list={products.data} card={Product} direction="Horizontal" mode="Scroll"></List>
+                    {
+                        products.responseStatus=="not_recieved"
+                        ?
+                        <Loadinglistscreen cardStyles={styles[Device].loader_card} cardGap={30} count={3} direction="horizontal"/>
+                        :
+                            products.data.length==0
+                            ?
+                            <Text>No Products</Text>
+                            :
+                            <List cardStyles={styles[Device].card} list={products.data} card={Product} direction="Horizontal" mode="Scroll"></List>
+                    }
                 </View>
             </View>
             {/* <Text>Home</Text>

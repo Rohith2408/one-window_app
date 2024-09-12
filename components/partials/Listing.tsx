@@ -65,6 +65,12 @@ const MobileSStyles=StyleSheet.create({
         width:15,
         height:15,
         resizeMode:"contain"
+    },
+    not_found:{
+        fontSize:20
+    },
+    not_found_sub:{
+        fontSize:14
     }
 })
 
@@ -88,6 +94,12 @@ const MobileMStyles=StyleSheet.create({
         width:15,
         height:15,
         resizeMode:"contain"
+    },
+    not_found:{
+        fontSize:18
+    },
+    not_found_sub:{
+        fontSize:14
     }
 })
 
@@ -111,6 +123,12 @@ const MobileLStyles=StyleSheet.create({
         width:15,
         height:15,
         resizeMode:"contain"
+    },
+    not_found:{
+        fontSize:20
+    },
+    not_found_sub:{
+        fontSize:14
     }
 })
 
@@ -146,7 +164,9 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
         setIsLoading(true);
         let appliedFilters=bakeFilters(props.additionalFilters,props.quickFilters);
         let res=await ListInfo?.listFetcher({search:props.search,filters:appliedFilters,page:props.page})
-        setIsLoading(false)
+        setTimeout(()=>{
+            setIsLoading(false)
+        },750)
         return res
     }
 
@@ -185,25 +205,19 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
         }
     }
 
-
     useEffect(()=>{
         return ()=>{
             removeFromBasket(props.listid+"filters")
         }
     },[])
 
-
-    //console.log("props",JSON.stringify(props,null,2));
-
-    //console.log("Additional",JSON.stringify(props.additionalFilters,null,2));
-    //console.log("Quick",JSON.stringify(props.quickFilters,null,2));
-
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.filter_wrapper]}>
-                <View style={{flex:1,backgroundColor:Themes.Light.OnewindowLightBlue,borderRadius:100}}>
+                <View style={{flex:1,borderRadius:100}}>
                     <Listselection 
                         direction="horizontal"
+                        blurUnSelected={true}
                         selectionStyle="border"
                         initialSelection={props.quickFilters.map((item)=>ListInfo?.filters.quick.find((item2)=>item.type==item2.type))}
                         styles={{contentcontainer:{gap:10}}}
@@ -222,6 +236,15 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
                     {/* <Text style={[styles[Device].allfilters]}>All Filters</Text> */}
                 </Pressable>
             </View>
+            {
+                isLoading
+                ?
+                <View style={{width:"95%",height:2,alignSelf:'center'}}>
+                    <Lineloader/>
+                </View>
+                :
+                null
+            }
         {
             Component
             ?
@@ -235,8 +258,9 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
                 }
                 </ScrollView>
                 :
-                <View style={{flex:1,justifyContent:"center",alignItems:'center'}}>
-                    <Text>No items found!</Text>
+                <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:5}}>
+                    <Text style={[styles[Device].not_found,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.listid+" not found "+":("}</Text>
+                    <Text style={[styles[Device].not_found_sub,{textAlign:"center",lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Waaait!, there are over 80,000+ Programs to choose from, start exploring now!</Text>
                 </View>
             :
             null
@@ -244,6 +268,41 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
         </View>
     )
 
+}
+
+const Lineloader=()=>{
+
+    const animstate=useRef(new Animated.Value(0)).current
+    const [dimensions,setDimensions]=useState<LayoutRectangle|undefined>(undefined)
+
+    useEffect(()=>{
+        Animated.loop(
+            Animated.sequence([
+              Animated.timing(animstate, {
+                toValue: 1,
+                duration:400,
+                useNativeDriver: false,
+              }),
+              Animated.timing(animstate, {
+                toValue: 0,
+                duration: 400,
+                useNativeDriver: false,
+              }),
+            ])
+        ).start();
+    },[])
+
+    return(
+        <View style={{flex:1}} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
+        {
+            dimensions
+            ?
+            <Animated.View style={{borderRadius:100,backgroundColor:"rgba(0,0,0,0.75)",width:animstate.interpolate({inputRange:[0,1],outputRange:[0,dimensions.width]}),height:dimensions.height}}/>
+            :
+            null
+        }
+        </View>
+    )
 }
 
 // const correctAdditionalFilters=(additionalFilters:AppliedFilter[],baseFilters:AppliedQuickFilter[])=>{

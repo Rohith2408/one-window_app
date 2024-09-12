@@ -118,7 +118,7 @@ const Recommendations=()=>{
                     {
                         recommendations.responseStatus!="recieved"
                         ?
-                        <Loadinglistscreen cardGap={30} cardHeight={Device=="MobileS"?175:(Device=="MobileM"?200:250)}></Loadinglistscreen>
+                        <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
                         :
                         null
                     }

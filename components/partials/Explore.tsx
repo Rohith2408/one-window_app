@@ -191,7 +191,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
 
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:15}}>
-            <Pressable onPress={openSearch}><Text style={{padding:7,fontFamily:Fonts.NeutrifStudio.Bold,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.5),color:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:10}}>{props.programslistquery.search?props.programslistquery.search:"Search..."}</Text></Pressable>
+            <Pressable style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100}} onPress={openSearch}><Text style={{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}}>{props.programslistquery.search?props.programslistquery.search:"Search..."}</Text></Pressable>
             <Listselection
                 direction="horizontal"
                 selectionStyle="background"

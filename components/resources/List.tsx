@@ -38,7 +38,7 @@ const List=(props:ListType<any>)=>{
 
     return(
         <View>
-            <ScrollView indicatorStyle="black" pagingEnabled={props.mode=="Swipe"} horizontal={props.direction=="Horizontal"} contentContainerStyle={{gap:30,padding:15}}>
+            <ScrollView indicatorStyle="black" pagingEnabled={props.mode=="Swipe"} horizontal={props.direction=="Horizontal"} contentContainerStyle={{gap:30,padding:0}}>
             {
                 props.list.map((item,i)=>
                 <View key={item.id?item.id:i} style={[props.cardStyles]}><Component {...item} index={i}/></View>

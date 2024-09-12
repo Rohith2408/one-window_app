@@ -1712,5 +1712,14 @@ export const studyLevel=[
     "B.S. + M.S.",
   ]
 
+export const topUniversities=[
+    "Harvard University",
+    "University of Oxford",
+    "Stanford University",
+    "Massachusetts Institute of Technology",
+    "University of Cambridge",
+    
+]
+
 
 export {Industries,GradingSystems,Tests,Countrycodes}

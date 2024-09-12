@@ -75,7 +75,7 @@ const Experts=()=>{
         {
             experts.responseStatus=="not_recieved"
             ?
-            <Loadinglistscreen cardGap={30} cardHeight={Device=="MobileS"?100:(Device=="MobileM"?130:170)}></Loadinglistscreen>
+            <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
             :
             <View style={{flex:1}}>
                 <ScrollView style={{flex:1}} contentContainerStyle={{gap:40,paddingBottom:20}}>
