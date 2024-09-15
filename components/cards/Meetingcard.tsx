@@ -92,11 +92,73 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
-    
+    icon:{
+        width:26,
+        height:26,
+        resizeMode:'contain'
+    },
+    title:{
+        fontSize:14
+    },
+    datetime:{
+        fontSize:12
+    },
+    attendees:{
+        fontSize:12
+    },
+    edit:{
+        width:14,
+        height:14,
+        resizeMode:'contain'
+    },
+    delete:{
+        width:14,
+        height:14,
+        resizeMode:'contain'
+    },
+    clock:{
+        width:12,
+        height:12,
+        resizeMode:"contain"
+    },
+    status:{
+        fontSize:10
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
-    
+    icon:{
+        width:26,
+        height:26,
+        resizeMode:'contain'
+    },
+    title:{
+        fontSize:14
+    },
+    datetime:{
+        fontSize:12
+    },
+    attendees:{
+        fontSize:12
+    },
+    edit:{
+        width:14,
+        height:14,
+        resizeMode:'contain'
+    },
+    delete:{
+        width:14,
+        height:14,
+        resizeMode:'contain'
+    },
+    clock:{
+        width:12,
+        height:12,
+        resizeMode:"contain"
+    },
+    status:{
+        fontSize:10
+    }
 })
 
 const styles={
@@ -137,6 +199,7 @@ const Meetingcard=(props:{data:Meeting,index:number})=>{
             }
         })
         setIsloading(false)
+        console.log("cancel response",JSON.stringify(res,null,2));
         if(res.success)
         {
             dispatch(updateMeeting({

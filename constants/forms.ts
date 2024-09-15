@@ -651,7 +651,7 @@ const forms:FormInfo[]=[
         ]
     },
     {
-        id:"Workexperience",
+        id:"Workexperience_completed",
         title:"Please provide your Work Experience",
         getInitialData:(id:string|undefined)=>{
             
@@ -661,7 +661,7 @@ const forms:FormInfo[]=[
                 {id:"companyname",value:data?data.companyName:""},
                 {id:"sector",value:data?[{label:setWordCase(data.sector),value:data.sector}]:[]},
                 {id:"designation",value:data?data.designation:""},
-                {id:"ongoing",value:data?data.Ongoing?"yes":"no":"no"},
+                //{id:"ongoing",value:data?data.Ongoing?"yes":"no":"no"},
                 {id:"worktype",value:data?[{label:setWordCase(data.type),value:data.type}]:[]},
                 // {id:"document",value:data?data.docId:""},
                 {id:"startdate",value:data?data.startDate:undefined},
@@ -677,7 +677,7 @@ const forms:FormInfo[]=[
                     sector:data[data.findIndex((item)=>item.id=="sector")].value[0].value,
                     type:data[data.findIndex((item)=>item.id=="worktype")].value[0].value,
                     designation:data[data.findIndex((item)=>item.id=="designation")].value,
-                    Ongoing:data[data.findIndex((item)=>item.id=="ongoing")].value=="yes"?true:false,
+                    Ongoing:false,
                     startDate:data[data.findIndex((item)=>item.id=="startdate")].value,
                     endDate:data.find((item)=>item.id=="enddate")?.value,
                     docId:undefined
@@ -861,6 +861,188 @@ const forms:FormInfo[]=[
             //         event:"onFocus"
             //     }
             // }
+        ]
+    },
+    {
+        id:"Workexperience_working",
+        title:"Please provide your Work Experience",
+        getInitialData:(id:string|undefined)=>{
+            
+            let data:WorkExperience|undefined=id?store.getState().workexperience.data.find((item)=>item._id==id):undefined
+            console.log("init",data)
+            return [
+                {id:"companyname",value:data?data.companyName:""},
+                {id:"sector",value:data?[{label:setWordCase(data.sector),value:data.sector}]:[]},
+                {id:"designation",value:data?data.designation:""},
+                //{id:"ongoing",value:data?data.Ongoing?"yes":"no":"no"},
+                {id:"worktype",value:data?[{label:setWordCase(data.type),value:data.type}]:[]},
+                // {id:"document",value:data?data.docId:""},
+                {id:"startdate",value:data?data.startDate:undefined},
+                //{id:"enddate",value:data?data.endDate:undefined},
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                console.log("id",id)
+                let workexperience:WorkExperience={
+                    _id:id,
+                    companyName:data[data.findIndex((item)=>item.id=="companyname")].value,
+                    sector:data[data.findIndex((item)=>item.id=="sector")].value[0].value,
+                    type:data[data.findIndex((item)=>item.id=="worktype")].value[0].value,
+                    designation:data[data.findIndex((item)=>item.id=="designation")].value,
+                    Ongoing:true,
+                    startDate:data[data.findIndex((item)=>item.id=="startdate")].value,
+                    endDate:"",
+                    docId:undefined
+                    //docId:Doc2Upload
+                }
+                !id?delete workexperience._id:null
+                return workexperience
+            },
+            onSubmit:async (data:WorkExperience)=>{
+                console.log("data",data);
+                let updatedWorkexperiences:WorkExperience[]=[]
+                let currentWorkexperiences=store.getState().workexperience.data
+                if(currentWorkexperiences.find((item)=>item._id==data._id))
+                {
+                    updatedWorkexperiences=currentWorkexperiences.map((item)=>item._id==data._id?data:item);
+                }
+                else
+                {
+                    updatedWorkexperiences=[...currentWorkexperiences,data]
+                }
+                console.log("updated",updatedWorkexperiences);
+                let res:ServerResponse=await profileUpdator({workExperience:updatedWorkexperiences},(res)=>res.success?store.dispatch(setWorkExperience(res.data.workExperience)):null)
+                return res
+            },
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        //initialFields:["companyname","worktype","sector","designation","ongoing","startdate"],
+        allFields:[
+            {
+                id:"companyname",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:"Ex. Microsoft"}
+                },
+                title:"Company Name",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"worktype",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:[
+                                {label:"Full-time",value:"full-time"},
+                                {label:"Part-time",value:"part-time"},
+                                {label:"Freelancing",value:"freelancing"},
+                                {label:"Contract",value:"contract"},
+                                {label:"Remote",value:"remote"},
+                                {label:"Flexible",value:"flexible"},
+                                {label:"Shift-work",value:"shift work"}
+                            ],
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"worktype",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"worktype-dropdown"
+                    },
+                },
+                title:"Work type",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"sector",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:Industries.map((item)=>({label:setWordCase(item),value:item})),
+                            idExtractor:(item:ListItem)=>item.label,
+                            labelExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"sector",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"sector-dropdown"
+                    }
+                },
+                title:"Sector",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"designation",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:"Front End Developer"}
+                },
+                title:"Designation",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"ongoing",
+                componentInfo:{
+                    component:Checkbox,
+                    props:{
+                        options:{
+                            yes:{label:"Yes",value:"yes"},
+                            no:{label:"No",value:"no"}
+                        }
+                    }
+                },
+                //emptyChecker:data,
+                title:"Ongoing?",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"startdate",
+                componentInfo:{
+                    component:Datetime,
+                    props:undefined
+                },
+                title:"Start Date",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            }
         ]
     },
     {

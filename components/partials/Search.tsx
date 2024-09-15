@@ -7,6 +7,7 @@ import { Image } from "expo-image"
 import location_icon from '../../assets/images/misc/location.png'
 import go_icon from '../../assets/images/misc/back.png'
 import discipline_icon from '../../assets/images/misc/discipline.png'
+import sample_illustration from '../../assets/images/misc/sample_iIlustration.png'
 import useNavigation from "../../hooks/useNavigation"
 import { getBasket } from "../../constants/basket"
 import Loader from "../resources/Loader"
@@ -118,6 +119,11 @@ const MobileSStyles=StyleSheet.create({
     },
     not_found_sub:{
         fontSize:12
+    },
+    illustration:{
+        width:200,
+        aspectRatio:2,
+        resizeMode:"contain"
     }
 })
 const MobileMStyles=StyleSheet.create({
@@ -169,6 +175,11 @@ const MobileMStyles=StyleSheet.create({
     },
     not_found_sub:{
         fontSize:14
+    },
+    illustration:{
+        width:250,
+        aspectRatio:2,
+        resizeMode:"contain"
     }
 })
 const MobileLStyles=StyleSheet.create({
@@ -265,7 +276,8 @@ const Search=(props:{initialSearch:string})=>{
                                 ?
                                     lists.universities.length==0
                                     ?
-                                    <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:5}}>
+                                    <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:10}}>
+                                        <Image source={sample_illustration} style={[styles[Device].illustration]}/>
                                         <Text style={[styles[Device].not_found,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{"University not found "+":("}</Text>
                                         <Text style={[styles[Device].not_found_sub,{textAlign:"center",lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Don't worry there are over 8000+ Universities to explore!</Text>
                                     </View>

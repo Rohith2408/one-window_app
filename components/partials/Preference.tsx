@@ -120,7 +120,9 @@ const Preference=(props:{preferenceid:string})=>{
                     styles:{contentcontainer:{gap:10}},
                     onselection:selection,
                     initialSelection:info.getInitialData(),
-                    options:info.options}}
+                    options:info.options,
+                    update:preference
+                }}
                 />
             </View>
         </View>

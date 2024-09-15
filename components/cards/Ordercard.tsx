@@ -31,7 +31,7 @@ const GeneralStyles=StyleSheet.create({
         display:"flex",
         flex:1,
         flexDirection:"column",
-        gap:0,
+        gap:7.5,
     },
     actions_wrapper:{
         display:'flex',
@@ -72,7 +72,6 @@ const TabStyles=StyleSheet.create({
 
 const MobileSStyles=StyleSheet.create({
     name:{
-        lineHeight:20,
         fontSize:13
     },
     category:{
@@ -99,7 +98,6 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     name:{
-        lineHeight:22,
         fontSize:14
     },
     category:{
@@ -123,7 +121,6 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     name:{
-        lineHeight:20,
         fontSize:14
     },
     category:{
@@ -181,14 +178,18 @@ const Ordercard=(props:Order & {index:number})=>{
             <Image source={upload_icon} style={[styles[Device].icon]}/>
         </View>
         <View style={[GeneralStyles.info_wrapper]}>
-            <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
+            {/* <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
                 <View style={{width:5,height:5,borderRadius:10,backgroundColor:"#69FF6F"}}></View>
                 <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{formatDate(props.paymentDetails.created_at)}</Text>
-            </Animated.View>
+            </Animated.View> */}
             <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.Package?props.Package.name:"Direct Purchase"}</Text>
-            <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5,backgroundColor:getThemeColor(props.index)}}>
+            <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
                 <Image style={[styles[Device].clock_icon]} source={upload_icon} />
-                <Text style={[styles[Device].intake,{padding:5,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Price - "+props.paymentDetails.currency+" "+props.paymentDetails.amount/100+" | "+setWordCase(props.paymentDetails.paymentStatus)}</Text>
+                <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Price - "+props.paymentDetails.currency+" "+props.paymentDetails.amount/100+" | "+setWordCase(props.paymentDetails.paymentStatus)}</Text>
+            </View>
+            <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
+                <Image style={[styles[Device].clock_icon]} source={upload_icon} />
+                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{formatDate(props.paymentDetails.created_at)}</Text>
             </View>
         </View>
         {

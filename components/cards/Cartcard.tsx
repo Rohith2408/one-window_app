@@ -27,13 +27,14 @@ const GeneralStyles=StyleSheet.create({
         width:"100%",
         height:"100%",
         zIndex:-1,
+        transform:[{rotate:"1deg"}]
     },
     sub_wrapper:{
         display:"flex",
         flexDirection:"column",
         flex:1,
         alignSelf:"stretch",
-        padding:10
+        padding:15
     },
     superset_wrapper:{
         display:"flex",
@@ -190,6 +191,7 @@ const Cartcard=(props:CartItem & {index:number})=>{
         if(validation?.success)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
+            console.log("Server res",JSON.stringify(serverRes,null,2))
             if(serverRes?.success)
             {
                 setIsloading(false);

@@ -47,6 +47,10 @@ import Recommendations from "../components/partials/Recommendations"
 import Successfull from "../components/flyers/Successfull"
 import Error from "../components/flyers/Error"
 import Nointernet from "../components/flyers/Nointernet"
+import Coursepreference from "../components/partials/Coursepreference"
+import Countrypreference from "../components/partials/Countrypreference"
+import Degreepreference from "../components/partials/Degreepreference"
+import Currentlyworking from "../components/flyers/Currentlyworking"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -97,6 +101,10 @@ const components:ScreenInfo[]=[
     {id:"Myorders",component:Myorders,type:"Partial",title:"My Orders",props:["ordersummaryid"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Payment",component:Payment,type:"Partial",title:"Payment",props:["orderId"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Recommendations",component:Recommendations,type:"Partial",title:"Recommendations",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Coursepreference",component:Coursepreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Countrypreference",component:Countrypreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Degreepreference",component:Degreepreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Currentlyworking",component:Currentlyworking,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
 ]
 
 const setComponentInfo=(id:string,key:keyof ScreenInfo,value:any)=>{

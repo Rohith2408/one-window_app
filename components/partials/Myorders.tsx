@@ -13,8 +13,8 @@ const Myorders=()=>{
         <View style={{flex:1}}>
             <ScrollView style={{flex:1}} contentContainerStyle={{gap:50}}>
             {
-                orders.data.map((order)=>
-                <Ordercard {...order}/>
+                orders.data.map((order,i)=>
+                <Ordercard index={i} {...order}/>
             )}
             </ScrollView>
         </View>

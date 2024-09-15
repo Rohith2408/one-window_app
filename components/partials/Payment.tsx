@@ -131,7 +131,7 @@ const Payment = () => {
       ) : (
         <View style={{flex:1,alignItems:"center",justifyContent:"center",gap:10}}>
           <Text style={[{fontSize:24,fontFamily:Fonts.NeutrifStudio.Bold,color:"green"}]}>Payment Successfull</Text>
-          <Text style={[{fontSize:14,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Order details can be viewed from My Orders section!</Text>
+          <Text style={[{fontSize:14,textAlign:"center",fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Order details can be viewed in My Orders section!</Text>
         </View>
       )}
     </View>

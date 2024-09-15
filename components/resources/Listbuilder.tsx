@@ -64,11 +64,37 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
-    
+    list_wrapper:{
+        padding:10
+    },
+    add:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    input:{
+        fontSize:14
+    },
+    selected:{
+        fontSize:14
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
-    
+    list_wrapper:{
+        padding:10
+    },
+    add:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    input:{
+        fontSize:14
+    },
+    selected:{
+        fontSize:14
+    }
 })
 
 const styles={

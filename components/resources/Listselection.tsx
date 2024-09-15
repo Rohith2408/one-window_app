@@ -38,10 +38,17 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Listselection=(props:{direction:"horizontal"|"vertical",blurUnSelected?:boolean,selectionStyle:"background"|"border"|"tick",initialSelection?:any[],styles?:{contentcontainer:any},onselection:(data:any)=>void,options:{list:any[],card?:React.FC<any>,idExtractor:(data:any)=>any,labelExtractor?:(data:any)=>any,selectionMode:"single"|"multi"}})=>{
+const Listselection=(props:{direction:"horizontal"|"vertical",update?:any,blurUnSelected?:boolean,selectionStyle:"background"|"border"|"tick",initialSelection?:any[],styles?:{contentcontainer:any},onselection:(data:any)=>void,options:{list:any[],card?:React.FC<any>,idExtractor:(data:any)=>any,labelExtractor?:(data:any)=>any,selectionMode:"single"|"multi"}})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [selected,setSelected]=useState(props.initialSelection?props.initialSelection:[])
+
+    useEffect(()=>{
+        if(props.update)
+        {
+            setSelected(props.update)
+        }
+    },[props.update])
 
     const selection=(data:any)=>{
         let updated=[]

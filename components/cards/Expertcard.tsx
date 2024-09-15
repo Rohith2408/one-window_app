@@ -20,7 +20,8 @@ const GeneralStyles=StyleSheet.create({
         flex:1,
         display:'flex',
         flexDirection:'column',
-        alignSelf:"stretch"
+        alignSelf:"stretch",
+        padding:5
     },
     sub_wrapper1:{
         flex:1,
@@ -96,7 +97,7 @@ const MobileMStyles=StyleSheet.create({
         borderRadius:25
     },
     sub_wrapper:{
-        gap:10
+        gap:15
     },
     icon:{
         width:22,
@@ -133,7 +134,7 @@ const Expertcard=(props:Advisor & {index:number})=>{
                     </View>
                 </View>
                 <View style={[GeneralStyles.sub_wrapper2]}>
-                    <Text style={[styles[Device].assigned_for,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Assigned for</Text>
+                    <Text style={[styles[Device].assigned_for,{textAlign:"right",fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Assigned for</Text>
                     <Text style={[styles[Device].countries,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence(props.assignedCountries,"",",")}</Text>
                 </View>
             </View>

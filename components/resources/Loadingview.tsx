@@ -43,8 +43,8 @@ const Loadingview=(props:{isLoading:boolean,style:ViewStyle[],children:React.Rea
     },[props.isLoading])
 
     return(
-        <View style={{position:"relative",display:"flex"}}>
-            <Animated.View style={[{position:"absolute"},props.transitionEffect=="scale"?{transform:[{scale:loadingScale}]}:{opacity:loadingScale}]}>
+        <View style={{position:"relative",flex:1,display:"flex"}}>
+            <Animated.View style={[{position:"absolute",width:'100%',height:"100%"},props.transitionEffect=="scale"?{transform:[{scale:loadingScale}]}:{opacity:loadingScale}]}>
                 <AnimatedGradient style={[{borderRadius:30},...props.style]}  start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} locations={[0,gradientProgress.interpolate({inputRange:[0,1],outputRange:[0.2,0.8]}),gradientProgress.interpolate({inputRange:[0,1],outputRange:[0.4,1]}),0]} colors={['#F7F6FB','#E1DAFF',"#F1EDFF","#F1EDFF"]}><Text></Text></AnimatedGradient>
             </Animated.View>
             <Animated.View style={[{zIndex:1},props.transitionEffect=="scale"?{transform:[{scale:contentScale}]}:{opacity:contentScale}]}>

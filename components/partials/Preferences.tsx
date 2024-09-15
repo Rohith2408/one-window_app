@@ -141,9 +141,11 @@ const Preferences=()=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const options=useRef([
-        {title:"Degree",icon:degree_icon,screen:{id:"Preference",params:{preferenceid:"degree"}}},
-        {title:"Course",icon:course_icon,screen:{id:"Preference",params:{preferenceid:"courses"}}},
-        {title:"Country",icon:country_icon,screen:{id:"Preference",params:{preferenceid:"country"}}},
+        {title:"Degree",icon:degree_icon,screen:{id:"Flyer",params:{flyerid:"Degreepreference"}}},
+        {title:"Course",icon:degree_icon,screen:{id:"Flyer",params:{flyerid:"Coursepreference"}}},
+        {title:"Country",icon:degree_icon,screen:{id:"Flyer",params:{flyerid:"Countrypreference"}}},
+        // {title:"Course",icon:course_icon,screen:{id:"Preference",params:{preferenceid:"courses"}}},
+        // {title:"Country",icon:country_icon,screen:{id:"Preference",params:{preferenceid:"country"}}},
         // {title:"Currency",icon:currency_icon,screen:{id:"Currency",params:undefined}},
     ]).current
     const [path,navigate]=useNavigation()

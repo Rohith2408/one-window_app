@@ -164,7 +164,7 @@ const Recommendationcard=(props:Recommendation & {index:number})=>{
         }).start()
     }
 
-    console.log("rec",JSON.stringify(props,null,2))
+    //console.log("rec",JSON.stringify(props,null,2))
 
     return(
         <Pressable onPress={showProgram}>

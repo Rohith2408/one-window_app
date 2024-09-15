@@ -175,14 +175,18 @@ const Unpurchasedproductscard=(props:{data:Product,index:number,hideDelete?:bool
                     <Image source={props.data.course.icon} style={[styles[Device].icon]}/>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
-                    <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
+                    {/* <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
                         <View style={{width:5,height:5,borderRadius:10,backgroundColor:"#69FF6F"}}></View>
                         <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.data.category)}</Text>
-                    </Animated.View>
+                    </Animated.View> */}
                     <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.data.course.name}</Text>
                     <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5}}>
                         <Image style={[styles[Device].clock_icon]} source={clock_icon} />
                         <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{formatDate(props.data.intake)}</Text>
+                    </View>
+                    <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5}}>
+                        <Image style={[styles[Device].clock_icon]} source={clock_icon} />
+                        <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{setWordCase(props.data.category)}</Text>
                     </View>
                 </View>
                 {

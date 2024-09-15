@@ -3,11 +3,12 @@ import { getServerRequestURL, serverRequest, setWordCase } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 import { ServerResponse } from "../../types"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
-import { setAdvisors } from "../../store/slices/advisorsSlice"
+import { addAdvisor, setAdvisors, updateAdvisor } from "../../store/slices/advisorsSlice"
 import { addChats } from "../../store/slices/chatsSlice"
 import { useState } from "react"
 import { Image } from "expo-image"
 import loader from '../../assets/images/misc/loader.gif'
+import { store } from "../../store"
 
 const Requestcounsellorcard=(props:{country:string})=>{
 
@@ -27,8 +28,16 @@ const Requestcounsellorcard=(props:{country:string})=>{
         console.log("Request Response",serverRes);
         if(serverRes.success)
         {
-            //dispatch(setAdvisors(serverRes.data.advisors))
-            //dispatch(addChats(serverRes.data.chat));
+            console.log("request response",JSON.stringify(serverRes))
+            if(store.getState().advisors.data?.find((advisor)=>advisor.info._id==serverRes.data.advisor.info._id))
+            {
+                dispatch(updateAdvisor(serverRes.data.advisor))
+            }
+            else
+            {
+                dispatch(addAdvisor(serverRes.data.advisor))
+                dispatch(addChats(serverRes.data.chat));
+            }
         }
         // let accessTokenRes=await checkAccessToken();
         // setLayoutAnimation()

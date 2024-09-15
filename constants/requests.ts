@@ -56,6 +56,7 @@ const requests:RequestInfo[]=[
             return keyVerifierResponse
         },
         serverCommunicator:async (data:any)=>{
+            console.log("server data",JSON.stringify(data,null,2));
             let res=await cartRequest(data);
             return res;
         },
