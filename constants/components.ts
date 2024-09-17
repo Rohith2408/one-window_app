@@ -51,6 +51,8 @@ import Coursepreference from "../components/partials/Coursepreference"
 import Countrypreference from "../components/partials/Countrypreference"
 import Degreepreference from "../components/partials/Degreepreference"
 import Currentlyworking from "../components/flyers/Currentlyworking"
+import Existingorders from "../components/flyers/Existingorders"
+import Addtoorder from "../components/partials/Addtoorder"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -95,6 +97,7 @@ const components:ScreenInfo[]=[
     {id:"Cart",component:Cart,type:"Partial",title:"Cart",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Order",component:Order,type:"Partial",title:"Checkout",props:["orderinfoid"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Ordersummary",component:Ordersummary,type:"Partial",title:"Order Summary",props:["ordersummaryid"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Addtoorder",component:Addtoorder,type:"Partial",title:"Add To Order",props:["orderinfoid"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Preferences",component:Preferences,type:"Partial",title:"Preferences",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Preference",component:Preference,props:["preferenceid"],type:"Partial",title:"Preferences",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Community",component:Community,type:"Partial",title:"Community",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -105,6 +108,7 @@ const components:ScreenInfo[]=[
     {id:"Countrypreference",component:Countrypreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Degreepreference",component:Degreepreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Currentlyworking",component:Currentlyworking,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Existingorders",component:Existingorders,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
 ]
 
 const setComponentInfo=(id:string,key:keyof ScreenInfo,value:any)=>{

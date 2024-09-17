@@ -281,6 +281,12 @@ const endPoints=[
         id:"order-info",
         category:"student",
         tail:"order",
+        type:"GET",
+    },
+    {
+        id:"add-products",
+        category:"student",
+        tail:"order",
         type:"POST",
     },
     {

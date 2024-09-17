@@ -117,8 +117,6 @@ const Ordersummary=(props:{ordersummaryid:string})=>{
             let serverRes=await requestInfo?.serverCommunicator(inputvalidation.data);
             if(serverRes?.success)
             {
-                //dispatch(addOrders(serverRes.data));
-                //console.log("order res",JSON.stringify(serverRes.data,null,2));
                 setIsloading(false);
                 await requestInfo?.responseHandler(serverRes);
                 addToBasket("payment_options",serverRes.data.order.paymentDetails);
@@ -163,7 +161,7 @@ const Ordersummary=(props:{ordersummaryid:string})=>{
             </View>
             <View style={{flex:1,gap:15,padding:10}}>
             <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
-                <ScrollView contentContainerStyle={[styles[Device].products_wrapper,{padding:5,paddingTop:20,paddingBottom:20}]}>
+                <ScrollView contentContainerStyle={[styles[Device].products_wrapper,{padding:5,paddingTop:0,paddingBottom:20}]}>
                 {
                     orderInfo.products.map((product,i)=>
                     <Unpurchasedproductscard hideDelete={true} data={product} index={i}/>
@@ -171,15 +169,14 @@ const Ordersummary=(props:{ordersummaryid:string})=>{
                 }
                 </ScrollView>
             </View>
-            <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={!isLoading?placeOrder:null}>
-                {
-                    !isLoading
-                    ?
-                    <Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Place Order</Text>
-                    :
-                    <Image style={[styles[Device].loader]} source={loader}/>
-                }
-                
+            <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={!isLoading?placeOrder:null}>
+            {
+                !isLoading
+                ?
+                <Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Place Order</Text>
+                :
+                <Image style={[styles[Device].loader]} source={loader}/>
+            }
             </Pressable>
         </View>
     )

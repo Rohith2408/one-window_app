@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Course, Event, Product, ProgramIntake, ServerResponse } from "../../types"
-import { PackageProductsValidator, Word2Sentence, getDevice, getServerRequestURL, getThemeColor, serverRequest } from "../../utils";
+import { PackageProductsValidator, Word2Sentence, getDevice, getLightThemeColor, getServerRequestURL, getThemeColor, serverRequest } from "../../utils";
 import { cartRequest } from "../../utils/serverrequests";
 import useNavigation from "../../hooks/useNavigation";
 import { addToBasket } from "../../constants/basket";
@@ -12,6 +12,7 @@ import { requests } from "../../constants/requests";
 import { Image } from "expo-image";
 import location_icon from '../../assets/images/misc/location.png'
 import fee_icon from '../../assets/images/misc/fee.png'
+import cart_icon from '../../assets/images/misc/cart.png'
 import { Fonts, Themes } from "../../constants";
 
 const GeneralStyles=StyleSheet.create({
@@ -141,6 +142,11 @@ const MobileSStyles=StyleSheet.create({
     },
     add_to_cart:{
         fontSize:10
+    },
+    cart_icon:{
+        width:16,
+        height:16,
+        resizeMode:'contain'
     }
 })
 
@@ -200,12 +206,77 @@ const MobileMStyles=StyleSheet.create({
     },
     add_to_cart:{
         fontSize:14
+    },
+    cart_icon:{
+        width:18,
+        height:18,
+        resizeMode:'contain'
     }
 })
 
 const MobileLStyles=StyleSheet.create({
 
-    
+    location_icon:{
+        width:12,
+        height:12,
+        resizeMode:"contain"
+    },
+    uni_icon:{
+        width:26,
+        height:26,
+        borderRadius:100,
+        resizeMode:"contain"
+    },
+    uni_icon_bg:{
+        width:24,
+        height:24,
+        borderRadius:100,
+        left:-7,
+        top:7
+    },
+    uni_location:{
+        fontSize:12
+    },
+    program_name:{
+        fontSize:16
+    },
+    dashboard_icon:{
+        height:18,
+        width:18,
+        resizeMode:"contain"
+    },
+    dashboard_item_wrapper:{
+        borderRadius:20,
+        flex:1
+    },
+    dashboards_wrapper:{
+        height:240,
+        gap:20
+    },
+    dashboard_wrapper:{
+        gap:20
+    },
+    dashboard_value:{
+        fontSize:13
+    },
+    dashboard_label:{
+        fontSize:12
+    },
+    about_heading:{
+        fontSize:16
+    },
+    about:{
+        fontSize:14,
+        lineHeight:24
+    },
+    add_to_cart:{
+        fontSize:14
+    },
+    cart_icon:{
+        width:20,
+        height:20,
+        resizeMode:'contain'
+    }
 })
 
 const styles={
@@ -321,7 +392,10 @@ const Program=(props:{programid:string})=>{
                             <Pressable onPress={openUniversity} style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([programInfo.university?.name,programInfo.university?.location?.country],"")}</Text></Pressable>
                         </View>
                         <View style={[GeneralStyles.actions_wrapper]}>
-                            <Pressable onPress={()=>showIntakes(addToCart)} style={{borderWidth:1,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}><Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium,padding:7,paddingLeft:15,paddingRight:15}]}>Add to Cart</Text></Pressable>
+                            <Pressable onPress={()=>showIntakes(addToCart)} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
+                                <Image source={cart_icon} style={[styles[Device].cart_icon]}/>
+                                <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Add to Cart</Text>
+                            </Pressable>
                         </View>
                     </View>
                 </View>
@@ -359,7 +433,7 @@ const Dashboarditem=(data:{label:string,value:string,icon:string,index:number})=
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
-        <View style={[GeneralStyles.dashboard_item_wrapper,styles[Device].dashboard_item_wrapper,{backgroundColor:getThemeColor(data.index)}]}>
+        <View style={[GeneralStyles.dashboard_item_wrapper,styles[Device].dashboard_item_wrapper,{backgroundColor:getLightThemeColor(data.index)}]}>
             <Image style={[styles[Device].dashboard_icon]} source={data.icon}/>
             <Text style={[styles[Device].dashboard_value,{color:"black",fontFamily:Fonts.NeutrifStudio.Bold}]}>{data.value}</Text>
             <Text style={[styles[Device].dashboard_label,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{data.label}</Text>

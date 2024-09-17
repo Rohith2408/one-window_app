@@ -15,7 +15,7 @@ const Payment = () => {
 
   const paymentData=useRef(getBasket("payment_options")).current;
   const profile = useRef({ ...store.getState().personalinfo.data, ...store.getState().sharedinfo.data }).current;
-  const [showRazorpayPage, setShowRazorpayPage] = useState(true);
+  const [showRazorpayPage, setShowRazorpayPage] = useState(paymentData.amount==0?false:true);
   const dispatch=useAppDispatch()
   const [path,navigate]=useNavigation()
   

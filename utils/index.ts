@@ -614,6 +614,7 @@ export const ISOtoIntakeformat=(iso:string)=>{
 // }
 
 export const PackageProductsValidator=(Package:Package|undefined,Products:Product[])=>{
+  console.log("validating");
   let orders=store.getState().orders.data
   let categories=getCategoriesFromProducts(Products);
   let categoryErrors:{category:string,error:string}[]=[];
@@ -631,13 +632,20 @@ export const PackageProductsValidator=(Package:Package|undefined,Products:Produc
           name:item.course.name,
           icon:item.course.university.logoSrc
       }},product))))
+    let unpurchasedproducts=Products.filter((product)=>!orders.find((order:Order)=>order.products.find((item)=>compareProducts({category:item.category,
+      intake:item.intake,
+      course:{
+          id:item.course._id,
+          name:item.course.name,
+          icon:item.course.university.logoSrc
+      }},product))))
     productsErrors=purchasedProducts.map((item)=>({product:item,error:"Already purchased"}))
-    if(purchasedProducts.length==0)
+    if(unpurchasedproducts.length>0)
     {
       categories.forEach((category)=>{
-        let categoryproducts=Products.filter((item)=>item.category==category)
+        let categoryproducts=unpurchasedproducts.filter((item)=>item.category==category)
         let categoryInPackage=Package?.products.find((item)=>item.category==category)
-        console.log("products",Products)
+        //console.log("products",Products)
           if(Package!=undefined)
           {
             if(categoryInPackage==undefined)

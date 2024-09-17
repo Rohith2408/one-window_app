@@ -20,17 +20,28 @@ const TabStyles=StyleSheet.create({
 const MobileSStyles=StyleSheet.create({
     apply:{
         fontSize:12
+    },
+    heading:{
+        fontSize:12
     }
 })
 
 const MobileMStyles=StyleSheet.create({
     apply:{
         fontSize:14
+    },
+    heading:{
+        fontSize:14
     }
 })
 
 const MobileLStyles=StyleSheet.create({
-
+    apply:{
+        fontSize:14
+    },
+    heading:{
+        fontSize:14
+    }
 })
 
 const styles={
@@ -73,10 +84,9 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     console.log("info",info);
 
     return(
-        <View style={{flex:1,flexDirection:'column',justifyContent:"center",alignItems:'center',gap:30,padding:10}}>
-            {/* <Text style={[{margin:15,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Please select the Intake</Text> */}
+        <View style={{flex:1,flexDirection:'column',justifyContent:"center",alignItems:'center',gap:20,padding:5,paddingBottom:15}}>
             <View style={{alignSelf:'stretch',gap:7}}>
-                <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the year</Text>
+                <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the year</Text>
                 <View>
                     <Listselection 
                         {...{
@@ -94,8 +104,8 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
                     />
                 </View>
             </View>
-            <View style={{alignSelf:'stretch',gap:7}}>
-                <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the Month</Text>
+            <View style={{flex:1,alignSelf:'stretch',gap:7}}>
+                <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the Month</Text>
                 <View>
                     <Listselection 
                     {...{
@@ -114,18 +124,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
                     />
                 </View>
             </View> 
-            {
-                intake.month && intake.year
-                ?
-                <View style={{alignSelf:'stretch'}}><Asynchronousbutton successText="Added Succesfully" idleText="Apply" failureText="Something went wront" callback={apply}/></View>
-                // <Pressable style={{padding:10,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),borderRadius:100,alignSelf:"stretch",alignItems:'center',justifyContent:'center'}} onPress={apply}>
-                // {
-                //     <Ima
-                // }
-                // </Pressable>
-                :
-                null
-            }   
+            <View style={{alignSelf:'stretch',transform:[{scale:(intake.month && intake.year)?1:0}]}}><Asynchronousbutton successText="Added Succesfully" idleText="Apply" failureText="Something went wront" callback={apply}/></View>
             {
                 error!=undefined
                 ?

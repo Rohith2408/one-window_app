@@ -13,10 +13,14 @@ const GeneralStyles=StyleSheet.create({
         justifyContent:"center",
         borderRadius:100,
         borderWidth:1,
-        padding:12
+        paddingLeft:15,
+        paddingRight:15
     },
     text:{
         position:"absolute"
+    },
+    loader:{
+        
     }
 })
 
@@ -33,33 +37,42 @@ const TabStyles=StyleSheet.create({
 
 const MobileSStyles=StyleSheet.create({
     text:{
-
+        fontSize:12
     },
     loader:{
         width:18,
         height:18,
         resizeMode:"contain"
-    }   
+    },
+    wrapper:{
+        padding:7.5
+    }
 })
 const MobileMStyles=StyleSheet.create({
     text:{
-
+        fontSize:14
     },
     loader:{
         width:15,
         height:15,
         resizeMode:"contain"
-    }  
+    },
+    wrapper:{
+        padding:10
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
     text:{
-
+        fontSize:14
     },
     loader:{
         width:15,
         height:15,
         resizeMode:"contain"
+    },
+    wrapper:{
+        padding:10
     }
 })
 
@@ -116,10 +129,10 @@ const Asynchronousbutton=(props:{successText:string,idleText:string,failureText:
 
 
     return(
-        <Pressable onPress={click} style={[GeneralStyles.wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(1)}]}>
+        <Pressable onPress={click} style={[GeneralStyles.wrapper,styles[Device].wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderWidth:1.2}]}>
             <Animated.Text style={[GeneralStyles.text,styles[Device].text,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1),transform:[{scale:idleTextScale}]}]}>{props.idleText}</Animated.Text>
-            <Animated.Text style={[GeneralStyles.text,styles[Device].text,{transform:[{scale:successTextScale}]}]}>{props.successText}</Animated.Text>
-            <Animated.Text style={[GeneralStyles.text,styles[Device].text,{transform:[{scale:failureTextScale}]}]}>{props.failureText}</Animated.Text>
+            <Animated.Text style={[GeneralStyles.text,styles[Device].text,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1),transform:[{scale:successTextScale}]}]}>{props.successText}</Animated.Text>
+            <Animated.Text style={[GeneralStyles.text,styles[Device].text,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1),transform:[{scale:failureTextScale}]}]}>{props.failureText}</Animated.Text>
             <Animated.Image source={loading_gif} style={[styles[Device].loader,{transform:[{scale:loadingScale}]}]}></Animated.Image>
         </Pressable>
     )

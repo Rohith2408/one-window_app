@@ -1,6 +1,6 @@
 import { store } from "../store";
 import { setCart } from "../store/slices/cartSlice";
-import { addOrders, setOrders } from "../store/slices/ordersSlice";
+import { addOrders, setOrders, updateOrder } from "../store/slices/ordersSlice";
 import { setRecommendations } from "../store/slices/recommendationsSlice";
 import { Product, Recommendation, RecommendationType, RequestInfo, ServerResponse } from "../types";
 import { ISOtoIntakeformat, Word2Sentence, getServerRequestURL, keyVerifier, profileUpdator, serverRequest } from "../utils";
@@ -52,7 +52,8 @@ const requests:RequestInfo[]=[
     {
         id:"removeFromCart",
         inputValidator:(data:cartdata)=>{
-            let keyVerifierResponse=keyVerifier(data,["action","itemId"])
+            let keyVerifierResponse=keyVerifier(data,["action","itemIds"])
+            console.log("validation",keyVerifierResponse)
             return keyVerifierResponse
         },
         serverCommunicator:async (data:any)=>{
@@ -91,6 +92,31 @@ const requests:RequestInfo[]=[
             if(res.success)
             {
                 store.dispatch(addOrders(res.data.order));
+            }
+        }
+    },
+    {
+        id:"addproducts",
+        inputValidator:(data:{products:Product[],orderid:string})=>{
+            console.log("Order I/P Recieved ",JSON.stringify(data,null,2));
+            let keyVerifierResponse=keyVerifier(data,["orderId","products"])
+            let emptyProductsRes={success:data.products.length!=0,data:undefined,message:data.products.length==0?"Products cant be empty":""}
+            let res={success:keyVerifierResponse.success && emptyProductsRes.success,data:data,message:Word2Sentence([keyVerifierResponse.message,emptyProductsRes.message])}
+            return res
+        },
+        serverCommunicator:async (data:{products:Product[],orderId:string})=>{
+            let res=await serverRequest({
+                url:getServerRequestURL("add-products","POST"),
+                reqType:"POST",
+                body:data
+            })
+            console.log("Order Server Response ",JSON.stringify(res,null,2));
+            return res;
+        },
+        responseHandler:(res:ServerResponse)=>{
+            if(res.success)
+            {
+                store.dispatch(updateOrder(res.data));
             }
         }
     },

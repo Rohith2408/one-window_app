@@ -75,13 +75,13 @@ const MobileSStyles=StyleSheet.create({
 
     },
     sub_wrapper:{
-        gap:20,
+        gap:10,
         borderRadius:25
     },
     bg_wrapper:{
         borderRadius:25,
-        left:15,
-        top:15,
+        left:8,
+        top:8,
     },
     superset_text:{
         fontSize:10
@@ -109,16 +109,45 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     superset_text:{
-        fontSize:13
+        fontSize:12
     },
     sub_wrapper:{
-        gap:20,
+        gap:15,
         borderRadius:30
     },
     bg_wrapper:{
         borderRadius:30,
-        left:12,
-        top:12,
+        left:10,
+        top:10,
+    },
+    icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    course_name:{
+        fontSize:14
+    },
+    uni_name:{
+        fontSize:13
+    },
+    footer:{
+        fontSize:13
+    }
+})
+
+const MobileLStyles=StyleSheet.create({
+    superset_text:{
+        fontSize:13
+    },
+    sub_wrapper:{
+        gap:10,
+        borderRadius:30
+    },
+    bg_wrapper:{
+        borderRadius:30,
+        left:10,
+        top:10,
     },
     icon:{
         width:24,
@@ -133,26 +162,6 @@ const MobileMStyles=StyleSheet.create({
     },
     footer:{
         fontSize:13
-    }
-})
-
-const MobileLStyles=StyleSheet.create({
-    superset_text:{
-        fontSize:12
-    },
-    icon:{
-        width:20,
-        height:20,
-        resizeMode:"contain"
-    },
-    course_name:{
-        fontSize:14
-    },
-    uni_name:{
-        fontSize:12
-    },
-    footer:{
-        fontSize:12
     }
 })
 
@@ -182,12 +191,13 @@ const Cartcard=(props:CartItem & {index:number})=>{
     const deleteItem=async ()=>{
         let data={
             action:"remove",
-            itemId:props._id
+            itemIds:[props._id]
         }
         setIsloading(true);
         let serverRes={success:false,message:"",data:undefined};
         let requestInfo=requests.find((item)=>item.id=="removeFromCart");
         let validation=requestInfo?.inputValidator(data);
+        console.log("Res",serverRes,requestInfo);
         if(validation?.success)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
@@ -230,7 +240,7 @@ const Cartcard=(props:CartItem & {index:number})=>{
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
-            <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
+            {/* <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View> */}
             <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:getLightThemeColor(props.index%4)}]}>
                 <View style={[GeneralStyles.superset_wrapper]}>
                     <View style={{borderRadius:100,backgroundColor:getThemeColor(props.index%4)}}>

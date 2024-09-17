@@ -185,7 +185,7 @@ const Ordercard=(props:Order & {index:number})=>{
             <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.Package?props.Package.name:"Direct Purchase"}</Text>
             <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
                 <Image style={[styles[Device].clock_icon]} source={upload_icon} />
-                <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Price - "+props.paymentDetails.currency+" "+props.paymentDetails.amount/100+" | "+setWordCase(props.paymentDetails.paymentStatus)}</Text>
+                <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Price - "+props.paymentDetails.currency+" "+props.paymentDetails.amount/100+" | "+setWordCase(props.paymentDetails.paymentStatus)+" | "+"Products-"+props.products.length}</Text>
             </View>
             <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
                 <Image style={[styles[Device].clock_icon]} source={upload_icon} />

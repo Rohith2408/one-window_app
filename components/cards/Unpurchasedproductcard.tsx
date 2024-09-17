@@ -3,12 +3,13 @@ import { Meeting, Product, ServerResponse } from "../../types"
 import meeting_icon from '../../assets/images/misc/meeting.png'
 import { Image } from "expo-image"
 import { useRef, useState } from "react"
-import { Word2Sentence, formatDate, formatTime, getDevice, getServerRequestURL, serverRequest, setWordCase } from "../../utils"
+import { Word2Sentence, formatDate, formatTime, getDevice, getServerRequestURL, getThemeColor, serverRequest, setWordCase } from "../../utils"
 import delete_icon from '../../assets/images/misc/delete.png'
 import loader from '../../assets/images/misc/loader.gif'
 import edit_icon from '../../assets/images/misc/edit.png'
 import { Fonts, Themes } from "../../constants"
 import clock_icon from '../../assets/images/misc/date.png'
+import products_icon from '../../assets/images/misc/products.png'
 import useNavigation from "../../hooks/useNavigation"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
 import { updateMeeting } from "../../store/slices/meetingsSlice"
@@ -19,7 +20,7 @@ const GeneralStyles=StyleSheet.create({
         display:"flex",
         justifyContent:"center",
         alignItems:'center',
-        padding:0
+        padding:5
     },
     sub_wrapper:{
         display:"flex",
@@ -49,6 +50,9 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:"row",
         gap:5,
         alignItems:'center'
+    },
+    icon_bg:{
+        position:"absolute"
     }
 })
 
@@ -71,6 +75,13 @@ const MobileSStyles=StyleSheet.create({
         width:20,
         height:20,
         resizeMode:"contain",
+        borderRadius:100
+    },
+    icon_bg:{
+        width:20,
+        height:20,
+        left:-3,
+        top:3,
         borderRadius:100
     },
     clock_icon:{
@@ -102,6 +113,13 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain",
         borderRadius:100
     },
+    icon_bg:{
+        width:24,
+        height:24,
+        left:-5,
+        top:5,
+        borderRadius:100
+    },
     clock_icon:{
         width:10,
         height:10,
@@ -129,6 +147,13 @@ const MobileLStyles=StyleSheet.create({
         width:16,
         height:16,
         resizeMode:"contain",
+        borderRadius:100
+    },
+    icon_bg:{
+        width:24,
+        height:24,
+        left:-5,
+        top:5,
         borderRadius:100
     },
     clock_icon:{
@@ -172,21 +197,18 @@ const Unpurchasedproductscard=(props:{data:Product,index:number,hideDelete?:bool
         <View style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.sub_wrapper]}>
                 <View style={[GeneralStyles.icon_wrapper]}>
+                    <View style={[GeneralStyles.icon_bg,styles[Device].icon_bg,{backgroundColor:getThemeColor(props.index)}]}></View>
                     <Image source={props.data.course.icon} style={[styles[Device].icon]}/>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
-                    {/* <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
-                        <View style={{width:5,height:5,borderRadius:10,backgroundColor:"#69FF6F"}}></View>
-                        <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.data.category)}</Text>
-                    </Animated.View> */}
                     <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.data.course.name}</Text>
                     <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5}}>
+                        <Image style={[styles[Device].clock_icon]} source={products_icon} />
+                        <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{setWordCase(props.data.category)}</Text>
+                    </View>
+                    <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5,opacity:0.6}}>
                         <Image style={[styles[Device].clock_icon]} source={clock_icon} />
                         <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{formatDate(props.data.intake)}</Text>
-                    </View>
-                    <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5}}>
-                        <Image style={[styles[Device].clock_icon]} source={clock_icon} />
-                        <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{setWordCase(props.data.category)}</Text>
                     </View>
                 </View>
                 {

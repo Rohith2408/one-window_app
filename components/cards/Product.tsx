@@ -45,7 +45,7 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:"column",
         alignItems:"flex-start",
         justifyContent:"center",
-        gap:12
+        gap:10
     },
     misc_wrapper:{
         display:"flex",

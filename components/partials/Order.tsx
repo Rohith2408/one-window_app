@@ -92,6 +92,12 @@ const styles={
     MobileL:MobileLStyles
 }
 
+type error={
+    category:{category:string,error:string}[]|undefined,
+    products:{product:Product,error:string}[]|undefined,
+    general:undefined|string[]
+}
+
 const Order=(props:{orderinfoid:string})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
@@ -99,17 +105,15 @@ const Order=(props:{orderinfoid:string})=>{
     const [path,navigate]=useNavigation()
     const [Package,setPackage]=useState(orderInfo.package)
     const [Products,setProducts]=useState<Product[]>(orderInfo.products)
-    const [categoryError,setCategoryError]=useState<{category:string,error:string}[]|undefined>(undefined)
-    const [productErrors,setProductErrors]=useState<{product:Product,error:string}[]|undefined>(undefined);
-    const [generalErrors,setGeneralErrors]=useState<undefined|string[]>(undefined);
+    const errors=useRef<error>({category:undefined,products:undefined,general:undefined});
     const suggestedPackages=useAppSelector((state)=>state.suggestedpackages.data);
 
     useEffect(()=>{
-        let errors=PackageProductsValidator(Package,Products)
-        setCategoryError(errors.categoryErrors);
-        setProductErrors(errors.productsErrors);
-        setGeneralErrors(errors.generalErrors)
-        console.log("errors",JSON.stringify(errors,null,2))
+        // let errors=PackageProductsValidator(Package,Products)
+        // setCategoryError(errors.categoryErrors);
+        // setProductErrors(errors.productsErrors);
+        // setGeneralErrors(errors.generalErrors)
+        // console.log("errors",JSON.stringify(errors,null,2))
     },[Package,Products])
 
     const packageSelected=(item:Package[])=>{
@@ -128,16 +132,15 @@ const Order=(props:{orderinfoid:string})=>{
         }) 
         navigate?navigate({type:"AddScreen",payload:{screen:"Ordersummary",params:{ordersummaryid:"ordersummary"}}}):null
     }
-
-    // const redirectToExplore=()=>{
-
-    // }
     
-    console.log(Package)
-    
+    let validation=PackageProductsValidator(Package,Products)
+    errors.current={category:validation.categoryErrors,products:validation.productsErrors,general:validation.generalErrors}
+    // console.log("Errors",JSON.stringify(errors.current,null,2));
+    // console.log("package",Package?.name);
+
     return(
         <View style={{flex:1}}>
-            <View style={{padding:10,gap:15}}>
+            <View style={{padding:5,gap:15}}>
                 <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Suggested Packages</Text>
                 <View>
                     <ScrollView horizontal>
@@ -152,30 +155,30 @@ const Order=(props:{orderinfoid:string})=>{
                     </ScrollView>
                 </View>
                     <View>{
-                        categoryError?.map((error)=>
-                        <Text>{error.error}</Text>
+                        errors.current.category?.map((error)=>
+                        <Text style={[styles[Device].error]}>{error.error}</Text>
                         )    
                     }</View>
                 <View>
                 </View>
             </View>
-            <View style={{flex:1,gap:15,padding:10}}>
-            <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
-                <ScrollView contentContainerStyle={{gap:30,padding:5,paddingTop:20,paddingBottom:20}}>
+            <View style={{flex:1,gap:15,padding:5}}>
+                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
+                <ScrollView contentContainerStyle={{gap:30,paddingBottom:20}}>
                 {
                     Products.map((product,i)=>
-                    <View style={{gap:5}}>
+                    <View key={product.course.id+product.intake} style={{gap:7.5}}>
                         <Unpurchasedproductscard data={product} deleteHandler={deleteProduct} index={i}/>
-                        <Text style={[{alignSelf:"flex-end",fontFamily:Fonts.NeutrifStudio.Regular,color:"red"},styles[Device].error]}>{productErrors?.find((item)=>compareProducts(item.product,product))?.error}</Text>
+                        <Text style={[{alignSelf:"flex-end",fontFamily:Fonts.NeutrifStudio.Regular,color:"red"},styles[Device].error]}>{errors.current.products?.find((item)=>compareProducts(item.product,product))?.error}</Text>
                     </View>
                     )
                 }
                 </ScrollView>
             </View>
             {
-                (categoryError!=undefined && productErrors!=undefined && categoryError.length==0 && productErrors.length==0 && generalErrors!=undefined && generalErrors.length==0)
+                (errors.current.category!=undefined && errors.current.products!=undefined && errors.current.category.length==0 && errors.current.products.length==0 && errors.current.general!=undefined && errors.current.general.length==0)
                 ?
-                <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={showOrderSummary}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Continue</Text></Pressable>
+                <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={showOrderSummary}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:5}]}>Continue</Text></Pressable>
                 :
                 null
             }

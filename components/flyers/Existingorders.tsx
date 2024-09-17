@@ -1,0 +1,153 @@
+import { useRef, useState } from "react"
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
+import { Fonts, Themes } from "../../constants"
+import useNavigation from "../../hooks/useNavigation"
+import sample_pic from '../../assets/images/misc/sampledp.png'
+import loader from '../../assets/images/misc/loader.gif'
+import { formatDate, getDevice, profileUpdator } from "../../utils"
+import * as ImagePicker from 'expo-image-picker';
+import { Order, Package, Product, ServerResponse } from "../../types"
+import { useAppDispatch } from "../../hooks/useAppDispatch"
+import { setSharedInfo } from "../../store/slices/sharedinfoSlice"
+import { useAppSelector } from "../../hooks/useAppSelector"
+import { Image } from "expo-image"
+import Listselection from "../resources/Listselection"
+import Ordercard from "../cards/Ordercard"
+import { addToBasket, getBasket } from "../../constants/basket"
+
+const GeneralStyles=StyleSheet.create({
+    wrapper:{
+        flex:1,
+        padding:20,
+        gap:10
+    }
+})
+
+const TabStyles=StyleSheet.create({
+    
+})
+
+const MobileSStyles=StyleSheet.create({
+    option:{
+        fontSize:12
+    },
+    heading:{
+        fontSize:14
+    },
+    checkout:{
+        fontSize:12
+    },
+})
+
+const MobileMStyles=StyleSheet.create({
+    option:{
+        fontSize:16
+    },
+    heading:{
+        fontSize:18,
+        lineHeight:24
+    },
+    checkout:{
+        fontSize:14
+    },
+})
+
+const MobileLStyles=StyleSheet.create({
+    option:{
+        fontSize:14
+    },
+    heading:{
+        fontSize:16
+    },
+    checkout:{
+        fontSize:14
+    },
+})
+
+const styles={
+    Tab:TabStyles,
+    MobileS:MobileSStyles,
+    MobileM:MobileMStyles,
+    MobileL:MobileLStyles
+}
+
+const Existingorders=()=>{
+
+    const [path,navigate]=useNavigation()
+    const Device=useRef<keyof typeof styles>(getDevice()).current
+    const dispatch=useAppDispatch()
+    const orders=useAppSelector((state)=>state.orders).data.filter((item)=>item.Package)
+    const [selected,setSelected]=useState<undefined|Order>(undefined)
+    const [loading,setloading]=useState(false);
+    const orderinfo:{package:Package|undefined,products:Product[]}=getBasket("orderinfo");
+
+
+    const onselect=(order:Order[])=>{
+        //console.log("sel",order);
+        setSelected(order[0])
+    }
+
+    const addToExisting=()=>{
+        console.log("add to ",selected?.Package,orderinfo.products)
+        addToBasket("orderinfo",{
+            orderId:selected?._id,
+            package:selected?.Package,
+            products:orderinfo.products
+        }) 
+        navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Addtoorder",params:{orderinfoid:"orderinfo"}}}):null
+    }
+
+    const newOrder=()=>{
+        navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Order",params:{orderinfoid:"orderinfo"}}}):null
+    }
+
+    console.log("info",orderinfo.products[0].course);
+
+    return(
+        <View style={[GeneralStyles.wrapper,{gap:20}]}>
+            <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Do you want to add the products to an existing purchase?</Text>
+            <View style={{flex:1}}>
+            {/* <ScrollView style={{flex:1}}>
+            {
+                orders.map((item)=>
+                <View>
+                    <Text style={[]}>{item.Package.name}</Text>
+                    <Text>{formatDate(item.paymentDetails.created_at)}</Text>
+                </View>
+                )
+            }
+            </ScrollView> */}
+            <Listselection
+                {...{
+                    direction:"vertical",
+                    selectionStyle:"tick",
+                    styles:{contentcontainer:{gap:10}},
+                    onselect:onselect,
+                    onselection:onselect,
+                    initialSelection:[],
+                    options:{
+                        list:orders,
+                        idExtractor:(item:Order)=>item._id,
+                        card:Ordercard,
+                        selectionMode:"single"
+                    }}}
+                />
+            </View>
+            <View style={{flexDirection:'row',justifyContent:'center',gap:10,padding:10}}>
+                {
+                    selected
+                    ?
+                    <Pressable style={{alignSelf:"center",padding:5,paddingLeft:15,paddingRight:15,borderRadius:100,borderWidth:1.5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={addToExisting}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Add To Existing Order</Text></Pressable>
+                    :
+                    null
+                }
+                <Pressable style={{alignSelf:"center",padding:5,paddingLeft:15,paddingRight:15,borderRadius:100,borderWidth:1.5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={newOrder}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Place A New Order</Text></Pressable>
+            </View>
+        </View>
+    )
+
+}
+
+export default Existingorders

@@ -93,7 +93,7 @@ const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick"|"back
 
 
     return(
-        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{position:"relative",flexDirection:'row',padding:5,paddingLeft:15,paddingRight:15}}>
+        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{position:"relative",flexDirection:'row'}}>
         {
             props.data.card
             ?
