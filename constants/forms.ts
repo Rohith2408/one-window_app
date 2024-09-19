@@ -3532,7 +3532,12 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
-                            list:Countries.map((country)=>({label:country,value:country})),
+                            fetcher:(data:AppliedFilter)=>{
+                                let baseFilter:AppliedQuickFilter|undefined=getBasket("Universitiesfilter").baseFilters.find((item)=>item.type=="country");
+                                let options=Countries.map((country)=>({label:country,value:country}))
+                                return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
+                            },
+                            //list:Countries.map((country)=>({label:country,value:country})),
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label
                         },

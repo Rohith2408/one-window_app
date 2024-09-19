@@ -614,7 +614,7 @@ export const ISOtoIntakeformat=(iso:string)=>{
 // }
 
 export const PackageProductsValidator=(Package:Package|undefined,Products:Product[])=>{
-  console.log("validating");
+  console.log("validating",JSON.stringify(Products[0].course));
   let orders=store.getState().orders.data
   let categories=getCategoriesFromProducts(Products);
   let categoryErrors:{category:string,error:string}[]=[];
@@ -625,20 +625,8 @@ export const PackageProductsValidator=(Package:Package|undefined,Products:Produc
     generalErrors.push("Products cannot be empty");
   }
   else{
-    let purchasedProducts=Products.filter((product)=>orders.find((order:Order)=>order.products.find((item)=>compareProducts({category:item.category,
-      intake:item.intake,
-      course:{
-          id:item.course._id,
-          name:item.course.name,
-          icon:item.course.university.logoSrc
-      }},product))))
-    let unpurchasedproducts=Products.filter((product)=>!orders.find((order:Order)=>order.products.find((item)=>compareProducts({category:item.category,
-      intake:item.intake,
-      course:{
-          id:item.course._id,
-          name:item.course.name,
-          icon:item.course.university.logoSrc
-      }},product))))
+    let purchasedProducts=Products.filter((product)=>orders.find((order:Order)=>order.products.find((item)=>compareProducts(item,product))))
+    let unpurchasedproducts=Products.filter((product)=>!orders.find((order:Order)=>order.products.find((item)=>compareProducts(item,product))))
     productsErrors=purchasedProducts.map((item)=>({product:item,error:"Already purchased"}))
     if(unpurchasedproducts.length>0)
     {
@@ -665,6 +653,16 @@ export const PackageProductsValidator=(Package:Package|undefined,Products:Produc
           }
           }
       });
+      if(Package!=undefined)
+      {
+        let countryProducts=unpurchasedproducts.filter((item)=>!productsErrors.find((item2)=>compareProducts(item2.product,item)));
+        countryProducts.forEach((item)=>{
+          if(!Package?.country.find((country)=>country==item.course.university.location.country))
+          {
+            productsErrors.push({product:item,error:"You cannot apply for universities in "+item.course.university.location.country+" with the current package"})
+          }
+        })
+      }
     }
   }
   return {categoryErrors,productsErrors,generalErrors}
@@ -685,7 +683,7 @@ export const getCategoriesFromProducts=(products: Product[])=>{
 }
 
 export const compareProducts=(product1:Product,product2:Product)=>{
-  return product1.category==product2.category && product1.course.id==product2.course.id && product1.intake==product2.intake
+  return product1.category==product2.category && product1.course._id==product2.course._id && product1.intake==product2.intake
 }
 
 export const listHandler=(id:string,data:Listquery)=>{

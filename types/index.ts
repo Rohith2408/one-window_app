@@ -264,42 +264,7 @@ export type TabScreen={
 
 export type CartItem={
     category: string,
-    course: {
-        tuitionFee: {
-            tuitionFee: number,
-            tuitionFeeType: string
-        },
-        applicationDetails: {
-            applicationFee: number,
-            applicationFeeLink: string
-        },
-        currency: {
-            symbol: string,
-            code:string
-        },
-        _id: string,
-        university: {
-            location: {
-                country:string,
-                state: string,
-                city: string
-            },
-            _id: string,
-            name: string,
-            logoSrc: string,
-            type: string,
-            establishedYear: number
-        },
-        name: string,
-        subDiscipline: string,
-        schoolName: string,
-        discipline: string,
-        studyLevel: string,
-        duration: number,
-        studyMode: string[],
-        startDate: ProgramIntake[],
-        elite: true
-    },
+    course:CourseListObj
     intake: string,
     _id: string
 }
@@ -1158,14 +1123,14 @@ export interface Meeting_Server{
     __v: number
 }
 
+export interface ServerUnpurchasedProduct{
+
+}
+
 export interface Product{
     category:string,
     intake:string,
-    course:{
-        id:string,
-        name:string,
-        icon?:string
-    }
+    course:CourseListObj
 }
 
 export interface UG_Institutes{

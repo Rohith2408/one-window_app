@@ -2,7 +2,7 @@ import { store } from "../store";
 import { setCart } from "../store/slices/cartSlice";
 import { addOrders, setOrders, updateOrder } from "../store/slices/ordersSlice";
 import { setRecommendations } from "../store/slices/recommendationsSlice";
-import { Product, Recommendation, RecommendationType, RequestInfo, ServerResponse } from "../types";
+import { Product, Recommendation, RecommendationType, RequestInfo, ServerResponse, ServerUnpurchasedProduct } from "../types";
 import { ISOtoIntakeformat, Word2Sentence, getServerRequestURL, keyVerifier, profileUpdator, serverRequest } from "../utils";
 import { cartRequest } from "../utils/serverrequests";
 
@@ -71,7 +71,7 @@ const requests:RequestInfo[]=[
     },
     {
         id:"placeorder",
-        inputValidator:(data:{products:Product[],package:string|undefined})=>{
+        inputValidator:(data:{products:ServerUnpurchasedProduct[],package:string|undefined})=>{
             console.log("Order I/P Recieved ",JSON.stringify(data,null,2));
             let keyVerifierResponse=keyVerifier(data,["packageId","products"])
             let emptyProductsRes={success:data.products.length!=0,data:undefined,message:data.products.length==0?"Products cant be empty":""}
@@ -79,13 +79,13 @@ const requests:RequestInfo[]=[
             console.log("Order I/P Validation Response ",res);
             return res
         },
-        serverCommunicator:async (data:{products:Product[],package:string|undefined})=>{
+        serverCommunicator:async (data:{products:ServerUnpurchasedProduct[],package:string|undefined})=>{
             let res=await serverRequest({
                 url:getServerRequestURL("checkout","POST"),
                 reqType:"POST",
                 body:data
             })
-            console.log("Order Server Response ",res);
+            //console.log("Order Server Response ",res);
             return res;
         },
         responseHandler:(res:ServerResponse)=>{
@@ -97,14 +97,14 @@ const requests:RequestInfo[]=[
     },
     {
         id:"addproducts",
-        inputValidator:(data:{products:Product[],orderid:string})=>{
+        inputValidator:(data:{products:ServerUnpurchasedProduct[],orderid:string})=>{
             console.log("Order I/P Recieved ",JSON.stringify(data,null,2));
             let keyVerifierResponse=keyVerifier(data,["orderId","products"])
             let emptyProductsRes={success:data.products.length!=0,data:undefined,message:data.products.length==0?"Products cant be empty":""}
             let res={success:keyVerifierResponse.success && emptyProductsRes.success,data:data,message:Word2Sentence([keyVerifierResponse.message,emptyProductsRes.message])}
             return res
         },
-        serverCommunicator:async (data:{products:Product[],orderId:string})=>{
+        serverCommunicator:async (data:{products:ServerUnpurchasedProduct[],orderId:string})=>{
             let res=await serverRequest({
                 url:getServerRequestURL("add-products","POST"),
                 reqType:"POST",

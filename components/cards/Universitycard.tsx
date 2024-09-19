@@ -54,7 +54,42 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    sub_wrapper:{
+        gap:7,
+        borderRadius:30
+    },
+    bg_wrapper:{
+        borderRadius:30,
+        left:15,
+        top:15,
+    },
+    name:{
+        fontSize:14,
+        lineHeight:20
+    },
+    icon:{
+        width:18,
+        height:18,
+        borderRadius:100,
+        resizeMode:"contain"
+    },
+    uni_name:{
+        fontSize:12
+    },
+    misc:{
+        fontSize:14
+    },
+    important:{
+        fontSize:10
+    },
+    stem_banner_text:{
+        fontSize:10
+    },
+    go_icon:{
+        width:10,
+        height:10,
+        resizeMode:"contain"
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -72,8 +107,8 @@ const MobileSStyles=StyleSheet.create({
         lineHeight:18
     },
     icon:{
-        width:22,
-        height:22,
+        width:16,
+        height:16,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -111,8 +146,8 @@ const MobileMStyles=StyleSheet.create({
         lineHeight:20
     },
     icon:{
-        width:24,
-        height:24,
+        width:18,
+        height:18,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -136,7 +171,42 @@ const MobileMStyles=StyleSheet.create({
 })
 
 const MobileLStyles=StyleSheet.create({
-    
+    sub_wrapper:{
+        gap:7,
+        borderRadius:30
+    },
+    bg_wrapper:{
+        borderRadius:30,
+        left:15,
+        top:15,
+    },
+    name:{
+        fontSize:14,
+        lineHeight:20
+    },
+    icon:{
+        width:18,
+        height:18,
+        borderRadius:100,
+        resizeMode:"contain"
+    },
+    uni_name:{
+        fontSize:12
+    },
+    misc:{
+        fontSize:14
+    },
+    important:{
+        fontSize:10
+    },
+    stem_banner_text:{
+        fontSize:10
+    },
+    go_icon:{
+        width:10,
+        height:10,
+        resizeMode:"contain"
+    }
 })
 
 const styles={
@@ -173,9 +243,11 @@ const Universitycard=(props:UniversityListObj & {index:number})=>{
                 </View> 
                 <View style={{flexDirection:'row',gap:5}}>
                     <View style={[GeneralStyles.info_wrapper]}>
-                        <Image source={props.logoSrc} style={[styles[Device].icon]}/>
                         <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.name}</Text>
-                        <Text style={[styles[Device].uni_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.location.city,props.location.state,props.location.country])}</Text>
+                        <View style={{flexDirection:"row",alignItems:"center",gap:5}}>
+                            <Image source={props.logoSrc} style={[styles[Device].icon]}/>
+                            <Text style={[styles[Device].uni_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.location.city,props.location.state,props.location.country])}</Text>
+                        </View>
                     </View>
                     <View style={{flexDirection:"row",alignItems:'center'}}><Image source={go_icon} style={[styles[Device].go_icon,{transform:[{scaleX:-1}]}]}/></View>
                 </View>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
-import { Course, Event, Product, ProgramIntake, ServerResponse } from "../../types"
+import { Course, Event, ServerResponse } from "../../types"
 import { PackageProductsValidator, Word2Sentence, getDevice, getLightThemeColor, getServerRequestURL, getThemeColor, serverRequest } from "../../utils";
 import { cartRequest } from "../../utils/serverrequests";
 import useNavigation from "../../hooks/useNavigation";

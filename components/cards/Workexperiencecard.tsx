@@ -14,6 +14,7 @@ import { store } from "../../store"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
 import { setWorkExperience } from "../../store/slices/workexperienceSlice"
 import useNavigation from "../../hooks/useNavigation"
+import { addToBasket } from "../../constants/basket"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -216,7 +217,13 @@ const Workexperiencecard=(props:{data:WorkExperience,index:number})=>{
     }
 
     const edit=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Workexperience",forminitialdataid:props.data._id}}}):null
+        addToBasket("currentlyworking",{callback:addWork,initialStatus:!props.data.Ongoing})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Currentlyworking",flyerdata:{currentlyWorkingBasketid:"currentlyworking"}}}}):null
+        //navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Workexperience",forminitialdataid:props.data._id}}}):null
+    }
+
+    const addWork=(currentlyworking:boolean)=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:currentlyworking?"Workexperience_working":"Workexperience_completed",forminitialdataid:props.data._id}}}):null
     }
 
     //console.log("ids",props.data)

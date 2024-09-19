@@ -37,52 +37,29 @@ const Payment = () => {
   }).current;
 
   const handlePayment = async (response: any) => {
-    //console.log("razor pay response",JSON.stringify(response,null,2));
-    try {
-      let res:ServerResponse=await serverRequest({
-        reqType:"POST",
-        url:getServerRequestURL("payment-verification","POST"),
-        body:response
+    console.log("razor pay response",response,getServerRequestURL("payment-verification","POST"));
+    let res:ServerResponse=await serverRequest({
+      reqType:"POST",
+      url:getServerRequestURL("payment-verification","POST"),
+      body:response
+    })
+    console.log("payment verification response",JSON.stringify(res,null,2));
+    if (res.success) {
+      const response1 = await serverRequest({
+        url:getServerRequestURL("order-info","GET",{orderId:res.data.reference}),
+        reqType:"GET"
       })
-      console.log("payment verification response",JSON.stringify(res,null,2));
-      if (res.success) {
-        const response1 = await serverRequest({
-          url:getServerRequestURL("order-info","GET",{orderId:res.data.reference}),
-          reqType:"GET"
-        })
-        console.log("order response",JSON.stringify(response1,null,2));
-        if (response1) {
-          //dispatch()
-          let order:Order=response1.data
-          dispatch(updateOrder(response1.data));
-          dispatch(setCart(store.getState().cart.data.filter((cartitem)=>!order.products.find((orderitem)=>
-            compareProducts({
-              category:cartitem.category,
-              intake:cartitem.intake,
-              course:{
-                  id:cartitem.course._id,
-                  name:cartitem.course.name,
-                  icon:""
-              }
-            },
-            {
-              category:orderitem.category,
-              intake:orderitem.intake,
-              course:{
-                  id:orderitem.course._id,
-                  name:orderitem.course.name,
-                  icon:""
-              }
-            }
-          )))))
-          navigate({type:"RemovePages",payload:[{id:"Payment"},{id:"Order"},{id:"Ordersummary"}]})
-        }
-      } 
-      else {
-        console.log('Payment verification failed');
+      console.log("order response",JSON.stringify(response1,null,2));
+      if (response1) {
+        //dispatch()
+        let order:Order=response1.data
+        console.log("res order",JSON.stringify(response1.data,null,2));
+        dispatch(updateOrder(response1.data));
+        navigate({type:"RemovePages",payload:[{id:"Payment"},{id:"Order"},{id:"Ordersummary"},{id:"Cart"}]})
       }
-    } catch (error) {
-      console.error('Error verifying payment:', error);
+    } 
+    else {
+      console.log('Payment verification failed');
     }
   };
 

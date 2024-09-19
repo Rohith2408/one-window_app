@@ -172,6 +172,8 @@ const Ordercard=(props:Order & {index:number})=>{
         
     },[])
 
+    console.log("Payment",props.paymentDetails.created_at);
+
     return(
     <View style={[GeneralStyles.sub_wrapper]}>
         <View style={[GeneralStyles.icon_wrapper]}>

@@ -16,7 +16,8 @@ const TabStyles=StyleSheet.create({
 
 const MobileSStyles=StyleSheet.create({
     title:{
-        fontSize:14
+        fontSize:14,
+        lineHeight:20
     },
     check_circle:{
         width:15,
@@ -32,7 +33,8 @@ const MobileSStyles=StyleSheet.create({
 })
 const MobileMStyles=StyleSheet.create({
     title:{
-        fontSize:16
+        fontSize:16,
+        lineHeight:24
     },
     check_circle:{
         width:17,
@@ -72,8 +74,10 @@ const styles={
 
 const Currentlyworking=(props:{currentlyWorkingBasketid:string})=>{
 
+    const info=useRef(getBasket(props.currentlyWorkingBasketid)).current
+    console.log("inf",info)
     const Device=useRef<keyof typeof styles>(getDevice()).current
-    const [isCompleted,setIsCompleted]=useState(true);
+    const [isCompleted,setIsCompleted]=useState(info.initialStatus!=undefined?info.initialStatus:true);
     const animindex=useRef(new Animated.Value(0)).current;
     const [path,navigate]=useNavigation()
 
@@ -86,13 +90,15 @@ const Currentlyworking=(props:{currentlyWorkingBasketid:string})=>{
 
     const next=()=>{
         navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
-        getBasket(props.currentlyWorkingBasketid).callback(!isCompleted)
+        info.callback(!isCompleted)
     }
 
+    console.log("current",isCompleted,info.initialStatus);
+
     return(
-        <View style={{paddingTop:20,gap:10}}>
-            <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Are you still working in the company?</Text>
-            <View style={{gap:10}}>
+        <View style={{paddingTop:20,gap:15}}>
+            <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Before proceeding, could you please let us know your current employment status at this company?</Text>
+            <View style={{gap:15}}>
                 <View>
                     <Pressable onPress={()=>setIsCompleted(false)} style={{flexDirection:'row',alignItems:'center',gap:5}}>
                         <View style={[styles[Device].check_circle,{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}]}>

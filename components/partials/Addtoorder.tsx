@@ -13,6 +13,7 @@ import Unpurchasedproductscard from "../cards/Unpurchasedproductcard"
 import tick from "../../assets/images/misc/tick_black.png"
 import { Image } from "expo-image"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
+import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -112,11 +113,10 @@ const Addtoorder=(props:{orderinfoid:string})=>{
             orderId:orderInfo.orderId,
             products:Products.map((item)=>({
                 category: item.category,
-                courseId:item.course.id,
+                courseId:item.course._id,
                 intake: item.intake
             }))
         }
-        //setIsloading(true);
         let serverRes={success:false,message:"",data:undefined};
         let requestInfo=requests.find((item)=>item.id=="addproducts");
         let validation=requestInfo?.inputValidator(data);
@@ -129,9 +129,31 @@ const Addtoorder=(props:{orderinfoid:string})=>{
             {
                 //setIsloading(false);
                 requestInfo?.responseHandler(serverRes);
+                await removeCartItems(Products);
+                navigate({type:"RemovePages",payload:[{id:"Addtoorder"},{id:"Cart"}]})
             }
         }
         return serverRes?.success
+    }
+
+    const removeCartItems=async (products:Product[])=>{
+        let data={
+            action:"remove",
+            itemIds:store.getState().cart.data.filter((cartitem)=>products.find((orderitem)=>compareProducts(cartitem,orderitem))).map((item)=>item._id)
+        }
+        let serverRes={success:false,message:"",data:undefined};
+        let requestInfo=requests.find((item)=>item.id=="removeFromCart");
+        let validation=requestInfo?.inputValidator(data);
+        console.log("Res",serverRes,requestInfo);
+        if(validation?.success)
+        {
+            serverRes=await requestInfo?.serverCommunicator(data);
+            console.log("Server res",JSON.stringify(serverRes,null,2))
+            if(serverRes?.success)
+            {
+                requestInfo?.responseHandler(serverRes);
+            }
+        }
     }
 
     const deleteProduct=(item:Product)=>{
@@ -141,7 +163,6 @@ const Addtoorder=(props:{orderinfoid:string})=>{
     
     let validation=PackageProductsValidator(orderInfo.package,Products)
     errors.current={category:validation.categoryErrors,products:validation.productsErrors,general:validation.generalErrors}
-    // console.log("Errors",JSON.stringify(errors.current,null,2));
     console.log("infff",orderInfo);
 
     return(
@@ -164,7 +185,7 @@ const Addtoorder=(props:{orderinfoid:string})=>{
                 <ScrollView contentContainerStyle={{gap:30,paddingBottom:20}}>
                 {
                     Products.map((product,i)=>
-                    <View key={product.course.id+product.intake} style={{gap:7.5}}>
+                    <View key={product.course._id+product.intake} style={{gap:7.5}}>
                         <Unpurchasedproductscard data={product} deleteHandler={deleteProduct} index={i}/>
                         <Text style={[{alignSelf:"flex-end",fontFamily:Fonts.NeutrifStudio.Regular,color:"red"},styles[Device].error]}>{errors.current.products?.find((item)=>compareProducts(item.product,product))?.error}</Text>
                     </View>

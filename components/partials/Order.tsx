@@ -108,20 +108,11 @@ const Order=(props:{orderinfoid:string})=>{
     const errors=useRef<error>({category:undefined,products:undefined,general:undefined});
     const suggestedPackages=useAppSelector((state)=>state.suggestedpackages.data);
 
-    useEffect(()=>{
-        // let errors=PackageProductsValidator(Package,Products)
-        // setCategoryError(errors.categoryErrors);
-        // setProductErrors(errors.productsErrors);
-        // setGeneralErrors(errors.generalErrors)
-        // console.log("errors",JSON.stringify(errors,null,2))
-    },[Package,Products])
-
     const packageSelected=(item:Package[])=>{
         setPackage(item[0]);
     }
 
     const deleteProduct=(item:Product)=>{
-        console.log("data")
         setProducts(Products.filter((product)=>!compareProducts(item,product)))
     }
 
@@ -135,8 +126,6 @@ const Order=(props:{orderinfoid:string})=>{
     
     let validation=PackageProductsValidator(Package,Products)
     errors.current={category:validation.categoryErrors,products:validation.productsErrors,general:validation.generalErrors}
-    // console.log("Errors",JSON.stringify(errors.current,null,2));
-    // console.log("package",Package?.name);
 
     return(
         <View style={{flex:1}}>
@@ -167,7 +156,7 @@ const Order=(props:{orderinfoid:string})=>{
                 <ScrollView contentContainerStyle={{gap:30,paddingBottom:20}}>
                 {
                     Products.map((product,i)=>
-                    <View key={product.course.id+product.intake} style={{gap:7.5}}>
+                    <View key={product.course._id+product.intake} style={{gap:7.5}}>
                         <Unpurchasedproductscard data={product} deleteHandler={deleteProduct} index={i}/>
                         <Text style={[{alignSelf:"flex-end",fontFamily:Fonts.NeutrifStudio.Regular,color:"red"},styles[Device].error]}>{errors.current.products?.find((item)=>compareProducts(item.product,product))?.error}</Text>
                     </View>

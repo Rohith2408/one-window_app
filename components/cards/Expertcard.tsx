@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native"
 import { Advisor } from "../../types"
-import { Word2Sentence, getDevice, setWordCase } from "../../utils"
+import { Word2Sentence, getDevice, getLightThemeColor, getThemeColor, setWordCase } from "../../utils"
 import { Image } from "expo-image"
 import { useRef } from "react"
 import expert_icon from '../../assets/images/misc/expert.png'
@@ -123,14 +123,14 @@ const Expertcard=(props:Advisor & {index:number})=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
     
     return(
-        <View style={[GeneralStyles.wrapper,styles[Device].wrapper,{backgroundColor:props.index%2==0?Themes.Light.OnewindowPurple(0.5):Themes.Light.OnewindowTeal(0.7)}]}>
+        <View style={[GeneralStyles.wrapper,styles[Device].wrapper,{backgroundColor:getLightThemeColor(props.index)}]}>
             <View style={[GeneralStyles.sub_wrapper]}>
                 <View style={[GeneralStyles.sub_wrapper1]}>
                     <View style={[GeneralStyles.icon_wrapper]}><Image source={expert_icon} style={[styles[Device].icon]}></Image></View>
                     <View style={[GeneralStyles.info_wrapper]}>
                         <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold}]}>{Word2Sentence([props.info.firstName,props.info.lastName],""," ")}</Text>
                         <Text style={[styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.info.email}</Text>
-                        <View style={[styles[Device].role_wrapper,{backgroundColor:props.index%2==0?Themes.Light.OnewindowPurple(1):Themes.Light.OnewindowTeal(1),borderRadius:100}]}><Text style={[styles[Device].role,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{setWordCase(props.info.role)}</Text></View>
+                        <View style={[styles[Device].role_wrapper,{backgroundColor:getThemeColor(props.index),borderRadius:100}]}><Text style={[styles[Device].role,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{setWordCase(props.info.role)}</Text></View>
                     </View>
                 </View>
                 <View style={[GeneralStyles.sub_wrapper2]}>

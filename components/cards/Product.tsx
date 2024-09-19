@@ -63,7 +63,6 @@ const GeneralStyles=StyleSheet.create({
         gap:5
     },
     intake_wrapper:{
-        flex:1,
         display:"flex",
         flexDirection:"row",
         justifyContent:"center",
@@ -292,8 +291,6 @@ const Product=(props:PurchasedProduct & {index:number})=>{
     ]).current
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
-    console.log("products",props.status);
-
     return(
         <View style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>
             <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
@@ -308,6 +305,10 @@ const Product=(props:PurchasedProduct & {index:number})=>{
                             <Image source={props.course.university.logoSrc} style={[styles[Device].uni_icon,GeneralStyles.uni_icon]}/>
                             <View style={{flex:1}}><Text style={[styles[Device].uni_name,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{truncateString(props.course.university.name,30,true)}</Text></View>
                         </View>
+                        <View style={[GeneralStyles.intake_wrapper,{alignSelf:"flex-start"}]}>
+                            <Image source={clock} style={[styles[Device].intake_icon]}/>
+                            <Text style={[styles[Device].intake,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Intake: "+formatDate(props.intake)}</Text>
+                        </View>
                         {/* <View style={[{backgroundColor:'black',borderRadius:10},styles[Device].seperator]}></View>
                         <View style={[GeneralStyles.intake_wrapper]}>
                             <Image source={clock} style={[styles[Device].intake_icon]}/>
@@ -315,10 +316,10 @@ const Product=(props:PurchasedProduct & {index:number})=>{
                         </View> */}
                     </View> 
                 </View>
-                <View style={[GeneralStyles.intake_wrapper,{alignSelf:"flex-end"}]}>
+                {/* <View style={[GeneralStyles.intake_wrapper,{alignSelf:"flex-start"}]}>
                     <Image source={clock} style={[styles[Device].intake_icon]}/>
                     <Text style={[styles[Device].intake,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Intake: "+formatDate(props.intake)}</Text>
-                </View>
+                </View> */}
                 <View style={[GeneralStyles.status_wrapper]}>
                     <View style={[GeneralStyles.status]}>
                         <Image source={processing_icon} style={[styles[Device].status_icon]} />

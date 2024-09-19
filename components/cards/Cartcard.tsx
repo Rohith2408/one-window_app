@@ -75,7 +75,7 @@ const MobileSStyles=StyleSheet.create({
 
     },
     sub_wrapper:{
-        gap:10,
+        gap:15,
         borderRadius:25
     },
     bg_wrapper:{
@@ -87,8 +87,8 @@ const MobileSStyles=StyleSheet.create({
         fontSize:10
     },
     icon:{
-        width:24,
-        height:24,
+        width:14,
+        height:14,
         resizeMode:"contain"
     },
     course_name:{
@@ -112,7 +112,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     sub_wrapper:{
-        gap:15,
+        gap:20,
         borderRadius:30
     },
     bg_wrapper:{
@@ -121,8 +121,8 @@ const MobileMStyles=StyleSheet.create({
         top:10,
     },
     icon:{
-        width:24,
-        height:24,
+        width:16,
+        height:16,
         resizeMode:"contain"
     },
     course_name:{
@@ -150,8 +150,8 @@ const MobileLStyles=StyleSheet.create({
         top:10,
     },
     icon:{
-        width:24,
-        height:24,
+        width:16,
+        height:16,
         resizeMode:"contain"
     },
     course_name:{
@@ -240,7 +240,7 @@ const Cartcard=(props:CartItem & {index:number})=>{
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
-            {/* <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View> */}
+            <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
             <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:getLightThemeColor(props.index%4)}]}>
                 <View style={[GeneralStyles.superset_wrapper]}>
                     <View style={{borderRadius:100,backgroundColor:getThemeColor(props.index%4)}}>
@@ -252,9 +252,11 @@ const Cartcard=(props:CartItem & {index:number})=>{
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <View style={[GeneralStyles.info_subwrapper]}>
-                        <Image style={[styles[Device].icon,{borderRadius:100}]} source={props.course.university.logoSrc}/>
                         <Text style={[styles[Device].course_name,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.course.name}</Text>
-                        <Text style={[styles[Device].uni_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.course.university.name}</Text>
+                        <View style={{flexDirection:"row",alignItems:"center",gap:5}}>
+                            <Image style={[styles[Device].icon,{borderRadius:100}]} source={props.course.university.logoSrc}/>
+                            <Text style={[styles[Device].uni_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.course.university.name}</Text>
+                        </View>
                     </View>
                     <View style={{display:"flex",flexDirection:"row",alignItems:'center',transform:[{scaleX:-1}]}}><Image source={go_icon} style={[styles[Device].go_icon]}/></View>
                 </View>

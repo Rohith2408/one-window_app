@@ -1,7 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Package, Product } from "../../types"
 import { addToBasket, getBasket } from "../../constants/basket"
-import { formatDate, getDevice } from "../../utils"
+import { compareProducts, formatDate, getDevice } from "../../utils"
 import { requests } from "../../constants/requests"
 import useNavigation from "../../hooks/useNavigation"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
@@ -12,6 +12,7 @@ import Unpurchasedproductscard from "../cards/Unpurchasedproductcard"
 import { Fonts, Themes } from "../../constants"
 import { useRef, useState } from "react"
 import loader from '../../assets/images/misc/loader.gif'
+import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -109,43 +110,43 @@ const Ordersummary=(props:{ordersummaryid:string})=>{
         let requestInfo=requests.find((item)=>item.id=="placeorder");
         let inputvalidation=requestInfo?.inputValidator({packageId:orderInfo.package?._id,products:orderInfo.products.map((item)=>({
             category: item.category,
-            courseId:item.course.id,
+            courseId:item.course._id,
             intake: item.intake
         }))})
         if(inputvalidation?.success)
         {
             let serverRes=await requestInfo?.serverCommunicator(inputvalidation.data);
+            console.log("server res",JSON.stringify(serverRes,null,2));
             if(serverRes?.success)
             {
+                requestInfo?.responseHandler(serverRes);
+                await removeCartItems(orderInfo.products);
                 setIsloading(false);
-                await requestInfo?.responseHandler(serverRes);
                 addToBasket("payment_options",serverRes.data.order.paymentDetails);
                 navigate?navigate({type:"AddScreen",payload:{screen:"Payment"}}):null
             }
         }
     }
 
-    // "order": {
-    //     "student": "66d842496fc02725b73b5386",
-    //     "Package": "66b8414fcfe5abb913e9b1bd",
-    //     "products": [
-    //       "66d87ec6537413cd6d46596e"
-    //     ],
-    //     "paymentDetails": {
-    //       "amount": 0,
-    //       "amount_due": 0,
-    //       "created_at": "2024-09-04T15:37:42.474Z",
-    //       "currency": "INR",
-    //       "paymentStatus": "paid"
-    //     },
-    //     "status": "pending",
-    //     "_id": "66d87ec6537413cd6d465970",
-    //     "logs": [],
-    //     "createdAt": "2024-09-04T15:37:42.475Z",
-    //     "updatedAt": "2024-09-04T15:37:42.475Z",
-    //     "__v": 0
-    //   },
-    //   "razorPay": null
+    const removeCartItems=async (products:Product[])=>{
+        let data={
+            action:"remove",
+            itemIds:store.getState().cart.data.filter((cartitem)=>products.find((orderitem)=>compareProducts(cartitem,orderitem))).map((item)=>item._id)
+        }
+        let serverRes={success:false,message:"",data:undefined};
+        let requestInfo=requests.find((item)=>item.id=="removeFromCart");
+        let validation=requestInfo?.inputValidator(data);
+        console.log("Res",serverRes,requestInfo);
+        if(validation?.success)
+        {
+            serverRes=await requestInfo?.serverCommunicator(data);
+            console.log("Server res",JSON.stringify(serverRes,null,2))
+            if(serverRes?.success)
+            {
+                requestInfo?.responseHandler(serverRes);
+            }
+        }
+    }
 
     return(
         <View style={{flex:1,gap:30}}>
@@ -184,3 +185,19 @@ const Ordersummary=(props:{ordersummaryid:string})=>{
 }
 
 export default Ordersummary
+
+
+// {
+//     "success":true,
+//     "message":"order placed",
+//     "data":
+//     {
+//         "razorPay":{"amount":1490000,"amount_due":1490000,"amount_paid":0,"attempts":0,"created_at":1726586923,"currency":"INR","entity":"order","id":"order_OyHcF0fD5FuzJS","notes":{"item_ids":{"package":null,"products":["66e9a02a672766fe0243c935"]},"note_key":"purchase initiated by rohith test2"},"offer_id":null,"receipt":null,"status":"created"},
+//         "order":{
+//             "student":"66e0138c2354567185f7005d",
+//             "Package":null,
+//             "products":["66e9a02a672766fe0243c935"],
+//             "paymentDetails":{"razorpay_order_id":"order_OyHcF0fD5FuzJS","amount":1490000,"amount_due":1490000,"created_at":"1970-01-20T23:36:26.923Z","currency":"INR","paymentStatus":"pending","misc":{"amount":1490000,"amount_due":1490000,"amount_paid":0,"attempts":0,"created_at":1726586923,"currency":"INR","entity":"order","id":"order_OyHcF0fD5FuzJS","notes":{"item_ids":{"package":null,"products":["66e9a02a672766fe0243c935"]},"note_key":"purchase initiated by rohith test2"},"offer_id":null,"receipt":null,"status":"created"}},"status":"pending","logs":[{"action":"new Order Created","time":"2024-09-17T14:46:34.258Z","details":"{\"note_key\":\"purchase initiated by rohith test2\",\"item_ids\":{\"package\":null,\"products\":[\"66e9a02a672766fe0243c935\"]}}","_id":"66e9a02b672766fe0243c938"}],"_id":"66e9a02b672766fe0243c937","createdAt":"2024-09-17T15:28:43.074Z","updatedAt":"2024-09-17T15:28:43.074Z","__v":0}}}
+
+
+            

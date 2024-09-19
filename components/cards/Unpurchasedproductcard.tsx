@@ -198,7 +198,7 @@ const Unpurchasedproductscard=(props:{data:Product,index:number,hideDelete?:bool
             <View style={[GeneralStyles.sub_wrapper]}>
                 <View style={[GeneralStyles.icon_wrapper]}>
                     <View style={[GeneralStyles.icon_bg,styles[Device].icon_bg,{backgroundColor:getThemeColor(props.index)}]}></View>
-                    <Image source={props.data.course.icon} style={[styles[Device].icon]}/>
+                    <Image source={props.data.course.university.logoSrc} style={[styles[Device].icon]}/>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.data.course.name}</Text>

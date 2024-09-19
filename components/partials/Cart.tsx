@@ -152,11 +152,12 @@ const Cart=()=>{
     const addProducts=(order:Order)=>{
         addToBasket("orderinfo",{
             package:order.Package,
-            products:cart.data.map((item)=>({
-                intake:item?.intake,
-                category:item?.course.elite?"elite application":"premium application",
-                course:{name:item?.course?.name,id:item.course._id,icon:item.course.university.logoSrc}
-            }))
+            products:cart.data
+            // cart.data.map((item)=>({
+            //     intake:item?.intake,
+            //     category:item?.course.elite?"elite application":"premium application",
+            //     course:{name:item?.course?.name,id:item.course._id,icon:item.course.university.logoSrc}
+            // })
         }) 
         navigate?navigate({type:"AddScreen",payload:{screen:"Addproducts",params:{orderinfoid:"orderinfo"}}}):null
     }
@@ -165,11 +166,7 @@ const Cart=()=>{
         let existingOrders:Order[]|undefined=store.getState().orders.data.filter((item)=>item.Package!=undefined);
         addToBasket("orderinfo",{
             package:undefined,
-            products:cart.data.map((item)=>({
-                intake:item?.intake,
-                category:item?.course.elite?"elite application":"premium application",
-                course:{name:item?.course?.name,id:item.course._id,icon:item.course.university.logoSrc}
-            }))
+            products:cart.data
         }) 
         if(existingOrders?.length>0)
         {
@@ -179,11 +176,7 @@ const Cart=()=>{
         {
             addToBasket("orderinfo",{
                 package:undefined,
-                products:cart.data.map((item)=>({
-                    intake:item?.intake,
-                    category:item?.course.elite?"elite application":"premium application",
-                    course:{name:item?.course?.name,id:item.course._id,icon:item.course.university.logoSrc}
-                }))
+                products:cart.data
             }) 
             navigate?navigate({type:"AddScreen",payload:{screen:"Order",params:{orderinfoid:"orderinfo"}}}):null
         }
