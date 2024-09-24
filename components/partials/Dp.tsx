@@ -12,10 +12,11 @@ const GeneralStyles=StyleSheet.create({
         backgroundColor:"rgba(0,0,0,0.8)",
         display:"flex",
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
     },
     dp:{
-        position:"absolute"
+        position:"absolute",
+        zIndex:1
     }
 })
 

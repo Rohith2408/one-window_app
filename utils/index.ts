@@ -801,6 +801,7 @@ export const getListQuery=(currentData:Listqueryadv,newData:any)=>{
 }
 
 
+
 // export const bakeFilters=(additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[])=>{
 
 // }

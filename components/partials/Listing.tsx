@@ -10,6 +10,7 @@ import { Image } from "expo-image"
 import Listselection from "../resources/Listselection"
 import Quickfiltercard from "../cards/Quickfiltercard"
 import filter_icon from '../../assets/images/misc/filter.png'
+import { useAppSelector } from "../../hooks/useAppSelector"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -150,6 +151,8 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     const dataRequested=useRef(false);
     const Device=useRef(getDevice()).current
     const maxPages=useRef(1)
+    const phonenumber=useAppSelector((state)=>state.sharedinfo.data)?.phone;
+    const verificationStatus=useAppSelector((state)=>state.verification.data)?.find((item)=>item.type=="phone")?.status;
     //const lisbasket=getBasket(props.basketid);
 
     useEffect(()=>{
@@ -193,8 +196,26 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
         {
             if(!dataRequested.current && (e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y>e.nativeEvent.contentSize.height-20))
             {
-                props.eventHandler({name:"setPage",triggerBy:props.listid,data:props.page+1});
-                dataRequested.current=true
+                if(props.page+1>2)
+                {
+                    if(phonenumber==undefined || Object.keys(phonenumber).length==0 || !phonenumber.countryCode || !phonenumber.number){
+                        console.log("No phone number")
+                    }
+                    else if(!verificationStatus){
+                        addToBasket("phonenumber",phonenumber)
+                        navigate?navigate({type:"AddScreen",payload:{screen:"Phoneverification"}}):null
+                    }
+                    else
+                    {
+                        props.eventHandler({name:"setPage",triggerBy:props.listid,data:props.page+1});
+                    }
+                    dataRequested.current=true
+                }
+                else
+                {
+                    props.eventHandler({name:"setPage",triggerBy:props.listid,data:props.page+1});
+                    dataRequested.current=true
+                }
             }
             else
             {

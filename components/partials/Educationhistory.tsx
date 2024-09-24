@@ -21,6 +21,7 @@ import { store } from "../../store"
 import { setEducationHistory } from "../../store/slices/educationHistorySlice"
 import { useRef, useState } from "react"
 import { Fonts, Themes } from "../../constants"
+import { addToBasket } from "../../constants/basket"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -265,7 +266,7 @@ const School=(props:{data:EducationHistory_School|undefined})=>{
                     </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>
-                    <Pressable onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
+                    <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
                     <Pressable onPress={!isLoading?remove:undefined} style={{flex:1,display:"flex",justifyContent:"flex-end"}}><Image source={isLoading?loading_gif:delete_icon} style={[styles[Device].delete_icon]} /></Pressable>
                 </View>
             </View>
@@ -275,7 +276,7 @@ const School=(props:{data:EducationHistory_School|undefined})=>{
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>School</Text>
                     <View style={[GeneralStyles.nodetails_wrapper]}>
-                        <Pressable onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
+                        <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
                         <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
                     </View>
                 </View>
@@ -336,7 +337,7 @@ const Intermediate=(props:{data:EducationHistory_Plus2|undefined})=>{
                     </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>
-                    <Pressable onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
+                    <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
                     <Pressable onPress={!isLoading?remove:undefined} style={{flex:1,display:"flex",justifyContent:"flex-end"}}><Image source={isLoading?loading_gif:delete_icon} style={[styles[Device].delete_icon]} /></Pressable>
                 </View>
             </View>
@@ -346,7 +347,7 @@ const Intermediate=(props:{data:EducationHistory_Plus2|undefined})=>{
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Intermediate</Text>
                     <View style={[GeneralStyles.nodetails_wrapper]}>
-                        <Pressable onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
+                        <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
                         <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
                     </View>
                 </View>
@@ -374,6 +375,13 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
 
     const add=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Undergraduation"}}}):null
+    }
+
+    const showInstitutes=()=>{
+        addToBasket("institutions-flyer",{
+            callback:add
+        });
+        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Institutes",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
     }
 
     const remove=async ()=>{
@@ -411,7 +419,7 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
                     </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>
-                    <Pressable onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
+                    <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
                     <Pressable onPress={!isLoading?remove:undefined} style={{flex:1,display:"flex",justifyContent:"flex-end"}}><Image source={isLoading?loading_gif:delete_icon} style={[styles[Device].delete_icon]} /></Pressable>
                 </View>
             </View>
@@ -421,7 +429,7 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Undergraduate</Text>
                     <View style={[GeneralStyles.nodetails_wrapper]}>
-                        <Pressable onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
+                        <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
                         <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
                     </View>
                 </View>
@@ -486,7 +494,7 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
                     </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>
-                    <Pressable onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
+                    <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
                     <Pressable onPress={!isLoading?remove:undefined} style={{flex:1,display:"flex",justifyContent:"flex-end"}}><Image source={isLoading?loading_gif:delete_icon} style={[styles[Device].delete_icon]} /></Pressable>
                 </View>
             </View>
@@ -496,7 +504,7 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Postgraduate</Text>
                     <View style={[GeneralStyles.nodetails_wrapper]}>
-                        <Pressable onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
+                        <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
                         <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
                     </View>
                 </View>

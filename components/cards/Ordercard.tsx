@@ -5,6 +5,8 @@ import { addToBasket, removeFromBasket } from "../../constants/basket"
 import { useEffect, useRef } from "react"
 import { Image } from "expo-image"
 import upload_icon from '../../assets/images/misc/upload.png'
+import clock_icon from '../../assets/images/misc/clock.png'
+import products_icon from '../../assets/images/misc/products.png'
 import { Word2Sentence, formatDate, getDevice, getThemeColor, setWordCase } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 
@@ -31,7 +33,7 @@ const GeneralStyles=StyleSheet.create({
         display:"flex",
         flex:1,
         flexDirection:"column",
-        gap:7.5,
+        gap:9,
     },
     actions_wrapper:{
         display:'flex',
@@ -177,7 +179,7 @@ const Ordercard=(props:Order & {index:number})=>{
     return(
     <View style={[GeneralStyles.sub_wrapper]}>
         <View style={[GeneralStyles.icon_wrapper]}>
-            <Image source={upload_icon} style={[styles[Device].icon]}/>
+            <Image source={products_icon} style={[styles[Device].icon]}/>
         </View>
         <View style={[GeneralStyles.info_wrapper]}>
             {/* <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
@@ -186,12 +188,12 @@ const Ordercard=(props:Order & {index:number})=>{
             </Animated.View> */}
             <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.Package?props.Package.name:"Direct Purchase"}</Text>
             <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
-                <Image style={[styles[Device].clock_icon]} source={upload_icon} />
-                <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Price - "+props.paymentDetails.currency+" "+props.paymentDetails.amount/100+" | "+setWordCase(props.paymentDetails.paymentStatus)+" | "+"Products-"+props.products.length}</Text>
+                <Image style={[styles[Device].clock_icon]} source={clock_icon} />
+                <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Order placed on "+formatDate(props.paymentDetails.created_at)}</Text>
             </View>
             <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
                 <Image style={[styles[Device].clock_icon]} source={upload_icon} />
-                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{formatDate(props.paymentDetails.created_at)}</Text>
+                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Price - "+props.paymentDetails.currency+" "+props.paymentDetails.amount/100+" | "+setWordCase(props.paymentDetails.paymentStatus)+" | "+"Products-"+props.products.length}</Text>
             </View>
         </View>
         {

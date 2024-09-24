@@ -57,7 +57,7 @@ const Testoptions=()=>{
     }
 
     return(
-        <View style={{flex:1,paddingTop:10}}>
+        <View style={{flex:1,paddingTop:10,gap:10}}>
         {
             Tests.map((test)=>
             <Pressable onPress={()=>openForm(test.name)}>

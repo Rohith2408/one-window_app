@@ -1134,11 +1134,14 @@ export interface Product{
 }
 
 export interface UG_Institutes{
-    instituteName:string,
-    city:string,
-    state:string,
-    country:string,
-    affiliatedUniversity:string
+    InstitutionName:string,
+    IEH: {exists: false},
+    //city:string,
+    State?:string,
+    District?:string,
+    university:string[]
+    // country:string,
+    //affiliatedUniversity:string
 }
 
 export interface PurchasedProduct{

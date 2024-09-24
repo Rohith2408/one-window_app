@@ -155,8 +155,6 @@ const Forgotpassword=()=>{
         (ref.current && unit!=undefined)?ref.current.scrollTo({x:unit*page,animated:true}):null
     },[page,unit])
 
-    console.log("Forgoooot");
-
     return(
         <View onLayout={(e)=>setUnit(e.nativeEvent.layout.width)} style={[GeneralStyles.main_wrapper]}>
             {/* <Text style={{padding:20,alignSelf:"center"}}>Phone number verification</Text> */}
@@ -185,6 +183,7 @@ const Requestotp=(props:{setPage:any,setEmail:any})=>{
     const [error,setError]=useState<string|undefined>("");
 
     const requestOtp=async ()=>{
+        console.log("forgot",email);
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("forgot-password-getcode","POST"),
             reqType:"POST",

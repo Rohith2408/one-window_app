@@ -204,7 +204,7 @@ const forms:FormInfo[]=[
                 {id:"password",value:""},
                 {id:"confirmpassword",value:""},
                 {id:"preffereddestinations",value:[]},
-                {id:"prefferedlanguage",value:[]},
+                //{id:"prefferedlanguage",value:[]},
             ]
         },
         submit:{
@@ -215,15 +215,15 @@ const forms:FormInfo[]=[
                     email:data[data.findIndex((item)=>item.id=="email")].value,
                     password:data[data.findIndex((item)=>item.id=="password")].value,
                     confirmpassword:data[data.findIndex((item)=>item.id=="confirmpassword")].value,
-                    preffereddestinations:data[data.findIndex((item)=>item.id=="preffereddestinations")].value[0].value,
-                    prefferedlanguage:data[data.findIndex((item)=>item.id=="prefferedlanguage")].value[0].value,
+                    preffereddestinations:data[data.findIndex((item)=>item.id=="preffereddestinations")].value.map((item)=>(item.value)),
+                    //prefferedlanguage:data[data.findIndex((item)=>item.id=="prefferedlanguage")].value[0].value,
                 }
                 return info
             },
             onSubmit:async (data:{firstname:string,lastname:string,email:string,password:string,confirmpassword:string,preffereddestinations:string[],prefferedlanguage:string})=>{
                 console.log("reg",data);
                 let deviceToken=await SecureStore.getItemAsync(secureStoreKeys.DEVICE_TOKEN);
-                let res:ServerResponse=await serverRequest({url:getServerRequestURL("register","POST"),routeType:"public",reqType:"POST",body:{firstName:data.firstname,lastName:data.lastname,email:data.email,password:data.password,country:data.preffereddestinations,language:data.prefferedlanguage}})
+                let res:ServerResponse=await serverRequest({url:getServerRequestURL("register","POST"),routeType:"public",reqType:"POST",body:{firstName:data.firstname,lastName:data.lastname,email:data.email,password:data.password,country:data.preffereddestinations}})//,language:data.prefferedlanguage
                 console.log("ressss signup",res)
                 return res;
             },
@@ -1094,7 +1094,7 @@ const forms:FormInfo[]=[
                     component:Textbox,
                     props:{placeholder:"Ramadevi Public School"}
                 },
-                title:"Institute Name",
+                title:"School Name",
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
@@ -2101,15 +2101,16 @@ const forms:FormInfo[]=[
                     affiliatedUniversity:data[data.findIndex((item)=>item.id=="affiliateduniversity")].value,
                     programMajor:data[data.findIndex((item)=>item.id=="programmajor")].value,
                     gradingSystem: data[data.findIndex((item)=>item.id=="gradingsystem")].value[0].value,
-                    totalScore: data[data.findIndex((item)=>item.id=="totalscore")].value,
+                    totalScore: data[data.findIndex((item)=>item.id=="totalscore")].value.toString(),
                     startDate: data[data.findIndex((item)=>item.id=="startdate")].value,
                     endDate: data[data.findIndex((item)=>item.id=="enddate")].value,
-                    backlogs:data[data.findIndex((item)=>item.id=="backlogs")].value,
+                    backlogs:data[data.findIndex((item)=>item.id=="backlogs")].value.toString(),
                     isCompleted:data[data.findIndex((item)=>item.id=="completed")].value=="yes"?true:false
                 }
                 return ugdetail
             },
             onSubmit:async (data:EducationHistory_UnderGraduation)=>{
+                console.log("dyat",data);
                 let res:ServerResponse=await profileUpdator({education:{...store.getState().educationhistory.data,underGraduation:data}},(res)=>res.success?store.dispatch(setEducationHistory(res.data.education)):null)
                 console.log("Server res",res);
                 return res
@@ -3309,7 +3310,7 @@ const forms:FormInfo[]=[
                     }
                 },
                 isOptional:true,
-                title:"Study Level",
+                title:"Ideal Study Level",
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined

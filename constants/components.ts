@@ -53,6 +53,7 @@ import Degreepreference from "../components/partials/Degreepreference"
 import Currentlyworking from "../components/flyers/Currentlyworking"
 import Existingorders from "../components/flyers/Existingorders"
 import Addtoorder from "../components/partials/Addtoorder"
+import Institutes from "../components/flyers/Institutes"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -74,6 +75,7 @@ const components:ScreenInfo[]=[
     {id:"Dropdownoptionsasync",component:Dropdownoptionsasync,type:"Flyer"},
     {id:"Emailverification",component:Emailverification,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Phoneverification",component:Phoneverification,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Institutes",component:Institutes,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Personalinfo",component:Personalinfo,type:"Partial",title:"Personal Info",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3,swipeDirection:"X"},
     {id:"DPoptions",component:DPoptions,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Dp",component:Dp,type:"Popup",props:["image"],swipeDirection:"XY",isTransparent:true,occupyFullScreen:true,animationStyle:"FadeIn",removalThreshold:0.5},

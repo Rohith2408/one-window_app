@@ -260,7 +260,7 @@ const Cartcard=(props:CartItem & {index:number})=>{
                     </View>
                     <View style={{display:"flex",flexDirection:"row",alignItems:'center',transform:[{scaleX:-1}]}}><Image source={go_icon} style={[styles[Device].go_icon]}/></View>
                 </View>
-                <View style={[GeneralStyles.footer_wrapper]}><Text style={[styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{"Intake - "+formatDate(props.intake)}</Text></View>
+                <View style={[GeneralStyles.footer_wrapper]}><Text style={[styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{"Course Starting - "+formatDate(props.intake)}</Text></View>
             </View>
         </View>
     )

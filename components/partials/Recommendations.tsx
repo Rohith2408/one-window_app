@@ -125,8 +125,8 @@ const Recommendations=()=>{
                     {
                         generationStatus && profileChangeStatus && profileCompletionStatus
                         ?
-                        <Pressable style={{flexDirection:"column",alignItems:"center",justifyContent:"center"}} onPress={generateRecommendations}>
-                            <Text style={{alignSelf:"center",fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}}>Regenerate</Text>
+                        <Pressable style={{flexDirection:"column",alignItems:"center",alignSelf:"center",justifyContent:"center"}} onPress={generateRecommendations}>
+                            <Text style={{alignSelf:"center",padding:5,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}}>Regenerate</Text>
                             <Loader loaderStyles={styles[Device].loader} isLoading={isLoading}/>
                         </Pressable>
                         :
