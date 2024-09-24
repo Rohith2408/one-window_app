@@ -3,11 +3,12 @@ import useNavigation from "../../hooks/useNavigation"
 import { getDevice } from "../../utils"
 import { useRef } from "react"
 import useTheme from "../../hooks/useTheme"
-import {Themes } from "../../constants"
+import {Fonts, Themes } from "../../constants"
 import { Image } from "expo-image";
 import destinations_icon from "../../assets/images/explore/destinations.png"
 import universities_icon from '../../assets/images/explore/universities.png'
 import programs_icon from '../../assets/images/explore/programs.png'
+import university_icon from '../../assets/images/misc/mallareddylogo.png'
 import { Device } from "../../types"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import List from "../resources/List"
@@ -198,6 +199,7 @@ const MobileLStyles=StyleSheet.create({
         width:34,
         height:34
     },
+
     explore_text:{
         fontSize:12
     },
@@ -246,9 +248,13 @@ const Home=(props:undefined|{name:string})=>{
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper]}>
-                <View style={{position:"relative"}}>
+                <View style={{position:"relative",gap:10}}>
                     <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
                     <Text style={[{color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {personalinfo.data?.firstName}!</Text>
+                    <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
+                        <Image source={university_icon} style={[GeneralStyles.explore_icon,{width:24,height:24,resizeMode:"contain"}]}></Image>
+                        <Text style={{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.5)}}>Malla Reddy University</Text>
+                    </View>
                 </View>
                 <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
                     <Text style={[GeneralStyles.search_text,styles[Device].search_text]}>Search for "Harvard University"</Text>
