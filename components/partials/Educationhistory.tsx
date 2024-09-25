@@ -67,7 +67,58 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    card_wrapper:{
+        width:"100%",
+        height:75
+    },
+    info_wrapper:{
+        gap:10
+    },
+    card_icon:{
+        width:25,
+        height:25,
+        resizeMode:'contain'
+    },
+    edit_icon:{
+        width:15,
+        height:15,
+        resizeMode:'contain'
+    },
+    delete_icon:{
+        width:15,
+        height:15,
+        resizeMode:'contain'
+    },
+    location_icon:{
+        width:10,
+        height:10,
+        resizeMode:'contain'
+    },
+    info_icon:{
+        width:10,
+        height:10,
+        resizeMode:'contain'
+    },
+    text1:{
+        fontSize:14
+    },
+    text2:{
+        fontSize:12
+    },
+    text3:{
+        fontSize:12
+    },
+    title:{
+        fontSize:10
+    },
+    nodetails_icon:{
+        width:15,
+        height:15,
+        resizeMode:'contain'
+    },
+    nodetails:{
+        fontSize:12
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -181,7 +232,58 @@ const MobileMStyles=StyleSheet.create({
 })
 
 const MobileLStyles=StyleSheet.create({
-    
+    card_wrapper:{
+        width:"100%",
+        height:75
+    },
+    info_wrapper:{
+        gap:10
+    },
+    card_icon:{
+        width:25,
+        height:25,
+        resizeMode:'contain'
+    },
+    edit_icon:{
+        width:15,
+        height:15,
+        resizeMode:'contain'
+    },
+    delete_icon:{
+        width:15,
+        height:15,
+        resizeMode:'contain'
+    },
+    location_icon:{
+        width:10,
+        height:10,
+        resizeMode:'contain'
+    },
+    info_icon:{
+        width:10,
+        height:10,
+        resizeMode:'contain'
+    },
+    text1:{
+        fontSize:14
+    },
+    text2:{
+        fontSize:12
+    },
+    text3:{
+        fontSize:12
+    },
+    title:{
+        fontSize:10
+    },
+    nodetails_icon:{
+        width:15,
+        height:15,
+        resizeMode:'contain'
+    },
+    nodetails:{
+        fontSize:12
+    }
 })
 
 const styles={

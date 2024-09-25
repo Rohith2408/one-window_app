@@ -89,10 +89,10 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     name:{
-        fontSize:16,
+        fontSize:26,
     },
     email:{
-        fontSize:12
+        fontSize:14
     },
     dp:{
         width:75,
@@ -102,28 +102,30 @@ const TabStyles=StyleSheet.create({
     dpBg:{
         width:75,
         height:75,
-        objectFit:"contain"
+        objectFit:"contain",
+        bottom:10,
+        right:0
     },
     option_icon:{
-        width:20,
-        height:20,
+        width:40,
+        height:40,
         objectFit:'contain'
     },
     options_text:{
         fontSize:14
     },
     user_wrapper:{
-        flex:1,
+        flex:1
     },
     options_wrapper:{
-        flex:5,
+        flex:6,
     },
     logout:{
-        fontSize:12,
-        paddingTop:4,
-        paddingBottom:4,
-        paddingLeft:8,
-        paddingRight:8,
+        fontSize:14,
+        paddingTop:6,
+        paddingBottom:6,
+        paddingLeft:15,
+        paddingRight:15,
         fontWeight:"500"
     },
     loadingview_name:{
@@ -255,10 +257,10 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     name:{
-        fontSize:16,
+        fontSize:26,
     },
     email:{
-        fontSize:12
+        fontSize:14
     },
     dp:{
         width:75,
@@ -268,11 +270,13 @@ const MobileLStyles=StyleSheet.create({
     dpBg:{
         width:75,
         height:75,
-        objectFit:"contain"
+        objectFit:"contain",
+        bottom:10,
+        right:0
     },
     option_icon:{
-        width:20,
-        height:20,
+        width:40,
+        height:40,
         objectFit:'contain'
     },
     options_text:{
@@ -282,14 +286,14 @@ const MobileLStyles=StyleSheet.create({
         flex:1
     },
     options_wrapper:{
-        flex:5
+        flex:6,
     },
     logout:{
-        fontSize:12,
-        paddingTop:4,
-        paddingBottom:4,
-        paddingLeft:8,
-        paddingRight:8,
+        fontSize:14,
+        paddingTop:6,
+        paddingBottom:6,
+        paddingLeft:15,
+        paddingRight:15,
         fontWeight:"500"
     },
     loadingview_name:{

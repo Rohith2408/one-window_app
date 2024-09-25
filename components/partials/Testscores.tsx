@@ -14,6 +14,7 @@ import delete_icon from '../../assets/images/misc/delete.png'
 import edit_icon from '../../assets/images/misc/edit.png'
 import test_icon from '../../assets/images/misc/test.png'
 import { Fonts, Themes } from "../../constants"
+import emptylist from '../../assets/images/misc/emptylist.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -76,31 +77,30 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-
     add_icon:{
-        width:20,
-        height:20,
+        width:24,
+        height:24,
         resizeMode:"contain"
     },
     edit_icon:{
-        width:14,
-        height:14,
+        width:15,
+        height:15,
         resizeMode:"contain"
     },
     delete_icon:{
-        width:14,
-        height:14,
+        width:15,
+        height:15,
         resizeMode:"contain"
     },
     test_icon:{
-        width:16,
-        height:16,
+        width:18,
+        height:18,
         resizeMode:"contain",
         position:"relative"
     },
     test_icon_bg:{
-        width:16,
-        height:16,
+        width:18,
+        height:18,
         borderRadius:100,
         position:"absolute",
         zIndex:-1,
@@ -108,23 +108,34 @@ const TabStyles=StyleSheet.create({
         top:4
     },
     test_name:{
-        fontSize:13
+        fontSize:14
     },
     section_name:{
-        fontSize:11
+        fontSize:12
     },
     score:{
-        fontSize:11
+        fontSize:12
     },
     total_heading:{
-        fontSize:11
+        fontSize:12
     },
     total:{
-        fontSize:11
+        fontSize:12
     },
     test_date:{
-        fontSize:10
-    }
+        fontSize:11
+    },
+    no_workexperience:{
+        fontSize:18
+    },
+    click_message:{
+        fontSize:14
+    },
+    emptylist_image:{
+        width:100,
+        height:100,
+        resizeMode:"contain"
+    },
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -175,7 +186,19 @@ const MobileSStyles=StyleSheet.create({
     },
     test_date:{
         fontSize:10
-    }
+    },
+    no_workexperience:{
+        fontSize:14
+    },
+    click_message:{
+        fontSize:10,
+        lineHeight:16
+    },
+    emptylist_image:{
+        width:100,
+        height:100,
+        resizeMode:"contain"
+    },
 })
 const MobileMStyles=StyleSheet.create({
     add_icon:{
@@ -225,34 +248,45 @@ const MobileMStyles=StyleSheet.create({
     },
     test_date:{
         fontSize:10
-    }
-    
+    },
+    no_workexperience:{
+        fontSize:16
+    },
+    click_message:{
+        fontSize:12,
+        lineHeight:20
+    },
+    emptylist_image:{
+        width:100,
+        height:100,
+        resizeMode:"contain"
+    },
 })
 const MobileLStyles=StyleSheet.create({
     add_icon:{
-        width:20,
-        height:20,
+        width:24,
+        height:24,
         resizeMode:"contain"
     },
     edit_icon:{
-        width:14,
-        height:14,
+        width:15,
+        height:15,
         resizeMode:"contain"
     },
     delete_icon:{
-        width:14,
-        height:14,
+        width:15,
+        height:15,
         resizeMode:"contain"
     },
     test_icon:{
-        width:16,
-        height:16,
+        width:18,
+        height:18,
         resizeMode:"contain",
         position:"relative"
     },
     test_icon_bg:{
-        width:16,
-        height:16,
+        width:18,
+        height:18,
         borderRadius:100,
         position:"absolute",
         zIndex:-1,
@@ -260,24 +294,35 @@ const MobileLStyles=StyleSheet.create({
         top:4
     },
     test_name:{
-        fontSize:13
+        fontSize:14
     },
     section_name:{
-        fontSize:11
+        fontSize:12
     },
     score:{
-        fontSize:11
+        fontSize:12
     },
     total_heading:{
-        fontSize:11
+        fontSize:12
     },
     total:{
-        fontSize:11
+        fontSize:12
     },
     test_date:{
-        fontSize:10
-    }
-    
+        fontSize:11
+    },
+    no_workexperience:{
+        fontSize:16
+    },
+    click_message:{
+        fontSize:12,
+        lineHeight:20
+    },
+    emptylist_image:{
+        width:120,
+        height:120,
+        resizeMode:"contain"
+    },
 })
 
 const styles={
@@ -305,17 +350,29 @@ const Testscores=()=>{
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.sub_wrapper]}>
                 <Pressable onPress={add}><Image style={[styles[Device].add_icon]} source={add_icon}/></Pressable>
-                <ScrollView style={{flex:1,alignSelf:"stretch"}} contentContainerStyle={{gap:60,paddingTop:30}}>
+                <View style={{flex:1,alignSelf:"stretch"}}>
                 {
-                    tests.data
+                    tests.data.length==0
                     ?
-                        tests.data.map((test,i)=>
-                        <Test {...test} index={i}/>
-                        )
+                    <View style={{flex:1,gap:10,justifyContent:"center",alignItems:"center"}}>
+                        <Image source={emptylist} style={[styles[Device].emptylist_image]}/>
+                        <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>It's awfully quiet in here...!</Text>
+                        <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Test Scores play a major role in recommending programs for you, click on the above plus icon to start adding your scores now!</Text>
+                    </View>
                     :
-                    null
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:60,paddingTop:30}}>
+                    {
+                        tests.data
+                        ?
+                            tests.data.map((test,i)=>
+                            <Test {...test} index={i}/>
+                            )
+                        :
+                        null
+                    }
+                    </ScrollView>
                 }
-                </ScrollView>
+                </View>
             </View>
         </View>
     )
@@ -328,7 +385,6 @@ const Test=(props:TestType & {index:number})=>{
     const [isLoading,setIsLoading]=useState(false)
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const translateY=useRef(new Animated.Value(-10)).current
-
 
     const remove=async ()=>{
         setIsLoading(true);

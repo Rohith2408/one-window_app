@@ -13,7 +13,14 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    title:{
+        fontSize:16
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -28,11 +35,25 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
-    
+    icon:{
+        width:16,
+        height:16,
+        resizeMode:"contain"
+    },
+    title:{
+        fontSize:14
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
-    
+    icon:{
+        width:16,
+        height:16,
+        resizeMode:"contain"
+    },
+    title:{
+        fontSize:14
+    }
 })
 
 const styles={

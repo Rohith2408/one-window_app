@@ -82,7 +82,67 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    location_icon:{
+        width:16,
+        height:16,
+        resizeMode:"contain"
+    },
+    uni_icon:{
+        width:30,
+        height:30,
+        borderRadius:100,
+        resizeMode:"contain"
+    },
+    uni_icon_bg:{
+        width:28,
+        height:28,
+        borderRadius:100,
+        left:-7,
+        top:7
+    },
+    uni_location:{
+        fontSize:15
+    },
+    program_name:{
+        fontSize:18
+    },
+    dashboard_icon:{
+        height:22,
+        width:22,
+        resizeMode:"contain"
+    },
+    dashboard_item_wrapper:{
+        borderRadius:26,
+        flex:1
+    },
+    dashboards_wrapper:{
+        height:280,
+        gap:20
+    },
+    dashboard_wrapper:{
+        gap:20
+    },
+    dashboard_value:{
+        fontSize:14
+    },
+    dashboard_label:{
+        fontSize:13
+    },
+    about_heading:{
+        fontSize:18
+    },
+    about:{
+        fontSize:16,
+        lineHeight:30
+    },
+    add_to_cart:{
+        fontSize:16
+    },
+    cart_icon:{
+        width:24,
+        height:24,
+        resizeMode:'contain'
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -379,7 +439,7 @@ const Program=(props:{programid:string})=>{
         {
             programInfo
             ?
-            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:40}}>
+            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:44}}>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
                         <Image source={programInfo.university?.logoSrc} style={[styles[Device].uni_icon]}/>

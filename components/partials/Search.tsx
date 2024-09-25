@@ -4,7 +4,6 @@ import { ListItem, ServerResponse, UniversityListObj, UniversitySearchObj } from
 import { Word2Sentence, getDevice, getServerRequestURL, getThemeColor, serverRequest, truncateString } from "../../utils"
 import { Fonts, Themes, disciplines, subDisciplines, topUniversities } from "../../constants"
 import { Image } from "expo-image"
-import location_icon from '../../assets/images/misc/location.png'
 import go_icon from '../../assets/images/misc/back.png'
 import discipline_icon from '../../assets/images/misc/discipline.png'
 import sample_illustration from '../../assets/images/misc/sample_iIlustration.png'
@@ -12,6 +11,7 @@ import useNavigation from "../../hooks/useNavigation"
 import { getBasket } from "../../constants/basket"
 import Loader from "../resources/Loader"
 import Listselection from "../resources/Listselection"
+import Universitysearchcard from "../cards/Universitysearchcard"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -31,22 +31,6 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:"row",
         justifyContent:'flex-start',
         alignItems:"center"
-    },
-    uni_wrapper:{
-        alignSelf:'stretch',
-        display:"flex",
-        flexDirection:"row",
-        gap:5,
-        justifyContent:"center",
-        alignItems:"flex-start",
-        padding:7
-    },
-    uni_info_wrapper:{
-        display:"flex",
-        flex:1,
-        alignSelf:'stretch',
-        flexDirection:"column",
-        gap:8
     },
     discipline_wrapper:{
         display:"flex",
@@ -285,18 +269,7 @@ const Search=(props:{initialSearch:string})=>{
                                     <ScrollView style={{flex:1}} contentContainerStyle={{gap:20}}>
                                     {
                                         lists.universities.map((university:UniversitySearchObj,i)=>
-                                        <Pressable onPress={()=>select({label:university.name,value:university._id},"universityId")} style={[GeneralStyles.uni_wrapper]}>
-                                            <View style={[styles[Device].uni_icon_bg,{position:"absolute",backgroundColor:getThemeColor(i%4)}]}></View>
-                                            <Image source={university.logoSrc} style={[{position:'relative'},styles[Device].uni_icon]}/>
-                                            <View style={[styles[Device].uni_info_wrapper,GeneralStyles.uni_info_wrapper]}>
-                                                <Text style={[styles[Device].uni_text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Word2Sentence([university.name,university.code],"","|")}</Text>
-                                                <View style={{flexDirection:"row",gap:3}}>
-                                                    <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                                                    <Text style={[styles[Device].uni_text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([university.location.city,university.location.state,university.location.country],"")}</Text>
-                                                </View>
-                                            </View>
-                                            <Image source={go_icon} style={[styles[Device].go_icon,{transform:[{scaleX:-1}]}]}/>
-                                        </Pressable>
+                                            <Pressable onPress={()=>select({label:university.name,value:university._id},"universityId")}><Universitysearchcard {...university} index={i}/></Pressable>
                                         )
                                     }
                                     </ScrollView>

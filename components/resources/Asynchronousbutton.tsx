@@ -26,13 +26,16 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-
+        fontSize:16
     },
     loader:{
-        width:15,
-        height:15,
+        width:17,
+        height:17,
         resizeMode:"contain"
-    }   
+    },
+    wrapper:{
+        padding:10
+    } 
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -64,11 +67,11 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     text:{
-        fontSize:14
+        fontSize:16
     },
     loader:{
-        width:15,
-        height:15,
+        width:17,
+        height:17,
         resizeMode:"contain"
     },
     wrapper:{

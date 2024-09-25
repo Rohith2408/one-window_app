@@ -180,16 +180,16 @@ const MobileLStyles=StyleSheet.create({
     prop:{
         top:10,
         left:-10,
-        width:26,
-        height:26,
+        width:24,
+        height:24,
         resizeMode:"contain"
     },
     sub_wrapper:{
         maxWidth:500,
-        gap:34
+        gap:40
     },
     welcome_message:{
-        fontSize:22,
+        fontSize:26,
         fontWeight:"700"
     },
     search_text:{
@@ -199,7 +199,6 @@ const MobileLStyles=StyleSheet.create({
         width:34,
         height:34
     },
-
     explore_text:{
         fontSize:12
     },
@@ -207,15 +206,15 @@ const MobileLStyles=StyleSheet.create({
         gap:10
     },
     products_title:{
-        fontSize:15
+        fontSize:18
     },
     card:{
-        width:240,
-        height:185
+        width:250,
+        height:205
     },
     loader_card:{
-        width:240,
-        height:185
+        width:250,
+        height:205
     },
 })
 

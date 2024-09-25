@@ -193,28 +193,46 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     header_wrapper:{
-        height:170,
+        height:125,
         width:"100%",
         display:"flex",
     },
     name:{
-        fontSize:20
+        fontSize:18
     },
     email:{
-        fontSize:14
+        fontSize:12
     },
     card_wrapper:{
         height:100,
         width:"100%"
     },
     login:{
-        fontSize:24
+        fontSize:26
     },
     forgot:{
-        fontSize:14
+        fontSize:12
     },
     noaccount:{
-        fontSize:16
+        fontSize:14
+    },
+    logo:{
+        width: 175,
+        resizeMode: "contain"
+    },
+    airplane:{
+        width:50,
+        height:50,
+        top:-25,
+        left:-80,
+        resizeMode:"contain"
+    },
+    passport:{
+        width:30,
+        height:30,
+        top:35,
+        left:210,
+        resizeMode:"contain"
     }
 })
 

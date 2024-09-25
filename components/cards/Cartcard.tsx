@@ -67,7 +67,32 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    superset_text:{
+        fontSize:14
+    },
+    sub_wrapper:{
+        gap:25,
+        borderRadius:30
+    },
+    bg_wrapper:{
+        borderRadius:30,
+        left:10,
+        top:10,
+    },
+    icon:{
+        width:18,
+        height:18,
+        resizeMode:"contain"
+    },
+    course_name:{
+        fontSize:16
+    },
+    uni_name:{
+        fontSize:14
+    },
+    footer:{
+        fontSize:14
+    }
 })
 
 const MobileSStyles=StyleSheet.create({

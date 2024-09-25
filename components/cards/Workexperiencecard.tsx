@@ -55,7 +55,46 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    info_wrapper:{
+        gap:12
+    },
+    card_icon:{
+        width:28,
+        height:28,
+        resizeMode:'contain'
+    },
+    edit_icon:{
+        width:18,
+        height:18,
+        resizeMode:'contain'
+    },
+    delete_icon:{
+        width:18,
+        height:18,
+        resizeMode:'contain'
+    },
+    location_icon:{
+        width:14,
+        height:14,
+        resizeMode:'contain'
+    },
+    info_icon:{
+        width:14,
+        height:14,
+        resizeMode:'contain'
+    },
+    text1:{
+        fontSize:18
+    },
+    text2:{
+        fontSize:14
+    },
+    text3:{
+        fontSize:14
+    },
+    title:{
+        fontSize:13
+    }
 })
 
 const MobileSStyles=StyleSheet.create({

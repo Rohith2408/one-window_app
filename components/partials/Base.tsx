@@ -44,7 +44,7 @@ const Base=(props:{tab:string})=>{
 
 const styles=StyleSheet.create({
     screenWrapper:{
-        flex:9
+        flex:14
     },
     navWrapper:{
         flex:1

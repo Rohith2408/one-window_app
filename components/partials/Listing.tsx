@@ -39,10 +39,10 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     quickfilter:{
-        fontSize:12
+        fontSize:14
     },
     allfilters:{
-        fontSize:12
+        fontSize:14
     }
 })
 

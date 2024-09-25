@@ -55,7 +55,7 @@ const GeneralStyles=StyleSheet.create({
         gap:10
     },
     uni_wrapper:{
-        flex:1,
+        flex:2,
         display:"flex",
         flexDirection:"row",
         justifyContent:"center",
@@ -63,6 +63,7 @@ const GeneralStyles=StyleSheet.create({
         gap:5
     },
     intake_wrapper:{
+        flex:1,
         display:"flex",
         flexDirection:"row",
         justifyContent:"center",
@@ -228,39 +229,43 @@ const MobileMStyles=StyleSheet.create({
 })
 
 const MobileLStyles=StyleSheet.create({
+    main_wrapper:{
+        paddingBottom:10
+    },
     sub_wrapper:{
-        gap:20
+        gap:30,
+        borderRadius:30
     },
     bg_wrapper:{
         borderRadius:30,
-        left:12,
-        top:12,
+        left:6,
+        top:6,
     },
     category_text:{
-        fontSize:11
-    },
-    product_name:{
         fontSize:12
     },
+    product_name:{
+        fontSize:14
+    },
     uni_name:{
-        fontSize:9,
+        fontSize:12,
         lineHeight:13
     },
     intake:{
-        fontSize:9
+        fontSize:11
     },
     status_text:{
-        fontSize:8
+        fontSize:10
     },
     uni_icon:{
-        width:14,
-        height:14,
+        width:13,
+        height:13,
         objectFit:"contain",
         alignSelf:"flex-start"
     },
     intake_icon:{
-        width:10,
-        height:10,
+        width:9,
+        height:9,
         objectFit:"contain"
     },
     status_icon:{
@@ -307,7 +312,7 @@ const Product=(props:PurchasedProduct & {index:number})=>{
                         </View>
                         <View style={[GeneralStyles.intake_wrapper,{alignSelf:"flex-start"}]}>
                             <Image source={clock} style={[styles[Device].intake_icon]}/>
-                            <Text style={[styles[Device].intake,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Intake: "+formatDate(props.intake)}</Text>
+                            <Text style={[styles[Device].intake,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Course Start: "+formatDate(props.intake)}</Text>
                         </View>
                         {/* <View style={[{backgroundColor:'black',borderRadius:10},styles[Device].seperator]}></View>
                         <View style={[GeneralStyles.intake_wrapper]}>

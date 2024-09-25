@@ -28,7 +28,32 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     checkout:{
-        fontSize:12
+        fontSize:16
+    },
+    not_found:{
+        fontSize:20
+    },
+    not_found_sub:{
+        fontSize:16
+    },
+    items_count:{
+        fontSize:16
+    },
+    empty_image:{
+        width:120,
+        height:120,
+        resizeMode:"contain"
+    },
+    products_icon:{
+        width:18,
+        height:18,
+        resizeMode:"contain"
+    },
+    addmore:{
+        fontSize:16,
+    },
+    addmore_wrapper:{
+        padding:16
     }
 })
 

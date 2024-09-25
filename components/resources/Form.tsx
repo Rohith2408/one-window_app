@@ -40,11 +40,11 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     field_title:{
-        fontSize:12,
+        fontSize:16,
         paddingLeft:10
     },
     form_title:{
-        fontSize:13,
+        fontSize:16,
         marginTop:30,
         marginBottom:30
     }
@@ -230,7 +230,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
         fields.forEach(field => {
             addToBasket(field.id,field.value);
         })
-        console.log(getFullBasket())
+        console.log("data",getFullBasket())
     },[fields])
 
     //console.log("fields",fields);

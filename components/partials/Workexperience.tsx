@@ -25,15 +25,24 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     add_icon:{
-        width:34,
-        height:34,
+        width:40,
+        height:40,
         resizeMode:"contain"
     },
     no_workexperience:{
-        fontSize:14
+        fontSize:18
     },
     click_message:{
-        fontSize:12
+        fontSize:14
+    },
+    emptylist_image:{
+        width:100,
+        height:100,
+        resizeMode:"contain"
+    },
+    card:{
+        width:'100%',
+        height:75
     }
 })
 

@@ -1264,32 +1264,7 @@ export interface AvailableSlot{
 }
 
 export type Recommendation={
-    university: {
-      location: Location,
-      _id:string,
-      name: string,
-      logoSrc: string,
-      type: string,
-      establishedYear:number
-    },
-    course: {
-      tuitionFee: {
-        tuitionFee: number,
-        tuitionFeeType: string
-      },
-      currency: {
-        symbol: string,
-        code: string
-      },
-      _id: string,
-      name: string,
-      subDiscipline: string,
-      schoolName: string,
-      discipline: string,
-      studyLevel: string,
-      duration:string,
-      studyMode: string[]
-    },
+    course: CourseListObj,
     possibilityOfAdmit: string,
     _id: string
 }

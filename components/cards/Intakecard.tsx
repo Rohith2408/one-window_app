@@ -26,7 +26,34 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    uni_icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    uni_icon_bg:{
+        width:20,
+        height:20,
+        borderRadius:100,
+        left:5,
+        top:15
+    },
+    intake_icon:{
+        width:16,
+        height:16,
+        resizeMode:"contain"
+    },
+    intakemonth:{
+        fontSize:16
+    },
+    deadline:{
+        fontSize:14
+    },
+    go_icon:{
+        width:7,
+        height:7,
+        resizeMode:"contain"
+    }
 })
 
 const MobileSStyles=StyleSheet.create({

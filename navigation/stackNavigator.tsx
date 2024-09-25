@@ -1,4 +1,4 @@
-import { Animated, Dimensions, Easing, PanResponder, Pressable, StyleSheet, Text, View } from "react-native"
+import { Animated, Dimensions, Easing, Keyboard, PanResponder, Pressable, StyleSheet, Text, View } from "react-native"
 import { StackNavigator, StackScreen as StackScreenType } from "../types"
 import { useEffect, useRef } from "react"
 import useNavigation from "../hooks/useNavigation"
@@ -63,6 +63,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
   const height=useRef(new Animated.Value(initialState?initialState.height:0)).current
   const swipeThreshold = 100;
   const [path,navigate]=useNavigation();
+
 
   const getCurrentPosition=()=>(currentState.current)
   const setCurrentPosition=(val:{x:number,y:number,opacity:number,scale:number})=>{currentState.current=val}
@@ -148,6 +149,31 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
       {property:width,value:finalState?finalState.width:0,duration:200},
       {property:height,value:finalState?finalState.height:0,duration:200},
     ])
+
+    let keyboardWillShow,keyboardWillHide;
+    if(screenInfo?.type=="Flyer"){
+      keyboardWillShow = Keyboard.addListener('keyboardWillShow', (event) => {
+        Animated.timing(translateY, {
+          duration: event.duration,
+          toValue: finalState.y-(event.endCoordinates.height/Dimensions.get("screen").height),
+          useNativeDriver: false,
+        }).start();
+      });
+
+      keyboardWillHide = Keyboard.addListener('keyboardWillHide', (event) => {
+        Animated.timing(translateY, {
+          duration: event.duration,
+          toValue: finalState.y,
+          useNativeDriver: false,
+        }).start();
+      });
+    }
+
+    return () => {
+      keyboardWillShow?.remove();
+      keyboardWillHide?.remove();
+    };
+
   },[])
 
   const animate=(animData:{property:Animated.Value,style?:"timing"|"spring",value:number,duration:number,native?:boolean}[],callBack?:any)=>{

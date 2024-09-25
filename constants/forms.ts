@@ -143,7 +143,6 @@ const forms:FormInfo[]=[
             },
             onSubmit:async (data:{email:string,password:string})=>{
                 let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:data.email,password:data.password}})
-                
                 return res;
             },
             redirect:(data:any)=>({type:"Login"}),
@@ -2074,6 +2073,7 @@ const forms:FormInfo[]=[
         title:"Please provide your Undergraduation Details",
         getInitialData:(id:string|undefined)=>{
             let data:EducationHistory_UnderGraduation|undefined=store.getState().educationhistory.data.underGraduation
+            console.log("dyate",data);
             return [
                 {id:"institutename",value:data?.instituteName?data.instituteName:""},
                 {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},

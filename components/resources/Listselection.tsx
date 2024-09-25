@@ -10,7 +10,9 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    text:{
+        fontSize:16
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -28,7 +30,9 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
 
-    
+    text:{
+        fontSize:14
+    }
 })
 
 const styles={
@@ -100,7 +104,7 @@ const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick"|"back
             <View style={{flex:1}}><Card {...props.data.item} index={props.data.index}/></View>
             :
             <View style={{flex:1}}>
-                <Text style={[styles[Device].text,{opacity:props.data.blurUnSelected?0.5:1,fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:10}]}>{props.data.labelExtractor(props.data.item)}</Text>
+                <Text style={[styles[Device].text,{opacity:(props.data.blurUnSelected && !props.data.selected.find((item)=>props.data.idExtractor(item)==props.data.idExtractor(props.data.item)))?0.35:1,fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:10}]}>{props.data.labelExtractor(props.data.item)}</Text>
             </View>
         }
         {

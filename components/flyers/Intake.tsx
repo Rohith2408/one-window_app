@@ -14,7 +14,12 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    apply:{
+        fontSize:16
+    },
+    heading:{
+        fontSize:16
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -81,7 +86,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
         
     }
 
-    console.log("info",info);
+    //console.log("info",info);
 
     return(
         <View style={{flex:1,flexDirection:'column',justifyContent:"center",alignItems:'center',gap:20,padding:5,paddingBottom:15}}>

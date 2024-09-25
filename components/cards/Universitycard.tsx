@@ -55,7 +55,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     sub_wrapper:{
-        gap:7,
+        gap:25,
         borderRadius:30
     },
     bg_wrapper:{
@@ -64,26 +64,26 @@ const TabStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:14,
+        fontSize:16,
         lineHeight:20
     },
     icon:{
-        width:18,
-        height:18,
+        width:20,
+        height:20,
         borderRadius:100,
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:12
-    },
-    misc:{
         fontSize:14
     },
+    misc:{
+        fontSize:15
+    },
     important:{
-        fontSize:10
+        fontSize:12
     },
     stem_banner_text:{
-        fontSize:10
+        fontSize:12
     },
     go_icon:{
         width:10,
