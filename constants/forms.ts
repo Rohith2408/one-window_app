@@ -895,7 +895,7 @@ const forms:FormInfo[]=[
                     component:Textbox,
                     props:{placeholder:""}
                 },
-                title:"Qualification",
+                title:"Education Qualification",
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined

@@ -132,7 +132,7 @@ const Asynchronousbutton=(props:{successText:string,idleText:string,failureText:
 
 
     return(
-        <Pressable onPress={click} style={[GeneralStyles.wrapper,styles[Device].wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderWidth:1.2}]}>
+        <Pressable onPress={click} style={[GeneralStyles.wrapper,styles[Device].wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderWidth:1.2,backgroundColor:"white"}]}>
             <Animated.Text style={[GeneralStyles.text,styles[Device].text,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1),transform:[{scale:idleTextScale}]}]}>{props.idleText}</Animated.Text>
             <Animated.Text style={[GeneralStyles.text,styles[Device].text,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1),transform:[{scale:successTextScale}]}]}>{props.successText}</Animated.Text>
             <Animated.Text style={[GeneralStyles.text,styles[Device].text,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1),transform:[{scale:failureTextScale}]}]}>{props.failureText}</Animated.Text>

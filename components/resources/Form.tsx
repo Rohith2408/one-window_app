@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from "react"
 import { FormReducer } from "../../reducers/FormReducer";
 import { Event, FormField as FieldType, FormData, Form as FormType, ServerResponse} from "../../types";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Animated, Keyboard, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Fonts, Themes, forms } from "../../constants";
 import { getDevice } from "../../utils";
 import useNavigation from "../../hooks/useNavigation";
@@ -100,6 +100,8 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     const Device=useRef(getDevice()).current
     const [errors,setError]=useState<{id:string,error:undefined|string}[]>([]) 
     const [path,navigate]=useNavigation()
+    const [keyboard,setKeyboard]=useState({duration:0,height:0});
+    const offset=useRef(new Animated.Value(0)).current
     //console.log("fodod",additionalInfo,props.formbasket)
 
     const eventHandler=async (event:Event)=>{
@@ -132,6 +134,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     }
 
     const onSubmit=async ()=>{ 
+        Keyboard.dismiss();
         let errors=validate()
         setError(errors);
         console.log("Submitting");
@@ -222,9 +225,25 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     },[props.formerrors])
 
     useEffect(()=>{
+        Animated.timing(offset, {
+            duration: keyboard.duration,
+            toValue: -keyboard.height+30,
+            useNativeDriver: false,
+          }).start();
+    },[keyboard])
+
+    useEffect(()=>{
+        
+        let keyboardWillShow = Keyboard.addListener('keyboardWillShow', (event) => setKeyboard({duration:event.duration,height:event.endCoordinates.height}));
+        let keyboardWillHide = Keyboard.addListener('keyboardWillHide', (event) => setKeyboard({duration:event.duration,height:0}));
+
         console.log("form info",props.formid,formInfo?.id)
         formInfo?.onLoad?formInfo.onLoad():null
-        return (()=>clearBasket())
+        return (()=>{
+            keyboardWillShow?.remove();
+            keyboardWillHide?.remove();
+            clearBasket()
+        })
     },[])
 
     useEffect(()=>{
@@ -235,7 +254,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     },[fields])
 
     //console.log("fields",fields);
-    console.log("ffff",props.formbasket,props.formid,additionalInfo);
+    //console.log("ffff",props.formbasket,props.formid,additionalInfo);
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
@@ -247,7 +266,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                     :
                     null
                 }
-                <ScrollView style={{flex:1}} contentContainerStyle={[GeneralStyles.fields]}>
+                <ScrollView style={{flex:1}} contentContainerStyle={[GeneralStyles.fields,{paddingBottom:keyboard.height}]}>
                 {
                     fields.map((field,i)=>
                     <Field error={errors.find((item)=>item.id==field.id)?.error} key={field.id} data={field} info={formInfo?.allFields.find((item)=>field.id==item.id)} isFocussed={focussedField==undefined?false:(focussedField==field.id?true:false)} index={i} eventHandler={eventHandler}></Field>
@@ -255,7 +274,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                 }
                 </ScrollView>
             </View>
-            <Asynchronousbutton idleText={formInfo?.submit.idleText} successText={formInfo?.submit.successText} failureText={formInfo?.submit.failureText} callback={onSubmit}/>
+            <Animated.View style={[{transform:[{translateY:offset}]}]}><Asynchronousbutton idleText={formInfo?.submit.idleText} successText={formInfo?.submit.successText} failureText={formInfo?.submit.failureText} callback={onSubmit}/></Animated.View>
         </View>
     )
 }
