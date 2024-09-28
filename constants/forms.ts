@@ -32,6 +32,7 @@ import { secureStoreKeys } from "./securestore";
 import * as SecureStore from 'expo-secure-store'
 import Textitem from "../components/resources/Textitem";
 import Checkbox from "../components/resources/Checkbox";
+import Phoneinput from "../components/resources/Phoneinput";
 
 export const testToForm=(testname:string)=>{
     const testData=store.getState().testscores.data.find((test)=>test.name==testname)
@@ -126,26 +127,26 @@ export const testToForm=(testname:string)=>{
 
 const forms:FormInfo[]=[
     {
-        id:"Login",
+        id:"Login_email",
         getInitialData:(id:string|undefined)=>{
             return [
                 {id:"email",value:""},
-                {id:"password",value:""}
+                // {id:"password",value:""}
             ]
         },
         submit:{
             dataConverter:(data:FormData[],id?:string)=>{
                 let info={
                     email:data[data.findIndex((item)=>item.id=="email")].value,
-                    password:data[data.findIndex((item)=>item.id=="password")].value
+                    //password:data[data.findIndex((item)=>item.id=="password")].value
                 }
                 return info
             },
-            onSubmit:async (data:{email:string,password:string})=>{
-                let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:data.email,password:data.password}})
+            onSubmit:async (data:{email:string})=>{
+                let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:data.email}})
                 return res;
             },
-            redirect:(data:any)=>({type:"Login"}),
+            //redirect:(data:any)=>({type:"AddScreen",payload:{screen:"Verifyuser",params:{type:"email",data:{email:data}}}}),
             successText:"Success!",
             failureText:"Failed :(",
             idleText:"Login"
@@ -171,26 +172,110 @@ const forms:FormInfo[]=[
                     event:"onFocus"
                 }
             },
+            // {
+            //     id:"password",
+            //     componentInfo:{
+            //         component:Passwordinput,
+            //         props:{placeholder:"Should be atleast 8 characters"}
+            //     },
+            //     title:"Password",
+            //     validator:(data:string)=>({
+            //         success:validations.PASSWORD.regex.test(data),
+            //         message:validations.PASSWORD.errorMessage,
+            //         data:undefined
+            //     }),
+            //     onUpdate:{
+            //         event:"onTextInput",
+            //         handler:undefined
+            //     },
+            //     onFocus:{
+            //         event:"onFocus"
+            //     }
+            // }
+        ]
+    },
+    {
+        id:"Login_phone",
+        getInitialData:(id:string|undefined)=>{
+            return [
+                {id:"phone",value:{countryCode:[],phoneNumber:undefined}},
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let info={
+                    phone:{countryCode:data[data.findIndex((item)=>item.id=="phone")].value.countryCode[0].dial_code,phoneNumber:data[data.findIndex((item)=>item.id=="phone")].value.phoneNumber},
+                }
+                return info
+            },
+            onSubmit:async (data:{phone:{countryCode:string,phoneNumber:string}})=>{
+                let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{...data.phone}})
+                return res;
+            },
+            
+            //redirect:(data:any)=>({type:"Login"}),
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Login"
+        },
+        allFields:[
             {
-                id:"password",
+                id:"phone",
                 componentInfo:{
-                    component:Passwordinput,
-                    props:{placeholder:"Should be atleast 8 characters"}
+                    component:Phoneinput,
+                    props:{
+                        codes:{
+                            options:{
+                                card:Dialcode,
+                                list:Countrycodes,
+                                labelExtractor:(item:Countrycode)=>item.dial_code,
+                                idExtractor:(item:Countrycode)=>item.code
+                            },
+                            apply:(data:Countrycode[])=>{
+                                let current:PhoneType=getBasket("phone")
+                                return ({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"phone",newvalue:{...current,countryCode:data}}}})
+                            },
+                            selectionMode:"single",
+                            basketid:"phonecodes-dropdown"
+                        }
+                    }
                 },
-                title:"Password",
-                validator:(data:string)=>({
-                    success:validations.PASSWORD.regex.test(data),
-                    message:validations.PASSWORD.errorMessage,
-                    data:undefined
+                //isOptional:true,
+                validator:(data:{countryCode:ListItem[],phoneNumber:string,verified:boolean})=>({
+                    success:validations.PHONENUMBER.regex.test(data.phoneNumber),
+                    data:undefined,
+                    message:validations.PHONENUMBER.errorMessage
                 }),
+                emptyChecker:(data:{countryCode:ListItem[],phoneNumber?:string,verified?:boolean})=>({success:!(data.countryCode.length>0 && (data.phoneNumber && data.phoneNumber.length>0)),message:data.countryCode.length?"Dial code cannot be empty":"Phone number cannot be empty",data:undefined}),
+                title:"Phone",
                 onUpdate:{
-                    event:"onTextInput",
+                    event:"phone-input",
                     handler:undefined
                 },
                 onFocus:{
                     event:"onFocus"
                 }
-            }
+            },
+            // {
+            //     id:"password",
+            //     componentInfo:{
+            //         component:Passwordinput,
+            //         props:{placeholder:"Should be atleast 8 characters"}
+            //     },
+            //     title:"Password",
+            //     validator:(data:string)=>({
+            //         success:validations.PASSWORD.regex.test(data),
+            //         message:validations.PASSWORD.errorMessage,
+            //         data:undefined
+            //     }),
+            //     onUpdate:{
+            //         event:"onTextInput",
+            //         handler:undefined
+            //     },
+            //     onFocus:{
+            //         event:"onFocus"
+            //     }
+            // }
         ]
     },
     {

@@ -88,7 +88,6 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
     }
 
     const removeSelected=(item:ListItem)=>{
-        //setLayoutAnimation()
         navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.id,newvalue:props.value.filter((data)=>data.label!=item.label)}}}):null
     }
 
@@ -112,8 +111,6 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
         //     }
         // }
     },[props.value])
-
-    //console.log("options",props.id,props.value)
 
     return(
         <View style={[GeneralStyles.mainWrapper]}>

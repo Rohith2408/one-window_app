@@ -205,9 +205,6 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
                     selectionMode:"single"
                 }}
             />
-            {/* <View style={{flex:1}}>
-            <Courselisting courselistid={props.courselistid} coursepage={props.coursepage} courseadditionalFilters={props.courseadditionalFilters} coursequickFilters={props.coursequickFilters} coursesearch={props.coursesearch}/>
-            </View> */}
             <ScrollView 
             scrollEnabled={false}
             ref={ref}
@@ -221,19 +218,6 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
                 )
             }
             </ScrollView>
-            {/* <FlatList 
-                data={lists}
-                onScroll={(e)=>console.log(e.nativeEvent.contentOffset.x/(e.nativeEvent.contentSize.width-e.nativeEvent.layoutMeasurement.width))}
-                horizontal
-                keyExtractor={item => item.listid}
-                showsHorizontalScrollIndicator={false}
-                snapToInterval={dimensions?.width?dimensions.width:0}
-                decelerationRate="fast"
-                contentContainerStyle={styles.container}
-                renderItem={({ item }) => (
-                    <View style={[{width:dimensions?.width?dimensions.width:0}]}><Listing basketid={item.basketid} listid={item.listid} search={item.search} page={item.page} additionalFilters={item.additionalFilters} quickFilters={item.quickFilters}></Listing></View>
-                )}
-            /> */}
         </View>
     )
 }

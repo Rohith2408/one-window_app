@@ -7,7 +7,9 @@ import { Fonts, Themes } from "../../constants"
 const Dialcode=(props:Countrycode)=>{
 
     return(
-        <View style={{flex:1}}><Text style={[{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Word2Sentence([props.dial_code,props.code,props.name],"","-")}</Text></View>
+        <View style={{flex:1}}>
+            <Text style={[{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.dial_code+" - "+props.name}</Text>
+        </View>
     )
 
 }

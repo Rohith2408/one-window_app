@@ -18,6 +18,12 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"verify-user",
+        category:"auth",
+        tail:"verify-user",
+        type:"POST",
+    },
+    {
         id:"reset-password",
         category:"auth",
         tail:"verify-otp",

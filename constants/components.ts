@@ -54,6 +54,7 @@ import Currentlyworking from "../components/flyers/Currentlyworking"
 import Existingorders from "../components/flyers/Existingorders"
 import Addtoorder from "../components/partials/Addtoorder"
 import Institutes from "../components/flyers/Institutes"
+import Verifyuser from "../components/flyers/Verifyuser"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -62,6 +63,7 @@ const components:ScreenInfo[]=[
     {id:"Student",component:Student,type:"Layout"},
     {id:"Login",component:Login,type:"Layout"},
     {id:"Register",component:Register,type:"Layout"},
+    {id:"Verifyuser",component:Verifyuser,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Popup",component:Popup,props:["popupid","popupdata"],swipeDirection:"XY",type:"Screen",animationStyle:"Custom",customPlacement:{initial:{x:0,y:0,scale:0,opacity:1,height:0,width:0},final:{x:0.25,y:0.25,scale:1,opacity:1,height:0.5,width:0.5}}},
     {id:"Error",component:Error,props:["message"],type:"Popup"},
     {id:"Loginbase",component:Loginbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},

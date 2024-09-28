@@ -800,6 +800,8 @@ export const getListQuery=(currentData:Listqueryadv,newData:any)=>{
   
 }
 
+export const replaceCharacters=(str:string,start:number,end:number,replaceChar:string)=>str.slice(0, start) + replaceChar.repeat(end-start) + str.slice(end)
+
 
 
 // export const bakeFilters=(additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[])=>{

@@ -151,7 +151,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                     navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Error",flyerdata:{error:res.message}}}})
                 }
                 else{
-                    navigate?navigate({type:"RemoveScreen"}):null
+                    navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Form"}}):null
                     if(formInfo?.submit.redirect)
                     {
                         navigate?navigate(formInfo.submit.redirect(res.data)):null
@@ -222,6 +222,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     },[props.formerrors])
 
     useEffect(()=>{
+        console.log("form info",props.formid,formInfo?.id)
         formInfo?.onLoad?formInfo.onLoad():null
         return (()=>clearBasket())
     },[])
@@ -234,6 +235,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     },[fields])
 
     //console.log("fields",fields);
+    console.log("ffff",props.formbasket,props.formid,additionalInfo);
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
