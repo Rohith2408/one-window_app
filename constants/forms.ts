@@ -11,7 +11,7 @@ import { store } from "../store";
 import { setEducationHistory } from "../store/slices/educationHistorySlice";
 import { setTests } from "../store/slices/testScoresSlice";
 import { setWorkExperience } from "../store/slices/workexperienceSlice";
-import { AdditionalFilterInfo, Advisor, AppliedFilter, AppliedQuickFilter, Countrycode, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FormData, FormField, FormInfo, ListInfo, ListItem, Meeting, Phone as PhoneType, ServerResponse, Sharedinfo, Test, WorkExperience } from "../types";
+import { AdditionalFilterInfo, Advisor, AppliedFilter, AppliedQuickFilter, Countrycode, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FamilyInfo, FormData, FormField, FormInfo, ListInfo, ListItem, Meeting, Phone as PhoneType, ServerResponse, Sharedinfo, Test, WorkExperience } from "../types";
 import { Word2Sentence, fetchCities, fetchCountries, fetchStates,  getMergedFilters,  getServerRequestURL, profileUpdator, serverRequest, setWordCase} from "../utils";
 import { validations} from "../utils/validations";
 import { addToBasket, getBasket, getFullBasket} from "./basket";
@@ -33,6 +33,7 @@ import * as SecureStore from 'expo-secure-store'
 import Textitem from "../components/resources/Textitem";
 import Checkbox from "../components/resources/Checkbox";
 import Phoneinput from "../components/resources/Phoneinput";
+import { setFamilyinfo } from "../store/slices/familyInfoSlice";
 
 export const testToForm=(testname:string)=>{
     const testData=store.getState().testscores.data.find((test)=>test.name==testname)
@@ -732,6 +733,206 @@ const forms:FormInfo[]=[
             //         event:"onFocus"
             //     }
             // },
+        ]
+    },
+    {
+        id:"Familydetails",
+        title:"Please provide your family member details",
+        getInitialData:(id:string|undefined)=>{
+            let data:FamilyInfo|undefined=store.getState().familyinfo.data.find((item)=>item.RelationshipWithStudent==id)
+            return [
+                {id:"firstname",value:data?data.GuardianFirstName:""},
+                {id:"lastname",value:data?data.GuardianLastName:""},
+                {id:"email",value:data?data.GuardianEmail:""},
+                {id:"phone",value:{countryCode:data?.GuardianContactNumber?.countryCode?([Countrycodes.find((item)=>item.dial_code==data?.GuardianContactNumber?.countryCode)]):[],phoneNumber:data?.GuardianContactNumber?.number}},
+                {id:"occupation",value:data?data.GuardianOccupation:""},
+                {id:"qualification",value:data?data.GuardianQualification:""},
+                {id:"relationshipwithstudent",value:data?[{label:setWordCase(data.RelationshipWithStudent),value:data.RelationshipWithStudent}]:""},
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let info:FamilyInfo={
+                    GuardianFirstName: data[data.findIndex((item)=>item.id=="firstname")].value,
+                    GuardianLastName: data[data.findIndex((item)=>item.id=="lastname")].value,
+                    GuardianEmail: data[data.findIndex((item)=>item.id=="email")].value,
+                    GuardianOccupation: data[data.findIndex((item)=>item.id=="occupation")].value,
+                    GuardianQualification: data[data.findIndex((item)=>item.id=="qualification")].value,
+                    RelationshipWithStudent: data[data.findIndex((item)=>item.id=="relationshipwithstudent")].value[0].value,
+                    GuardianContactNumber: {countryCode:data[data.findIndex((item)=>item.id=="phone")].value.countryCode[0].dial_code,number:data[data.findIndex((item)=>item.id=="phone")].value.phoneNumber},
+                }
+                return info
+            },
+            onSubmit:async (data:FamilyInfo)=>{
+                console.log("dyate",data);
+                let familydetails:FamilyInfo[]=store.getState().familyinfo.data;
+                console.log("details",familydetails)
+                if(familydetails.find((item)=>item.RelationshipWithStudent==data.RelationshipWithStudent))
+                {
+                    familydetails=familydetails.map((item)=>item.RelationshipWithStudent==data.RelationshipWithStudent?data:item)
+                }
+                else
+                {
+                    familydetails=[...familydetails,data];
+                }
+                let res:ServerResponse=await profileUpdator({familyDetails:familydetails},(res)=>res.success?store.dispatch(setFamilyinfo(res.data.familyDetails)):null)
+                
+                return res
+            },
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        allFields:[
+            {
+                id:"firstname",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"First Name",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"lastname",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Last Name",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"email",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Email",
+                validator:(data:string)=>{
+                    let validationData=validations.EMAIL
+                    return {
+                        success:validationData.regex.test(data),
+                        message:validationData.errorMessage,
+                        data:undefined
+                    }
+                },
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"phone",
+                componentInfo:{
+                    component:Phoneinput,
+                    props:{
+                        codes:{
+                            options:{
+                                card:Dialcode,
+                                list:Countrycodes,
+                                labelExtractor:(item:Countrycode)=>item.dial_code,
+                                idExtractor:(item:Countrycode)=>item.code
+                            },
+                            apply:(data:Countrycode[])=>{
+                                let current:PhoneType=getBasket("phone")
+                                return ({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"phone",newvalue:{...current,countryCode:data}}}})
+                            },
+                            selectionMode:"single",
+                            basketid:"phonecodes-dropdown"
+                        }
+                    }
+                },
+                //isOptional:true,
+                validator:(data:{countryCode:ListItem[],phoneNumber:string,verified:boolean})=>({
+                    success:validations.PHONENUMBER.regex.test(data.phoneNumber),
+                    data:undefined,
+                    message:validations.PHONENUMBER.errorMessage
+                }),
+                emptyChecker:(data:{countryCode:ListItem[],phoneNumber?:string,verified?:boolean})=>({success:!(data.countryCode.length>0 && (data.phoneNumber && data.phoneNumber.length>0)),message:data.countryCode.length?"Dial code cannot be empty":"Phone number cannot be empty",data:undefined}),
+                title:"Phone",
+                onUpdate:{
+                    event:"phone-input",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"occupation",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Occupation",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"qualification",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Qualification",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"relationshipwithstudent",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:[
+                                {label:"Father",value:"father"},
+                                {label:"Mother",value:"mother"},
+                                {label:"Sibling",value:"sibling"},
+                                {label:"Guardian",value:"guardian"}
+                            ],
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.value
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"relationshipwithstudent",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"relation-dropdown"
+                    },
+                },
+                title:"Relation",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
         ]
     },
     {

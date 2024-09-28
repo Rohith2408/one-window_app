@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import * as SecureStore from 'expo-secure-store';
-import { FamilyInfo, Request} from "../../misc/typeDefinations";
+import { FamilyInfo, Request } from "../../types";
+
 
 let initialState:Request<FamilyInfo[]>={
     requestStatus:"not_initiated",

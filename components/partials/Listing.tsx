@@ -196,26 +196,28 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
         {
             if(!dataRequested.current && (e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y>e.nativeEvent.contentSize.height-20))
             {
-                if(props.page+1>2)
-                {
-                    if(phonenumber==undefined || Object.keys(phonenumber).length==0 || !phonenumber.countryCode || !phonenumber.number){
-                        console.log("No phone number")
-                    }
-                    else if(!verificationStatus){
-                        addToBasket("phonenumber",phonenumber)
-                        navigate?navigate({type:"AddScreen",payload:{screen:"Phoneverification"}}):null
-                    }
-                    else
-                    {
-                        props.eventHandler({name:"setPage",triggerBy:props.listid,data:props.page+1});
-                    }
-                    dataRequested.current=true
-                }
-                else
-                {
-                    props.eventHandler({name:"setPage",triggerBy:props.listid,data:props.page+1});
-                    dataRequested.current=true
-                }
+                // if(props.page+1>2)
+                // {
+                //     if(phonenumber==undefined || Object.keys(phonenumber).length==0 || !phonenumber.countryCode || !phonenumber.number){
+                //         console.log("No phone number")
+                //     }
+                //     else if(!verificationStatus){
+                //         addToBasket("phonenumber",phonenumber)
+                //         navigate?navigate({type:"AddScreen",payload:{screen:"Phoneverification"}}):null
+                //     }
+                //     else
+                //     {
+                //         props.eventHandler({name:"setPage",triggerBy:props.listid,data:props.page+1});
+                //     }
+                //     dataRequested.current=true
+                // }
+                // else
+                // {
+                //     props.eventHandler({name:"setPage",triggerBy:props.listid,data:props.page+1});
+                //     dataRequested.current=true
+                // }
+                props.eventHandler({name:"setPage",triggerBy:props.listid,data:props.page+1});
+                dataRequested.current=true
             }
             else
             {

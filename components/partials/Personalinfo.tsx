@@ -147,6 +147,7 @@ const Personalinfo=()=>{
         {title:"Education History",icon:education_icon,screen:{id:"Educationhistory",params:undefined}},
         {title:"Test Scores",icon:test_icon,screen:{id:"Testscores",params:undefined}},
         {title:"Documents",icon:documents_icon,screen:{id:"Documents",params:{documentstab:"Personal"}}},
+        {title:"Family Details",icon:documents_icon,screen:{id:"Familydetails"}},
     ]).current
     const [path,navigate]=useNavigation()
 

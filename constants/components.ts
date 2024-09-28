@@ -55,6 +55,7 @@ import Existingorders from "../components/flyers/Existingorders"
 import Addtoorder from "../components/partials/Addtoorder"
 import Institutes from "../components/flyers/Institutes"
 import Verifyuser from "../components/flyers/Verifyuser"
+import Familydetails from "../components/partials/Familydetails"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -113,6 +114,7 @@ const components:ScreenInfo[]=[
     {id:"Degreepreference",component:Degreepreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Currentlyworking",component:Currentlyworking,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Existingorders",component:Existingorders,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Familydetails",component:Familydetails,type:"Partial",title:"Family Details",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
 ]
 
 const setComponentInfo=(id:string,key:keyof ScreenInfo,value:any)=>{
