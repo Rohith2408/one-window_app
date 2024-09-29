@@ -30,6 +30,7 @@ import { initWishlist } from "../../store/slices/wishlistSlice"
 import { initOrders } from "../../store/slices/ordersSlice"
 import { initSuggestedPackage } from "../../store/slices/suggestedpackageSlice"
 import { initProducts } from "../../store/slices/productsSlice"
+import { store } from "../../store"
 
 const Student=(props:{screens:string[],params:any})=>{
 

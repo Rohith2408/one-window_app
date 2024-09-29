@@ -253,9 +253,6 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
         console.log("data",getFullBasket())
     },[fields])
 
-    //console.log("fields",fields);
-    //console.log("ffff",props.formbasket,props.formid,additionalInfo);
-
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.fields_wrapper]}>

@@ -13,6 +13,7 @@ const GeneralStyles=StyleSheet.create({
     wrapper:{
         display:"flex",
         flex:1,
+        padding:10
     },
     sub_wrapper:{
         display:"flex",
@@ -61,7 +62,17 @@ const MobileMStyles=StyleSheet.create({
 })
 
 const MobileLStyles=StyleSheet.create({
-    
+    text:{
+        fontSize:16
+    },
+    verified_icon:{
+        width:16,
+        height:16,
+        resizeMode:'contain'
+    },
+    verify:{
+        fontSize:12
+    }
 })
 
 const styles={
