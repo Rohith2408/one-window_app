@@ -30,7 +30,17 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    text:{
+        fontSize:16
+    },
+    verified_icon:{
+        width:16,
+        height:16,
+        resizeMode:'contain'
+    },
+    verify:{
+        fontSize:12
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
