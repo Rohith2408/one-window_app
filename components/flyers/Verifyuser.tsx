@@ -76,6 +76,7 @@ const Verifyuser=(props:{type:"mobile"|"email",data:idData})=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [otp,setOtp]=useState("")
     const [path,navigate]=useNavigation()
+    const otpLength=useRef(6).current
 
     const verify=async ()=>{
         let res:ServerResponse=await serverRequest({
@@ -105,7 +106,7 @@ const Verifyuser=(props:{type:"mobile"|"email",data:idData})=>{
             <Text style={[GeneralStyles.heading,styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Please enter the otp sent to {props.type=="email"?replaceCharacters(props.data.email,3,props.data.email.length-3,"*"):replaceCharacters(props.data.phone.phoneNumber,3,props.data.phone.phoneNumber.length-2,"*")}</Text>
             <View style={{flex:1}}><TextInput placeholder="OTP" style={[styles[Device].otp,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)},{borderBottomWidth:1,borderBottomColor:"#E3E3E3"}]} onChangeText={(txt)=>setOtp(txt)}></TextInput></View>
             {
-                otp.length>=4
+                otp.length>=otpLength
                 ?
                 <Asynchronousbutton idleText="Verify" successText="Success!" failureText="Failed" callback={verify}/>
                 // <Pressable onPress={verify}><Text>Verify</Text></Pressable>

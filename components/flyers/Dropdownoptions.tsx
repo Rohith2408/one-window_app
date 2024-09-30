@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
+import { NativeScrollEvent, NativeSyntheticEvent, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
 import { getBasket, removeFromBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
 import { ListItem } from "../../types"
@@ -36,6 +36,10 @@ const GeneralStyles=StyleSheet.create({
         width:14,
         height:14,
         objectFit:'contain'
+    },
+    search:{
+        padding:10,
+        borderRadius:100
     }
 })
 
@@ -85,13 +89,19 @@ const styles={
 const Dropdownoptions=(props:{basketid:string})=>{
 
     const [search,setSearch]=useState("");
+    const [page,setPage]=useState(0);
     let info=useRef(getBasket(props.basketid)).current
-    const [options,setoptions]=useState(info.options?.list?info.options.list:[])
+    const options=useRef([]);
     const [selected,setSelected]=useState<ListItem[]>(info.selected?info.selected:[])
     const [path,navigate]=useNavigation()
     const [isLoading,setIsLoading]=useState(false)
     const Card=info.options.card
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const itemsPerPage=useRef(9).current
+    const maxPages=useRef((info.options.list.length/itemsPerPage)+(info.options.list.length%itemsPerPage!=0?1:0)).current
+    const pageUpdated=useRef(false);
+    const [selectionType,setSelectionType]=useState<"custom"|"default">("default");
+    //const [custom,setCustom]=useState<string|undefined>(info.options.custom?info.selected:undefined);
 
     const selection=(data:any)=>{
         if(selected.find((item)=>info.options.idExtractor(item)==info.options.idExtractor(data))){
@@ -103,9 +113,26 @@ const Dropdownoptions=(props:{basketid:string})=>{
         }
     }
 
-    useEffect(()=>{
-        //search.length>0?info.options.searchEvaluator?setoptions(options.map((item)=>info.options.searchEvaluator(item,search))):null:setoptions(info.options?.list?info.options.list:[])
-    },[search])
+    const onScroll=(e:NativeSyntheticEvent<NativeScrollEvent>)=>{
+        if(page<maxPages)
+        {
+            if(!pageUpdated.current && (e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y>e.nativeEvent.contentSize.height))
+            {
+                setPage(page+1)
+                pageUpdated.current=true
+            }
+            else
+            {
+                if((e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y<=e.nativeEvent.contentSize.height)){
+                    pageUpdated.current=false
+                }
+            }
+        }
+    }
+
+    // useEffect(()=>{
+    //     //search.length>0?info.options.searchEvaluator?setoptions(options.map((item)=>info.options.searchEvaluator(item,search))):null:setoptions(info.options?.list?info.options.list:[])
+    // },[search])
 
     useEffect(()=>{
         return ()=>{
@@ -121,6 +148,25 @@ const Dropdownoptions=(props:{basketid:string})=>{
     }
 
     setLayoutAnimation()
+    if(info.options.searchEvaluator)
+    {
+        if(search)
+        {
+            console.log(info.options.list.filter((item)=>{console.log(item,search,info.options.searchEvaluator(item,search));return info.options.searchEvaluator(item,search)}))
+            options.current=info.options.list.filter((item)=>info.options.searchEvaluator(item,search)).slice(0,(page+1)*itemsPerPage);
+        }
+        else
+        {
+            options.current=info.options.list.slice(0,(page+1)*itemsPerPage)
+        }
+    }
+    else{
+        options.current=info.options.list.slice(0,(page+1)*itemsPerPage)
+    }
+
+    // useEffect(()=>{
+    //     setSelected([]);
+    // },[selectionType])
 
     //console.log("oppp",info.selected,info.options)
 
@@ -141,36 +187,62 @@ const Dropdownoptions=(props:{basketid:string})=>{
                 :
                 <View style={{flex:1,gap:20,padding:10}}>
                     {
-                        options.length>10 && info.options.searchEvaluator
+                        info.options.searchEvaluator
                         ?
                         <TextInput placeholder="Search..." style={[GeneralStyles.search,{borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)}]} value={search} onChangeText={(text)=>setSearch(text)}></TextInput>
                         :
                         null
                     }
-                    <ScrollView style={[GeneralStyles.options_wrapper]} contentContainerStyle={{gap:15,paddingBottom:10}}>
-                    {
-                        options.map((item:any,i:number)=>
-                        <Pressable key={item.label} onPress={()=>selection(item)} style={[GeneralStyles.option_wrapper]}>
-                        {
-                            Card
-                            ?
-                            <Card key={item._id?item._id:i} {...item}/>
-                            :
-                            <View style={{flex:1}}>
-                                <View style={{flex:1}}><Text style={[styles[Device].item_text,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.label}</Text></View>
-                            </View>
-                        }
-                        {
-                            selected.find((selecteditem)=>info.options.idExtractor(selecteditem)==info.options.idExtractor(item))
-                            ?
-                            <Image source={tick_icon} style={[GeneralStyles.tick]}/>
-                            :
-                            null
-                        }
+                    {/* {
+                        info.options.custom
+                        ?
+                        <Pressable onPress={()=>{setSelected([]);setSelectionType(selectionType=="custom"?"default":"custom")}}>
+                            <Text>
+                            { 
+                                selectionType=="custom"
+                                ?
+                                info.options.custom.defaultMessage
+                                :
+                                info.options.custom.customMessage
+                            }
+                            </Text>
                         </Pressable>
-                        )
+                        :
+                        null
+                    } */}
+                    {
+                        selectionType=="custom"
+                        ?
+                        <View>
+                            <TextInput placeholder="" style={[GeneralStyles.search,{borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)}]} onChangeText={(text)=>text.length==0?setSelected([]):selection({label:text,value:text})}></TextInput>
+                            {/* <Pressable onPress={()=>selection({label:custom,value:custom})}><Text>Add</Text></Pressable> */}
+                        </View>
+                        :
+                        <ScrollView onScroll={onScroll} style={[GeneralStyles.options_wrapper]} contentContainerStyle={{gap:15,paddingBottom:10}}>
+                        {
+                            options.current.map((item:any,i:number)=>
+                            <Pressable key={item.label} onPress={()=>selection(item)} style={[GeneralStyles.option_wrapper]}>
+                            {
+                                Card
+                                ?
+                                <Card key={item._id?item._id:i} {...item}/>
+                                :
+                                <View style={{flex:1}}>
+                                    <View style={{flex:1}}><Text style={[styles[Device].item_text,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.label}</Text></View>
+                                </View>
+                            }
+                            {
+                                selected.find((selecteditem)=>info.options.idExtractor(selecteditem)==info.options.idExtractor(item))
+                                ?
+                                <Image source={tick_icon} style={[GeneralStyles.tick]}/>
+                                :
+                                null
+                            }
+                            </Pressable>
+                            )
+                        }
+                        </ScrollView>
                     }
-                    </ScrollView>
                 </View>
             }
             </View>

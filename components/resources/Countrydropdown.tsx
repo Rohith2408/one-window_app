@@ -10,10 +10,8 @@ const Countrydropdown=(props:DropdownType & {cityFieldId:string,stateFieldId:str
     const initialRender=useRef(true)
 
     useEffect(()=>{
-        
         if(!initialRender.current)
         {
-            
             navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.cityFieldId,newvalue:[]}}}):null
             setTimeout(()=>{
                 navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.stateFieldId,newvalue:[]}}}):null
@@ -21,7 +19,6 @@ const Countrydropdown=(props:DropdownType & {cityFieldId:string,stateFieldId:str
         }
         else
         {
-            //props.value.length!=0?addToBasket(props.basketid,props.value[0].value):null
             initialRender.current=false
         }
     },[props.value])

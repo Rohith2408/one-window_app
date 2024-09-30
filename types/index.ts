@@ -170,7 +170,11 @@ export type Dropdown={
         fetcher?:(data?:any)=>Promise<any>,
         idExtractor:(item:any)=>string,
         labelExtractor:(item:any)=>string,
-        searchEvaluator:(item:any,query:string)=>boolean
+        searchEvaluator:(item:any,query:string)=>boolean,
+        custom:{
+            customMessage:string,
+            defaultMessage:string
+        }
     },
     isAsync?:boolean,
     basketid:string,

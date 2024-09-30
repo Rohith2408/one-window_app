@@ -364,7 +364,7 @@ const Profile=(props:any)=>{
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.user_wrapper,styles[Device].user_wrapper]}>
                 <View style={[GeneralStyles.name_wrapper]}>
-                    <Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.name,styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{sharedInfo.data?.firstName+" "+sharedInfo.data?.lastName}</Text></Loadingview>
+                    <Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.name,styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{(sharedInfo.data?.firstName || sharedInfo.data?.lastName)?sharedInfo.data?.firstName+" "+sharedInfo.data?.lastName:"User"}</Text></Loadingview>
                     <Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.email,styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{sharedInfo.data?.email}</Text></Loadingview>
                 </View>
                 <Pressable onPress={showDpOptions} style={[GeneralStyles.dp_wrapper]}>

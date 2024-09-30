@@ -145,6 +145,7 @@ const forms:FormInfo[]=[
             },
             onSubmit:async (data:{email:string})=>{
                 let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:data.email}})
+                console.log("email res",res);
                 return res;
             },
             //redirect:(data:any)=>({type:"AddScreen",payload:{screen:"Verifyuser",params:{type:"email",data:{email:data}}}}),
@@ -210,11 +211,11 @@ const forms:FormInfo[]=[
                 return info
             },
             onSubmit:async (data:{phone:{countryCode:string,phoneNumber:string}})=>{
+                console.log("request phone",data);
                 let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{...data.phone}})
+                console.log("ress phone",res);
                 return res;
             },
-            
-            //redirect:(data:any)=>({type:"Login"}),
             successText:"Success!",
             failureText:"Failed :(",
             idleText:"Login"
@@ -230,7 +231,8 @@ const forms:FormInfo[]=[
                                 card:Dialcode,
                                 list:Countrycodes,
                                 labelExtractor:(item:Countrycode)=>item.dial_code,
-                                idExtractor:(item:Countrycode)=>item.code
+                                idExtractor:(item:Countrycode)=>item.code,
+                                searchEvaluator:(item:Countrycode,search:string)=>item.name.toLowerCase().trim().includes(search.toLowerCase().trim()),
                             },
                             apply:(data:Countrycode[])=>{
                                 let current:PhoneType=getBasket("phone")
@@ -590,23 +592,23 @@ const forms:FormInfo[]=[
                     _id:store.getState().sharedinfo.data?._id,
                     firstName:data[data.findIndex((item)=>item.id=="firstname")].value,
                     lastName:data[data.findIndex((item)=>item.id=="lastname")].value,
-                    email:data[data.findIndex((item)=>item.id=="email")].value.email,
-                    phone:{countryCode:data[data.findIndex((item)=>item.id=="phone")].value.countryCode[0].dial_code,number:data[data.findIndex((item)=>item.id=="phone")].value.phoneNumber},
+                    // email:data[data.findIndex((item)=>item.id=="email")].value.email,
+                    // phone:{countryCode:data[data.findIndex((item)=>item.id=="phone")].value.countryCode[0].dial_code,number:data[data.findIndex((item)=>item.id=="phone")].value.phoneNumber},
                 }
                 return info
             },
             onSubmit:async (data:Sharedinfo)=>{
                 console.log("Submitting data",data);
                 let res:ServerResponse=await profileUpdator({...data},(res)=>res.success?store.dispatch(setSharedInfo({...store.getState().sharedinfo.data,...data})):null)
-                let res2:ServerResponse=await serverRequest({
-                    url:getServerRequestURL("edit-phone","PUT"),
-                    reqType:"PUT",
-                    body:{
-                        phone:data.phone
-                    }
-                })
-                console.log("reply",res,res2)
-                return {success:res.success && res2.success,data:undefined,message:res.message+" , "+res2.message}
+                // let res2:ServerResponse=await serverRequest({
+                //     url:getServerRequestURL("edit-phone","PUT"),
+                //     reqType:"PUT",
+                //     body:{
+                //         phone:data.phone
+                //     }
+                // })
+                // console.log("reply",res,res2)
+                return res
             },
             successText:"Success!",
             failureText:"Failed :(",
@@ -647,17 +649,19 @@ const forms:FormInfo[]=[
                 id:"email",
                 componentInfo:{
                     component:Email,
-                    props:{placeholder:""}
-                },
-                title:"Email",
-                validator:(data:{email:string,verified:boolean})=>{
-                    let validationData=validations.EMAIL
-                    return {
-                        success:validationData.regex.test(data.email),
-                        message:validationData.errorMessage,
-                        data:undefined
+                    props:{
+                        placeholder:"Until verified email will not be saved"
                     }
                 },
+                title:"Email",
+                // validator:(data:{email:string,verified:boolean})=>{
+                //     let validationData=validations.EMAIL
+                //     return {
+                //         success:validationData.regex.test(data.email),
+                //         message:validationData.errorMessage,
+                //         data:undefined
+                //     }
+                // },
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
@@ -702,37 +706,7 @@ const forms:FormInfo[]=[
                 onFocus:{
                     event:"onFocus"
                 }
-            },
-            // {
-            //     id:"planningtotakeacademictest",
-            //     componentInfo:{
-            //         component:Phone,
-            //         props:{placeholder:""}
-            //     },
-            //     title:"Planningtotakeacademictest",
-            //     onUpdate:{
-            //         event:"onTextInput",
-            //         handler:undefined
-            //     },
-            //     onFocus:{
-            //         event:"onFocus"
-            //     }
-            // },
-            // {
-            //     id:"phone",
-            //     componentInfo:{
-            //         component:Phone,
-            //         props:{placeholder:""}
-            //     },
-            //     title:"Phone",
-            //     onUpdate:{
-            //         event:"onTextInput",
-            //         handler:undefined
-            //     },
-            //     onFocus:{
-            //         event:"onFocus"
-            //     }
-            // },
+            }
         ]
     },
     {
@@ -917,7 +891,11 @@ const forms:FormInfo[]=[
                                 {label:"Guardian",value:"guardian"}
                             ],
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.value
+                            idExtractor:(item:ListItem)=>item.value,
+                            custom:{
+                                customMessage:"Relation not found?",
+                                defaultMessage:"Show default relations?"
+                            }
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"relationshipwithstudent",newvalue:data}}}),
                         selectionMode:"single",
@@ -1024,7 +1002,11 @@ const forms:FormInfo[]=[
                                 {label:"Shift-work",value:"shift work"}
                             ],
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            custom:{
+                                customMessage:"Worktype not found?",
+                                defaultMessage:"Select a default worktype?"
+                            }
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"worktype",newvalue:data}}}),
                         selectionMode:"single",
@@ -1048,7 +1030,12 @@ const forms:FormInfo[]=[
                         options:{
                             list:Industries.map((item)=>({label:setWordCase(item),value:item})),
                             idExtractor:(item:ListItem)=>item.label,
-                            labelExtractor:(item:ListItem)=>item.label
+                            labelExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                            custom:{
+                                customMessage:"Sector not found?",
+                                defaultMessage:"Select a default sector?"
+                            }
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"sector",newvalue:data}}}),
                         selectionMode:"single",
@@ -1237,7 +1224,11 @@ const forms:FormInfo[]=[
                                 {label:"Shift-work",value:"shift work"}
                             ],
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            custom:{
+                                customMessage:"Worktype not found?",
+                                defaultMessage:"Select a default worktype?"
+                            }
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"worktype",newvalue:data}}}),
                         selectionMode:"single",
@@ -1261,7 +1252,12 @@ const forms:FormInfo[]=[
                         options:{
                             list:Industries.map((item)=>({label:setWordCase(item),value:item})),
                             idExtractor:(item:ListItem)=>item.label,
-                            labelExtractor:(item:ListItem)=>item.label
+                            labelExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                            custom:{
+                                customMessage:"Sector not found?",
+                                defaultMessage:"Select a default sector?"
+                            }
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"sector",newvalue:data}}}),
                         selectionMode:"single",
@@ -1399,7 +1395,8 @@ const forms:FormInfo[]=[
                                 return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
@@ -1432,7 +1429,8 @@ const forms:FormInfo[]=[
                                 return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
@@ -1468,7 +1466,8 @@ const forms:FormInfo[]=[
                                 return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
@@ -1677,6 +1676,7 @@ const forms:FormInfo[]=[
         title:"Please provide your Intermediate Details",
         getInitialData:(id:string|undefined)=>{
             let data:EducationHistory_Plus2|undefined=store.getState().educationhistory.data.plus2
+            console.log("inter",);
             return [
                 {id:"institutename",value:data?.instituteName?data.instituteName:""},
                 {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
@@ -1747,7 +1747,8 @@ const forms:FormInfo[]=[
                                 return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
@@ -1781,7 +1782,8 @@ const forms:FormInfo[]=[
                                 return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
@@ -1817,7 +1819,8 @@ const forms:FormInfo[]=[
                                 return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
@@ -2007,9 +2010,15 @@ const forms:FormInfo[]=[
             {
                 id:"completed",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Checkbox,
+                    props:{
+                        options:{
+                            yes:{label:"Yes",value:"yes"},
+                            no:{label:"No",value:"no"}
+                        }
+                    }
                 },
+                //emptyChecker:data,
                 title:"Completed?",
                 onUpdate:{
                     event:"onTextInput",
@@ -2359,7 +2368,7 @@ const forms:FormInfo[]=[
         title:"Please provide your Undergraduation Details",
         getInitialData:(id:string|undefined)=>{
             let data:EducationHistory_UnderGraduation|undefined=store.getState().educationhistory.data.underGraduation
-            console.log("dyate",data);
+            //console.log("dyate",data);
             return [
                 {id:"institutename",value:data?.instituteName?data.instituteName:""},
                 {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
@@ -2433,7 +2442,8 @@ const forms:FormInfo[]=[
                                 return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
@@ -2462,7 +2472,8 @@ const forms:FormInfo[]=[
                                 return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
@@ -2491,7 +2502,8 @@ const forms:FormInfo[]=[
                                 return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             } ,
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
@@ -2749,7 +2761,8 @@ const forms:FormInfo[]=[
                                 return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
@@ -2782,7 +2795,8 @@ const forms:FormInfo[]=[
                                 return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
@@ -2818,7 +2832,8 @@ const forms:FormInfo[]=[
                                 return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             } ,
                             labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
@@ -3596,7 +3611,7 @@ const forms:FormInfo[]=[
                     }
                 },
                 isOptional:true,
-                title:"Ideal Study Level",
+                title:"Study Level",
                 onUpdate:{
                     event:"onTextInput",
                     handler:undefined
@@ -3649,7 +3664,8 @@ const forms:FormInfo[]=[
                             //list:subDisciplines.map((discipline)=>({label:discipline,value:discipline})),
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label,
-                            searchEvaluator:(item:ListItem,query:string)=>item.label.includes(query)
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                            //searchEvaluator:(item:ListItem,query:string)=>item.label.includes(query)
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"subDiscipline",newvalue:data}}}),
                         selectionMode:"single",
@@ -3696,33 +3712,33 @@ const forms:FormInfo[]=[
                     event:"onFocus"
                 }
             },
-            {
-                id:"LanguageTestName",
-                title:"Language Test",
-                componentInfo:{
-                    component:Dropdown,
-                    props:{
-                        options:{
-                            list:[
-                                {label:"GRE",value:"GRE"},
-                                {label:"TOEFL",value:"TOEFL"}
-                            ],
-                            labelExtractor:(item:ListItem)=>item.label,
-                            idExtractor:(item:ListItem)=>item.label
-                        },
-                        selectionMode:"single",
-                        basketid:"languagetest-dropdown"
-                    },
-                },
-                isOptional:true,
-                onUpdate:{
-                    event:"onTextInput",
-                    handler:undefined
-                },
-                onFocus:{
-                    event:"onFocus"
-                }
-            },
+            // {
+            //     id:"LanguageTestName",
+            //     title:"Language Test",
+            //     componentInfo:{
+            //         component:Dropdown,
+            //         props:{
+            //             options:{
+            //                 list:[
+            //                     {label:"GRE",value:"GRE"},
+            //                     {label:"TOEFL",value:"TOEFL"}
+            //                 ],
+            //                 labelExtractor:(item:ListItem)=>item.label,
+            //                 idExtractor:(item:ListItem)=>item.label
+            //             },
+            //             selectionMode:"single",
+            //             basketid:"languagetest-dropdown"
+            //         },
+            //     },
+            //     isOptional:true,
+            //     onUpdate:{
+            //         event:"onTextInput",
+            //         handler:undefined
+            //     },
+            //     onFocus:{
+            //         event:"onFocus"
+            //     }
+            // },
             {
                 id:"Type",
                 title:"University Type",

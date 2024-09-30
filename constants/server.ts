@@ -24,6 +24,12 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"add-phone/email",
+        category:"student",
+        tail:"phone-email",
+        type:"POST",
+    },
+    {
         id:"reset-password",
         category:"auth",
         tail:"verify-otp",

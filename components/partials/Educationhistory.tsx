@@ -512,12 +512,12 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
                     <Animated.Text onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.25)} style={[styles[Device].title,GeneralStyles.title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1),transform:[{translateY:titleTranslate}]}]}>Undergraduation</Animated.Text>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Word2Sentence([props.data.instituteName,props.data.degreeProgram],"","|")}</Text>
                     <View style={{flexDirection:"row",gap:5}}>
-                        <Image style={[styles[Device].location_icon,{opacity:0.5}]} source={location_icon}/>
-                        <Text style={[styles[Device].text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.city,props.data.state,props.data.country],"",",")}</Text>
+                        <Image style={[styles[Device].info_icon,{opacity:0.5}]} source={info_icon}/>
+                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.data?.programMajor+" | "+props.data?.totalScore+" "+props.data?.gradingSystem}</Text>
                     </View>
                     <View style={{flexDirection:"row",gap:5}}>
-                        <Image style={[styles[Device].info_icon,{opacity:0.5}]} source={info_icon}/>
-                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.programMajor,props.data.gradingSystem,props.data.totalScore?.toString()],"","|")}</Text>
+                        <Image style={[styles[Device].location_icon,{opacity:0.5}]} source={location_icon}/>
+                        <Text style={[styles[Device].text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.city,props.data.state,props.data.country],"",",")}</Text>
                     </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>

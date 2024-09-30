@@ -69,6 +69,7 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
     const addedToBasket=useRef(false);
 
     const onSelect=async ()=>{
+        console.log("selected dddd")
         if(props.isAsync)
         {
             addToBasket(props.basketid+"-dropdownoptionsasync",{options:props.options,apply:props.apply,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value});
@@ -83,7 +84,9 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
             navigate?navigate({type:"UpdateParam",payload:{param:"formerrors",newValue:{id:props.id,error:res.success?undefined:res.message}}}):null
             res.success?addToBasket(props.basketid+"-dropdownoptions",{options:{...props.options,list:res.data},eventHandler:props.eventHandler,apply:props.apply,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value}):null
             res.success?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null:null
-            setLoading(false)
+            setTimeout(()=>{
+                setLoading(false)
+            },100)
         }
     }
 
@@ -114,9 +117,9 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
 
     return(
         <View style={[GeneralStyles.mainWrapper]}>
-            <Pressable style={[GeneralStyles.selecttext_wrapper]} onPress={onSelect}>
+            <Pressable style={[GeneralStyles.selecttext_wrapper]} onPress={!loading?onSelect:null}>
                 <View style={{flex:1}}><Text style={[{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,fontWeight:"700"}]}>{(props.selectionMode=="single" && props.value.length!=0)?props.options.labelExtractor(props.value[0]):"Select"}</Text></View>
-                <Image source={loading?loading_gif:arrow_icon} style={{width:10,height:10,resizeMode:"contain",transform:[{rotate:"-90deg"}]}}></Image>
+                <Image source={loading?loading_gif:arrow_icon} style={{width:16,height:16,resizeMode:"contain",transform:[{rotate:"-90deg"}]}}></Image>
             </Pressable>
             {
                 props.selectionMode=="multi"

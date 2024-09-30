@@ -39,7 +39,6 @@ const Requestotp=(props:{email:string,setPage:any})=>{
 
     const [email,setEmail]=useState(props.email);
     const [request,setRequest]=useState<ServerResponse>()
-    //const email=useAppSelector((state)=>state.sharedinfo.data?.email);
     const [delay,setDelay]=useState(0)
 
     const updateEmail=async ()=>{

@@ -14,6 +14,7 @@ import { useAppSelector } from "../../hooks/useAppSelector"
 import List from "../resources/List"
 import Product from "../cards/Product"
 import Loadinglistscreen from "../resources/Loadinglistscreen"
+import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -244,12 +245,14 @@ const Home=(props:undefined|{name:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Search"}}):null
     }
 
+    console.log("ver",store.getState().verification);
+
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper]}>
                 <View style={{position:"relative",gap:10}}>
                     <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
-                    <Text style={[{color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {personalinfo.data?.firstName}!</Text>
+                    <Text style={[{color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?(personalinfo.data.firstName):"User")}!</Text>
                     <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
                         <Image source={university_icon} style={[GeneralStyles.explore_icon,{width:24,height:24,resizeMode:"contain"}]}></Image>
                         <Text style={{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.5)}}>Malla Reddy University</Text>
