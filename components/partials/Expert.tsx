@@ -62,7 +62,40 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    info_wrapper:{
+        height:110,
+        width:"100%",
+        display:"flex",
+    },
+    name:{
+        fontSize:18
+    },
+    email:{
+        fontSize:12
+    },
+    dp:{
+        width:50,
+        height:50,
+        resizeMode:"contain"
+    },
+    dp_bg:{
+        width:50,
+        height:50,
+        top:-5,
+        left:10
+    },
+    meeting_heading:{
+        fontSize:14
+    },
+    card_wrapper:{
+        height:100,
+        width:"100%"
+    },
+    add_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    }
 })
 
 const MobileSStyles=StyleSheet.create({

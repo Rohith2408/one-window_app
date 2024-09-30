@@ -66,7 +66,8 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     datetime:{
-        fontSize:10
+        fontSize:10,
+        lineHeight:16
     },
     attendees:{
         fontSize:10
@@ -139,7 +140,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     attendees:{
-        fontSize:12
+        fontSize:12,
+        lineHeight:16
     },
     edit:{
         width:14,
@@ -233,7 +235,11 @@ const Meetingcard=(props:{data:Meeting,index:number})=>{
                         <Image style={[styles[Device].clock]} source={clock_icon} />
                         <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{getdatatime(props.data.startDate.dateTime,props.data.endDate.dateTime)}</Text>
                     </View>
-                    <Text style={[styles[Device].attendees,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{Word2Sentence(props.data.attendees,"Attendees- ")}</Text>
+                    <View style={{gap:5,flexDirection:"row"}}>
+                        {/* <Text style={[styles[Device].attendees,{color:'black',fontFamily:Fonts.NeutrifStudio.Regular}]}>Attendees </Text> */}
+                        <Image style={[styles[Device].clock]} source={clock_icon} />
+                        <Text style={[styles[Device].attendees,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{Word2Sentence(props.data.attendees,"",",")}</Text>
+                    </View>
                 </View>
                 {
                     props.data.status!="cancelled"

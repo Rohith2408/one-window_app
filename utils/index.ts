@@ -484,9 +484,10 @@ export const pickDocument=async (sizeLimit:number)=>{
   return response
 }
 
-export const Word2Sentence=(words:string[],startStr?:string,seperator?:string)=>{
+export const Word2Sentence=(words:string[],startStr?:string,seperator?:string,dontSetCase?:boolean)=>{
+  console.log(dontSetCase)
   //console.log("words",words.filter((word)=>word!=undefined || word!=null));
-  return words.filter((word)=>word!=undefined || word!=null).reduce((sentence,word,i)=>(word.length>0)?(i==(words.length-1)?(sentence+setWordCase(word)):(sentence+setWordCase(word)+(seperator?(" "+seperator+" "):" , "))):(sentence+""),startStr!=undefined?startStr:"")
+  return words.filter((word)=>word!=undefined || word!=null).reduce((sentence,word,i)=>(word.length>0)?(i==(words.length-1)?(sentence+(dontSetCase?word:setWordCase(word))):(sentence+(dontSetCase?word:setWordCase(word))+(seperator?(" "+seperator+" "):" "))):(sentence+""),startStr!=undefined?startStr:"")
 }
 
 export const formatDate=(date:string,showWeek?:boolean)=>{
@@ -802,6 +803,25 @@ export const getListQuery=(currentData:Listqueryadv,newData:any)=>{
 
 export const replaceCharacters=(str:string,start:number,end:number,replaceChar:string)=>str.slice(0, start) + replaceChar.repeat(end-start) + str.slice(end)
 
+export const camelCaseToString=(camelstr:string)=>{
+  let words=[];
+  let currentword="";  
+  for(let i=0;i<camelstr.length;i++)
+  {
+    if(camelstr[i]==camelstr[i].toUpperCase())
+    {
+      words.push(setWordCase(currentword))
+      currentword="";
+    }
+    if(i==camelstr.length-1)
+    {
+        currentword+=camelstr[i]
+        words.push(setWordCase(currentword))
+    }
+    currentword+=camelstr[i]
+  }
+  return words
+}
 
 
 // export const bakeFilters=(additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[])=>{
