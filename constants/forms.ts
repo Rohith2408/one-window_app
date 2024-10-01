@@ -4295,7 +4295,8 @@ const forms:FormInfo[]=[
                             },
                             //list:studyLevel.map((item)=>({label:item,value:item})),
                             idExtractor:(item:ListItem)=>item.label,
-                            labelExtractor:(item:ListItem)=>item.label
+                            labelExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"studyLevel",newvalue:data}}}),
                         selectionMode:"single",

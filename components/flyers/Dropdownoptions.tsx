@@ -152,7 +152,7 @@ const Dropdownoptions=(props:{basketid:string})=>{
     {
         if(search)
         {
-            console.log(info.options.list.filter((item)=>{console.log(item,search,info.options.searchEvaluator(item,search));return info.options.searchEvaluator(item,search)}))
+            //console.log(info.options.list.filter((item)=>{console.log(item,search,info.options.searchEvaluator(item,search));return info.options.searchEvaluator(item,search)}))
             options.current=info.options.list.filter((item)=>info.options.searchEvaluator(item,search)).slice(0,(page+1)*itemsPerPage);
         }
         else

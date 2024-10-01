@@ -1,5 +1,5 @@
 import { Dimensions, LayoutAnimation, Platform } from "react-native";
-import { Api, GradingSystems, Tests, Themes, andReplacer, baseAppUrl,lists,secureStoreKeys } from "../constants";
+import { Api, GradingSystems, Tests, Themes, andReplacer, baseAppUrl,lists,secureStoreKeys, slashReplacer } from "../constants";
 import { Chat, Message, Participant, ServerRequest, StackScreen, ServerResponse, Sharedinfo, FormData, ListItem, Product, Package, Listquery, AppliedFilter, AppliedQuickFilter, Order, Listqueryadv } from "../types";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
@@ -49,7 +49,13 @@ export const formatQueryParamsToString=(params:any)=>{
       (current + "=" + 
           (typeof values[index] === "string" 
               ? values[index] 
-              : JSON.stringify(values[index]).replace(/&/g,andReplacer)
+              : JSON.stringify(values[index]).replace(/[&/]/g, (match:string) => {
+                if (match === "&") {
+                  return andReplacer;
+                } else if (match === "/") {
+                  return slashReplacer;
+                }
+              })
           )
       ) + 
       (index === keys.length - 1 ? "" : "&"), 
@@ -71,7 +77,13 @@ export const formatQueryParamsToObj=(queryString:string)=>{
       if(isStringified(decodedValue))
       {
         //console.log("decoded",decodedValue,decodedValue.replace(/__AND__/g, '&'))
-        result[decodedKey] = JSON.parse(decodedValue.replace(/__AND__/g, '&'));
+        result[decodedKey] = JSON.parse(decodedValue.replace(/__AND__|__SLASH__/g, function(match) {
+          if (match === andReplacer) {
+            return '&';
+          } else if (match === slashReplacer) {
+            return '/';
+          }
+        }));
       }
       else
       {

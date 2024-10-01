@@ -103,7 +103,7 @@ const Dropdownoptionsasync=(props:{basketid:string,eventHandler:any})=>{
     const [selectionType,setSelectionType]=useState<"custom"|"default">("default");
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
-    console.log("inf",info.options);
+    //console.log("inf",info.options);
     const selection=(data:any)=>{
         if(selected.find((item)=>info.options.idExtractor(item)==info.options.idExtractor(data))){
             setSelected(selected.filter((item)=>info.options.idExtractor(item)!=info.options.idExtractor(data)))
@@ -115,6 +115,7 @@ const Dropdownoptionsasync=(props:{basketid:string,eventHandler:any})=>{
     }
 
     const onScroll=(e:NativeSyntheticEvent<NativeScrollEvent>)=>{
+        console.log("scroll",page,maxPages.current);
         if(page<maxPages.current)
         {
             if(!pageUpdated.current && (e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y>e.nativeEvent.contentSize.height))
@@ -139,7 +140,8 @@ const Dropdownoptionsasync=(props:{basketid:string,eventHandler:any})=>{
                 {
                     //console.log("ressssssAAA",res.data[0]);
                     maxPages.current=(res.data.length/itemsPerPage)+(res.data.length%itemsPerPage!=0?1:0)
-                    setPage(1);
+                    console.log("max pages",maxPages.current);
+                    setPage(0);
                     setOptions(res.data)
                 }
             }):null
