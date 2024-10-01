@@ -56,6 +56,7 @@ import Addtoorder from "../components/partials/Addtoorder"
 import Institutes from "../components/flyers/Institutes"
 import Verifyuser from "../components/flyers/Verifyuser"
 import Familydetails from "../components/partials/Familydetails"
+import Intermediatecompleted from "../components/flyers/Intermediatecompleted"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -115,6 +116,7 @@ const components:ScreenInfo[]=[
     {id:"Currentlyworking",component:Currentlyworking,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Existingorders",component:Existingorders,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Familydetails",component:Familydetails,type:"Partial",title:"Family Details",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Intermediatecompleted",component:Intermediatecompleted,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
 ]
 
 const setComponentInfo=(id:string,key:keyof ScreenInfo,value:any)=>{

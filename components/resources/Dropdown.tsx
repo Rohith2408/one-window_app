@@ -72,7 +72,7 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
         console.log("selected dddd")
         if(props.isAsync)
         {
-            addToBasket(props.basketid+"-dropdownoptionsasync",{options:props.options,apply:props.apply,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value});
+            addToBasket(props.basketid+"-dropdownoptions",{options:{...props.options},eventHandler:props.eventHandler,apply:props.apply,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value});
             navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptionsasync",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null
         }
         else

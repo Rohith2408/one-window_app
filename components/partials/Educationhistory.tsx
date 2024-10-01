@@ -6,6 +6,7 @@ import Nestedview from "../resources/Nestedview"
 import { Image } from "expo-image"
 import loading_gif from '../../assets/images/misc/loader.gif'
 import add_icon from '../../assets/images/misc/add.png'
+import date_icon from '../../assets/images/misc/calendar.png'
 import delete_icon from '../../assets/images/misc/delete.png'
 import edit_icon from '../../assets/images/misc/edit.png'
 import school_icon from '../../assets/images/education/school.png'
@@ -16,7 +17,7 @@ import info_icon from '../../assets/images/misc/info.png'
 import location_icon from '../../assets/images/misc/location.png'
 
 import useNavigation from "../../hooks/useNavigation"
-import { Word2Sentence, getDevice, profileUpdator } from "../../utils"
+import { Word2Sentence, formatDate, getDevice, profileUpdator } from "../../utils"
 import { store } from "../../store"
 import { setEducationHistory } from "../../store/slices/educationHistorySlice"
 import { useRef, useState } from "react"
@@ -404,9 +405,10 @@ const Intermediate=(props:{data:EducationHistory_Plus2|undefined})=>{
         }).start()
     }
 
-    const add=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Intermediate"}}}):null
-    }
+    // const add=(data:boolean)=>{
+    //     console.log(data);
+    //     navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:data?"Intermediate_completed":"Intermediate_not-completed"}}}):null
+    // }
 
     const remove=async ()=>{
         setIsLoading(true);
@@ -415,9 +417,16 @@ const Intermediate=(props:{data:EducationHistory_Plus2|undefined})=>{
         return res
     }
 
-    const edit=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Intermediate"}}}):null
+    const openForm=(data:boolean)=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:data?"Intermediate_completed":"Intermediate_not-completed"}}}):null
     }
+
+    const openCompletedFlyer=()=>{
+        addToBasket("intermediatecompleted",{callback:openForm,institute:props.data?.instituteName,initialStatus:props.data?.isCompleted==undefined?true:props.data .isCompleted})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intermediatecompleted",flyerdata:{intermediateCompletedBasketid:"intermediatecompleted"}}}}):null
+    }
+
+    //console.log("in",props.data?.backlogs)
 
     return(
         <View style={{flex:1}}>
@@ -430,16 +439,20 @@ const Intermediate=(props:{data:EducationHistory_Plus2|undefined})=>{
                     <Animated.Text onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.35)} style={[styles[Device].title,GeneralStyles.title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5),transform:[{translateY:titleTranslate}]}]}>Intermediate</Animated.Text>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Word2Sentence([props.data.instituteName,props.data.stream],"","|")}</Text>
                     <View style={{flexDirection:"row",gap:5}}>
+                        <Image style={[styles[Device].info_icon,{opacity:0.7}]} source={info_icon}/>
+                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>{props.data?.stream+" | "+props.data?.totalScore+" "+props.data?.gradingSystem+ (props.data.backlogs!=0?" | "+props.data.backlogs+" Backlogs":"")}</Text>
+                    </View>
+                    <View style={{flexDirection:"row",gap:5}}>
                         <Image style={[styles[Device].location_icon,{opacity:0.5}]} source={location_icon}/>
                         <Text style={[styles[Device].text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.city,props.data.state,props.data.country],"",",")}</Text>
                     </View>
                     <View style={{flexDirection:"row",gap:5}}>
-                        <Image style={[styles[Device].info_icon,{opacity:0.5}]} source={info_icon}/>
-                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.board,props.data.gradingSystem,props.data.totalScore],"","|")}</Text>
+                        <Image style={[styles[Device].info_icon,{opacity:0.5}]} source={date_icon}/>
+                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{formatDate(props.data.startDate)+ (props.data.isCompleted?(" - "+formatDate(props.data.endDate)):"")}</Text>
                     </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>
-                    <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
+                    <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
                     <Pressable onPress={!isLoading?remove:undefined} style={{flex:1,display:"flex",justifyContent:"flex-end"}}><Image source={isLoading?loading_gif:delete_icon} style={[styles[Device].delete_icon]} /></Pressable>
                 </View>
             </View>
@@ -449,7 +462,7 @@ const Intermediate=(props:{data:EducationHistory_Plus2|undefined})=>{
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Intermediate</Text>
                     <View style={[GeneralStyles.nodetails_wrapper]}>
-                        <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
+                        <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
                         <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
                     </View>
                 </View>
@@ -475,10 +488,6 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
         }).start()
     }
 
-    const add=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Undergraduation"}}}):null
-    }
-
     const showInstitutes=()=>{
         addToBasket("institutions-flyer",{
             callback:add
@@ -493,8 +502,18 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
         return res
     }
 
-    const edit=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Undergraduation"}}}):null
+    // const add=(data:boolean)=>{
+    //     console.log(data);
+    //     navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:data?"Undergraduation_completed":"Undergraduation_not-completed"}}}):null
+    // }
+
+    const openForm=(data:boolean)=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:data?"Undergraduation_completed":"Undergraduation_not-completed"}}}):null
+    }
+
+    const openCompletedFlyer=()=>{
+        addToBasket("intermediatecompleted",{callback:openForm,institute:props.data?.instituteName,initialStatus:props.data?.isCompleted==undefined?true:props.data.isCompleted})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intermediatecompleted",flyerdata:{intermediateCompletedBasketid:"intermediatecompleted"}}}}):null
     }
 
     const checkIfEmpty=(data:EducationHistory_UnderGraduation|undefined)=>{
@@ -519,9 +538,13 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
                         <Image style={[styles[Device].location_icon,{opacity:0.5}]} source={location_icon}/>
                         <Text style={[styles[Device].text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.city,props.data.state,props.data.country],"",",")}</Text>
                     </View>
+                    <View style={{flexDirection:"row",gap:5}}>
+                        <Image style={[styles[Device].info_icon,{opacity:0.5}]} source={date_icon}/>
+                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{formatDate(props.data.startDate)+ (props.data.isCompleted?(" - "+formatDate(props.data.endDate)):"")}</Text>
+                    </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>
-                    <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
+                    <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
                     <Pressable onPress={!isLoading?remove:undefined} style={{flex:1,display:"flex",justifyContent:"flex-end"}}><Image source={isLoading?loading_gif:delete_icon} style={[styles[Device].delete_icon]} /></Pressable>
                 </View>
             </View>
@@ -531,7 +554,7 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Undergraduate</Text>
                     <View style={[GeneralStyles.nodetails_wrapper]}>
-                        <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
+                        <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
                         <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
                     </View>
                 </View>
@@ -549,10 +572,6 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const titleTranslate=useRef(new Animated.Value(0)).current
     const titleHeight=useRef().current
-
-    const add=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Postgraduation"}}}):null
-    }
 
     const remove=async ()=>{
         setIsLoading(true);
@@ -572,8 +591,18 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
         return (!data || Object.keys(data).length==0 || Object.keys(data).length==1 && data.custom!=undefined)?true:false
     }
 
-    const edit=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Postgraduation"}}}):null
+    // const add=(data:boolean)=>{
+    //     console.log(data);
+    //     navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:data?"Postgraduation_completed":"Postgraduation_not-completed"}}}):null
+    // }
+
+    const openForm=(data:boolean)=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:data?"Postgraduation_completed":"Postgraduation_not-completed"}}}):null
+    }
+
+    const openCompletedFlyer=()=>{
+        addToBasket("intermediatecompleted",{callback:openForm,institute:props.data?.instituteName,initialStatus:props.data?.isCompleted==undefined?true:props.data.isCompleted})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intermediatecompleted",flyerdata:{intermediateCompletedBasketid:"intermediatecompleted"}}}}):null
     }
 
     return(
@@ -585,18 +614,22 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
                 <View style={[GeneralStyles.icon_wrapper]}><Image source={ug_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Animated.Text onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.25)} style={[styles[Device].title,GeneralStyles.title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5),transform:[{translateY:titleTranslate}]}]}>Postgraduation</Animated.Text>
-                    <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Word2Sentence([props.data.instituteName,props.data.degreeProgram],"","|")}</Text>
+                    <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Word2Sentence([props.data?.instituteName,props.data?.degreeProgram],"","|")}</Text>
+                    <View style={{flexDirection:"row",gap:5}}>
+                        <Image style={[styles[Device].info_icon,{opacity:0.5}]} source={info_icon}/>
+                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.data?.specialization+" | "+props.data?.totalScore+" "+props.data?.gradingSystem}</Text>
+                    </View>
                     <View style={{flexDirection:"row",gap:5}}>
                         <Image style={[styles[Device].location_icon,{opacity:0.5}]} source={location_icon}/>
                         <Text style={[styles[Device].text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.city,props.data.state,props.data.country],"",",")}</Text>
                     </View>
                     <View style={{flexDirection:"row",gap:5}}>
-                        <Image style={[styles[Device].info_icon,{opacity:0.5}]} source={info_icon}/>
-                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.programMajor,props.data.gradingSystem,props.data.totalScore?.toString()],"","|")}</Text>
+                        <Image style={[styles[Device].info_icon,{opacity:0.5}]} source={date_icon}/>
+                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{formatDate(props.data.startDate)+ (props.data.isCompleted?(" - "+formatDate(props.data.endDate)):"")}</Text>
                     </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>
-                    <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={edit} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
+                    <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer} style={{flex:1}}><Image source={edit_icon} style={[styles[Device].edit_icon]} /></Pressable>
                     <Pressable onPress={!isLoading?remove:undefined} style={{flex:1,display:"flex",justifyContent:"flex-end"}}><Image source={isLoading?loading_gif:delete_icon} style={[styles[Device].delete_icon]} /></Pressable>
                 </View>
             </View>
@@ -606,7 +639,7 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Postgraduate</Text>
                     <View style={[GeneralStyles.nodetails_wrapper]}>
-                        <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
+                        <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
                         <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
                     </View>
                 </View>

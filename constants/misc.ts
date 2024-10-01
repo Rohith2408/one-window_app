@@ -47,6 +47,15 @@ const Tests=[
 
 export const Countries=["United States of America","United Kingdom","Canada","Australia","Ireland","New Zealand"]
 
+export const boards=[
+    "Central Board of Secondary Education (CBSE)", 
+    "Indian Certificate of Secondary Education (ICSE)", 
+    "International Baccalaureate (IB)", 
+    "National Institute of Open Schooling (NIOS)", 
+    "All India Senior School Certificate Examination (AISSCE)", 
+  ]
+  
+
 const Countrycodes=[
     {
     "name": "Afghanistan",
