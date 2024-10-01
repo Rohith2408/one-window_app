@@ -53,7 +53,7 @@ const Passwordinput=(props:{eventHandler:any,value:string,id:string,placeholder:
         props.eventHandler({name:"onTextInput",data:txt,triggerBy:"textinput"})
     }
 
-    console.log(visibility)
+    //console.log(visibility)
 
     return(
         <View style={{flexDirection:"row",padding:10,borderWidth:1,borderColor:"#E3E3E3",borderRadius:5}}>

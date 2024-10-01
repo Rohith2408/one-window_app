@@ -195,7 +195,7 @@ const styles={
 const Expertcard=(props:Advisor & {index:number})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
-    console.log(props.assignedCountries,props.info.firstName,props.info.role)
+    //console.log(props.assignedCountries,props.info.firstName,props.info.role)
     
     return(
         <View style={[GeneralStyles.main_wrapper]}>

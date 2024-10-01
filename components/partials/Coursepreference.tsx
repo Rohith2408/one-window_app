@@ -88,7 +88,7 @@ const Coursepreference=(props)=>{
     const onselect=async (selitem)=>{
         selected.current=selitem
         setIsloading(true)
-        console.log(selitem,preferencedata);
+        //console.log(selitem,preferencedata);
         let serverRes=await preferencedata?.serverCommunicator(selectedPreferences?.find((item2)=>item2==selitem)?selectedPreferences.filter((item)=>item!=selitem):[...selectedPreferences,selitem]);
         if(serverRes?.success)
         {

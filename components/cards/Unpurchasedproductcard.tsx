@@ -185,7 +185,7 @@ const Unpurchasedproductscard=(props:{data:Product,index:number,hideDelete?:bool
             useNativeDriver:false
         }).start()
     }
-    console.log(props.data)
+    //console.log(props.data)
 
     const deleteItem=()=>{
         setIsloading(true);

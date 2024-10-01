@@ -158,7 +158,7 @@ const Recommendations=()=>{
         return res?.success
     }
 
-    console.log("p",store.getState().preferences.data?.country?.length>0)
+    //console.log("p",store.getState().preferences.data?.country?.length>0)
 
     useEffect(()=>{
        setTimeout(()=>{
@@ -170,7 +170,7 @@ const Recommendations=()=>{
         ref.current.scrollTo({x:dimensions.width*(tabs.findIndex((tab)=>tab.label==selected[0].label)),animated:true})
     }
 
-    console.log(recommendations.data?.data.length)
+    //console.log(recommendations.data?.data.length)
 
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}}>

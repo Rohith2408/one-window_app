@@ -366,7 +366,7 @@ const Program=(props:{programid:string})=>{
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
 
     const order=(event:Event)=>{
-        console.log(event);
+        //console.log(event);
         addToBasket(props.programid,{
             package:freePackageInfo,
             products:[{

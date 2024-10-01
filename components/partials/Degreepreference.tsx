@@ -87,12 +87,12 @@ const Degreepreference=(props)=>{
     },[search])
 
     const onselect=async (selitem)=>{
-        console.log(selitem);
+        //console.log(selitem);
         selected.current=selitem
         setIsloading(true)
-        console.log(selitem,preferencedata);
+        //console.log(selitem,preferencedata);
         let serverRes=await preferencedata?.serverCommunicator(selectedPreference==selitem?undefined:selitem);
-        console.log(serverRes)
+        //console.log(serverRes)
         if(serverRes?.success)
         {
             preferencedata?.responseHandler(serverRes.data.preference)

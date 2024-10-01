@@ -209,7 +209,7 @@ const Requestotp=(props:{setPage:any,setEmail:any})=>{
         setEmail(txt)
         let emailValidationData=validations.EMAIL
         let emailValidation=emailValidationData.regex.test(txt);
-        console.log(emailValidation)
+        //console.log(emailValidation)
         setError(!emailValidation?emailValidationData.errorMessage:undefined)
     }
 

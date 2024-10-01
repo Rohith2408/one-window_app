@@ -157,6 +157,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
 
     useEffect(()=>{
         //if()
+
         getList().then((res:ServerResponse|undefined)=>{
             maxPages.current=res?.data.totalPages;
             (res && res.success)?setList(props.page==1?[...res.data.list]:[...list,...res.data.list]):null
@@ -166,6 +167,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     const getList=async ()=>{
         setIsLoading(true);
         let appliedFilters=bakeFilters(props.additionalFilters,props.quickFilters);
+        console.log("Applied",props.listid,JSON.stringify(appliedFilters,null,2));
         let res=await ListInfo?.listFetcher({search:props.search,filters:appliedFilters,page:props.page})
         setTimeout(()=>{
             setIsLoading(false)

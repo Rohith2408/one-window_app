@@ -497,7 +497,7 @@ export const pickDocument=async (sizeLimit:number)=>{
 }
 
 export const Word2Sentence=(words:string[],startStr?:string,seperator?:string,dontSetCase?:boolean)=>{
-  console.log(dontSetCase)
+  //console.log(dontSetCase)
   //console.log("words",words.filter((word)=>word!=undefined || word!=null));
   return words.filter((word)=>word!=undefined || word!=null).reduce((sentence,word,i)=>(word.length>0)?(i==(words.length-1)?(sentence+(dontSetCase?word:setWordCase(word))):(sentence+(dontSetCase?word:setWordCase(word))+(seperator?(" "+seperator+" "):" "))):(sentence+""),startStr!=undefined?startStr:"")
 }

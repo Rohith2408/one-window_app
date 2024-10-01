@@ -252,7 +252,7 @@ const Familydetailscard=(props:{data:FamilyInfo,index:number})=>{
     const remove=async ()=>{
         let familydetails=store.getState().familyinfo.data
         setIsLoading(true);
-        console.log(familydetails.filter((item)=>item.RelationshipWithStudent!=props.data.RelationshipWithStudent)); 
+        //console.log(familydetails.filter((item)=>item.RelationshipWithStudent!=props.data.RelationshipWithStudent)); 
         await profileUpdator({familyDetails:familydetails.filter((item)=>item.RelationshipWithStudent!=props.data.RelationshipWithStudent)},(res)=>dispatch(setFamilyinfo(res.data.familyDetails)))
         setIsLoading(false)
     }
@@ -263,11 +263,11 @@ const Familydetailscard=(props:{data:FamilyInfo,index:number})=>{
     // }
 
     const edit=()=>{
-        console.log(props.data.RelationshipWithStudent)
+        //console.log(props.data.RelationshipWithStudent)
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Familydetails",forminitialdataid:props.data.RelationshipWithStudent}}}):null
     }
 
-    console.log("family",props.data)
+    //console.log("family",props.data)
 
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,padding:5}}>

@@ -107,7 +107,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     const eventHandler=async (event:Event)=>{
         console.log("event",event);
         let field=formInfo?.allFields.find((field)=>field.id==event.triggerBy)
-        console.log(field?.onUpdate)
+        //console.log(field?.onUpdate)
         if(field)
         {
             switch(event.name){
@@ -126,7 +126,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                     break;
 
                 case field.onFocus?.event:
-                    console.log(event.triggerBy)
+                    //console.log(event.triggerBy)
                     setFocussedField(event.triggerBy)
                     break;
             }
