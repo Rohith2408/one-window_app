@@ -188,6 +188,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
             baseFilters:mergeQuickFilters(props.quickFilters),
             callback:applyAdditionalFilters
         })
+        console.log("iddd",ListInfo?.formid);
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:ListInfo?.formid,forminitialdataid:props.listid+"filter",formbasket:props.listid+"filter"}}}):null
     }
 

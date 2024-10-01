@@ -4226,6 +4226,10 @@ const forms:FormInfo[]=[
             console.log("filter idd",getBasket(id));
             let filtersInfo=lists.find((list)=>list.id=="Programs")?.filters.additional;
             let data:{additionalFilters:AppliedFilter[]}|undefined=id?getBasket(id):undefined
+            console.log("fields",filtersInfo?.map((item)=>{
+                let applied=data?.additionalFilters?.find((item2)=>item2.type==item.type)?.data
+                return {id:item.type,value:applied?applied:[]}
+            }))
             return filtersInfo?filtersInfo.map((item)=>{
                 let applied=data?.additionalFilters?.find((item2)=>item2.type==item.type)?.data
                 return {id:item.type,value:applied?applied:[]}

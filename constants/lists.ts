@@ -40,11 +40,11 @@ const lists:ListInfo[]=[
                     title:"Country",
                     icon:sample_icon
                 },
-                {
-                    type:"LanguageTestName",
-                    title:"Language Test",
-                    icon:sample_icon
-                },
+                // {
+                //     type:"LanguageTestName",
+                //     title:"Language Test",
+                //     icon:sample_icon
+                // },
                 {
                     type:"Type",
                     title:"Universaity Type",
