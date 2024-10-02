@@ -105,13 +105,16 @@ const Dropdownoptionsasync=(props:{basketid:string,eventHandler:any})=>{
 
     //console.log("inf",info.options);
     const selection=(data:any)=>{
+        let sel;
         if(selected.find((item)=>info.options.idExtractor(item)==info.options.idExtractor(data))){
-            setSelected(selected.filter((item)=>info.options.idExtractor(item)!=info.options.idExtractor(data)))
+            sel=selected.filter((item)=>info.options.idExtractor(item)!=info.options.idExtractor(data))
         }
         else
         {
-            setSelected(info.selectionMode=="single"?[data]:[...selected,data])
+            sel=info.selectionMode=="single"?[data]:[...selected,data]
         }
+        setSelected(sel)
+        info.selectionMode=="single"?apply(sel):null;
     }
 
     const onScroll=(e:NativeSyntheticEvent<NativeScrollEvent>)=>{
@@ -148,7 +151,7 @@ const Dropdownoptionsasync=(props:{basketid:string,eventHandler:any})=>{
         }
     },[search])
 
-    const apply=()=>{
+    const apply=(selected:any)=>{
         info.eventHandler?info.eventHandler({name:"onSelect",data:selected,triggerBy:"dropdownoptions"}):null
         navigate?navigate({type:"RemoveScreen"}):null;
         navigate?navigate(info.apply?info.apply(selected):{type:"UpdateParam",payload:{param:"formupdate",newValue:{id:info?.fieldid,newvalue:selected}}}):null
@@ -168,9 +171,9 @@ const Dropdownoptionsasync=(props:{basketid:string,eventHandler:any})=>{
     return(
         <View style={{flex:1,paddingTop:10,gap:10}}>
             {
-                selected.length>0
+                selected.length>0 && info.selectionMode!="single"
                 ?
-                <Pressable style={[GeneralStyles.apply,{borderColor:Themes.Light.OnewindowPrimaryBlue(1)}]} onPress={apply}><Text style={[GeneralStyles.apply_text,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Apply</Text></Pressable>
+                <Pressable style={[GeneralStyles.apply,{borderColor:Themes.Light.OnewindowPrimaryBlue(1)}]} onPress={()=>apply(selected)}><Text style={[GeneralStyles.apply_text,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Apply</Text></Pressable>
                 :
                 null
             }

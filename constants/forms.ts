@@ -15,7 +15,7 @@ import { AdditionalFilterInfo, Advisor, AppliedFilter, AppliedQuickFilter, Count
 import { Word2Sentence, fetchCities, fetchCountries, fetchStates,  getMergedFilters,  getServerRequestURL, profileUpdator, serverRequest, setWordCase} from "../utils";
 import { validations} from "../utils/validations";
 import { addToBasket, getBasket, getFullBasket} from "./basket";
-import { Countries, GradingSystems, Industries, Languages, Tests, boards, disciplines, intakes, studyLevel, subDisciplines } from "./misc";
+import { Countries, GradingSystems, Industries, Languages, Tests, boards, disciplines, intakes, pgCourses, studyLevel, subDisciplines, undergradCourses } from "./misc";
 import { Countrycodes } from "./misc";
 import Dialcode from "../components/cards/Dialcode";
 import { setSharedInfo } from "../store/slices/sharedinfoSlice";
@@ -2387,15 +2387,15 @@ const forms:FormInfo[]=[
         title:"Please provide your Undergraduation Details",
         getInitialData:(id:string|undefined)=>{
             let data:EducationHistory_UnderGraduation|undefined=store.getState().educationhistory.data.underGraduation
-            //console.log("dyate",data);
-            return [
-                {id:"institutename",value:data?.instituteName?[{label:data.instituteName,value:data.instituteName}]:""},
+            console.log("dyate",data);
+            return [//instituteName
+                {id:"institutename",value:data?.instituteName?[{label:data.instituteName,value:data.instituteName}]:[]},
                 {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
                 {id:"state",value:data?.state?[{label:setWordCase(data.state),value:data.state}]:[]},
                 {id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
-                {id:"affiliateduniversity",value:data?.instituteName?data.affiliatedUniversity:""},
-                {id:"programmajor",value:data?.instituteName?data.programMajor:""},
-                {id:"degreeprogram",value:data?.instituteName?data.degreeProgram:""},
+                {id:"affiliateduniversity",value:data?.affiliatedUniversity?data.affiliatedUniversity:""},
+                {id:"degreeprogram",value:data?.degreeProgram?[{label:data.degreeProgram,value:data.degreeProgram}]:[]},
+                {id:"programmajor",value:data?.programMajor?[{label:data.programMajor,value:data.programMajor}]:[]},
                 {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
                 {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
                 {id:"backlogs",value:data?.backlogs!=undefined?data.backlogs.toString():undefined},
@@ -2408,17 +2408,17 @@ const forms:FormInfo[]=[
             dataConverter:(data:FormData[],id?:string)=>{
                 let ugdetail:EducationHistory_UnderGraduation={
                     instituteName:data[data.findIndex((item)=>item.id=="institutename")].value[0].value,
+                    affiliatedUniversity:data[data.findIndex((item)=>item.id=="affiliateduniversity")].value,
                     city: data[data.findIndex((item)=>item.id=="city")].value[0].value,
                     state: data[data.findIndex((item)=>item.id=="state")].value[0].value,
                     country: data[data.findIndex((item)=>item.id=="country")].value[0].value,
-                    degreeProgram:data[data.findIndex((item)=>item.id=="degreeprogram")].value,
-                    affiliatedUniversity:data[data.findIndex((item)=>item.id=="affiliateduniversity")].value,
-                    programMajor:data[data.findIndex((item)=>item.id=="programmajor")].value,
+                    degreeProgram:data[data.findIndex((item)=>item.id=="degreeprogram")].value[0].value,
+                    programMajor:data[data.findIndex((item)=>item.id=="programmajor")].value[0].value,
                     gradingSystem: data[data.findIndex((item)=>item.id=="gradingsystem")].value[0].value,
                     totalScore: data[data.findIndex((item)=>item.id=="totalscore")].value.toString(),
+                    backlogs:data[data.findIndex((item)=>item.id=="backlogs")].value.toString(),
                     startDate: data[data.findIndex((item)=>item.id=="startdate")].value,
                     endDate: data[data.findIndex((item)=>item.id=="enddate")].value,
-                    backlogs:data[data.findIndex((item)=>item.id=="backlogs")].value.toString(),
                     isCompleted:true
                 }
                 return ugdetail
@@ -2574,8 +2574,21 @@ const forms:FormInfo[]=[
             {
                 id:"programmajor",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let degree=getBasket("degreeprogram");
+                                let majors=degree.length>0?undergradCourses[degree[0].value].map((item)=>({label:item,value:item})):undefined
+                                return {success:majors!=undefined?true:false,data:majors,message:"Select the degree program first"}
+                            } ,
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"programmajor",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"programmajor-dropdown"
+                    }
                 },
                 title:"Programmajor",
                 onUpdate:{
@@ -2589,8 +2602,17 @@ const forms:FormInfo[]=[
             {
                 id:"degreeprogram",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:Object.keys(undergradCourses).map((item)=>({label:item,value:item})),
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"degreeprogram-dropdown"
+                    }
                 },
                 title:"Degree Program",
                 onUpdate:{
@@ -2727,13 +2749,13 @@ const forms:FormInfo[]=[
             let data:EducationHistory_UnderGraduation|undefined=store.getState().educationhistory.data.underGraduation
             //console.log("dyate",data);
             return [
-                {id:"institutename",value:data?.instituteName?[{label:data.instituteName,value:data.instituteName}]:""},
+                {id:"institutename",value:data?.instituteName?[{label:data.instituteName,value:data.instituteName}]:[]},
                 {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
                 {id:"state",value:data?.state?[{label:setWordCase(data.state),value:data.state}]:[]},
                 {id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
-                {id:"affiliateduniversity",value:data?.instituteName?data.affiliatedUniversity:""},
-                {id:"programmajor",value:data?.instituteName?data.programMajor:""},
-                {id:"degreeprogram",value:data?.instituteName?data.degreeProgram:""},
+                {id:"affiliateduniversity",value:data?.affiliatedUniversity?data.affiliatedUniversity:""},
+                {id:"degreeprogram",value:data?.degreeProgram?[{label:data.degreeProgram,value:data.degreeProgram}]:[]},
+                {id:"programmajor",value:data?.programMajor?[{label:data.programMajor,value:data.programMajor}]:[]},
                 {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
                 {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
                 {id:"backlogs",value:data?.backlogs!=undefined?data.backlogs.toString():undefined},
@@ -2775,8 +2797,26 @@ const forms:FormInfo[]=[
             {
                 id:"institutename",
                 componentInfo:{
-                    component:Textbox,
+                    component:Dropdown,
                     props:{
+                        options:{
+                            fetcher:async (str:string)=>{
+                                console.log("search string",str);
+                                let res:ServerResponse=await serverRequest({
+                                    url:getServerRequestURL("regex","GET",{search:str.trim(),institutions:1,universities:0,disciplines:0,subDisciplines:0}),
+                                    reqType:"GET"
+                                })
+                                //console.log("search res",res);
+                                return {success:res.success,message:res.message,data:res.data?.institutions.map((item:UG_Institutes)=>({label:item.InstitutionName,value:item.InstitutionName}))}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            //searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        isAsync:true,
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"institutename",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"country-dropdown",
                     }
                 },
                 title:"Institute Name",
@@ -2894,8 +2934,21 @@ const forms:FormInfo[]=[
             {
                 id:"programmajor",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let degree=getBasket("degreeprogram");
+                                let majors=degree.length>0?undergradCourses[degree[0].value].map((item)=>({label:item,value:item})):undefined
+                                return {success:majors!=undefined?true:false,data:majors,message:"Select the degree program first"}
+                            } ,
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"programmajor",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"programmajor-dropdown"
+                    }
                 },
                 title:"Programmajor",
                 onUpdate:{
@@ -2909,8 +2962,17 @@ const forms:FormInfo[]=[
             {
                 id:"degreeprogram",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:Object.keys(undergradCourses).map((item)=>({label:item,value:item})),
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"degreeprogram-dropdown"
+                    }
                 },
                 title:"Degree Program",
                 onUpdate:{
@@ -3050,9 +3112,9 @@ const forms:FormInfo[]=[
                 {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
                 {id:"state",value:data?.state?[{label:setWordCase(data.state),value:data.state}]:[]},
                 {id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
-                {id:"affiliateduniversity",value:data?.instituteName?data.affiliatedUniversity:""},
-                {id:"specialization",value:data?.instituteName?data.specialization:""},
-                {id:"degreeprogram",value:data?.instituteName?data.degreeProgram:""},
+                {id:"affiliateduniversity",value:data?.affiliatedUniversity?data.affiliatedUniversity:""},
+                {id:"degreeprogram",value:data?.degreeProgram?[{label:data.degreeProgram,value:data.degreeProgram}]:[]},
+                {id:"specialization",value:data?.specialization?[{label:data.specialization,value:data.specialization}]:[]},
                 {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
                 {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
                 {id:"startdate",value:data?.startDate?data.startDate:undefined},
@@ -3224,8 +3286,21 @@ const forms:FormInfo[]=[
             {
                 id:"specialization",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let degree=getBasket("degreeprogram");
+                                let majors=degree.length>0?pgCourses[degree[0].value].map((item)=>({label:item,value:item})):undefined
+                                return {success:majors!=undefined?true:false,data:majors,message:"Select the degree program first"}
+                            } ,
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"specialization",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"specialization-dropdown"
+                    }
                 },
                 title:"Specialization",
                 onUpdate:{
@@ -3239,8 +3314,17 @@ const forms:FormInfo[]=[
             {
                 id:"degreeprogram",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:Object.keys(pgCourses).map((item)=>({label:item,value:item})),
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"degreeprogram-dropdown"
+                    }
                 },
                 title:"Degree Program",
                 onUpdate:{
@@ -3381,9 +3465,9 @@ const forms:FormInfo[]=[
                 {id:"country",value:data?.country?[{label:setWordCase(data.country),value:data.country}]:[]},
                 {id:"state",value:data?.state?[{label:setWordCase(data.state),value:data.state}]:[]},
                 {id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
-                {id:"affiliateduniversity",value:data?.instituteName?data.affiliatedUniversity:""},
-                {id:"specialization",value:data?.instituteName?data.specialization:""},
-                {id:"degreeprogram",value:data?.instituteName?data.degreeProgram:""},
+                {id:"affiliateduniversity",value:data?.affiliatedUniversity?data.affiliatedUniversity:""},
+                {id:"degreeprogram",value:data?.degreeProgram?[{label:data.degreeProgram,value:data.degreeProgram}]:[]},
+                {id:"specialization",value:data?.specialization?[{label:data.specialization,value:data.specialization}]:[]},
                 {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
                 {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
                 {id:"backlogs",value:data?.backlogs!=undefined?data.backlogs.toString():undefined},
@@ -3555,8 +3639,21 @@ const forms:FormInfo[]=[
             {
                 id:"specialization",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let degree=getBasket("degreeprogram");
+                                let majors=degree.length>0?pgCourses[degree[0].value].map((item)=>({label:item,value:item})):undefined
+                                return {success:majors!=undefined?true:false,data:majors,message:"Select the degree program first"}
+                            } ,
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"specialization",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"specialization-dropdown"
+                    }
                 },
                 title:"Specialization",
                 onUpdate:{
@@ -3570,8 +3667,17 @@ const forms:FormInfo[]=[
             {
                 id:"degreeprogram",
                 componentInfo:{
-                    component:Textbox,
-                    props:{placeholder:""}
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:Object.keys(pgCourses).map((item)=>({label:item,value:item})),
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"degreeprogram-dropdown"
+                    }
                 },
                 title:"Degree Program",
                 onUpdate:{
@@ -4350,7 +4456,9 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:()=>{
+                                //let discipline=getBasket("discipline");
                                 let baseFilter=getBasket("Programsfilter").baseFilters.find((item)=>item.type=="subDiscipline");
+                                //console.log("baseeeee",JSON.stringify(discipline,null,2))
                                 let options=subDisciplines.map((discipline)=>({label:discipline,value:discipline}));
                                 return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
                             },

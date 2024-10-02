@@ -115,6 +115,8 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
         // }
     },[props.value])
 
+    //console.log("drrr",props.id,JSON.stringify(props.value,null,2));
+
     return(
         <View style={[GeneralStyles.mainWrapper]}>
             <Pressable style={[GeneralStyles.selecttext_wrapper]} onPress={!loading?onSelect:null}>
