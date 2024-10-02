@@ -82,8 +82,7 @@ const GeneralStyles=StyleSheet.create({
     },
     logout:{
         borderRadius:100,
-        borderWidth:1,
-        color:"white"
+        borderWidth:1
     }
 })
 
@@ -122,10 +121,10 @@ const TabStyles=StyleSheet.create({
     },
     logout:{
         fontSize:14,
-        paddingTop:6,
-        paddingBottom:6,
-        paddingLeft:15,
-        paddingRight:15,
+        paddingTop:12,
+        paddingBottom:12,
+        paddingLeft:17,
+        paddingRight:17,
         fontWeight:"500"
     },
     loadingview_name:{
@@ -178,10 +177,10 @@ const MobileSStyles=StyleSheet.create({
     },
     logout:{
         fontSize:12,
-        paddingTop:4,
-        paddingBottom:4,
-        paddingLeft:10,
-        paddingRight:10,
+        paddingTop:8,
+        paddingBottom:8,
+        paddingLeft:12,
+        paddingRight:12,
         fontWeight:"500"
     },
     loadingview_name:{
@@ -234,8 +233,8 @@ const MobileMStyles=StyleSheet.create({
     },
     logout:{
         fontSize:14,
-        paddingTop:6,
-        paddingBottom:6,
+        paddingTop:10,
+        paddingBottom:10,
         paddingLeft:15,
         paddingRight:15,
         fontWeight:"500"
@@ -290,8 +289,8 @@ const MobileLStyles=StyleSheet.create({
     },
     logout:{
         fontSize:14,
-        paddingTop:6,
-        paddingBottom:6,
+        paddingTop:10,
+        paddingBottom:10,
         paddingLeft:15,
         paddingRight:15,
         fontWeight:"500"
@@ -332,7 +331,7 @@ const Profile=(props:any)=>{
         {title:"Favourites",icon:favourites_icon,screen:""},
         {title:"Cart",icon:cart_icon,screen:"Cart"},
         {title:"My Orders",icon:orders_icon,screen:"Myorders"},
-        {title:"My Products",icon:orders_icon,screen:""}
+        {title:"My Products",icon:orders_icon,screen:"Myproducts"}
     ]).current
 
     const press=()=>{
@@ -382,7 +381,7 @@ const Profile=(props:any)=>{
             }
             </View>
             <View style={[GeneralStyles.logout_wrapper]}>
-                <Pressable onPress={logout} style={[GeneralStyles.logout,{backgroundColor:Themes.Light.OnewindowPrimaryBlue(1)}]}><Text style={[GeneralStyles.logout,styles[Device].logout,{fontFamily:Fonts.NeutrifStudio.Medium}]}>Logout</Text></Pressable>
+                <Pressable onPress={logout} style={[GeneralStyles.logout,{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]}><Text style={[GeneralStyles.logout,styles[Device].logout,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Logout</Text></Pressable>
             </View>
             
         </View>

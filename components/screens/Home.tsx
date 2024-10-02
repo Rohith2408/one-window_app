@@ -12,9 +12,10 @@ import university_icon from '../../assets/images/misc/mallareddylogo.png'
 import { Device } from "../../types"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import List from "../resources/List"
-import Product from "../cards/Product"
+import Product from "../cards/Productcard"
 import Loadinglistscreen from "../resources/Loadinglistscreen"
 import { store } from "../../store"
+import emptylist from '../../assets/images/misc/emptylist.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -88,6 +89,14 @@ const TabStyles=StyleSheet.create({
     },
     products_title:{
         fontSize:16
+    },
+    no_products:{
+        fontSize:15
+    },
+    no_products_image:{
+        width:100,
+        height:100,
+        resizeMode:"contain"
     }
 })
 
@@ -131,6 +140,14 @@ const MobileSStyles=StyleSheet.create({
         width:230,
         height:160
     },
+    no_products:{
+        fontSize:12
+    },
+    no_products_image:{
+        width:64,
+        height:64,
+        resizeMode:"contain"
+    }
 })
 
 const MobileMStyles=StyleSheet.create({
@@ -174,6 +191,14 @@ const MobileMStyles=StyleSheet.create({
         width:250,
         height:205
     },
+    no_products:{
+        fontSize:12
+    },
+    no_products_image:{
+        width:70,
+        height:70,
+        resizeMode:"contain"
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
@@ -217,6 +242,14 @@ const MobileLStyles=StyleSheet.create({
         width:250,
         height:205
     },
+    no_products:{
+        fontSize:14
+    },
+    no_products_image:{
+        width:80,
+        height:80,
+        resizeMode:"contain"
+    }
 })
 
 const styles={
@@ -245,21 +278,21 @@ const Home=(props:undefined|{name:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Search"}}):null
     }
 
-    console.log("ver",store.getState().verification);
+    //console.log("ver",store.getState().products);
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper]}>
                 <View style={{position:"relative",gap:10}}>
                     <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
-                    <Text style={[{color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?(personalinfo.data.firstName):"User")}!</Text>
+                    <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?(personalinfo.data.firstName):"User")}!</Text>
                     <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
                         <Image source={university_icon} style={[GeneralStyles.explore_icon,{width:24,height:24,resizeMode:"contain"}]}></Image>
                         <Text style={{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.5)}}>Malla Reddy University</Text>
                     </View>
                 </View>
                 <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
-                    <Text style={[GeneralStyles.search_text,styles[Device].search_text]}>Search for "Harvard University"</Text>
+                    <Text style={[GeneralStyles.search_text,styles[Device].search_text,{fontFamily:Fonts.NeutrifStudio.Regular}]}>Search for "Harvard University"</Text>
                 </Pressable>
                 <View style={[GeneralStyles.explore_wrapper]}>
                 {
@@ -269,7 +302,7 @@ const Home=(props:undefined|{name:string})=>{
                 }
                 </View>
                 <View style={[GeneralStyles.products_wrapper,styles[Device].products_wrapper]}>
-                    <Text style={[GeneralStyles.products_title,styles[Device].products_title,{color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
+                    <Text style={[GeneralStyles.products_title,styles[Device].products_title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
                     {
                         products.responseStatus=="not_recieved"
                         ?
@@ -277,7 +310,10 @@ const Home=(props:undefined|{name:string})=>{
                         :
                             products.data.length==0
                             ?
-                            <Text>No Products</Text>
+                            <View style={{flexDirection:"column",justifyContent:"center",alignItems:'center',gap:10}}>
+                                <Image source={emptylist} style={[styles[Device].no_products_image]}/>
+                                <Text style={[styles[Device].no_products,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Not purchased any products</Text>
+                            </View>
                             :
                             <List cardStyles={styles[Device].card} list={products.data} card={Product} direction="Horizontal" mode="Scroll"></List>
                     }
@@ -295,7 +331,7 @@ const Exploreitem=(props:{icon:string,text:string,theme:"light"|"dark",device:De
     return(
         <Pressable onPress={()=>props.handler()} style={[GeneralStyles.explore_item,{gap:5}]}>
             <Image source={props.icon} style={[GeneralStyles.explore_icon,styles[props.device].explore_icon]}></Image>
-            <Text style={[GeneralStyles.explore_text, {color:Themes.Light.OnewindowPrimaryBlue(1)} ,styles[props.device].explore_text]}>{props.text}</Text>
+            <Text style={[GeneralStyles.explore_text, {color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold} ,styles[props.device].explore_text]}>{props.text}</Text>
         </Pressable>
     )
 }

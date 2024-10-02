@@ -35,7 +35,7 @@ const Base=(props:{tab:string})=>{
     console.log("base props",props)
 
     return(
-        <View style={{width:"100%",height:"100%"}}>
+        <View style={{width:"100%",height:"100%",gap:10}}>
             <View style={[styles.screenWrapper]}><Tabnavigator screens={Screens} currentTab={{id:props.tab,props:undefined}} invalidPathScreen={Invalidpath}></Tabnavigator></View>
             <View style={[styles.navWrapper]}><Navbar tab={props.tab}></Navbar></View>
         </View>
@@ -47,7 +47,7 @@ const styles=StyleSheet.create({
         flex:14
     },
     navWrapper:{
-        flex:1
+        flex:1.1
     }
 })
 

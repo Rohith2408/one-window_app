@@ -7,7 +7,7 @@ import community_icon from '../../assets/images/navbar/community.png'
 import profile_icon from '../../assets/images/navbar/profile.png'
 import { Image } from "expo-image"
 import { getDevice } from "../../utils"
-import { Themes } from "../../constants"
+import { Fonts, Themes } from "../../constants"
 import { Device } from "../../types"
 
 const GeneralStyles=StyleSheet.create({
@@ -15,8 +15,13 @@ const GeneralStyles=StyleSheet.create({
         width:"100%",
         height:"100%",
         backgroundColor:'white',
+        shadowOpacity:0.1,
+        shadowRadius:5,
+        elevation:2,
+        borderRadius:100,
         display:'flex',
-        flexDirection:'row'
+        flexDirection:'row',
+        
     },
     nav_item:{
         flex:1,
@@ -144,7 +149,7 @@ const Navitem=(props:{device:Device,icon:string,color:string,title:string,isFocu
 
     return(
         <Pressable onPress={()=>navigate?navigate({type:"UpdateParam",payload:{param:"tab",newValue:props.title.toLowerCase()}}):null} style={[GeneralStyles.nav_item]}>
-            <Animated.View style={[props.device?styles[props.device].highlighter:{},{backgroundColor:props.color},GeneralStyles.highlighter,{transform:[{scale:scale}]}]}><Text style={[props.device?styles[props.device].text:{},GeneralStyles.text,{color:"black"}]}>{props.title}</Text></Animated.View>
+            <Animated.View style={[props.device?styles[props.device].highlighter:{},{backgroundColor:props.color},GeneralStyles.highlighter,{transform:[{scale:scale}]}]}><Text style={[props.device?styles[props.device].text:{},GeneralStyles.text,{color:"black",fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.title}</Text></Animated.View>
             <Animated.Image source={props.icon} style={[props.device?styles[props.device].icon:{},{transform:[{scale:Animated.subtract(1,scale)}]}]}></Animated.Image>
         </Pressable>
     )

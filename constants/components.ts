@@ -57,6 +57,9 @@ import Institutes from "../components/flyers/Institutes"
 import Verifyuser from "../components/flyers/Verifyuser"
 import Familydetails from "../components/partials/Familydetails"
 import Intermediatecompleted from "../components/flyers/Intermediatecompleted"
+import Myproducts from "../components/partials/Myproducts"
+import Product from "../components/partials/Product"
+import Orderdetails from "../components/partials/Orderdetails"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -108,6 +111,9 @@ const components:ScreenInfo[]=[
     {id:"Preference",component:Preference,props:["preferenceid"],type:"Partial",title:"Preferences",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Community",component:Community,type:"Partial",title:"Community",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Myorders",component:Myorders,type:"Partial",title:"My Orders",props:["ordersummaryid"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Orderdetails",component:Orderdetails,type:"Partial",title:"Order Details",props:["orderId"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Myproducts",component:Myproducts,type:"Partial",title:"My Products",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Product",component:Product,type:"Partial",title:"Product",props:["productId"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Payment",component:Payment,type:"Partial",title:"Payment",props:["orderId"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Recommendations",component:Recommendations,type:"Partial",title:"Recommendations",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Coursepreference",component:Coursepreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},

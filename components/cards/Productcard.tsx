@@ -1,11 +1,12 @@
 import { useRef } from "react"
 import { Product as ProductType, PurchasedProduct} from "../../types"
-import { StyleSheet, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Fonts, Themes } from "../../constants"
 import { formatDate, getDevice, getLightThemeColor, getThemeColor, setWordCase, truncateString } from "../../utils"
 import { Image } from "expo-image"
 import clock from '../../assets/images/misc/clock-black.png'
 import processing_icon from '../../assets/images/products/processing.png'
+import useNavigation from "../../hooks/useNavigation"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -286,7 +287,7 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Product=(props:PurchasedProduct & {index:number})=>{
+const Productcard=(props:PurchasedProduct & {index:number})=>{
 
     const bgColors=useRef([
         Themes.Light.OnewindowRed(1),
@@ -295,9 +296,14 @@ const Product=(props:PurchasedProduct & {index:number})=>{
         Themes.Light.OnewindowYellow(1)
     ]).current
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const [path,navigate]=useNavigation();
+
+    const showProduct=()=>{
+        //navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:props._id}}})
+    }
 
     return(
-        <View style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>
+        <Pressable onPress={showProduct} style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>
             <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
             <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:getLightThemeColor(props.index%4)}]}>
                 <View style={[GeneralStyles.category_wrapper]}>
@@ -314,17 +320,8 @@ const Product=(props:PurchasedProduct & {index:number})=>{
                             <Image source={clock} style={[styles[Device].intake_icon]}/>
                             <Text style={[styles[Device].intake,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Course Start: "+formatDate(props.intake)}</Text>
                         </View>
-                        {/* <View style={[{backgroundColor:'black',borderRadius:10},styles[Device].seperator]}></View>
-                        <View style={[GeneralStyles.intake_wrapper]}>
-                            <Image source={clock} style={[styles[Device].intake_icon]}/>
-                            <Text style={[styles[Device].intake,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{formatDate(props.intake)}</Text>
-                        </View> */}
                     </View> 
                 </View>
-                {/* <View style={[GeneralStyles.intake_wrapper,{alignSelf:"flex-start"}]}>
-                    <Image source={clock} style={[styles[Device].intake_icon]}/>
-                    <Text style={[styles[Device].intake,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Intake: "+formatDate(props.intake)}</Text>
-                </View> */}
                 <View style={[GeneralStyles.status_wrapper]}>
                     <View style={[GeneralStyles.status]}>
                         <Image source={processing_icon} style={[styles[Device].status_icon]} />
@@ -332,12 +329,12 @@ const Product=(props:PurchasedProduct & {index:number})=>{
                     </View>
                 </View>
             </View>
-        </View>
+        </Pressable>
     )   
 
 }
 
-export default Product
+export default Productcard
 
 // export interface Product{
 //     info: {
