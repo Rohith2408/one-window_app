@@ -57,7 +57,39 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    name:{
+        lineHeight:20,
+        fontSize:14
+    },
+    category:{
+        fontSize:12
+    },
+    intake:{
+        fontSize:11
+    },
+    icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain",
+        borderRadius:100
+    },
+    icon_bg:{
+        width:24,
+        height:24,
+        left:-5,
+        top:5,
+        borderRadius:100
+    },
+    clock_icon:{
+        width:10,
+        height:10,
+        resizeMode:"contain",
+    },
+    loader:{
+        width:20,
+        height:20,
+        resizeMode:"contain",
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -144,8 +176,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:11
     },
     icon:{
-        width:16,
-        height:16,
+        width:24,
+        height:24,
         resizeMode:"contain",
         borderRadius:100
     },
@@ -159,6 +191,11 @@ const MobileLStyles=StyleSheet.create({
     clock_icon:{
         width:10,
         height:10,
+        resizeMode:"contain",
+    },
+    loader:{
+        width:18,
+        height:18,
         resizeMode:"contain",
     }
 })

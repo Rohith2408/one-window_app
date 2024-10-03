@@ -1160,7 +1160,15 @@ export interface PurchasedProduct{
     user: string,
     category: string,
     cancellationRequest: boolean,
-    advisors: string[],//ex. ids
+    advisors: {
+        _id:string,
+        role: string,
+        displayPicSrc: string,
+        email: string,
+        userType: string,
+        firstName: string,
+        lastName: string,
+    }[],
     docChecklist:  {
         name: string,
         isChecked: false,

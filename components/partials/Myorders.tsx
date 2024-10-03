@@ -7,7 +7,7 @@ import Ordercard from "../cards/Ordercard";
 const Myorders=()=>{
 
     const orders=useAppSelector((state)=>state.orders);
-    console.log("Orders",JSON.stringify(orders.data[6],null,2))
+    //console.log("Orders",JSON.stringify(orders.data[1],null,2))
 
     return(
         <View style={{flex:1}}>

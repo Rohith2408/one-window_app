@@ -6,7 +6,7 @@ import chat_icon from '../../assets/images/navbar/chat.png'
 import community_icon from '../../assets/images/navbar/community.png'
 import profile_icon from '../../assets/images/navbar/profile.png'
 import { Image } from "expo-image"
-import { getDevice } from "../../utils"
+import { getDevice, getLightThemeColor } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 import { Device } from "../../types"
 
@@ -126,8 +126,8 @@ const Navbar=(props:{tab:string})=>{
     return(
         <View style={[GeneralStyles.main_wrapper]}>
         {
-            tabs.map((tab)=>
-            <Navitem key={tab.title} device={Device} {...tab} isFocussed={tab.title.toLowerCase()==props.tab.toLowerCase()}/>
+            tabs.map((tab,i)=>
+            <Navitem key={tab.title} device={Device} {...tab} index={i} isFocussed={tab.title.toLowerCase()==props.tab.toLowerCase()}/>
             )
         }
         </View>
@@ -135,7 +135,7 @@ const Navbar=(props:{tab:string})=>{
 
 }
 
-const Navitem=(props:{device:Device,icon:string,color:string,title:string,isFocussed:boolean})=>{
+const Navitem=(props:{device:Device,icon:string,color:string,index:number,title:string,isFocussed:boolean})=>{
 
     const scale=useRef(new Animated.Value(0)).current
     const [path,navigate]=useNavigation()
@@ -149,7 +149,7 @@ const Navitem=(props:{device:Device,icon:string,color:string,title:string,isFocu
 
     return(
         <Pressable onPress={()=>navigate?navigate({type:"UpdateParam",payload:{param:"tab",newValue:props.title.toLowerCase()}}):null} style={[GeneralStyles.nav_item]}>
-            <Animated.View style={[props.device?styles[props.device].highlighter:{},{backgroundColor:props.color},GeneralStyles.highlighter,{transform:[{scale:scale}]}]}><Text style={[props.device?styles[props.device].text:{},GeneralStyles.text,{color:"black",fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.title}</Text></Animated.View>
+            <Animated.View style={[props.device?styles[props.device].highlighter:{},{backgroundColor:getLightThemeColor(props.index)},GeneralStyles.highlighter,{transform:[{scale:scale}]}]}><Text style={[props.device?styles[props.device].text:{},GeneralStyles.text,{color:"black",fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.title}</Text></Animated.View>
             <Animated.Image source={props.icon} style={[props.device?styles[props.device].icon:{},{transform:[{scale:Animated.subtract(1,scale)}]}]}></Animated.Image>
         </Pressable>
     )

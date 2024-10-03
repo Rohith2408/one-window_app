@@ -50,13 +50,13 @@ const GeneralStyles=StyleSheet.create({
     },
     misc_wrapper:{
         display:"flex",
-        flexDirection:"row",
+        flexDirection:"column",
         justifyContent:"center",
         alignItems:"flex-start",
-        gap:10
+        gap:7.5
     },
     uni_wrapper:{
-        flex:2,
+        // flex:2,
         display:"flex",
         flexDirection:"row",
         justifyContent:"center",
@@ -64,7 +64,7 @@ const GeneralStyles=StyleSheet.create({
         gap:5
     },
     intake_wrapper:{
-        flex:1,
+        // flex:1,
         display:"flex",
         flexDirection:"row",
         justifyContent:"center",
@@ -116,8 +116,8 @@ const TabStyles=StyleSheet.create({
         alignSelf:"flex-start"
     },
     intake_icon:{
-        width:10,
-        height:10,
+        width:14,
+        height:14,
         objectFit:"contain"
     },
     status_icon:{
@@ -157,14 +157,14 @@ const MobileSStyles=StyleSheet.create({
         fontSize:8
     },
     uni_icon:{
-        width:14,
-        height:14,
+        width:11,
+        height:11,
         objectFit:"contain",
         alignSelf:"flex-start"
     },
     intake_icon:{
-        width:10,
-        height:10,
+        width:11,
+        height:11,
         objectFit:"contain"
     },
     status_icon:{
@@ -214,8 +214,8 @@ const MobileMStyles=StyleSheet.create({
         alignSelf:"flex-start"
     },
     intake_icon:{
-        width:9,
-        height:9,
+        width:13,
+        height:13,
         objectFit:"contain"
     },
     status_icon:{
@@ -265,8 +265,8 @@ const MobileLStyles=StyleSheet.create({
         alignSelf:"flex-start"
     },
     intake_icon:{
-        width:9,
-        height:9,
+        width:13,
+        height:13,
         objectFit:"contain"
     },
     status_icon:{
@@ -299,7 +299,7 @@ const Productcard=(props:PurchasedProduct & {index:number})=>{
     const [path,navigate]=useNavigation();
 
     const showProduct=()=>{
-        //navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:props._id}}})
+        navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:props._id}}})
     }
 
     return(

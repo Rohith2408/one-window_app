@@ -10,6 +10,7 @@ import { updateOrder } from "../../store/slices/ordersSlice";
 import { setCart } from "../../store/slices/cartSlice";
 import useNavigation from "../../hooks/useNavigation";
 import { Fonts, Themes } from "../../constants";
+import { addProduct, addProducts } from "../../store/slices/productsSlice";
 
 const Payment = () => {
 
@@ -55,6 +56,7 @@ const Payment = () => {
         let order:Order=response1.data
         console.log("res order",JSON.stringify(response1.data,null,2));
         dispatch(updateOrder(response1.data));
+        dispatch(addProducts(response1.data.products));
         navigate({type:"RemovePages",payload:[{id:"Payment"},{id:"Order"},{id:"Ordersummary"},{id:"Cart"}]})
       }
     } 
