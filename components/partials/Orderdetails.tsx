@@ -58,14 +58,14 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     location_icon:{
-        width:16,
-        height:16,
+        width:14,
+        height:14,
         marginTop:4,
         resizeMode:"contain"
     },
     uni_icon:{
-        width:30,
-        height:30,
+        width:28,
+        height:28,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -73,23 +73,59 @@ const TabStyles=StyleSheet.create({
         width:28,
         height:28,
         borderRadius:100,
-        left:-7,
-        top:7
+        left:-10,
+        top:10
     },
     uni_location:{
-        fontSize:15,
-        lineHeight:20
+        fontSize:14,
+        lineHeight:18
     },
     program_name:{
         fontSize:18
+    },
+    product_card:{
+        height:250
     }
 })
 
 const MobileSStyles=StyleSheet.create({
 
     location_icon:{
-        width:12,
-        height:12,
+        width:8,
+        height:8,
+        marginTop:1,
+        resizeMode:"contain"
+    },
+    uni_icon:{
+        width:20,
+        height:20,
+        borderRadius:100,
+        resizeMode:"contain"
+    },
+    uni_icon_bg:{
+        width:20,
+        height:20,
+        borderRadius:100,
+        left:-5,
+        top:5
+    },
+    uni_location:{
+        fontSize:10,
+        lineHeight:14
+    },
+    program_name:{
+        fontSize:13
+    },
+    product_card:{
+        height:170
+    }
+})
+
+const MobileMStyles=StyleSheet.create({
+    location_icon:{
+        width:10,
+        height:10,
+        marginTop:2,
         resizeMode:"contain"
     },
     uni_icon:{
@@ -106,40 +142,14 @@ const MobileSStyles=StyleSheet.create({
         top:5
     },
     uni_location:{
-        fontSize:10,
-        lineHeight:14
-    },
-    program_name:{
-        fontSize:12
-    }
-})
-
-const MobileMStyles=StyleSheet.create({
-    location_icon:{
-        width:12,
-        height:12,
-        marginTop:2,
-        resizeMode:"contain"
-    },
-    uni_icon:{
-        width:26,
-        height:26,
-        borderRadius:100,
-        resizeMode:"contain"
-    },
-    uni_icon_bg:{
-        width:24,
-        height:24,
-        borderRadius:100,
-        left:-7,
-        top:7
-    },
-    uni_location:{
-        fontSize:12,
+        fontSize:11,
         lineHeight:16
     },
     program_name:{
-        fontSize:16
+        fontSize:15
+    },
+    product_card:{
+        height:190
     }
 })
 
