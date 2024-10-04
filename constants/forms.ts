@@ -2771,7 +2771,7 @@ const forms:FormInfo[]=[
                     city: data[data.findIndex((item)=>item.id=="city")].value[0].value,
                     state: data[data.findIndex((item)=>item.id=="state")].value[0].value,
                     country: data[data.findIndex((item)=>item.id=="country")].value[0].value,
-                    degreeProgram:data[data.findIndex((item)=>item.id=="degreeprogram")].value,
+                    degreeProgram:data[data.findIndex((item)=>item.id=="degreeprogram")].value[0].value,
                     affiliatedUniversity:data[data.findIndex((item)=>item.id=="affiliateduniversity")].value,
                     programMajor:data[data.findIndex((item)=>item.id=="programmajor")].value[0].value,
                     gradingSystem: data[data.findIndex((item)=>item.id=="gradingsystem")].value[0].value,
