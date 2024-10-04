@@ -145,8 +145,8 @@ const Personalinfo=()=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const options=useRef([
         {title:"My Details",icon:personal_icon,screen:{id:"Form",params:{formid:"Mydetails"}}},
-        {title:"Workexperience",icon:work_icon,screen:{id:"Workexperience",params:undefined}},
         {title:"Education History",icon:education_icon,screen:{id:"Educationhistory",params:undefined}},
+        {title:"Work Experience",icon:work_icon,screen:{id:"Workexperience",params:undefined}},
         {title:"Test Scores",icon:test_icon,screen:{id:"Testscores",params:undefined}},
         {title:"Documents",icon:documents_icon,screen:{id:"Documents",params:{documentstab:"Personal"}}},
         {title:"Family Details",icon:documents_icon,screen:{id:"Familydetails"}},

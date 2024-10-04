@@ -232,19 +232,19 @@ const MobileMStyles=StyleSheet.create({
         top:4
     },
     test_name:{
-        fontSize:13
+        fontSize:14
     },
     section_name:{
-        fontSize:11
+        fontSize:12
     },
     score:{
-        fontSize:11
+        fontSize:12
     },
     total_heading:{
-        fontSize:11
+        fontSize:12
     },
     total:{
-        fontSize:11
+        fontSize:12
     },
     test_date:{
         fontSize:10
