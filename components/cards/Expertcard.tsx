@@ -58,6 +58,9 @@ const GeneralStyles=StyleSheet.create({
         justifyContent:"center",
         alignItems:"flex-end",
         gap:5
+    },
+    footer:{
+        textAlign:"right"
     }
 })
 
@@ -181,7 +184,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:13
     },
     footer:{
-        fontSize:13
+        fontSize:13,
+        lineHeight:18
     }
 })
 
@@ -224,7 +228,7 @@ const Expertcard=(props:Advisor & {index:number})=>{
                     ?
                     <View style={[GeneralStyles.footer_wrapper]}>
                         <Text style={[styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Regular,color:"grey"}]}>Assigned for:</Text>
-                        <Text style={[styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence(props.assignedCountries,"",",",true)}</Text>
+                        <Text style={[GeneralStyles.footer,styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence(props.assignedCountries,"",",",true)}</Text>
                     </View>
                     :
                     null

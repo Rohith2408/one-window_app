@@ -229,7 +229,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
         {
           screenInfo?.type=="Flyer" || screenInfo?.type=="Popup"
           ?
-          <Pressable onPress={()=>back(200)} style={{position:"absolute",zIndex:-1,top:"-100%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}}></Pressable>
+          <Pressable hitSlop={{left:25,right:25,top:25,bottom:25}} onPress={()=>back(200)} style={{position:"absolute",zIndex:-1,top:"-100%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}}></Pressable>
           :
           null
         }
@@ -246,7 +246,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           {
             screenInfo?.type=="Partial" && props.index!=0
             ?
-            <Pressable style={[styles.back,screenInfo.occupyFullScreen?{left:20,top:30}:{left:-10,top:30}]} onPress={()=>{back(200)}}><Image source={back_icon} style={[styles.back_icon]}></Image></Pressable>
+            <Pressable hitSlop={{left:30,right:30,top:30,bottom:30}} style={[styles.back,screenInfo.occupyFullScreen?{left:20,top:30}:{left:-10,top:30}]} onPress={()=>{back(200)}}><Image source={back_icon} style={[styles.back_icon]}></Image></Pressable>
             :
             null
           }
@@ -419,7 +419,8 @@ const styles=StyleSheet.create({
       position:"relative"
     },
     back:{
-      position:"absolute"
+      position:"absolute",
+      zIndex:1
       //paddingTop:0.04*Dimensions.get("screen").width
     },
     swipeStripL:{

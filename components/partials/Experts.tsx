@@ -25,13 +25,17 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    card_wrapper:{
+        width:"100%",
+        height:210,
+        borderRadius:25
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
     card_wrapper:{
         width:"100%",
-        height:140,
+        height:150,
         borderRadius:25
     }
 })
@@ -39,7 +43,7 @@ const MobileSStyles=StyleSheet.create({
 const MobileMStyles=StyleSheet.create({
     card_wrapper:{
         width:"100%",
-        height:150,
+        height:175,
         borderRadius:25
     }
 })
@@ -47,7 +51,7 @@ const MobileMStyles=StyleSheet.create({
 const MobileLStyles=StyleSheet.create({
     card_wrapper:{
         width:"100%",
-        height:150,
+        height:190,
         borderRadius:25
     }
 })

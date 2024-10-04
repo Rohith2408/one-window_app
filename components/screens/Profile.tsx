@@ -354,7 +354,7 @@ const Profile=(props:any)=>{
     }
 
     const openScreen=(screen:string)=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:screen}}):null
+        screen?navigate?navigate({type:"AddScreen",payload:{screen:screen}}):null:null
     }
 
     //console.log(sharedInfo.responseStatus!="recieved")

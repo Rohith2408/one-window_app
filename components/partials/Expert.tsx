@@ -8,6 +8,7 @@ import Meetingcard from "../cards/Meetingcard"
 import { Fonts, Themes } from "../../constants"
 import add_icon from '../../assets/images/misc/add.png'
 import useNavigation from "../../hooks/useNavigation"
+import emptylist from '../../assets/images/misc/emptylist.png'
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -15,7 +16,7 @@ const GeneralStyles=StyleSheet.create({
         flex:1
     },
     info_wrapper:{
-        padding:0,
+        paddingTop:5,
         position:"relative",
         backgroundColor:'red'
     },
@@ -95,6 +96,18 @@ const TabStyles=StyleSheet.create({
         width:20,
         height:20,
         resizeMode:"contain"
+    },
+    no_meetings:{
+        fontSize:18
+    },
+    click_message:{
+        fontSize:14,
+        lineHeight:20
+    },
+    emptylist_image:{
+        width:120,
+        height:120,
+        resizeMode:"contain"
     }
 })
 
@@ -131,6 +144,18 @@ const MobileSStyles=StyleSheet.create({
     add_icon:{
         width:20,
         height:20,
+        resizeMode:"contain"
+    },
+    no_meetings:{
+        fontSize:14
+    },
+    click_message:{
+        fontSize:10,
+        lineHeight:20
+    },
+    emptylist_image:{
+        width:80,
+        height:80,
         resizeMode:"contain"
     }
 })
@@ -169,6 +194,18 @@ const MobileMStyles=StyleSheet.create({
         width:20,
         height:20,
         resizeMode:"contain"
+    },
+    no_meetings:{
+        fontSize:16
+    },
+    click_message:{
+        fontSize:12,
+        lineHeight:20
+    },
+    emptylist_image:{
+        width:100,
+        height:100,
+        resizeMode:"contain"
     }
 })
 
@@ -206,6 +243,17 @@ const MobileLStyles=StyleSheet.create({
         width:20,
         height:20,
         resizeMode:"contain"
+    },
+    no_meetings:{
+        fontSize:16
+    },
+    click_message:{
+        fontSize:12
+    },
+    emptylist_image:{
+        width:100,
+        height:100,
+        resizeMode:"contain"
     }
 })
 
@@ -233,7 +281,7 @@ const Expert=(props:{expertid:string})=>{
                 <View style={[GeneralStyles.info_wrapper_bg,{backgroundColor:Themes.Light.OnewindowRed(1)}]}></View>
                 <View style={[GeneralStyles.info_subwrapper]}>
                     <View style={[GeneralStyles.name_wrapper]}>
-                        <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold}]}>{Word2Sentence([expert?.info.firstName,expert?.info.lastName],""," ")}</Text>
+                        <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold}]}>{Word2Sentence([expert?.info.firstName,expert?.info.lastName],"")}</Text>
                         <Text style={[styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{expert?.info.email}</Text>
                     </View>
                     <View style={[GeneralStyles.dp_wrapper]}>
@@ -248,6 +296,15 @@ const Expert=(props:{expertid:string})=>{
                     <Pressable onPress={()=>bookslot()}><Image style={[styles[Device].add_icon]} source={add_icon}/></Pressable>
                 </View>
                 <View style={{flex:1}}>
+                {
+                    meetings.length==0
+                    ?
+                    <View style={{flex:1,gap:10,justifyContent:"center",alignItems:"center"}}>
+                        <Image source={emptylist} style={[styles[Device].emptylist_image]}/>
+                        <Text style={[styles[Device].no_meetings,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>It's awfully quiet in here...!</Text>
+                        <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button above to schedule a meet with the expert</Text>
+                    </View>
+                    :
                     <ScrollView style={{flex:1}} contentContainerStyle={{gap:10}}>
                     {
                         meetings.map((meeting,i)=>
@@ -255,6 +312,7 @@ const Expert=(props:{expertid:string})=>{
                         )
                     }
                     </ScrollView>
+                }
                 </View>
             </View>
         </View>
