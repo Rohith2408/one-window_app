@@ -121,7 +121,7 @@ const Order=(props:{orderinfoid:string})=>{
             package:Package,
             products:Products
         }) 
-        navigate?navigate({type:"AddScreen",payload:{screen:"Ordersummary",params:{ordersummaryid:"ordersummary"}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Ordersummary"}}):null
     }
     
     let validation=PackageProductsValidator(Package,Products)

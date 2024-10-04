@@ -24,6 +24,12 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"verify-otp",
+        category:"student",
+        tail:"verify-otp",
+        type:"POST",
+    },
+    {
         id:"add-phone/email",
         category:"student",
         tail:"phone-email",
@@ -171,11 +177,6 @@ const endPoints=[
         
     },
     {
-        ENUM:"request-counsellor",
-        TYPE:"student",
-        
-    },
-    {
         ENUM:"generate-recommendations",
         TYPE:"student",
         
@@ -207,6 +208,12 @@ const endPoints=[
         id:"cart",
         category:"student",
         tail:"cart",
+        type:"POST",
+    },
+    {
+        id:"wishlist",
+        category:"student",
+        tail:"wish-list",
         type:"POST",
     },
     {

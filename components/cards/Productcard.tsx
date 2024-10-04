@@ -299,7 +299,10 @@ const Productcard=(props:PurchasedProduct & {index:number})=>{
     const [path,navigate]=useNavigation();
 
     const showProduct=()=>{
-        navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:props._id}}})
+        navigate({type:"RemoveSpecificScreen",payload:{id:"Product"}})
+        setTimeout(()=>{
+            navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:props._id}}})
+        },100)
     }
 
     return(

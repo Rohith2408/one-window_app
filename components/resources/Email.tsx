@@ -11,6 +11,9 @@ import { ServerResponse } from "../../types"
 import loading_gif from '../../assets/images/misc/loader.gif'
 import { validations } from "../../utils/validations"
 import { store } from "../../store"
+import { addToBasket } from "../../constants/basket"
+import { Verified } from "../../store/slices/verificationSlice"
+import { useAppDispatch } from "../../hooks/useAppDispatch"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -99,6 +102,7 @@ const Email=(props:{value:{email:string|undefined,verified:boolean},placeholder:
     const [message,setMessage]=useState("")
     const [isLoading,setIsLoading]=useState(false)
     const [error,setError]=useState<string|undefined>(undefined);
+    const dispatch=useAppDispatch()
 
     const openVerification=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Emailverification"}}):null
@@ -115,30 +119,52 @@ const Email=(props:{value:{email:string|undefined,verified:boolean},placeholder:
     // }
 
     const requestOtp=async ()=>{
-        // console.log("email res",{
-        //     email:props.value.email,
-        //     phoneNumber:store.getState().sharedinfo.data?.phone?.number, 
-        //     countryCode:store.getState().sharedinfo.data?.phone?.countryCode
-        // })
         setIsLoading(true)
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("add-phone/email","POST"),
             reqType: "POST",
             body:{
                 email:props.value.email,
-                phoneNumber:store.getState().sharedinfo.data?.phone?.number, 
-                countryCode:store.getState().sharedinfo.data?.phone?.countryCode
             }    
         });
-        console.log("email res",{
-            email:props.value.email,
-            phoneNumber:store.getState().sharedinfo.data?.phone?.number, 
-            countryCode:store.getState().sharedinfo.data?.phone?.countryCode
-        },res)
+        console.log("email res",res)
         !res.success?setError("Something went wrong"):setMessage("Verification link has been sent to your email");
+        addToBasket("verification-callback",{callback:verifyOtp})
+        res.success?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Verifyuser",flyerdata:{type:"email",data:{email:props.value.email}}}}}):null:null
         setIsLoading(false);
         return res
     }
+
+    const verifyOtp=async (otp:string,data:{ email: string })=>{
+        let res:ServerResponse=await serverRequest({
+            url:getServerRequestURL("verify-otp","POST"),
+            reqType: "POST",
+            body:{
+                otp:otp,
+                type:"email"
+            }    
+        });
+        if(res.success)
+        {
+            dispatch(Verified("email"));
+            navigate({type:"RemovePages",payload:[{id:"Form"},{id:"Flyer"}]});
+        }
+        console.log("res",JSON.stringify(res,null,2));
+        return res;
+    }
+
+    // res {
+    //     "success": true,
+    //     "message": "verification Successful",
+    //     "data": {
+    //       "missingFields": [],
+    //       "emailLoginOtp": {
+    //         "verified": true,
+    //         "data": null,
+    //         "expiry": "2024-10-04T08:02:59.946Z"
+    //       }
+    //     }
+    //   }
 
     const verify=()=>{
         if(props.value.email)
@@ -161,6 +187,7 @@ const Email=(props:{value:{email:string|undefined,verified:boolean},placeholder:
     const updateEmail=(text:string)=>{
         navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.id,newvalue:{...props.value,email:text}}}}):null
     }
+
 
 
 

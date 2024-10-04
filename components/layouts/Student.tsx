@@ -89,7 +89,7 @@ const Student=(props:{screens:string[],params:any})=>{
             url:getServerRequestURL("profile","GET"),
             reqType: "GET"
         })
-        console.log("ress",res)
+        console.log("ress",res.data.otp)
         if(!res.success)
         {
             if(res.message==serverResponses.VerificationFailed || res.message==serverResponses.InvalidTokens || res.message==serverResponses.TokenMissing)
@@ -185,7 +185,10 @@ const Student=(props:{screens:string[],params:any})=>{
                 responseStatus:"recieved",
                 haveAnIssue:false,
                 issue:"",
-                data:res.data.verification
+                data:[
+                    {type:"email",status:res.data.otp.emailLoginOtp.verified},
+                    {type:"phone",status:res.data.otp.phoneLoginOtp.verified}
+                ]
             }))
         }
     }
@@ -195,7 +198,7 @@ const Student=(props:{screens:string[],params:any})=>{
             url:getServerRequestURL("dashboard","GET"),
             reqType: "GET"
         })
-        console.log("act",res)
+        //console.log("act",JSON.stringify(res.data.activity,null,2))
         if(!res.success)
         {
             if(res.message==serverResponses.VerificationFailed || res.message==serverResponses.TokenMissing)

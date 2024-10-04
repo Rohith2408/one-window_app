@@ -342,7 +342,7 @@ const Product=(props:{productId:string})=>{
     }
 
     const showOrderDetails=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Orderdetails",params:{orderId:product?.order}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Orderdetails",params:{orderdetailsid:product?.order}}}):null
     }
 
     const showExpert=(id:string)=>{
@@ -350,7 +350,6 @@ const Product=(props:{productId:string})=>{
     }
 
     console.log("order",JSON.stringify(store.getState().orders.data[0].products[0].advisors,null,2))
-    //console.log("advisors",product?.advisors,store.getState().advisors.data?.map((item)=>item.info._id))
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>

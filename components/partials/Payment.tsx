@@ -11,22 +11,24 @@ import { setCart } from "../../store/slices/cartSlice";
 import useNavigation from "../../hooks/useNavigation";
 import { Fonts, Themes } from "../../constants";
 import { addProduct, addProducts } from "../../store/slices/productsSlice";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
-const Payment = () => {
+const Payment = (props:{paymentOrderId:string}) => {
 
-  const paymentData=useRef(getBasket("payment_options")).current;
+  //const paymentData=useRef(getBasket("payment_options")).current;
+  const order=useAppSelector((state)=>state.orders.data).find((item)=>item._id==props.paymentOrderId);
   const profile = useRef({ ...store.getState().personalinfo.data, ...store.getState().sharedinfo.data }).current;
-  const [showRazorpayPage, setShowRazorpayPage] = useState(paymentData.amount==0?false:true);
+  const [showRazorpayPage, setShowRazorpayPage] = useState(order?.paymentDetails.amount==0?false:true);
   const dispatch=useAppDispatch()
   const [path,navigate]=useNavigation()
   
   const paymentOptions = useRef({
     key: 'rzp_test_TldsbrWlP8NUF5',
-    amount: paymentData.amount*100,
-    currency: paymentData.currency,
+    amount: order?.paymentDetails.amount*100,
+    currency: order?.paymentDetails.currency,
     name: 'One Window',
     description: 'Test Transaction',
-    order_id: paymentData.razorpay_order_id,
+    order_id: order?.paymentDetails.razorpay_order_id,
     prefill: {
       name: profile.firstName + ' ' + profile.lastName,
       email: profile.email,
@@ -98,7 +100,7 @@ const Payment = () => {
             `,
           }}
           onMessage={(event) => {
-            // console.log("Response from razzzz",event)
+            console.log("Response from razzzz",event)
             const data = JSON.parse(event.nativeEvent.data);
             handlePayment(data); 
             setShowRazorpayPage(false); 
@@ -118,6 +120,9 @@ const Payment = () => {
 };
 
 export default Payment;
+
+//onewindow://Student/Base/Myorders/Orderdetails?tab=profile
+
 
 // const Payment = (props:{orderId:string}) => {
 

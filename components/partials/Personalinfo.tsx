@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { Image } from "expo-image"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import personal_icon from '../../assets/images/profile/personalinfo/mydetails.png'
@@ -13,6 +13,8 @@ import { getDevice } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 import useNavigation from "../../hooks/useNavigation"
 import { store } from "../../store"
+import { Verified, setVerification, updateVerification } from "../../store/slices/verificationSlice"
+import { useAppDispatch } from "../../hooks/useAppDispatch"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -154,6 +156,12 @@ const Personalinfo=()=>{
     const openScreen=(screen:{id:string,params:any})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:screen.id,params:screen.params}}):null
     }
+
+    useEffect(()=>{
+        console.log("perrr")
+       // dispatch(setVerification([{type:"phone",status:true},{type:"email",status:true}]));
+        //updateVerification({type:"email",status:true});
+    },[])
 
     return(
         <View style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>

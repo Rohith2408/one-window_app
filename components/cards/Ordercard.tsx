@@ -159,8 +159,8 @@ const Ordercard=(props:Order & {index:number})=>{
 
     const redirectToPayment=async ()=>{
         console.log("Payment data",props.paymentDetails)
-        addToBasket("payment_options",props.paymentDetails);
-        navigate?navigate({type:"AddScreen",payload:{screen:"Payment"}}):null
+        //addToBasket("payment_options",props.paymentDetails);
+        navigate?navigate({type:"AddScreen",payload:{screen:"Payment",params:{paymentOrderId:props._id}}}):null
     }
 
     const animate=(y:number)=>{
@@ -169,15 +169,22 @@ const Ordercard=(props:Order & {index:number})=>{
             useNativeDriver:false
         }).start()
     }
+
+    const showOrderDetails=()=>{
+        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Orderdetails"}}):null
+        setTimeout(()=>{
+            navigate?navigate({type:"AddScreen",payload:{screen:"Orderdetails",params:{orderdetailsid:props._id}}}):null
+        },100)
+    }
     
     useEffect(()=>{
         
     },[])
 
-    console.log("Payment",props.paymentDetails.created_at);
+    //console.log("Payment",props.paymentDetails.created_at);
 
     return(
-    <View style={[GeneralStyles.sub_wrapper]}>
+    <Pressable onPress={showOrderDetails} style={[GeneralStyles.sub_wrapper]}>
         <View style={[GeneralStyles.icon_wrapper]}>
             <Image source={products_icon} style={[styles[Device].icon]}/>
         </View>
@@ -205,7 +212,7 @@ const Ordercard=(props:Order & {index:number})=>{
             :
             null
         }
-    </View>
+    </Pressable>
 )}
 
 export default Ordercard

@@ -8,6 +8,7 @@ import { Image } from "expo-image"
 import { Fonts, Themes } from "../../constants"
 import location_icon from '../../assets/images/misc/location.png'
 import products_icon from '../../assets/images/misc/products.png'
+import Productcard from "../cards/Productcard"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -40,7 +41,7 @@ const GeneralStyles=StyleSheet.create({
     location_wrapper:{
         display:"flex",
         flexDirection:"row",
-        alignItems:"center",
+        alignItems:"flex-start",
         gap:5
     },
     about_wrapper:{
@@ -59,6 +60,7 @@ const TabStyles=StyleSheet.create({
     location_icon:{
         width:16,
         height:16,
+        marginTop:4,
         resizeMode:"contain"
     },
     uni_icon:{
@@ -75,7 +77,8 @@ const TabStyles=StyleSheet.create({
         top:7
     },
     uni_location:{
-        fontSize:15
+        fontSize:15,
+        lineHeight:20
     },
     program_name:{
         fontSize:18
@@ -103,7 +106,8 @@ const MobileSStyles=StyleSheet.create({
         top:5
     },
     uni_location:{
-        fontSize:10
+        fontSize:10,
+        lineHeight:14
     },
     program_name:{
         fontSize:12
@@ -114,6 +118,7 @@ const MobileMStyles=StyleSheet.create({
     location_icon:{
         width:12,
         height:12,
+        marginTop:2,
         resizeMode:"contain"
     },
     uni_icon:{
@@ -130,7 +135,8 @@ const MobileMStyles=StyleSheet.create({
         top:7
     },
     uni_location:{
-        fontSize:12
+        fontSize:12,
+        lineHeight:16
     },
     program_name:{
         fontSize:16
@@ -142,6 +148,7 @@ const MobileLStyles=StyleSheet.create({
     location_icon:{
         width:12,
         height:12,
+        marginTop:2,
         resizeMode:"contain"
     },
     uni_icon:{
@@ -158,11 +165,15 @@ const MobileLStyles=StyleSheet.create({
         top:7
     },
     uni_location:{
-        fontSize:12
+        fontSize:12,
+        lineHeight:16
     },
     program_name:{
         fontSize:16
     },
+    product_card:{
+        height:210
+    }
 })
 
 const styles={
@@ -172,16 +183,24 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Orderdetails=(props:{orderId:string})=>{
+const Orderdetails=(props:{orderdetailsid:string})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
-    const order=useAppSelector((state)=>state.orders.data).find((item)=>item._id==props.orderId)
+    const order=useAppSelector((state)=>state.orders.data).find((item)=>item._id==props.orderdetailsid)
     const [path,navigate]=useNavigation()
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
-
     // const openUniversity=()=>{
     //     navigate?navigate({type:"AddScreen",payload:{screen:"University",params:{universityid:product?.course.university?._id}}}):null
     // }
+
+    const makePayment=()=>{
+        //addToBasket("payment_options",order?.paymentDetails);
+        navigate?navigate({type:"AddScreen",payload:{screen:"Payment",params:{paymentOrderId:order?._id}}}):null
+    }
+
+    const showProduct=()=>{
+        
+    }
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
@@ -198,14 +217,50 @@ const Orderdetails=(props:{orderId:string})=>{
                         <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{"Order Placed on "+formatDate(order.paymentDetails.created_at)}</Text>
                         <View style={[GeneralStyles.location_wrapper]}>
                             <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <Pressable  style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([order.Package?"Order Placed with "+order.Package.name:"Order placed without a package","Amount-"+(order.paymentDetails.currency.toUpperCase()+" "+order.paymentDetails.amount/100),"Payment Status "+order.paymentDetails.paymentStatus],"","|")}</Text></Pressable>
+                            <View  style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([order.Package?"Order Placed with "+order.Package.name:"Order placed without a package","Amount-"+(order.paymentDetails.currency.toUpperCase()+" "+order.paymentDetails.amount/100),"Payment Status "+order.paymentDetails.paymentStatus],"","|")}</Text></View>
                         </View>
-                        <View style={[GeneralStyles.actions_wrapper]}>
-                            <Pressable style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
-                                {/* <Image source={cart_icon} style={[styles[Device].cart_icon]}/> */}
-                                {/* <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Show Order Details</Text> */}
-                            </Pressable>
-                        </View>
+                        {
+                            order.paymentDetails.paymentStatus=="pending"
+                            ?
+                            <View style={[GeneralStyles.actions_wrapper]}>
+                                <Pressable onPress={makePayment} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
+                                    {/* <Image source={cart_icon} style={[styles[Device].cart_icon]}/> */}
+                                    <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Pay Now</Text>
+                                </Pressable>
+                            </View>
+                            :
+                            null
+                        }
+                    </View>
+                </View>
+                <View style={{gap:10}}>
+                    <Text style={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products Purchased</Text>
+                    <View style={{gap:10}}>
+                    {
+                        order.products.map((product,i)=>
+                        <Pressable onPress={()=>showProduct(product._id)} style={[{padding:10},styles[Device].product_card]}><Productcard {...product} index={i}/></Pressable>
+                        )
+                    }
+                    </View>
+                </View>
+                <View>
+                    <Text style={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Payment Details</Text>
+                    <View>
+                    {/* {
+                        product.docChecklist.map((item)=>
+                        <Text>{item.name}</Text>
+                        )
+                    } */}
+                    </View>
+                </View>
+                <View>
+                    <Text style={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Logs</Text>
+                    <View>
+                    {/* {
+                        product.docChecklist.map((item)=>
+                        <Text>{item.name}</Text>
+                        )
+                    } */}
                     </View>
                 </View>
             </ScrollView>

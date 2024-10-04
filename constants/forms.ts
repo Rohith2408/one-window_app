@@ -576,7 +576,7 @@ const forms:FormInfo[]=[
         title:"Please provide your details",
         getInitialData:(id:string|undefined)=>{
             let data:Sharedinfo|undefined=store.getState().sharedinfo.data
-            //console.log("sss",data);
+            console.log("my details",store.getState().verification.data);
             return [
                 {id:"firstname",value:data?data.firstName:""},
                 {id:"lastname",value:data?data.lastName:""},

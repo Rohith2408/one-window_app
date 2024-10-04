@@ -97,10 +97,10 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Ordersummary=(props:{ordersummaryid:string})=>{
+const Ordersummary=()=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
-    let orderInfo:{package:Package|undefined,products:Product[]}=getBasket(props.ordersummaryid)
+    let orderInfo:{package:Package|undefined,products:Product[]}=getBasket("ordersummary")
     const [path,navigate]=useNavigation()
     const dispatch=useAppDispatch()
     const [isLoading,setIsloading]=useState(false);
@@ -122,8 +122,8 @@ const Ordersummary=(props:{ordersummaryid:string})=>{
                 requestInfo?.responseHandler(serverRes);
                 await removeCartItems(orderInfo.products);
                 setIsloading(false);
-                addToBasket("payment_options",serverRes.data.order.paymentDetails);
-                navigate?navigate({type:"AddScreen",payload:{screen:"Payment"}}):null
+                //addToBasket("payment_options",serverRes.data.order.paymentDetails);
+                navigate?navigate({type:"AddScreen",payload:{screen:"Payment",params:{paymentOrderId:serverRes.data.order._id}}}):null
             }
         }
     }

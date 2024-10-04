@@ -99,7 +99,7 @@ const requests:RequestInfo[]=[
         id:"addproducts",
         inputValidator:(data:{products:ServerUnpurchasedProduct[],orderid:string})=>{
             console.log("Order I/P Recieved ",JSON.stringify(data,null,2));
-            let keyVerifierResponse=keyVerifier(data,["orderId","products"])
+            let keyVerifierResponse=keyVerifier(data,["orderId2","products"])
             let emptyProductsRes={success:data.products.length!=0,data:undefined,message:data.products.length==0?"Products cant be empty":""}
             let res={success:keyVerifierResponse.success && emptyProductsRes.success,data:data,message:Word2Sentence([keyVerifierResponse.message,emptyProductsRes.message])}
             return res
@@ -140,6 +140,26 @@ const requests:RequestInfo[]=[
             {
                 store.dispatch(setRecommendations(res.data));
             }
+        }
+    },
+    {
+        id:"modify-wishlist",
+        inputValidator:(data:{action:string,courseId:string})=>{
+            return {success:(data.action!=undefined && data.action.length!=0) && (data.courseId!=undefined && data.courseId.length!=0),data:undefined,message:""};
+        },
+        serverCommunicator:async (data:{action:string,courseId:string})=>{
+            let res=await serverRequest({
+                url:getServerRequestURL("wishlist","POST"),
+                reqType:"POST"
+            })
+            console.log("wishlist Server Response ",res);
+            return res;
+        },
+        responseHandler:(res:ServerResponse)=>{
+            // if(res.success)
+            // {
+            //     store.dispatch(setRecommendations(res.data));
+            // }
         }
     },
 ]

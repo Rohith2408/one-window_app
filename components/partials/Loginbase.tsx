@@ -483,12 +483,57 @@ const Loginbase=(props:{auth:string})=>{
     }
 
     const login_email=(data:{email:string})=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Verifyuser",flyerdata:{type:"email",data:{email:data.email}}}}}):null
+        addToBasket("verification-callback",{callback:verify_email})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Verifyuser",flyerdata:{type:"email",data:{email:data.email},callback:verify_email}}}}):null
     }
 
     const login_phone=(data:{phone:{countryCode:string,phoneNumber:string}})=>{
-        console.log("phone daTA",data);
+        addToBasket("verification-callback",{callback:verify_phone})
         navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Verifyuser",flyerdata:{type:"phone",data:{phone:data.phone}}}}}):null
+    }
+
+    const verify_email=async (otp:string,data:{ email: string })=>{
+        
+        let res:ServerResponse=await serverRequest({
+            url:getServerRequestURL("verify-user","POST"),
+            reqType: "POST",
+            routeType:"public",
+            body:{email:data.email,otp:otp,type:"email"}
+        })
+        // if(res.success)
+        // {
+        //     navigate({type:"RemoveSpecificScreen",payload:{id:"Verifyloginotp"}})
+        //     navigate({type:"Login"})
+        // }
+        if(res.success)
+        {
+            //navigate({type:"RemoveSpecificScreen",payload:{id:"Verifyuser"}})
+            navigate({type:"Login"})
+        }
+        //res.success?navigate({type:""}):null
+        return res.success
+    }
+
+    const verify_phone=async (otp:string,data:{ phone: { countryCode: string; number: string } })=>{
+        console.log("phone veeeee",otp,data)
+        let res:ServerResponse=await serverRequest({
+            url:getServerRequestURL("verify-user","POST"),
+            reqType: "POST",
+            routeType:"public",
+            body:{...data.phone,otp:otp,type:"phone"}
+        })
+        // if(res.success)
+        // {
+        //     navigate({type:"RemoveSpecificScreen",payload:{id:"Verifyloginotp"}})
+        //     navigate({type:"Login"})
+        // }
+        if(res.success)
+        {
+            //navigate({type:"RemoveSpecificScreen",payload:{id:"Verifyuser"}})
+            navigate({type:"Login"})
+        }
+        //res.success?navigate({type:""}):null
+        return res.success
     }
 
     useEffect(()=>{

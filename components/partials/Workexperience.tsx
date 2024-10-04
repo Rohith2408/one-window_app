@@ -11,6 +11,7 @@ import { getDevice } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 import emptylist from '../../assets/images/misc/emptylist.png'
 import { addToBasket } from "../../constants/basket"
+import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     add_wrapper:{
@@ -132,7 +133,7 @@ const Workexperience=(props:any)=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     useEffect(()=>{
-
+        console.log("verrr",store.getState().verification.data)
     },[])
 
     const addWork=(currentlyworking:boolean)=>{

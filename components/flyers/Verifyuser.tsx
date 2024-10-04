@@ -5,6 +5,7 @@ import { useRef, useState } from "react"
 import useNavigation from "../../hooks/useNavigation"
 import { Fonts, Themes } from "../../constants"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
+import { getBasket } from "../../constants/basket"
 
 type idData = 
   | { phone: { countryCode: string; number: string } }
@@ -71,35 +72,18 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Verifyuser=(props:{type:"mobile"|"email",data:idData})=>{
+const Verifyuser=(props:{type:"mobile"|"email",data:idData,callback:(otp:string,data:idData)=>ServerResponse})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [otp,setOtp]=useState("")
     const [path,navigate]=useNavigation()
     const otpLength=useRef(6).current
+    console.log("verify user props",props);
 
     const verify=async ()=>{
-        let res:ServerResponse=await serverRequest({
-            url:getServerRequestURL("verify-user","POST"),
-            reqType: "POST",
-            routeType:"public",
-            body:props.type=="email"?{email:props.data.email,otp:otp,type:props.type}:{...props.data.phone,otp:otp,type:props.type}
-        })
-        if(res.success)
-        {
-            navigate({type:"RemoveSpecificScreen",payload:{id:"Verifyloginotp"}})
-            navigate({type:"Login"})
-        }
-        if(res.success)
-        {
-            navigate({type:"RemoveSpecificScreen",payload:{id:"Verifyuser"}})
-            navigate({type:"Login"})
-        }
-        //res.success?navigate({type:""}):null
+        let res:ServerResponse=await getBasket("verification-callback").callback(otp,props.data);
         return res.success
     }
-
-    console.log("verify",props);
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>

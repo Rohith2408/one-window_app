@@ -932,10 +932,10 @@ export interface Sharedinfo{
 export type Verification={
     type: "email" | "phone", 
     status: boolean,
-    token: {
-        data: string, // jwt
-        expiry: Date, // expiry date
-    }
+    // token: {
+    //     data: string, // jwt
+    //     expiry: Date, // expiry date
+    // }
 }
 
 export type ResearchPaper={
