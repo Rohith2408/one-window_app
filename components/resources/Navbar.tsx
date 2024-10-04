@@ -20,6 +20,8 @@ const GeneralStyles=StyleSheet.create({
         borderRadius:100,
         display:'flex',
         flexDirection:'row',
+        paddingLeft:5,
+        paddingRight:5
     },
     nav_item:{
         flex:1,
