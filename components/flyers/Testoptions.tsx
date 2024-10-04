@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { useRef } from "react"
 import { getDevice } from "../../utils"
+import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -59,7 +60,7 @@ const Testoptions=()=>{
     return(
         <View style={{flex:1,paddingTop:10,gap:10}}>
         {
-            Tests.map((test)=>
+            Tests.filter((test)=>!store.getState().testscores.data?.find((item)=>item.name==test.name)).map((test)=>
             <Pressable onPress={()=>openForm(test.name)}>
                 <Text style={[styles[Device].text,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{test.name}</Text>
             </Pressable>
