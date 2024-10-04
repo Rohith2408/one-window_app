@@ -12,8 +12,7 @@ import { Device } from "../../types"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        width:"100%",
-        height:"100%",
+        flex:1,
         backgroundColor:'white',
         shadowOpacity:0.1,
         shadowRadius:5,
@@ -21,14 +20,13 @@ const GeneralStyles=StyleSheet.create({
         borderRadius:100,
         display:'flex',
         flexDirection:'row',
-        
     },
     nav_item:{
         flex:1,
         display:"flex",
         flexDirection:"column",
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
     },
     icon:{
         resizeMode:"contain"
@@ -40,13 +38,13 @@ const GeneralStyles=StyleSheet.create({
         display:"flex",
         justifyContent:"center",
         alignItems:"center",
-        width:"90%",
+        width:"100%",
         height:"75%"
     },
     text:{
         alignSelf:"center",
         fontWeight:"700",
-        color:"black"
+        color:"black",
     }
 })
 
