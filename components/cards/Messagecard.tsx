@@ -84,6 +84,11 @@ const TabStyles=StyleSheet.create({
     },
     status:{
         fontSize:10
+    },
+    sender_dp:{
+        width:15,
+        height:15,
+        resizeMode:"contain"
     }
 })
 
@@ -120,6 +125,11 @@ const MobileSStyles=StyleSheet.create({
     },
     status:{
         fontSize:10
+    },
+    sender_dp:{
+        width:15,
+        height:15,
+        resizeMode:"contain"
     }
 })
 
@@ -196,6 +206,11 @@ const MobileLStyles=StyleSheet.create({
     },
     status:{
         fontSize:10
+    },
+    sender_dp:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
     }
 })
 
@@ -253,7 +268,6 @@ const Typing=(props:Message)=>{
             <Text style={[{padding:10},{fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.content}</Text>
             <View>
                 <TypingAnimation
-
                     dotColor="black"
                     dotMargin={5}
                     dotAmplitude={2}

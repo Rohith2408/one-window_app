@@ -62,6 +62,7 @@ import Product from "../components/partials/Product"
 import Orderdetails from "../components/partials/Orderdetails"
 import Message from "../components/partials/Message"
 import Address from "../components/partials/Address"
+import Chatsearch from "../components/partials/Chatsearch"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -127,6 +128,7 @@ const components:ScreenInfo[]=[
     {id:"Familydetails",component:Familydetails,type:"Partial",title:"Family Details",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Intermediatecompleted",component:Intermediatecompleted,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Message",component:Message,type:"Partial",occupyFullScreen:true,props:["chatId"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Chatsearch",component:Chatsearch,type:"Partial",title:"Search",props:["initialChatSearch"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
 ]
 
 const setComponentInfo=(id:string,key:keyof ScreenInfo,value:any)=>{

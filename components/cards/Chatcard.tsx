@@ -240,6 +240,7 @@ const Chatcard=(props:Chat & {index:number})=>{
     let unseenMessages=getUnseenMessages(profile?._id,props);
     let chatInfo=BakeChatInfo(props,profile);
     let lastMessageInfo=BakeLastmessage(props,profile);
+    let activeParticipants=getOnlineUsers(props,profile);
 
     const animate=(y:number)=>{
         Animated.spring(translate,{
@@ -252,16 +253,18 @@ const Chatcard=(props:Chat & {index:number})=>{
         navigate({type:"AddScreen",payload:{screen:"Message",params:{chatId:props._id}}});
     }
 
+    console.log("ac",props.participants.map((item)=>(item.activity)));
+
     return(
         <Pressable onPress={openChat} style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.sub_wrapper]}>
                 <View style={[GeneralStyles.icon_wrapper]}>
-                    <Image source={chatInfo.dp.length==0?default_icon:chatInfo.dp} style={[styles[Device].icon]}/>
+                    <Image source={chatInfo.dp.length==0?default_icon:chatInfo.dp} style={[{borderRadius:100},styles[Device].icon]}/>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
-                        <View style={{width:5,height:5,borderRadius:10,backgroundColor:"#69FF6F"}}></View>
-                        <Text style={[styles[Device].status,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Online</Text>
+                        <View style={{width:5,height:5,borderRadius:10,backgroundColor:activeParticipants.length>=1?"#69FF6F":"lightgrey"}}></View>
+                        <Text style={[styles[Device].status,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.participants.length==2?(activeParticipants.length==1?"Online":"Offline"):(activeParticipants.length+" Online")}</Text>
                     </Animated.View>
                     <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{chatInfo.name}</Text>
                     <View style={{display:"flex",alignItems:'center',flexDirection:'row',gap:5}}>
@@ -319,6 +322,10 @@ const BakeChatInfo=(chat:Chat,profile:Sharedinfo)=>{
     let name=chat.participants.length==2?chat.participants.find((participant)=>participant._id!=profile._id)?.firstName:"Group Chat"
     let dp=chat.participants.length==2?chat.participants.find((participant)=>participant._id!=profile._id)?.displayPicSrc:default_icon
     return {name,dp}
+}
+
+const getOnlineUsers=(chat:Chat,profile:Sharedinfo)=>{
+   return chat.participants.filter((item)=>item.activity && item.activity!="offline" && item._id!=profile._id)
 }
 
 export default Chatcard

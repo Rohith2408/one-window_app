@@ -13,7 +13,8 @@ const GeneralStyles=StyleSheet.create({
         flex:1,
         gap:10,
         backgroundColor:"white",
-        padding:10
+        padding:5,
+        paddingBottom:0
     },
     submit_button:{
         flex:1
@@ -225,15 +226,15 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     },[props.formerrors])
 
     useEffect(()=>{
+        console.log(keyboard.height);
         Animated.timing(offset, {
             duration: keyboard.duration,
-            toValue: -keyboard.height+30,
+            toValue: keyboard.height==0?5:(-keyboard.height+20),
             useNativeDriver: false,
           }).start();
     },[keyboard])
 
     useEffect(()=>{
-        
         let keyboardWillShow = Keyboard.addListener('keyboardWillShow', (event) => setKeyboard({duration:event.duration,height:event.endCoordinates.height}));
         let keyboardWillHide = Keyboard.addListener('keyboardWillHide', (event) => setKeyboard({duration:event.duration,height:0}));
 

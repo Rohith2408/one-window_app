@@ -1,7 +1,7 @@
-import { Text, View } from "react-native"
+import { AppState, Text, View } from "react-native"
 import Stacknavigator from "../../navigation/stackNavigator"
 import { FormField, Meeting_Server, ServerResponse, TriggerObject } from "../../types"
-import { getComponent, getServerRequestURL, propsMapper, serverRequest } from "../../utils"
+import { getComponent, getFriends, getServerRequestURL, propsMapper, serverRequest } from "../../utils"
 import Invalidpath from "../partials/Invalidpath"
 import Form from "../resources/Form"
 import { useEffect, useRef } from "react"
@@ -31,7 +31,7 @@ import { initOrders } from "../../store/slices/ordersSlice"
 import { initSuggestedPackage } from "../../store/slices/suggestedpackageSlice"
 import { initProducts } from "../../store/slices/productsSlice"
 import { store } from "../../store"
-import { initChats } from "../../store/slices/chatsSlice"
+import { initChats, updateChat, updateParticipantActivity, updateParticipantsActivity } from "../../store/slices/chatsSlice"
 import socket from "../../socket"
 
 const Student=(props:{screens:string[],params:any})=>{
@@ -108,7 +108,7 @@ const Student=(props:{screens:string[],params:any})=>{
                 issue:"",
                 data:res.data.personalDetails
             }))
-            console.log("personal",res.data.personalDetails)
+            //console.log("personal",res.data.personalDetails)
             dispatch(initSharedInfo({
                 requestStatus: "initiated",
                 responseStatus: "recieved",
@@ -286,25 +286,72 @@ const Student=(props:{screens:string[],params:any})=>{
                 issue:"",
                 data:res.data
             }))
-            console.log("chats",res.data);
+            //console.log("chats",res.data);
         }
+        return res
     }
     
+    const triggerRoot=(triggerObj:TriggerObject)=>{
+        switch(triggerObj.action){
+            case "activityList":
+                dispatch(updateParticipantsActivity(triggerObj.data))
+                break
+
+            case "ping":
+                dispatch(updateParticipantActivity({...triggerObj.sender,role:"",activity:triggerObj.data.status}))
+                break;
+
+            case "typing":
+                dispatch(updateParticipantActivity({...triggerObj.sender,role:"",activity:triggerObj.data=="start"?"typing":"inchat"}))
+                break;
+            
+            case "send":
+                dispatch(updateChat(triggerObj.data.chat))
+                break;
+
+            case "seen":
+                dispatch(updateChat(triggerObj.data));
+                break;
+        }
+    }
 
     useEffect(()=>{
         fetchProfile().then((res:ServerResponse)=>{
             if(res.success)
             {
-                socket.emit('join',{
+                let user={
                     _id:res.data._id,
                     firstName:res.data.firstName,
                     lastName:res.data.lastName,
                     email:res.data.email,
                     displayPicSrc:res.data.displayPicSrc?res.data.displayPicSrc:"",
                     phone:res.data.phone,
+                }
+                //socket.emit('join',user)
+                fetchChats().then((res2)=>{
+                    if(res2.success)
+                    {
+                        let friends:any=getFriends(res2.data,user._id);
+                        let triggerObj:TriggerObject={
+                            action:"ping",
+                            sender:{...user,userType:"student"},
+                            recievers:friends,
+                            data:{respond:false,status:'online'}
+                        }
+                        socket.emit('trigger',triggerObj);
+                        AppState.addEventListener('change',(state)=>{
+                            var triggerObject;
+                            triggerObject={
+                                action:'ping',
+                                sender:{...user,userType:"student"},
+                                recievers:friends,
+                                data:{respond:false,status:state=="active"?"online":"offline"}
+                            };
+                            socket.emit('trigger',{...triggerObj});
+                        })
+                    }
                 })
             }
-            fetchChats()
         })
         fetchActivity()
     },[])   

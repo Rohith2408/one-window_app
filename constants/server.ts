@@ -389,7 +389,19 @@ const endPoints=[
     {
         ENUM:"seen",
         TYPE:"communication",
-    }
+    },
+    {
+        id:"users-search",
+        category:"communication",
+        tail:"",
+        type:"GET",
+    },
+    {
+        id:"add-friend",
+        category:"communication",
+        tail:"chats",
+        type:"GET",
+    },
 ]
 
 const baseURL="https://campusroot.com/api/v1"

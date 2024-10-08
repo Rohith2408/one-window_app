@@ -155,6 +155,13 @@ const Chats=()=>{
         ref.current.scrollTo({x:dimensions.width*(tabs.findIndex((tab)=>tab.label==selected[0].label)),animated:true})
     }
 
+    const openSearch=()=>{
+        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Chatsearch"}}):null
+        setTimeout(()=>{
+            navigate?navigate({type:"AddScreen",payload:{screen:"Chatsearch",params:{initialChatSearch:""}}}):null
+        },200)
+    }
+
     console.log("chats",JSON.stringify(chats,null,2));
 
     return(
@@ -164,7 +171,8 @@ const Chats=()=>{
                 ?
                 <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
                 :
-                <View style={{flex:1,gap:10}}>
+                <View style={{flex:1,gap:25}}>
+                    <Pressable style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100}} onPress={openSearch}><Text style={{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}}>{"Search..."}</Text></Pressable>
                     <Listselection
                         direction="horizontal"
                         selectionStyle="background"
@@ -179,7 +187,7 @@ const Chats=()=>{
                             selectionMode:"single"
                         }}
                     />
-                    <ScrollView horizontal scrollEnabled={false} ref={ref} style={{flex:1}} contentContainerStyle={{paddingTop:0,paddingBottom:30}}>
+                    <ScrollView horizontal scrollEnabled={false} ref={ref} style={{flex:1}} contentContainerStyle={{paddingTop:0}}>
                         <View style={{width:dimensions.width}}>
                             {
                                 experts.length==0
@@ -190,7 +198,7 @@ const Chats=()=>{
                                     <Pressable ><Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>No experts assigned , request for an expert?</Text></Pressable>
                                 </View>
                                 :
-                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:30,paddingBottom:30}}>
+                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:0,paddingBottom:30}}>
                                 {
                                     experts.map((item,i)=>
                                     <Chatcard {...item} index={i}/>

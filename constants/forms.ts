@@ -613,7 +613,7 @@ const forms:FormInfo[]=[
             },
             onSubmit:async (data:{personal:Personalinfo,shared:Sharedinfo})=>{
                 console.log("Submitting data",data);
-                let res:ServerResponse=await profileUpdator({...data,personalDetails:{...store.getState().personalinfo.data,countyOfBirth:data.personal.countyOfBirth,nationality:data.personal.nationality,DOB:data.personal.DOB,Gender:data.personal.Gender,maritalStatus:data.personal.maritalStatus}},(res)=>{
+                let res:ServerResponse=await profileUpdator({...data.shared,personalDetails:{...store.getState().personalinfo.data,countyOfBirth:data.personal.countyOfBirth,nationality:data.personal.nationality,DOB:data.personal.DOB,Gender:data.personal.Gender,maritalStatus:data.personal.maritalStatus}},(res)=>{
                     res.success?store.dispatch(setSharedInfo({...store.getState().sharedinfo.data,...data.shared})):null
                     res.success?store.dispatch(setPersonalInfo(res.data.personalDetails)):null
                 })
@@ -779,7 +779,7 @@ const forms:FormInfo[]=[
                             list:Nationalities.map((item)=>({label:item,value:item})),
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
-                            searchEvaluator:(item:Countrycode,search:string)=>item.name.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"nationality",newvalue:data}}}),
                         selectionMode:"single",
