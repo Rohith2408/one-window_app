@@ -11,11 +11,11 @@ import { store } from "../store";
 import { setEducationHistory } from "../store/slices/educationHistorySlice";
 import { setTests } from "../store/slices/testScoresSlice";
 import { setWorkExperience } from "../store/slices/workexperienceSlice";
-import { AdditionalFilterInfo, Advisor, AppliedFilter, AppliedQuickFilter, Countrycode, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FamilyInfo, FormData, FormField, FormInfo, Institute, ListInfo, ListItem, Meeting, Phone as PhoneType, ServerResponse, Sharedinfo, Test, UG_Institutes, WorkExperience } from "../types";
+import { AdditionalFilterInfo, Address, Advisor, AppliedFilter, AppliedQuickFilter, Countrycode, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FamilyInfo, FormData, FormField, FormInfo, Institute, ListInfo, ListItem, Meeting, Personalinfo, Phone as PhoneType, ServerResponse, Sharedinfo, Test, UG_Institutes, WorkExperience } from "../types";
 import { Word2Sentence, fetchCities, fetchCountries, fetchStates,  getMergedFilters,  getServerRequestURL, profileUpdator, serverRequest, setWordCase} from "../utils";
 import { validations} from "../utils/validations";
 import { addToBasket, getBasket, getFullBasket} from "./basket";
-import { Countries, GradingSystems, Industries, Languages, Tests, boards, disciplines, intakes, pgCourses, studyLevel, subDisciplines, undergradCourses } from "./misc";
+import { Countries, GradingSystems, Industries, Languages, Nationalities, Tests, boards, disciplines, intakes, pgCourses, studyLevel, subDisciplines, undergradCourses } from "./misc";
 import { Countrycodes } from "./misc";
 import Dialcode from "../components/cards/Dialcode";
 import { setSharedInfo } from "../store/slices/sharedinfoSlice";
@@ -34,6 +34,7 @@ import Textitem from "../components/resources/Textitem";
 import Checkbox from "../components/resources/Checkbox";
 import Phoneinput from "../components/resources/Phoneinput";
 import { setFamilyinfo } from "../store/slices/familyInfoSlice";
+import { setPersonalInfo } from "../store/slices/personalinfoSlice";
 
 export const testToForm=(testname:string)=>{
     const testData=store.getState().testscores.data.find((test)=>test.name==testname)
@@ -110,7 +111,7 @@ export const testToForm=(testname:string)=>{
         id:item.name,
         componentInfo:{
             component:Textbox,
-            props:{placeholder:item.validation.max+" - "+item.validation.min}
+            props:{placeholder:item.validation.min+" - "+item.validation.max}
         },
         title:item.name,
         onUpdate:{
@@ -576,12 +577,18 @@ const forms:FormInfo[]=[
         title:"Please provide your details",
         getInitialData:(id:string|undefined)=>{
             let data:Sharedinfo|undefined=store.getState().sharedinfo.data
+            let personalData:Personalinfo|undefined=store.getState().personalinfo.data
             console.log("my details",store.getState().verification.data);
             return [
                 {id:"firstname",value:data?data.firstName:""},
                 {id:"lastname",value:data?data.lastName:""},
                 {id:"email",value:{email:data?.email,verified:store.getState().verification.data?.find((item)=>item.type=="email")?.status}},
                 {id:"phone",value:{countryCode:data?.phone?.countryCode?([Countrycodes.find((item)=>item.dial_code==data?.phone?.countryCode)]):[],phoneNumber:data?.phone?.number,verified:store.getState().verification.data?.find((item)=>item.type=="phone")?.status}},
+                {id:"dateofbirth",value:personalData?.DOB?personalData.DOB:undefined},
+                {id:"gender",value:personalData?.Gender?[{label:setWordCase(personalData.Gender),value:personalData.Gender.toLowerCase()}]:[]},
+                {id:"countryofbirth",value:personalData?.countyOfBirth?[{label:personalData.countyOfBirth,value:personalData.countyOfBirth}]:[]},
+                {id:"nationality",value:personalData?.nationality?[{label:personalData.nationality,value:personalData.nationality}]:[]},
+                {id:"maritalstatus",value:personalData?.maritalStatus?[{label:personalData.maritalStatus,value:personalData.maritalStatus}]:[]},
                 // {id:"planningtotakeacademictest",value:data?data.isPlanningToTakeAcademicTest:undefined},
                 // {id:"planningtotakelanguagetest",value:data?data.isPlanningToTakeLanguageTest:undefined}
             ]
@@ -595,11 +602,21 @@ const forms:FormInfo[]=[
                     // email:data[data.findIndex((item)=>item.id=="email")].value.email,
                     // phone:{countryCode:data[data.findIndex((item)=>item.id=="phone")].value.countryCode[0].dial_code,number:data[data.findIndex((item)=>item.id=="phone")].value.phoneNumber},
                 }
-                return info
+                let personal:Personalinfo={
+                    DOB:data[data.findIndex((item)=>item.id=="dateofbirth")].value,
+                    Gender:data[data.findIndex((item)=>item.id=="gender")].value[0].value,
+                    nationality:data[data.findIndex((item)=>item.id=="nationality")].value[0].value,
+                    countyOfBirth:data[data.findIndex((item)=>item.id=="countryofbirth")].value[0].value,
+                    maritalStatus:data[data.findIndex((item)=>item.id=="maritalstatus")].value[0].value,
+                }
+                return {personal:personal,shared:info}
             },
-            onSubmit:async (data:Sharedinfo)=>{
+            onSubmit:async (data:{personal:Personalinfo,shared:Sharedinfo})=>{
                 console.log("Submitting data",data);
-                let res:ServerResponse=await profileUpdator({...data},(res)=>res.success?store.dispatch(setSharedInfo({...store.getState().sharedinfo.data,...data})):null)
+                let res:ServerResponse=await profileUpdator({...data,personalDetails:{...store.getState().personalinfo.data,countyOfBirth:data.personal.countyOfBirth,nationality:data.personal.nationality,DOB:data.personal.DOB,Gender:data.personal.Gender,maritalStatus:data.personal.maritalStatus}},(res)=>{
+                    res.success?store.dispatch(setSharedInfo({...store.getState().sharedinfo.data,...data.shared})):null
+                    res.success?store.dispatch(setPersonalInfo(res.data.personalDetails)):null
+                })
                 // let res2:ServerResponse=await serverRequest({
                 //     url:getServerRequestURL("edit-phone","PUT"),
                 //     reqType:"PUT",
@@ -706,7 +723,519 @@ const forms:FormInfo[]=[
                 onFocus:{
                     event:"onFocus"
                 }
-            }
+            },
+            {
+                id:"dateofbirth",
+                componentInfo:{
+                    component:Datetime,
+                    props:undefined
+                },
+                title:"Date of Birth",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"gender",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:[
+                                {label:"Male",value:"male"},
+                                {label:"Female",value:"female"},
+                                {label:"Other",value:"other"},
+                                {label:"Rather not say",value:"rather not say"},
+                            ],
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gender",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"gender-dropdown"
+                    },
+                },
+                title:"Gender",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"nationality",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:Nationalities.map((item)=>({label:item,value:item})),
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"nationality",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"nationality-dropdown"
+                    },
+                },
+                title:"Nationality",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"countryofbirth",
+                componentInfo:{
+                    component:Countrydropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let countries=await fetchCountries();
+                                return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"countryofbirth",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"country-dropdown",
+                    }
+                },
+                title:"Country",
+                onUpdate:{
+                    event:"onSelect",
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"maritalstatus",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:[
+                                {label:"Married",value:"married"},
+                                {label:"Bachelor",value:"bachelor"},
+                            ],
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"maritalstatus",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"gender-dropdown"
+                    },
+                },
+                title:"Marital Status",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+        ]
+    },
+    {
+        id:"Permanentaddress",
+        title:"Please provide your permanent address",
+        getInitialData:(id:string|undefined)=>{
+            let data:Address|undefined=store.getState().personalinfo.data?.permanentAddress
+            return [
+                {id:"a1",value:(data && Object.keys(data).length!=0)?data.addressLine1:""},
+                {id:"a2",value:(data && Object.keys(data).length!=0)?data.addressLine2:""},
+                {id:"a3",value:(data && Object.keys(data).length!=0)?data.addressLine3:""},
+                {id:"country",value:(data && Object.keys(data).length!=0)?[{label:setWordCase(data.country),value:data.country}]:[]},
+                {id:"state",value:(data && Object.keys(data).length!=0)?[{label:setWordCase(data.state),value:data.state}]:[]},
+                {id:"city",value:(data && Object.keys(data).length!=0)?[{label:setWordCase(data.city),value:data.city}]:[]},
+                {id:'pincode',value:(data && Object.keys(data).length!=0)?data.pinCode.toString():""}
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let info:Address={
+                    addressLine1:data[data.findIndex((item)=>item.id=="a1")].value,
+                    addressLine2:data[data.findIndex((item)=>item.id=="a2")].value,
+                    addressLine3:data[data.findIndex((item)=>item.id=="a3")].value,
+                    city: data[data.findIndex((item)=>item.id=="city")].value[0].value,
+                    state: data[data.findIndex((item)=>item.id=="state")].value[0].value,
+                    country: data[data.findIndex((item)=>item.id=="country")].value[0].value,
+                    pinCode:data[data.findIndex((item)=>item.id=="pincode")].value,
+                }
+                return info
+            },
+            onSubmit:async (data:Address)=>{
+                let res:ServerResponse=await profileUpdator({personalDetails:{...store.getState().personalinfo.data,permanentAddress:data}},(res)=>{
+                    res.success?store.dispatch(setPersonalInfo(res.data.personalDetails)):null
+                })
+                return res
+            },
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        allFields:[
+            {
+                id:"a1",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Address Line-1",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"a2",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Address Line-2",
+                isOptional:true,
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"a3",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Address Line-3",
+                isOptional:true,
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"pincode",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:"Ex.-500059"}
+                },
+                title:"Pincode",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"country",
+                componentInfo:{
+                    component:Countrydropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let countries=await fetchCountries();
+                                return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"country-dropdown",
+                        cityFieldId:"city",
+                        stateFieldId:"state"
+                    }
+                },
+                title:"Country",
+                onUpdate:{
+                    event:"onSelect",
+                    // handler:(fields:FormData[],data:ListItem[])=>{
+                    //     let selectedCountry=data[0].value;
+                    //     addToBasket("country",selectedCountry)
+                    // }
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"state",
+                componentInfo:{
+                    component:Statedropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let states=selectedCountry?await fetchStates(selectedCountry):undefined
+                                return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"state-dropdown",
+                        cityFieldId:"city"
+                    }
+                },
+                title:"State",
+                onUpdate:{
+                    event:"onSelect",
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"city",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let selectedState=getBasket("state")[0]?.label
+                                let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
+                                return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"city-dropdown"
+                        }
+                },
+                title:"City",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+        ]
+    },
+    {
+        id:"Temporaryaddress",
+        title:"Please provide your temporary address",
+        getInitialData:(id:string|undefined)=>{
+            let data:Address|undefined=store.getState().personalinfo.data?.temporaryAddress
+            return [
+                {id:"a1",value:(data && Object.keys(data).length!=0)?data.addressLine1:""},
+                {id:"a2",value:(data && Object.keys(data).length!=0)?data.addressLine2:""},
+                {id:"a3",value:(data && Object.keys(data).length!=0)?data.addressLine3:""},
+                {id:"country",value:(data && Object.keys(data).length!=0)?[{label:setWordCase(data.country),value:data.country}]:[]},
+                {id:"state",value:(data && Object.keys(data).length!=0)?[{label:setWordCase(data.state),value:data.state}]:[]},
+                {id:"city",value:(data && Object.keys(data).length!=0)?[{label:setWordCase(data.city),value:data.city}]:[]},
+                {id:'pincode',value:(data && Object.keys(data).length!=0)?data.pinCode.toString():""}
+            ]
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let info:Address={
+                    addressLine1:data[data.findIndex((item)=>item.id=="a1")].value,
+                    addressLine2:data[data.findIndex((item)=>item.id=="a2")].value,
+                    addressLine3:data[data.findIndex((item)=>item.id=="a3")].value,
+                    city: data[data.findIndex((item)=>item.id=="city")].value[0].value,
+                    state: data[data.findIndex((item)=>item.id=="state")].value[0].value,
+                    country: data[data.findIndex((item)=>item.id=="country")].value[0].value,
+                    pinCode:data[data.findIndex((item)=>item.id=="pincode")].value,
+                }
+                return info
+            },
+            onSubmit:async (data:Address)=>{
+                let res:ServerResponse=await profileUpdator({personalDetails:{...store.getState().personalinfo.data,temporaryAddress:data}},(res)=>{
+                    res.success?store.dispatch(setPersonalInfo(res.data.personalDetails)):null
+                })
+                return res
+            },
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        allFields:[
+            {
+                id:"a1",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Address Line-1",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"a2",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Address Line-2",
+                isOptional:true,
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"a3",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Address Line-3",
+                isOptional:true,
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"pincode",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:"Ex.-500059"}
+                },
+                title:"Pincode",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"country",
+                componentInfo:{
+                    component:Countrydropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let countries=await fetchCountries();
+                                return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"country-dropdown",
+                        cityFieldId:"city",
+                        stateFieldId:"state"
+                    }
+                },
+                title:"Country",
+                onUpdate:{
+                    event:"onSelect",
+                    // handler:(fields:FormData[],data:ListItem[])=>{
+                    //     let selectedCountry=data[0].value;
+                    //     addToBasket("country",selectedCountry)
+                    // }
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"state",
+                componentInfo:{
+                    component:Statedropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let states=selectedCountry?await fetchStates(selectedCountry):undefined
+                                return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"state-dropdown",
+                        cityFieldId:"city"
+                    }
+                },
+                title:"State",
+                onUpdate:{
+                    event:"onSelect",
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"city",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let selectedState=getBasket("state")[0]?.label
+                                let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
+                                return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"city-dropdown"
+                        }
+                },
+                title:"City",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
         ]
     },
     {

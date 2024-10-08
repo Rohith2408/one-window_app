@@ -15,12 +15,20 @@ import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     add_wrapper:{
+        display:"flex",
+        flexDirection:"row",
+        alignItems:"center",
         position:'absolute',
+        gap:7.5,
         bottom:20,
         right:0,
         zIndex:1,
         backgroundColor:"white",
-        borderRadius:100
+        borderRadius:100,
+        shadowOpacity:0.1,
+        shadowRadius:5,
+        elevation:2,
+        padding:7
     }
 })
 
@@ -72,8 +80,8 @@ const MobileSStyles=StyleSheet.create({
 })
 const MobileMStyles=StyleSheet.create({
     add_icon:{
-        width:38,
-        height:38,
+        width:26,
+        height:26,
         resizeMode:"contain"
     },
     no_workexperience:{
@@ -154,7 +162,10 @@ const Workexperience=(props:any)=>{
             <Loadinglistscreen cardStyles={styles[Device].card} cardGap={30} count={3} direction="vertical"/>
             :
             <View style={{flex:1,gap:30}}>
-                <Pressable onPress={openCurrentlyWorkingFlyer} style={[GeneralStyles.add_wrapper]}><Image style={[styles[Device].add_icon]} source={add_icon}></Image></Pressable>
+                <Pressable onPress={openCurrentlyWorkingFlyer} style={[GeneralStyles.add_wrapper]}>
+                    <Text style={{fontFamily:Fonts.NeutrifStudio.Medium}}>Add Experience</Text>
+                    <Image style={[styles[Device].add_icon]} source={add_icon}></Image>
+                </Pressable>
                 <View style={{flex:1}}>
                 {
                     workExperiences.data.length==0

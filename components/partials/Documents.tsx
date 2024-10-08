@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Word2Sentence, formatDate, getDevice, getServerRequestURL, pickDocument, serverRequest, setWordCase } from "../../utils"
-import { Documents as DocumentsType, Document as DocumentType, ServerResponse, Request, Event } from "../../types"
+import { Documents as DocumentsType, Document as DocumentType, ServerResponse, Request, Event, ListItem } from "../../types"
 import Tabbar from "../resources/Tabbar"
 import { useRef, useState } from "react"
 import Tabnavigator from "../../navigation/tabNavigator"
@@ -19,11 +19,13 @@ import add_icon from '../../assets/images/misc/add.png'
 import { store } from "../../store"
 import Docview from "../flyers/Docview"
 import Docviewer from "../resources/Docviewer"
+import Listselection from "../resources/Listselection"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
         flex:1,
-        paddingTop:10
+        paddingTop:10,
+        gap:30
     },
     document_wrapper:{
         flexDirection:'row',
@@ -164,11 +166,11 @@ const Documents=(props:{documentstab:string})=>{
     const documents=useAppSelector(state=>state.documents)
     const [path,navigate]=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
-    const categories=useRef([
-        {title:"Personal"},
-        {title:"Academic"},
-        {title:"Test"},
-        {title:"Work"}
+    const tabs=useRef([
+        {label:"Personal",value:"personal"},
+        {label:"Academic",value:"academic"},
+        {label:"Test",value:"test"},
+        {label:"Work",value:"work"}
     ]).current
 
     const Screens=useRef([
@@ -178,13 +180,29 @@ const Documents=(props:{documentstab:string})=>{
         {id:"Work",component:Work},
     ]).current
 
-    const tabChange=(tab:string)=>{
-        navigate?navigate({type:"UpdateParam",payload:{param:"documentstab",newValue:tab}}):null
+    const tabChange=(selected:ListItem[])=>{
+        navigate?navigate({type:"UpdateParam",payload:{param:"documentstab",newValue:selected[0].label}}):null
     }
 
     return(
         <View style={[GeneralStyles.wrapper]}>
-            <View style={[styles[Device].tabbar_wrapper]}><Tabbar fitWidth tabChangeHandler={tabChange} tabs={categories} currentTab={props.documentstab}></Tabbar></View>
+            {/* <View style={[styles[Device].tabbar_wrapper]}>
+                <Tabbar fitWidth tabChangeHandler={tabChange} tabs={categories} currentTab={props.documentstab}></Tabbar>
+            </View> */}
+            <Listselection
+                direction="horizontal"
+                selectionStyle="background"
+                initialSelection={[{label:setWordCase(props.documentstab),value:props.documentstab}]}
+                blurUnSelected={true}
+                styles={{contentcontainer:{gap:10}}}
+                onselection={tabChange}
+                options={{
+                    list:tabs,
+                    idExtractor:(data:ListItem)=>data.label,
+                    labelExtractor:(data:any)=>data.label,
+                    selectionMode:"single"
+                }}
+            />
             <View style={{flex:1,padding:10}}><Tabnavigator invalidPathScreen={Invalidpath} screens={Screens} currentTab={{id:props.documentstab,props:documents}}></Tabnavigator></View>
         </View>
     )

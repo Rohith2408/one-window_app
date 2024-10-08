@@ -14,10 +14,10 @@ export const messagesSlice=createSlice({
     name:'messages',
     initialState:initialState,
     reducers:{
-        initMessages:(state,action:PayloadAction<Request<Message[]>>)=>({...action.payload}),
+        initMessages:(state,action:PayloadAction<Request<Message[]>>)=>({...action.payload,data:action.payload.data.map((msg)=>({...msg,type:"normal"}))}),
         resetMessages:(state,action:PayloadAction)=>({...initialState}),
         addMessage:(state,action:PayloadAction<Message>)=>{
-            state.data=[...state.data.filter((msg)=>msg.type!="typing"),action.payload,...state.data.filter((msg)=>msg.type=="typing")]
+            state.data=[...state.data.filter((msg)=>msg.type!="typing"),{...action.payload,type:"normal"},...state.data.filter((msg)=>msg.type=="typing")]
         },
         startTypingMessage:(state,action:PayloadAction<Participant>)=>{
             let typingMessages=state.data.filter((msg)=>msg.type=="typing")

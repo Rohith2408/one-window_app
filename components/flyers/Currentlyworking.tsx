@@ -110,7 +110,7 @@ const Currentlyworking=(props:{currentlyWorkingBasketid:string})=>{
 
     return(
         <View style={{paddingTop:20,gap:15}}>
-            <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Before proceeding, could you please let us know your current employment status at this company?</Text>
+            <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Please let us know your current employment status at this company?</Text>
             <View style={{gap:15}}>
                 <View>
                     <Pressable onPress={()=>setIsCompleted(false)} style={{flexDirection:'row',alignItems:'center',gap:5}}>

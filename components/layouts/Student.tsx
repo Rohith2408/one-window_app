@@ -1,6 +1,6 @@
 import { Text, View } from "react-native"
 import Stacknavigator from "../../navigation/stackNavigator"
-import { FormField, Meeting_Server, ServerResponse } from "../../types"
+import { FormField, Meeting_Server, ServerResponse, TriggerObject } from "../../types"
 import { getComponent, getServerRequestURL, propsMapper, serverRequest } from "../../utils"
 import Invalidpath from "../partials/Invalidpath"
 import Form from "../resources/Form"
@@ -31,6 +31,8 @@ import { initOrders } from "../../store/slices/ordersSlice"
 import { initSuggestedPackage } from "../../store/slices/suggestedpackageSlice"
 import { initProducts } from "../../store/slices/productsSlice"
 import { store } from "../../store"
+import { initChats } from "../../store/slices/chatsSlice"
+import socket from "../../socket"
 
 const Student=(props:{screens:string[],params:any})=>{
 
@@ -106,6 +108,7 @@ const Student=(props:{screens:string[],params:any})=>{
                 issue:"",
                 data:res.data.personalDetails
             }))
+            console.log("personal",res.data.personalDetails)
             dispatch(initSharedInfo({
                 requestStatus: "initiated",
                 responseStatus: "recieved",
@@ -119,8 +122,6 @@ const Student=(props:{screens:string[],params:any})=>{
                     displayPicSrc:res.data.displayPicSrc?res.data.displayPicSrc:"",
                     phone:res.data.phone,
                     LeadSource:res.data.LeadSource,
-                    // isPlanningToTakeAcademicTest:res.data.isPlanningToTakeAcademicTest,
-                    // isPlanningToTakeLanguageTest:res.data.isPlanningToTakeLanguageTest,
                 }
             }))
             dispatch(initEducationHistory({
@@ -191,6 +192,7 @@ const Student=(props:{screens:string[],params:any})=>{
                 ]
             }))
         }
+        return res
     }
 
     const fetchActivity=async ()=>{
@@ -270,8 +272,40 @@ const Student=(props:{screens:string[],params:any})=>{
         }
     }
 
+    const fetchChats=async ()=>{
+        let res:ServerResponse=await serverRequest({
+            url:getServerRequestURL("chats","GET"),
+            reqType: "GET"
+        })
+        if(res.success)
+        {
+            dispatch(initChats({
+                requestStatus:"initiated",
+                responseStatus:"recieved",
+                haveAnIssue:false,
+                issue:"",
+                data:res.data
+            }))
+            console.log("chats",res.data);
+        }
+    }
+    
+
     useEffect(()=>{
-        fetchProfile()
+        fetchProfile().then((res:ServerResponse)=>{
+            if(res.success)
+            {
+                socket.emit('join',{
+                    _id:res.data._id,
+                    firstName:res.data.firstName,
+                    lastName:res.data.lastName,
+                    email:res.data.email,
+                    displayPicSrc:res.data.displayPicSrc?res.data.displayPicSrc:"",
+                    phone:res.data.phone,
+                })
+            }
+            fetchChats()
+        })
         fetchActivity()
     },[])   
     

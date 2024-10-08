@@ -5,92 +5,86 @@ import { getChatType } from "../../utils";
 
 type ChatType="advisors"|"community"
 
-let initialState:Request<{advisors:Chat[],community:Chat[]}>={
+let initialState:Request<Chat[]>={
     requestStatus:"not_initiated",
     responseStatus:"not_recieved",
     haveAnIssue:false,
     issue:"",
-    data:{
-        advisors:[],
-        community:[]
-    }
+    data:[]
 }
 
 export const chatsSlice=createSlice({
     name:'chats',
     initialState:initialState,
     reducers:{
-        initChats:(state,action:PayloadAction<Request<Chat[]>>)=>{
-            let chatType:ChatType;
-            state.haveAnIssue=action.payload.haveAnIssue
-            state.issue=action.payload.issue
-            state.requestStatus=action.payload.requestStatus
-            state.responseStatus=action.payload.responseStatus
-            state.data.advisors=[];
-            state.data.community=[];
-            action.payload.data.forEach((chat:Chat) =>{
-                chatType=getChatType(chat);  
-                state.data[chatType].push(chat)
-            })  
-        },
+        initChats:(state,action:PayloadAction<Request<Chat[]>>)=>action.payload,
         addChats:(state,action:PayloadAction<Chat>)=>{
-            let chatType:ChatType=getChatType(action.payload);
-            state.data[chatType].push(action.payload)
+            state.data.push(action.payload)
         },
         updateParticipantActivity:(state,action:PayloadAction<Participant>)=>{
-            state.data.advisors=state.data.advisors.map((chat)=>{
-                let index=chat.participants.findIndex((participant)=>participant._id==action.payload._id)
-                if(index==-1){
-                    return chat
-                }
-                else
-                {
-                    return {...chat,participants:chat.participants.map((participant)=>participant._id==action.payload._id?{...participant,activity:action.payload.activity}:participant)}
-                }
+            state.data=state.data.map((chat)=>{
+                return chat.participants.find((participant)=>participant._id==action.payload._id)?{...chat,participants:chat.participants.map((item)=>item._id==action.payload._id?{...item,activity:action.payload.activity}:item)}:chat
             })
-            state.data.community=state.data.community.map((chat)=>{
-                let index=chat.participants.findIndex((participant)=>participant._id==action.payload._id)
-                if(index==-1){
-                    return chat
-                }
-                else
-                {
-                    return {...chat,participants:chat.participants.map((participant)=>participant._id==action.payload._id?{...participant,activity:action.payload.activity}:participant)}
-                }
-            })
+            // state.data.advisors=state.data.advisors.map((chat)=>{
+            //     let index=chat.participants.findIndex((participant)=>participant._id==action.payload._id)
+            //     if(index==-1){
+            //         return chat
+            //     }
+            //     else
+            //     {
+            //         return {...chat,participants:chat.participants.map((participant)=>participant._id==action.payload._id?{...participant,activity:action.payload.activity}:participant)}
+            //     }
+            // })
+            // state.data.community=state.data.community.map((chat)=>{
+            //     let index=chat.participants.findIndex((participant)=>participant._id==action.payload._id)
+            //     if(index==-1){
+            //         return chat
+            //     }
+            //     else
+            //     {
+            //         return {...chat,participants:chat.participants.map((participant)=>participant._id==action.payload._id?{...participant,activity:action.payload.activity}:participant)}
+            //     }
+            // })
         },
         updateParticipantsActivity:(state,action:PayloadAction<Participant[]>)=>{
-            state.data.advisors=state.data.advisors.map((chat)=>{
+            state.data=state.data.map((chat)=>{
                 return {...chat,participants:chat.participants.map((participant)=>{
-                    let i=action.payload.findIndex((item)=>item._id==participant._id)
-                    if(i==-1)
-                    {
-                        return participant
-                    }
-                    else
-                    {
-                        return {...participant,activity:action.payload[i].activity}
-                    }
+                    let a=action.payload.find((item)=>item._id==participant._id)
+                    return a?{...participant,activity:a.activity}:participant
                 })}
             })
-            state.data.community=state.data.community.map((chat)=>{
-                return {...chat,participants:chat.participants.map((participant)=>{
-                    let i=action.payload.findIndex((item)=>item._id==participant._id)
-                    if(i==-1)
-                    {
-                        return participant
-                    }
-                    else
-                    {
-                        return {...participant,activity:action.payload[i].activity}
-                    }
-                })}
-            })
+            // state.data.advisors=state.data.advisors.map((chat)=>{
+            //     return {...chat,participants:chat.participants.map((participant)=>{
+            //         let i=action.payload.findIndex((item)=>item._id==participant._id)
+            //         if(i==-1)
+            //         {
+            //             return participant
+            //         }
+            //         else
+            //         {
+            //             return {...participant,activity:action.payload[i].activity}
+            //         }
+            //     })}
+            // })
+            // state.data.community=state.data.community.map((chat)=>{
+            //     return {...chat,participants:chat.participants.map((participant)=>{
+            //         let i=action.payload.findIndex((item)=>item._id==participant._id)
+            //         if(i==-1)
+            //         {
+            //             return participant
+            //         }
+            //         else
+            //         {
+            //             return {...participant,activity:action.payload[i].activity}
+            //         }
+            //     })}
+            // })
         },
         updateChat:(state,action:PayloadAction<Chat>)=>{
-            let chatType:ChatType=getChatType(action.payload);  
-            let index:number=state.data[chatType].findIndex((chat)=>chat._id==action.payload._id)
-            state.data[chatType][index]={...action.payload,participants:state.data[chatType][index].participants}
+            state.data=state.data.map((chat)=>chat._id==action.payload._id?{...action.payload,participants:chat.participants}:chat)
+            // let chatType:ChatType=getChatType(action.payload);  
+            // let index:number=state.data[chatType].findIndex((chat)=>chat._id==action.payload._id)
+            // state.data[chatType][index]={...action.payload,participants:state.data[chatType][index].participants}
         },
         resetChats:(state,action:PayloadAction)=>({...initialState})
     }

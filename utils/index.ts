@@ -835,6 +835,39 @@ export const camelCaseToString=(camelstr:string)=>{
   return words
 }
 
+export const setLastSeenMessage=(chat:Chat,messages:Message[],userId:string)=>{
+  let unsetParticipants=chat.participants.filter((item)=>item._id!=userId);
+  let i=messages.length-1;
+  for(i=messages.length-1;i>=0 && unsetParticipants.length>0;i--)
+  {
+    if(messages[i].sender?._id==userId)
+    {
+      let unseen=chat.unSeenMessages.find((item)=>item.message._id==messages[i]._id)
+      if(unseen){
+        unsetParticipants.forEach(participant => {
+            if(unseen?.seen.find((item)=>item==participant._id))
+            {
+              messages.splice(i+1,0,{_id:participant.firstName+"/seen",content:"Seen by "+setWordCase(participant.firstName),sender:participant,type:"seen"})
+              unsetParticipants=unsetParticipants.filter((item)=>item._id!=participant._id)
+            }
+        });
+      }
+      else
+      {
+        break;
+      }
+    }
+  }
+  if(i!=-1)
+  {
+    //m
+    if(unsetParticipants.length>0)
+    {
+      messages.splice(i+1,0,...unsetParticipants.map((participant:Participant)=>({_id:participant.firstName+"/seen",content:"Seen by "+setWordCase(participant.firstName),sender:participant,type:"seen"})))
+    }
+  }
+  return messages
+}
 
 // export const bakeFilters=(additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[])=>{
 

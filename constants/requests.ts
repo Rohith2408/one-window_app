@@ -1,5 +1,7 @@
 import { store } from "../store";
 import { setCart } from "../store/slices/cartSlice";
+import { updateChat } from "../store/slices/chatsSlice";
+import { addMessage } from "../store/slices/messagesSlice";
 import { addOrders, setOrders, updateOrder } from "../store/slices/ordersSlice";
 import { setRecommendations } from "../store/slices/recommendationsSlice";
 import { Product, Recommendation, RecommendationType, RequestInfo, ServerResponse, ServerUnpurchasedProduct } from "../types";
@@ -139,6 +141,29 @@ const requests:RequestInfo[]=[
             if(res.success)
             {
                 store.dispatch(setRecommendations(res.data));
+            }
+        }
+    },
+    {
+        id:"message-send",
+        inputValidator:(data:{content:string,chatId:string,repliedTo:string,uploaded_file:any})=>{
+            let allFields=(data && data.content.length!=0 && data.chatId)?true:false
+            return {success:allFields,data:undefined,message:allFields?"":"All fields are not present"}
+        },
+        serverCommunicator:async (data:{content:string,chatId:string,repliedTo:string,uploaded_file:any})=>{
+            let res:ServerResponse=await serverRequest({
+                url:getServerRequestURL("message-send","POST"),
+                reqType: "POST",
+                body:data
+            })
+            console.log("Message Rec Server Response ",res);
+            return res;
+        },
+        responseHandler:(res:ServerResponse)=>{
+            if(res.success)
+            {
+                store.dispatch(updateChat(res.data.chat))
+                store.dispatch(addMessage({...res.data.message,type:"normal"}))
             }
         }
     },

@@ -369,13 +369,22 @@ const endPoints=[
         
     },
     {
-        ENUM:"chats",
-        TYPE:"communication",
-        
+        id:"chats",
+        category:"communication",
+        tail:"chats",
+        type:"POST",
     },
     {
-        ENUM:"message",
-        TYPE:"communication",
+        id:"messages",
+        category:"communication",
+        tail:"message",
+        type:"GET",
+    },
+    {
+        id:"message-send",
+        category:"communication",
+        tail:"message",
+        type:"POST",
     },
     {
         ENUM:"seen",

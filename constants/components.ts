@@ -60,6 +60,8 @@ import Intermediatecompleted from "../components/flyers/Intermediatecompleted"
 import Myproducts from "../components/partials/Myproducts"
 import Product from "../components/partials/Product"
 import Orderdetails from "../components/partials/Orderdetails"
+import Message from "../components/partials/Message"
+import Address from "../components/partials/Address"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -87,13 +89,14 @@ const components:ScreenInfo[]=[
     {id:"DPoptions",component:DPoptions,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Dp",component:Dp,type:"Popup",props:["image"],swipeDirection:"XY",isTransparent:true,occupyFullScreen:true,animationStyle:"FadeIn",removalThreshold:0.5},
     {id:"Documents",component:Documents,type:"Partial",title:"Documents",props:["documentstab"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
-    {id:"Workexperience",component:Workexperience,type:"Partial",title:"Workexperience",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Workexperience",component:Workexperience,type:"Partial",title:"Work Experience",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Educationhistory",component:Educationhistory,type:"Partial",title:"Education History",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Testscores",component:Testscores,type:"Partial",title:"Test Scores",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Experts",component:Experts,type:"Partial",title:"Experts",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Expert",props:["expertid"],component:Expert,type:"Partial",occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Testoptions",component:Testoptions,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Mydetails",component:Mydetails,type:"Partial",title:"My Details",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Address",component:Address,type:"Partial",title:"Address",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Datetimeproselector",component:Datetimeproselector,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Successfull",component:Successfull,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Nointernet",component:Nointernet,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
@@ -123,6 +126,7 @@ const components:ScreenInfo[]=[
     {id:"Existingorders",component:Existingorders,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Familydetails",component:Familydetails,type:"Partial",title:"Family Details",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Intermediatecompleted",component:Intermediatecompleted,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Message",component:Message,type:"Partial",occupyFullScreen:true,props:["chatId"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
 ]
 
 const setComponentInfo=(id:string,key:keyof ScreenInfo,value:any)=>{

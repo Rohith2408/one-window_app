@@ -3,6 +3,7 @@ import { Image } from "expo-image"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import personal_icon from '../../assets/images/profile/personalinfo/mydetails.png'
 import documents_icon from '../../assets/images/profile/personalinfo/documents.png'
+import address_icon from '../../assets/images/profile/personalinfo/address.png'
 import work_icon from '../../assets/images/profile/personalinfo/workexperience.png'
 import education_icon from '../../assets/images/profile/personalinfo/education.png'
 import test_icon from '../../assets/images/profile/personalinfo/tests.png'
@@ -145,11 +146,12 @@ const Personalinfo=()=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const options=useRef([
         {title:"My Details",icon:personal_icon,screen:{id:"Form",params:{formid:"Mydetails"}}},
+        {title:"Family Details",icon:documents_icon,screen:{id:"Familydetails"}},
+        {title:"Address",icon:address_icon,screen:{id:"Address"}},
         {title:"Education History",icon:education_icon,screen:{id:"Educationhistory",params:undefined}},
         {title:"Work Experience",icon:work_icon,screen:{id:"Workexperience",params:undefined}},
         {title:"Test Scores",icon:test_icon,screen:{id:"Testscores",params:undefined}},
         {title:"Documents",icon:documents_icon,screen:{id:"Documents",params:{documentstab:"Personal"}}},
-        {title:"Family Details",icon:documents_icon,screen:{id:"Familydetails"}},
     ]).current
     const [path,navigate]=useNavigation()
 
