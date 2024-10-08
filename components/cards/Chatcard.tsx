@@ -16,6 +16,7 @@ import { useAppSelector } from "../../hooks/useAppSelector"
 import seen_icon from '../../assets/images/misc/seen.png'
 import delivered_icon from '../../assets/images/misc/delivered.png'
 import default_icon from '../../assets/images/misc/defaultDP.png'
+import go_icon from '../../assets/images/misc/back.png'
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -41,7 +42,7 @@ const GeneralStyles=StyleSheet.create({
         display:"flex",
         flex:1,
         flexDirection:"column",
-        gap:10,
+        gap:7.5,
     },
     actions_wrapper:{
         display:'flex',
@@ -88,6 +89,11 @@ const TabStyles=StyleSheet.create({
         height:12,
         resizeMode:"contain"
     },
+    indicators:{
+        width:12,
+        height:12,
+        resizeMode:"contain"
+    },
     status:{
         fontSize:10
     }
@@ -110,8 +116,8 @@ const MobileSStyles=StyleSheet.create({
         fontSize:10
     },
     edit:{
-        width:14,
-        height:14,
+        width:8,
+        height:8,
         resizeMode:'contain'
     },
     delete:{
@@ -122,6 +128,11 @@ const MobileSStyles=StyleSheet.create({
     clock:{
         width:10,
         height:10,
+        resizeMode:"contain"
+    },
+    indicators:{
+        width:6,
+        height:6,
         resizeMode:"contain"
     },
     status:{
@@ -145,8 +156,8 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     edit:{
-        width:14,
-        height:14,
+        width:10,
+        height:10,
         resizeMode:'contain'
     },
     delete:{
@@ -157,6 +168,11 @@ const MobileMStyles=StyleSheet.create({
     clock:{
         width:12,
         height:12,
+        resizeMode:"contain"
+    },
+    indicators:{
+        width:8,
+        height:8,
         resizeMode:"contain"
     },
     status:{
@@ -181,8 +197,8 @@ const MobileLStyles=StyleSheet.create({
         lineHeight:16
     },
     edit:{
-        width:14,
-        height:14,
+        width:10,
+        height:10,
         resizeMode:'contain'
     },
     delete:{
@@ -193,6 +209,11 @@ const MobileLStyles=StyleSheet.create({
     clock:{
         width:12,
         height:12,
+        resizeMode:"contain"
+    },
+    indicators:{
+        width:8,
+        height:8,
         resizeMode:"contain"
     },
     status:{
@@ -244,14 +265,14 @@ const Chatcard=(props:Chat & {index:number})=>{
                     </Animated.View>
                     <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{chatInfo.name}</Text>
                     <View style={{display:"flex",alignItems:'center',flexDirection:'row',gap:5}}>
-                        <Image style={[styles[Device].clock]} source={clock_icon} />
+                        {/* <Image style={[styles[Device].clock]} source={clock_icon} /> */}
                         <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:(props.lastMessage!=undefined && lastMessageInfo.sender=="other" && lastMessageInfo.status=="unseen")?Fonts.NeutrifStudio.Bold:Fonts.NeutrifStudio.Regular}]}>{props.lastMessage==undefined?"Tap to chat":props.lastMessage?.content}</Text>
                         {
                             props.lastMessage!=undefined && lastMessageInfo.sender=="current"
                             ?    
-                            <View style={{flexDirection:"row",gap:5}}>
-                                <Image style={[styles[Device].clock]} source={(lastMessageInfo.status=="unseen"?delivered_icon:seen_icon)} />
-                                <Image style={[styles[Device].clock]} source={(lastMessageInfo.status=="unseen"?delivered_icon:seen_icon)} />
+                            <View style={{flexDirection:"row",gap:0}}>
+                                <Image style={[styles[Device].indicators]} source={(lastMessageInfo.status=="unseen"?delivered_icon:seen_icon)} />
+                                <Image style={[styles[Device].indicators]} source={(lastMessageInfo.status=="unseen"?delivered_icon:seen_icon)} />
                             </View>
                             :
                             null
@@ -259,7 +280,7 @@ const Chatcard=(props:Chat & {index:number})=>{
                     </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>
-                    <Pressable style={{alignSelf:"center"}}><Image style={[styles[Device].edit]} source={edit_icon}/></Pressable>
+                    <View style={{alignSelf:"center"}}><Image style={[styles[Device].edit,{transform:[{scaleX:-1}]}]} source={go_icon}/></View>
                     {
                         unseenMessages.length!=0
                         ?

@@ -389,7 +389,7 @@ const Message=(props:{chatId:string})=>{
         return ()=>{
             keyboardWillShow?.remove();
             keyboardWillHide?.remove();
-            resetMessages()
+            dispatch(resetMessages());
         }
     },[])
 

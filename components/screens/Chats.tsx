@@ -158,13 +158,13 @@ const Chats=()=>{
     console.log("chats",JSON.stringify(chats,null,2));
 
     return(
-        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}}>
+        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,paddingTop:20}}>
             {
                 chats.responseStatus!="recieved"
                 ?
                 <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
                 :
-                <View style={{flex:1,gap:15}}>
+                <View style={{flex:1,gap:10}}>
                     <Listselection
                         direction="horizontal"
                         selectionStyle="background"
@@ -190,7 +190,7 @@ const Chats=()=>{
                                     <Pressable ><Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>No experts assigned , request for an expert?</Text></Pressable>
                                 </View>
                                 :
-                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:60,paddingTop:30,paddingBottom:30}}>
+                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:30,paddingBottom:30}}>
                                 {
                                     experts.map((item,i)=>
                                     <Chatcard {...item} index={i}/>
@@ -209,7 +209,7 @@ const Chats=()=>{
                                     <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Seems like you have no friends!</Text>
                                 </View>
                                 :
-                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:60,paddingTop:30,paddingBottom:30}}>
+                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:30,paddingBottom:30}}>
                                 {
                                     community.map((item,i)=>
                                     <Chatcard {...item} index={i}/>
