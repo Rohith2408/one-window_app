@@ -292,6 +292,7 @@ const Student=(props:{screens:string[],params:any})=>{
     }
     
     const triggerRoot=(triggerObj:TriggerObject)=>{
+        console.log("trigger",triggerObj);
         switch(triggerObj.action){
             case "activityList":
                 dispatch(updateParticipantsActivity(triggerObj.data))
@@ -316,6 +317,8 @@ const Student=(props:{screens:string[],params:any})=>{
     }
 
     useEffect(()=>{
+        //socket.removeListener("trigger",triggerRoot)
+        socket.on("trigger",triggerRoot);
         fetchProfile().then((res:ServerResponse)=>{
             if(res.success)
             {
@@ -327,7 +330,7 @@ const Student=(props:{screens:string[],params:any})=>{
                     displayPicSrc:res.data.displayPicSrc?res.data.displayPicSrc:"",
                     phone:res.data.phone,
                 }
-                //socket.emit('join',user)
+                socket.emit('join',user)
                 fetchChats().then((res2)=>{
                     if(res2.success)
                     {

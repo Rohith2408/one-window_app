@@ -265,6 +265,13 @@ const Chatcard=(props:Chat & {index:number})=>{
                     <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
                         <View style={{width:5,height:5,borderRadius:10,backgroundColor:activeParticipants.length>=1?"#69FF6F":"lightgrey"}}></View>
                         <Text style={[styles[Device].status,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.participants.length==2?(activeParticipants.length==1?"Online":"Offline"):(activeParticipants.length+" Online")}</Text>
+                        {
+                            props.participants.filter((item)=>item.activity=="typing").length!=0
+                            ?
+                            <Text style={[styles[Device].status,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Typing</Text>
+                            :
+                            null
+                        }
                     </Animated.View>
                     <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{chatInfo.name}</Text>
                     <View style={{display:"flex",alignItems:'center',flexDirection:'row',gap:5}}>

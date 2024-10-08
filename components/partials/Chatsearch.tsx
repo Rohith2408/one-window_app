@@ -8,6 +8,8 @@ import { getDevice, getFriends, getServerRequestURL, serverRequest } from "../..
 import { Fonts, Themes } from "../../constants"
 import { store } from "../../store"
 import default_icon from '../../assets/images/misc/defaultDP.png'
+import add_icon from '../../assets/images/misc/add-friend.png'
+import loader from '../../assets/images/misc/loader.gif'
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { addChats } from "../../store/slices/chatsSlice"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
@@ -23,8 +25,8 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     add_icon:{
-        width:40,
-        height:40,
+        width:30,
+        height:30,
         resizeMode:"contain"
     },
     no_workexperience:{
@@ -45,13 +47,16 @@ const TabStyles=StyleSheet.create({
     dp:{
         width:30,
         height:30
+    },
+    name:{
+        fontSize:16
     }
 })
 
 const MobileSStyles=StyleSheet.create({
     add_icon:{
-        width:34,
-        height:34,
+        width:16,
+        height:16,
         resizeMode:"contain"
     },
     no_workexperience:{
@@ -73,12 +78,15 @@ const MobileSStyles=StyleSheet.create({
     dp:{
         width:20,
         height:20
+    },
+    name:{
+        fontSize:12
     }
 })
 const MobileMStyles=StyleSheet.create({
     add_icon:{
-        width:26,
-        height:26,
+        width:18,
+        height:18,
         resizeMode:"contain"
     },
     no_workexperience:{
@@ -100,12 +108,15 @@ const MobileMStyles=StyleSheet.create({
     dp:{
         width:20,
         height:20
+    },
+    name:{
+        fontSize:14
     }
 })
 const MobileLStyles=StyleSheet.create({
     add_icon:{
-        width:34,
-        height:34,
+        width:18,
+        height:18,
         resizeMode:"contain"
     },
     no_workexperience:{
@@ -122,6 +133,9 @@ const MobileLStyles=StyleSheet.create({
     dp:{
         width:20,
         height:20
+    },
+    name:{
+        fontSize:14
     }
 
 })
@@ -142,6 +156,7 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
     const chats=useAppSelector((state)=>state.chats).data
     const friends=(getFriends(chats,store.getState().sharedinfo.data?._id))
     const dispatch=useAppDispatch()
+    const [loading,setLoading]=useState(false);
 
     const getUsers=async ()=>{
         console.log(getServerRequestURL("users-search","GET",{search:search}))
@@ -156,6 +171,7 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
     }
 
     const addFriend=async (user:User)=>{
+        setLoading(true)
         console.log("urrr",getServerRequestURL("add-friend","GET")+"/"+user._id)
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("add-friend","GET")+"/"+user._id,
@@ -166,6 +182,7 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
         {
             dispatch(addChats(res.data));
         }
+        setLoading(false)
     }
 
     const openChat=()=>{
@@ -197,13 +214,14 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
                     users.map((user,i)=>
                     <View key={user._id} style={[GeneralStyles.card]}>
                         <Image source={user.displayPicSrc?user.displayPicSrc:default_icon} style={[styles[Device].dp,{borderRadius:100}]}/>
-                        <View style={{flex:1}}><Text>{user.firstName+" "+user.lastName}</Text></View>
+                        <View style={{flex:1}}><Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{user.firstName+" "+user.lastName}</Text></View>
                         {
                             !friends.find((item)=>item?._id==user._id)
                             ?
-                            <Pressable onPress={()=>addFriend(user)}><Text>Add friend</Text></Pressable>
+                            <Pressable onPress={()=>!loading?addFriend(user):null}><Image source={loading?loader:add_icon} style={[styles[Device].add_icon]}/></Pressable>
                             :
-                            <Pressable><Text>Chat</Text></Pressable>
+                            null
+                            // <Pressable><Text>Chat</Text></Pressable>
                         }
                     </View>
                     )
@@ -212,8 +230,10 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
             }
             </View>
             :
-            <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
-                <Text>Use the search bar above to start meeting your study abroad companions!</Text>
+            <View style={{flex:1,gap:7.5,justifyContent:"center",alignItems:"center"}}>
+                <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Start Chatting...!</Text>
+                <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Use the search bar above to start meeting your study abroad companions!</Text>
+                {/* <Text style={[{textAlign:"center"},styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}></Text> */}
             </View>
         }
         </View>

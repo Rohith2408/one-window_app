@@ -8,7 +8,7 @@ import { Fonts, Themes } from "../../constants"
 import Loadingview from "../resources/Loadingview"
 import emptylist from '../../assets/images/misc/emptylist.png'
 import Loadinglistscreen from "../resources/Loadinglistscreen"
-import { Message as MessageType, Participant, ServerResponse } from "../../types"
+import { Message as MessageType, Participant, ServerResponse, TriggerObject } from "../../types"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
 import { addMessage, initMessages, resetMessages, seenMessage, startTypingMessage, stopTypingMessage } from "../../store/slices/messagesSlice"
 import { requests } from "../../constants/requests"
@@ -16,6 +16,8 @@ import add_icon from '../../assets/images/misc/add.png'
 import send_icon from '../../assets/images/misc/send.png'
 import loading_icon from '../../assets/images/misc/loader.gif'
 import Messagecard from "../cards/Messagecard"
+import { store } from "../../store"
+import socket from "../../socket"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -410,6 +412,17 @@ const Message=(props:{chatId:string})=>{
         } 
     }
 
+    const typingTrigger=(action:"start"|"stop")=>{
+        console.log(chat?.participants.filter((item)=>item._id!=profile.data?._id));
+        let triggerObj:TriggerObject={
+            action:"typing",
+            sender:{...profile.data,userType:"student",role:"student"},
+            recievers:chat?.participants.filter((item)=>item._id!=profile.data?._id),
+            data:action
+        }
+        socket.emit("trigger",triggerObj);
+    }
+
     //console.log("msgs",JSON.stringify(messages.data,null,2));
 
     return(
@@ -455,7 +468,7 @@ const Message=(props:{chatId:string})=>{
                 </View>
                 <Animated.View style={[GeneralStyles.messagebar_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)},{transform:[{translateY:messageBarOffset}]}]}>
                     <Pressable onPress={showPicker}><Image source={add_icon} style={[styles[Device].add]}/></Pressable>
-                    <View style={{flex:1}}><TextInput placeholder="Start Typing..." value={message} onChangeText={(txt)=>setMessage(txt)}></TextInput></View>
+                    <View style={{flex:1}}><TextInput onFocus={()=>typingTrigger("start")} onBlur={()=>typingTrigger("stop")} placeholder="Start Typing..." value={message} onChangeText={(txt)=>setMessage(txt)}></TextInput></View>
                     <Animated.View style={[{transform:[{scale:sendButtonScale}]}]}>
                         <Pressable onPress={!sending?send_message:null}><Image source={sending?loading_icon:send_icon} style={[styles[Device].send]}/></Pressable>
                     </Animated.View>
