@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
-import { getDevice, getServerRequestURL, serverRequest } from "../../utils"
+import { getDevice, getServerRequestURL, serverRequest, setWordCase } from "../../utils"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { Fonts, Themes } from "../../constants"
 import { Image } from "expo-image"
@@ -128,7 +128,7 @@ const Email=(props:{value:{email:string|undefined,verified:boolean},placeholder:
             }    
         });
         console.log("email res",res)
-        !res.success?setError("Something went wrong"):setMessage("Verification link has been sent to your email");
+        !res.success?setError(setWordCase(res.message)):setMessage("Verification link has been sent to your email");
         addToBasket("verification-callback",{callback:verifyOtp})
         res.success?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Verifyuser",flyerdata:{type:"email",data:{email:props.value.email}}}}}):null:null
         setIsLoading(false);

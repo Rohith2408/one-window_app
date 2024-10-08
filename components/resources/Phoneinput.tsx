@@ -6,6 +6,7 @@ import Dropdown from "./Dropdown"
 import { Image } from "expo-image"
 import { Fonts, Themes } from "../../constants"
 import { Countrycode, Dropdown as DropdownType, Event} from "../../types"
+import { addToBasket } from "../../constants/basket"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -75,12 +76,17 @@ const Phoneinput=(props:{codes:DropdownType,eventHandler:(event:Event)=>void,id:
     const [path,navigate]=useNavigation()
 
     const phoneInput=(number:string)=>{
+        console.log("phone",props.value,{...props.value,phoneNumber:number})
+        //navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.id,newvalue:date?.toISOString()}}}):null
         props.eventHandler({name:"phone-input",data:{...props.value,phoneNumber:number},triggerBy:"phoneinput"})
     }
 
     const codeSelected=(data:Event)=>{
+        console.log("code",{...props.value,countryCode:data.data})
         props.eventHandler({name:"phone-input",data:{...props.value,countryCode:data.data},triggerBy:"phoneinput"})
     }
+
+    console.log("phone input",props.value);
 
     return(
         <View style={[GeneralStyles.wrapper]}>

@@ -250,7 +250,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
         fields.forEach(field => {
             addToBasket(field.id,field.value);
         })
-        console.log("data",getFullBasket())
+        console.log("data",getFullBasket());
     },[fields])
 
     return(

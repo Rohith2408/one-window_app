@@ -697,10 +697,12 @@ const forms:FormInfo[]=[
                                 card:Dialcode,
                                 list:Countrycodes,
                                 labelExtractor:(item:Countrycode)=>item.dial_code,
-                                idExtractor:(item:Countrycode)=>item.code
+                                idExtractor:(item:Countrycode)=>item.code,
+                                searchEvaluator:(item:Countrycode,search:string)=>item.name.toLowerCase().trim().includes(search.toLowerCase().trim()),
                             },
                             apply:(data:Countrycode[])=>{
                                 let current:PhoneType=getBasket("phone")
+                                console.log("phone data",current);
                                 return ({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"phone",newvalue:{...current,countryCode:data}}}})
                             },
                             selectionMode:"single",
@@ -777,6 +779,7 @@ const forms:FormInfo[]=[
                             list:Nationalities.map((item)=>({label:item,value:item})),
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:Countrycode,search:string)=>item.name.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"nationality",newvalue:data}}}),
                         selectionMode:"single",
@@ -1247,7 +1250,7 @@ const forms:FormInfo[]=[
                 {id:"firstname",value:data?data.GuardianFirstName:""},
                 {id:"lastname",value:data?data.GuardianLastName:""},
                 {id:"email",value:data?data.GuardianEmail:""},
-                {id:"phone",value:{countryCode:data?.GuardianContactNumber?.countryCode?([Countrycodes.find((item)=>item.dial_code==data?.GuardianContactNumber?.countryCode)]):[],phoneNumber:data?.GuardianContactNumber?.number}},
+                {id:"phone",value:{countryCode:data?.GuardianContactNumber?.countryCode?([Countrycodes.find((item)=>item.dial_code==data?.GuardianContactNumber?.countryCode)]):[],phoneNumber:data?.GuardianContactNumber?.number?data.GuardianContactNumber.number:""}},
                 {id:"occupation",value:data?data.GuardianOccupation:""},
                 {id:"qualification",value:data?data.GuardianQualification:""},
                 {id:"relationshipwithstudent",value:data?[{label:setWordCase(data.RelationshipWithStudent),value:data.RelationshipWithStudent}]:""},
@@ -1350,10 +1353,12 @@ const forms:FormInfo[]=[
                                 card:Dialcode,
                                 list:Countrycodes,
                                 labelExtractor:(item:Countrycode)=>item.dial_code,
-                                idExtractor:(item:Countrycode)=>item.code
+                                idExtractor:(item:Countrycode)=>item.code,
+                                searchEvaluator:(item:Countrycode,search:string)=>item.name.toLowerCase().trim().includes(search.toLowerCase().trim()),
                             },
                             apply:(data:Countrycode[])=>{
                                 let current:PhoneType=getBasket("phone")
+                                console.log("phone data",current);
                                 return ({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"phone",newvalue:{...current,countryCode:data}}}})
                             },
                             selectionMode:"single",
@@ -1417,6 +1422,7 @@ const forms:FormInfo[]=[
                                 {label:"Father",value:"father"},
                                 {label:"Mother",value:"mother"},
                                 {label:"Sibling",value:"sibling"},
+                                {label:"Spouse",value:"spouse"},
                                 {label:"Guardian",value:"guardian"}
                             ],
                             labelExtractor:(item:ListItem)=>item.label,
