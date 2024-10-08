@@ -195,7 +195,7 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
 
     return(
         <View style={{flex:1,paddingTop:30}}>
-        <View style={{borderRadius:100,borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}><TextInput onChangeText={(txt)=>setSearch(txt)} placeholder="Search..." value={search} style={{padding:10}}/></View>
+        <View style={{borderRadius:100,borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}><TextInput autoFocus onChangeText={(txt)=>setSearch(txt)} placeholder="Search..." value={search} style={{padding:10}}/></View>
         {
             users!=undefined
             ?

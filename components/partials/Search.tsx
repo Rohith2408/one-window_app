@@ -374,7 +374,7 @@ const Dynamicsearch=(props:{onSearch:any,initialSearch:string})=>{
                 <Dynamicplaceholder/>
             </Pressable>
             :
-            <TextInput value={search} onChangeText={(txt)=>setSearch(txt)} autoFocus onBlur={()=>search.length==0?setMode("display"):null}/>
+            <TextInput autoFocus value={search} onChangeText={(txt)=>setSearch(txt)} autoFocus onBlur={()=>search.length==0?setMode("display"):null}/>
         }
         </View>
     )
