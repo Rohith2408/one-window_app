@@ -182,7 +182,7 @@ const Option=(props:{icon:string,title:string,Device:keyof typeof styles})=>{
     return(
         <View style={[GeneralStyles.option_wrapper]}>
             <Image source={props.icon} style={[styles[props.Device].option_icon]}></Image>
-            <View style={{flex:1}}><Text style={[styles[props.Device].options_text,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text></View>
+            <View style={{flex:1}}><Text style={[styles[props.Device].options_text,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text></View>
             <Image source={go_icon} style={[GeneralStyles.go_icon,styles[props.Device].go_icon]}></Image>
         </View>
     )

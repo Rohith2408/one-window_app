@@ -13,7 +13,7 @@ import add_icon from '../../assets/images/misc/add.png'
 import delete_icon from '../../assets/images/misc/delete.png'
 import edit_icon from '../../assets/images/misc/edit.png'
 import test_icon from '../../assets/images/misc/test.png'
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Tests, Themes } from "../../constants"
 import emptylist from '../../assets/images/misc/emptylist.png'
 
 const GeneralStyles=StyleSheet.create({
@@ -428,8 +428,8 @@ const Test=(props:TestType & {index:number})=>{
                     {
                         props.scores.map((item)=>
                         <View style={[GeneralStyles.section_wrapper]}>
-                            <View style={{flex:1}}><Text style={[styles[Device].section_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{item.description}</Text></View>
-                            <Text style={[styles[Device].score,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{item.count}</Text>
+                            <View style={{flex:1}}><Text style={[styles[Device].section_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.75)}]}>{item.description}</Text></View>
+                            <Text style={[styles[Device].score,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.75)}]}>{item.count}</Text>
                         </View>
                         )
                     }
@@ -437,7 +437,7 @@ const Test=(props:TestType & {index:number})=>{
                 </View>
                 <View style={[GeneralStyles.total_wrapper]}>
                     <Text style={[styles[Device].total_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Total</Text>
-                    <Text style={[styles[Device].total,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>200</Text>
+                    <Text style={[styles[Device].total,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Tests.find((item)=>item.name==props.name)?.totalEvaluator(props.scores)}</Text>
                 </View>
             </View>
            {/* <View>

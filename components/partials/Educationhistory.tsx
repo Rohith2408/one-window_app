@@ -101,7 +101,8 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:14
+        fontSize:14,
+        lineHeight:24
     },
     text2:{
         fontSize:12
@@ -156,7 +157,8 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:14
+        fontSize:14,
+        lineHeight:16
     },
     text2:{
         fontSize:12
@@ -180,7 +182,7 @@ const MobileSStyles=StyleSheet.create({
 const MobileMStyles=StyleSheet.create({
     card_wrapper:{
         width:"100%",
-        height:65
+        height:90
     },
     info_wrapper:{
         gap:10
@@ -211,7 +213,8 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:14
+        fontSize:14,
+        lineHeight:18
     },
     text2:{
         fontSize:12
@@ -235,7 +238,7 @@ const MobileMStyles=StyleSheet.create({
 const MobileLStyles=StyleSheet.create({
     card_wrapper:{
         width:"100%",
-        height:75
+        height:100
     },
     info_wrapper:{
         gap:10
@@ -266,7 +269,8 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:14
+        fontSize:14,
+        lineHeight:20
     },
     text2:{
         fontSize:12
@@ -306,10 +310,10 @@ const Educationhistory=()=>{
             education.responseStatus=="recieved"
             ?
             <View style={{flex:1,display:"flex",padding:5,flexDirection:'column',gap:50,paddingTop:30}}>
-                <View style={[styles[Device].card_wrapper]}><School data={education.data.school}/></View>
-                <View style={[styles[Device].card_wrapper]}><Intermediate data={education.data.plus2}/></View>
-                <View style={[styles[Device].card_wrapper]}><Undergraduation data={education.data.underGraduation}/></View>
-                <View style={[styles[Device].card_wrapper]}><Postgraduation data={education.data.postGraduation}/></View>
+                <View><School data={education.data.school}/></View>
+                <View><Intermediate data={education.data.plus2}/></View>
+                <View><Undergraduation data={education.data.underGraduation}/></View>
+                <View><Postgraduation data={education.data.postGraduation}/></View>
             </View>
             :
             <Loadinglistscreen cardStyles={{width:"100%",height:150}} cardGap={30} count={3} direction="vertical"/>
@@ -350,11 +354,11 @@ const School=(props:{data:EducationHistory_School|undefined})=>{
     }
 
     return(
-        <View style={{flex:1}}>
+        <View>
         {
             props.data && Object.keys(props.data).length!=0
             ?
-            <View style={{flex:1,flexDirection:'row',gap:10}}>
+            <View style={{flexDirection:'row',gap:10}}>
                 <View style={[GeneralStyles.icon_wrapper]}><Image source={school_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Animated.Text onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.35)} style={[styles[Device].title,GeneralStyles.title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5),transform:[{translateY:titleTranslate}]}]}>School</Animated.Text>
@@ -374,15 +378,16 @@ const School=(props:{data:EducationHistory_School|undefined})=>{
                 </View>
             </View>
             :
-            <View style={{flex:1,flexDirection:'row',gap:10}}>
-                <View style={[GeneralStyles.icon_wrapper]}><Image source={inter_icon} style={[styles[Device].card_icon]} /></View>
+            <View style={{flexDirection:'row',gap:10}}>
+                <View style={[GeneralStyles.icon_wrapper]}><Image source={school_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>School</Text>
-                    <View style={[GeneralStyles.nodetails_wrapper]}>
+                    {/* <View style={[GeneralStyles.nodetails_wrapper]}>
                         <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
                         <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
-                    </View>
+                    </View> */}
                 </View>
+                <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={add}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
             </View>
         }
         </View>
@@ -429,11 +434,11 @@ const Intermediate=(props:{data:EducationHistory_Plus2|undefined})=>{
     //console.log("in",props.data?.backlogs)
 
     return(
-        <View style={{flex:1}}>
+        <View>
         {
             props.data && Object.keys(props.data).length!=0
             ?
-            <View style={{flex:1,flexDirection:'row',gap:10}}>
+            <View style={{flexDirection:'row',gap:10}}>
                 <View style={[GeneralStyles.icon_wrapper]}><Image source={inter_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Animated.Text onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.35)} style={[styles[Device].title,GeneralStyles.title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5),transform:[{translateY:titleTranslate}]}]}>Intermediate</Animated.Text>
@@ -457,15 +462,16 @@ const Intermediate=(props:{data:EducationHistory_Plus2|undefined})=>{
                 </View>
             </View>
             :
-            <View style={{flex:1,flexDirection:'row',gap:10}}>
+            <View style={{flexDirection:'row',gap:10}}>
                 <View style={[GeneralStyles.icon_wrapper]}><Image source={inter_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Intermediate</Text>
-                    <View style={[GeneralStyles.nodetails_wrapper]}>
+                    {/* <View style={[GeneralStyles.nodetails_wrapper]}>
                         <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
                         <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
-                    </View>
+                    </View> */}
                 </View>
+                <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
             </View>
         }
         </View>
@@ -521,11 +527,11 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
     }
     
     return(
-        <View style={{flex:1}}>
+        <View>
         {
             !checkIfEmpty(props.data)
             ?
-            <View style={{flex:1,flexDirection:'row',gap:10}}>
+            <View style={{flexDirection:'row',gap:10}}>
                 <View style={[GeneralStyles.icon_wrapper]}><Image source={ug_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Animated.Text onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.25)} style={[styles[Device].title,GeneralStyles.title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1),transform:[{translateY:titleTranslate}]}]}>Undergraduation</Animated.Text>
@@ -549,15 +555,16 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
                 </View>
             </View>
             :
-            <View style={{flex:1,flexDirection:'row',gap:10}}>
-                <View style={[GeneralStyles.icon_wrapper]}><Image source={inter_icon} style={[styles[Device].card_icon]} /></View>
+            <View style={{flexDirection:'row',gap:10}}>
+                <View style={[GeneralStyles.icon_wrapper]}><Image source={ug_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Undergraduate</Text>
-                    <View style={[GeneralStyles.nodetails_wrapper]}>
+                    {/* <View style={[GeneralStyles.nodetails_wrapper]}>
                         <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
                         <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
-                    </View>
+                    </View> */}
                 </View>
+                <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
             </View>
         }
         </View>
@@ -606,12 +613,12 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
     }
 
     return(
-        <View style={{flex:1}}>
+        <View>
         {
             !checkIfEmpty(props.data)
             ?
-            <View style={{flex:1,flexDirection:'row',gap:10}}>
-                <View style={[GeneralStyles.icon_wrapper]}><Image source={ug_icon} style={[styles[Device].card_icon]} /></View>
+            <View style={{flexDirection:'row',gap:10}}>
+                <View style={[GeneralStyles.icon_wrapper]}><Image source={pg_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Animated.Text onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.25)} style={[styles[Device].title,GeneralStyles.title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5),transform:[{translateY:titleTranslate}]}]}>Postgraduation</Animated.Text>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Word2Sentence([props.data?.instituteName,props.data?.degreeProgram],"","|")}</Text>
@@ -634,15 +641,16 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
                 </View>
             </View>
             :
-            <View style={{flex:1,flexDirection:'row',gap:10}}>
-                <View style={[GeneralStyles.icon_wrapper]}><Image source={inter_icon} style={[styles[Device].card_icon]} /></View>
+            <View style={{flexDirection:'row',gap:10}}>
+                <View style={[GeneralStyles.icon_wrapper]}><Image source={pg_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Postgraduate</Text>
-                    <View style={[GeneralStyles.nodetails_wrapper]}>
+                    {/* <View style={[GeneralStyles.nodetails_wrapper]}>
                         <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
                         <Text style={[styles[Device].nodetails,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Details not added</Text>
-                    </View>
+                    </View> */}
                 </View>
+                <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} onPress={openCompletedFlyer}><Image style={[styles[Device].nodetails_icon]} source={add_icon}/></Pressable>
             </View>
         }
         </View>

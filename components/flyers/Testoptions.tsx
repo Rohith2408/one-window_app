@@ -12,29 +12,37 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:12,
-        padding:10
+        fontSize:13,
+    },
+    shortform:{
+        fontSize:16,
     }
     
 })
 
 const MobileSStyles=StyleSheet.create({
     text:{
+        fontSize:9,
+    },
+    shortform:{
         fontSize:12,
-        padding:10
     }
 })
 const MobileMStyles=StyleSheet.create({
 
     text:{
+        fontSize:11,
+    },
+    shortform:{
         fontSize:14,
-        padding:10
     }
 })
 const MobileLStyles=StyleSheet.create({
     text:{
-        fontSize:12,
-        padding:10
+        fontSize:11,
+    },
+    shortform:{
+        fontSize:14,
     }
     
 })
@@ -58,11 +66,12 @@ const Testoptions=()=>{
     }
 
     return(
-        <View style={{flex:1,paddingTop:10,gap:10}}>
+        <View style={{flex:1,padding:5,paddingTop:15,gap:20}}>
         {
             Tests.filter((test)=>!store.getState().testscores.data?.find((item)=>item.name==test.name)).map((test)=>
-            <Pressable onPress={()=>openForm(test.name)}>
-                <Text style={[styles[Device].text,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{test.name}</Text>
+            <Pressable style={{gap:5}} onPress={()=>openForm(test.name)}>
+                <Text style={[styles[Device].shortform,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{test.shortForm}</Text>
+                <Text style={[styles[Device].text,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{test.name}</Text>
             </Pressable>
             )
         }

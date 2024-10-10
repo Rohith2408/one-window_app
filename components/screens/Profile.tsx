@@ -12,7 +12,9 @@ import cart_icon from '../../assets/images/profile/cart.png'
 import expert_icon from '../../assets/images/profile/expert.png'
 import favourites_icon from '../../assets/images/profile/favourites.png'
 import orders_icon from '../../assets/images/profile/orders.png'
+import products_icon from '../../assets/images/profile/products.png'
 import preferences_icon from '../../assets/images/profile/preferences.png'
+import ai_icon from '../../assets/images/profile/ai.png'
 import { useAppSelector } from "../../hooks/useAppSelector";
 import Loadingview from "../resources/Loadingview";
 import defaultDP from '../../assets/images/misc/defaultDP.png'
@@ -37,7 +39,7 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:'column',
         alignItems:'flex-start',
         justifyContent:"center",
-        gap:10
+        gap:5
     },
     dp_wrapper:{
         flex:1,
@@ -185,7 +187,7 @@ const MobileSStyles=StyleSheet.create({
     },
     loadingview_name:{
         width:150,
-        height:30
+        height:20
     },
     loadingview_email:{
         width:100,
@@ -241,7 +243,7 @@ const MobileMStyles=StyleSheet.create({
     },
     loadingview_name:{
         width:150,
-        height:30
+        height:20
     },
     loadingview_email:{
         width:100,
@@ -297,7 +299,7 @@ const MobileLStyles=StyleSheet.create({
     },
     loadingview_name:{
         width:150,
-        height:30
+        height:20
     },
     loadingview_email:{
         width:100,
@@ -327,11 +329,11 @@ const Profile=(props:any)=>{
         {title:"Personal Info",icon:personal_icon,screen:"Personalinfo"},
         {title:"Experts",icon:expert_icon,screen:"Experts"},
         {title:"Preferences",icon:preferences_icon,screen:"Preferences"},
-        {title:"Recommended",icon:preferences_icon,screen:"Recommendations"},
+        {title:"AI",icon:ai_icon,screen:"Recommendations"},
         {title:"Favourites",icon:favourites_icon,screen:""},
         {title:"Cart",icon:cart_icon,screen:"Cart"},
         {title:"My Orders",icon:orders_icon,screen:"Myorders"},
-        {title:"My Products",icon:orders_icon,screen:"Myproducts"}
+        {title:"My Products",icon:products_icon,screen:"Myproducts"}
     ]).current
 
     const press=()=>{
@@ -364,7 +366,7 @@ const Profile=(props:any)=>{
             <View style={[GeneralStyles.user_wrapper,styles[Device].user_wrapper]}>
                 <View style={[GeneralStyles.name_wrapper]}>
                     <Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.name,styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{(sharedInfo.data?.firstName || sharedInfo.data?.lastName)?sharedInfo.data?.firstName+" "+sharedInfo.data?.lastName:"User"}</Text></Loadingview>
-                    <Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.email,styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{sharedInfo.data?.email}</Text></Loadingview>
+                    <Loadingview style={[styles[Device].loadingview_email]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.email,styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{sharedInfo.data?.email}</Text></Loadingview>
                 </View>
                 <Pressable onPress={showDpOptions} style={[GeneralStyles.dp_wrapper]}>
                     <View style={[GeneralStyles.dpBg,styles[Device].dpBg,{backgroundColor:Themes.Light.OnewindowRed(1)}]}></View>
@@ -393,7 +395,7 @@ const Option=(props:{icon:string,title:string,Device:keyof typeof styles})=>{
     return(
         <View style={[GeneralStyles.option_wrapper]}>
             <Image source={props.icon} style={[styles[props.Device].option_icon]}></Image>
-            <Text style={[styles[props.Device].options_text,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text>
+            <Text style={[styles[props.Device].options_text,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text>
         </View>
     )
 }

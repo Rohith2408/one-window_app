@@ -349,7 +349,7 @@ const Product=(props:{productId:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Expert",params:{expertid:id}}}):null
     }
 
-    console.log("order",JSON.stringify(store.getState().orders.data[0].products[0].advisors,null,2))
+    console.log("order",JSON.stringify(store.getState().orders.data[0].products[0],null,2))
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>

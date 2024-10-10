@@ -217,7 +217,7 @@ const Chats=()=>{
                                     <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Seems like you have no friends!</Text>
                                 </View>
                                 :
-                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:30,paddingBottom:30}}>
+                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:0,paddingBottom:30}}>
                                 {
                                     community.map((item,i)=>
                                     <Chatcard {...item} index={i}/>
