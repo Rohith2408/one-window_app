@@ -104,7 +104,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     //console.log("info",info);
 
     return(
-        <View style={{flex:1,flexDirection:'column',justifyContent:"center",alignItems:'center',gap:20,padding:5,paddingBottom:15}}>
+        <View style={{flex:1,flexDirection:'column',justifyContent:"center",alignItems:'center',gap:35,padding:5,paddingTop:15,paddingBottom:35}}>
             <View style={{alignSelf:'stretch',gap:7}}>
                 <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the year</Text>
                 <View>
