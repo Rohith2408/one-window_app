@@ -36,55 +36,9 @@ import socket from "../../socket"
 
 const Student=(props:{screens:string[],params:any})=>{
 
-    // const fields=useRef<FormField[]>([
-    // {
-    //     id:"firstname",
-    //     componentInfo:{
-    //         component:Textbox,
-    //         props:{
-    //             placeholder:"Enter your firstname"
-    //         }
-    //     },
-    //     title:"Firstname",
-    //     value:undefined,
-    //     onFocus:{
-    //         event:"onFocus"
-    //     }
-    // },
-    // {
-    //     id:"gender",
-    //     componentInfo:{
-    //         component:Dropdown,
-    //         props:{
-    //            options:[
-    //             {label:"Male",value:"male"},
-    //             {label:"Female",value:"female"},
-    //            ]
-    //         }
-    //     },
-    //     onFocus:{
-    //         event:"onToggle"
-    //     },
-    //     onUpdate:{
-    //         event:"onSelect"
-    //     },
-    //     title:"Gender",
-    //     value:undefined,
-    // },
-    // {
-    //     id:"lastname",
-    //     componentInfo:{
-    //         component:Textbox,
-    //         props:{
-    //             placeholder:"Enter your lastname"
-    //         }
-    //     },
-    //     title:"Lastname",
-    //     value:undefined,
-    // }
-    // ]).current
     const dispatch=useAppDispatch()
     const [path,navigate]=useNavigation()
+    const initialSetup=useRef(false);
 
     const fetchProfile=async ()=>{
         let res:ServerResponse=await serverRequest({
@@ -292,13 +246,14 @@ const Student=(props:{screens:string[],params:any})=>{
     }
     
     const triggerRoot=(triggerObj:TriggerObject)=>{
-        console.log("trigger",triggerObj);
+        console.log("trigger chat",triggerObj.action);
         switch(triggerObj.action){
             case "activityList":
                 dispatch(updateParticipantsActivity(triggerObj.data))
                 break
 
             case "ping":
+                console.log("recievd",triggerObj.sender.firstName,triggerObj.data);
                 dispatch(updateParticipantActivity({...triggerObj.sender,role:"",activity:triggerObj.data.status}))
                 break;
 
@@ -317,47 +272,40 @@ const Student=(props:{screens:string[],params:any})=>{
     }
 
     useEffect(()=>{
-        //socket.removeListener("trigger",triggerRoot)
-        socket.on("trigger",triggerRoot);
-        fetchProfile().then((res:ServerResponse)=>{
-            if(res.success)
-            {
-                let user={
-                    _id:res.data._id,
-                    firstName:res.data.firstName,
-                    lastName:res.data.lastName,
-                    email:res.data.email,
-                    displayPicSrc:res.data.displayPicSrc?res.data.displayPicSrc:"",
-                    phone:res.data.phone,
-                }
-                socket.emit('join',user)
-                fetchChats().then((res2)=>{
-                    if(res2.success)
-                    {
-                        let friends:any=getFriends(res2.data,user._id);
-                        let triggerObj:TriggerObject={
-                            action:"ping",
-                            sender:{...user,userType:"student"},
-                            recievers:friends,
-                            data:{respond:false,status:'online'}
-                        }
-                        socket.emit('trigger',triggerObj);
-                        AppState.addEventListener('change',(state)=>{
-                            var triggerObject;
-                            triggerObject={
-                                action:'ping',
+        if(!initialSetup.current)
+        {
+            fetchProfile().then((res:ServerResponse)=>{
+                if(res.success)
+                {
+                    let user={ _id:res.data._id,firstName:res.data.firstName,lastName:res.data.lastName}
+                    socket.emit('join',user)
+                    socket.on("trigger",triggerRoot);
+                    fetchChats().then((res2)=>{
+                        if(res2.success)
+                        {
+                            let friends:any=getFriends(res2.data,user._id);
+                            console.log("Friends",friends.map((item)=>item.firstName))
+                            let triggerObj:TriggerObject={
+                                action:"ping",
                                 sender:{...user,userType:"student"},
                                 recievers:friends,
-                                data:{respond:false,status:state=="active"?"online":"offline"}
-                            };
-                            socket.emit('trigger',{...triggerObj});
-                        })
-                    }
-                })
-            }
-        })
-        fetchActivity()
+                                data:{respond:false,status:'online'}
+                            }
+                            socket.emit('trigger',triggerObj);
+                            AppState.addEventListener('change',(state)=>{
+                                console.log("state",state);
+                                socket.emit('trigger',{...triggerObj,data:{respond:false,status:state=="active"?"online":"offline"}});
+                            })
+                        }
+                    })
+                }
+            })
+            fetchActivity()
+            initialSetup.current=true
+        }
     },[])   
+
+    console.log("trigger root",socket.listeners("trigger"))
     
     return(
         <View style={{width:"100%",height:"100%"}}>

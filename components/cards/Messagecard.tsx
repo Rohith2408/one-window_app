@@ -211,6 +211,12 @@ const MobileLStyles=StyleSheet.create({
         width:20,
         height:20,
         resizeMode:"contain"
+    },
+    normal_msg:{
+        fontSize:14
+    },
+    repliedTo:{
+        fontSize:10
     }
 })
 
@@ -287,19 +293,28 @@ const Normal=(props:Message)=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
-        <View style={{flexDirection:"row",alignItems:"center",alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start",backgroundColor:(props.sender?._id==profile?._id)?Themes.Light.OnewindowLightBlue:"#F6F6F6",borderRadius:20}}>
+        <View style={{alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start"}}>
+            <View style={{flexDirection:"row",alignItems:"center",backgroundColor:(props.sender?._id==profile?._id)?Themes.Light.OnewindowLightBlue:"#F6F6F6",borderRadius:20}}>
+                {
+                    props.sender?._id!=profile?._id
+                    ?
+                    <Image style={[styles[Device].sender_dp,{transform:[{translateY:-styles[Device].sender_dp.height/1.5}],borderRadius:100}]} source={props.sender?.displayPicSrc?props.sender?.displayPicSrc:default_icon} />
+                    :
+                    null
+                }
+                <Text style={[styles[Device].normal_msg,{padding:10},{fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.content}</Text>
+                {
+                    props.sender?._id==profile?._id
+                    ?
+                    <Image style={[styles[Device].sender_dp,{transform:[{translateY:-styles[Device].sender_dp.height/1.5}],borderRadius:100}]} source={props.sender?.displayPicSrc?props.sender?.displayPicSrc:default_icon} />
+                    :
+                    null
+                }
+            </View>
             {
-                props.sender?._id!=profile?._id
+                props.repliedTo
                 ?
-                <Image style={[styles[Device].sender_dp,{transform:[{translateY:-styles[Device].sender_dp.height/1.5}],borderRadius:100}]} source={props.sender?.displayPicSrc?props.sender?.displayPicSrc:default_icon} />
-                :
-                null
-            }
-            <Text style={[{padding:10},{fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.content}</Text>
-            {
-                props.sender?._id==profile?._id
-                ?
-                <Image style={[styles[Device].sender_dp,{transform:[{translateY:-styles[Device].sender_dp.height/1.5}],borderRadius:100}]} source={props.sender?.displayPicSrc?props.sender?.displayPicSrc:default_icon} />
+                <Text style={[styles[Device].repliedTo,{color:"grey",padding:10}]}>{"Replied to "+props.repliedTo.decoded}</Text>
                 :
                 null
             }

@@ -402,6 +402,12 @@ const endPoints=[
         tail:"chats",
         type:"GET",
     },
+    {
+        id:"message-seen",
+        category:"communication",
+        tail:"seen",
+        type:"GET",
+    },
 ]
 
 const baseURL="https://campusroot.com/api/v1"

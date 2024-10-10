@@ -407,6 +407,7 @@ export const editProfileServerRequest=async (data:any)=>{
 
 export const getDevice=()=>{
   let width=Dimensions.get("screen").width
+  //console.log("Device width",width);
   if(width>=320 && width<=375)
   {
     return "MobileS"

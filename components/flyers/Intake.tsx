@@ -70,6 +70,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     }
 
     const monthSelected=(data:ProgramIntake[])=>{
+        console.log((data[0].courseStartingMonth+1))
         setIntake({...intake,month:data.length==0?undefined:(data[0].courseStartingMonth+1).toString()})
     }
 
@@ -82,9 +83,23 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
         return true;
     }
 
-    const checkIfAlreadyExists=()=>{
-        
+    const getErrors=(intake:{year:undefined|string,month:undefined|string})=>{
+        //console.log(intake,(new Date().getMonth()+1).toString())
+        if(intake.year==undefined || intake.month==undefined)
+        {
+            return "Please select the month and year"
+        }
+        else if (intake.year==new Date().getFullYear().toString() && intake.month<(new Date().getMonth()+1).toString())
+        {
+            return "Selected intake not available"
+        }
+        else
+        {
+            return undefined
+        }
     }
+
+
 
     //console.log("info",info);
 
@@ -129,11 +144,11 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
                     />
                 </View>
             </View> 
-            <View style={{alignSelf:'stretch',transform:[{scale:(intake.month && intake.year)?1:0}]}}><Asynchronousbutton successText="Added Succesfully" idleText="Apply" failureText="Something went wront" callback={apply}/></View>
+            <View style={{alignSelf:'stretch',transform:[{scale:getErrors(intake)==undefined?1:0}]}}><Asynchronousbutton successText="Added Succesfully" idleText="Apply" failureText="Something went wront" callback={apply}/></View>
             {
-                error!=undefined
+                getErrors(intake)!=undefined
                 ?
-                <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:"red"}]}>{error}</Text>
+                <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:"red"}]}>{getErrors(intake)}</Text>
                 :
                 null
             }        
