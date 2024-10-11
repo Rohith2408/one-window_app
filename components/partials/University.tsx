@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Course, Event, Product, ProgramIntake, ServerResponse, University as UniversityType } from "../../types"
-import { PackageProductsValidator, Word2Sentence, getDevice, getServerRequestURL, getThemeColor, serverRequest } from "../../utils";
+import { PackageProductsValidator, Word2Sentence, getDevice, getLightThemeColor, getServerRequestURL, getThemeColor, serverRequest } from "../../utils";
 import { cartRequest } from "../../utils/serverrequests";
 import useNavigation from "../../hooks/useNavigation";
 import { addToBasket } from "../../constants/basket";
@@ -190,6 +190,9 @@ const MobileMStyles=StyleSheet.create({
     about:{
         fontSize:14,
         lineHeight:24
+    },
+    heading:{
+        fontSize:16
     }
 })
 
@@ -220,6 +223,7 @@ const University=(props:{universityid:string})=>{
         {icon:fee_icon,label:"Courses",value:universityInfo?.courses}
     ]
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
+    const ratings=universityInfo?.rating?{keys:Object.keys(universityInfo.rating),values:Object.values(universityInfo.rating)}:undefined
 
     const fetchUniversity=async ()=>{
         console.log("id",props.universityid)
@@ -234,6 +238,8 @@ const University=(props:{universityid:string})=>{
     useEffect(()=>{
         fetchUniversity();
     },[])
+
+    console.log("uni",universityInfo?.rating)
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
@@ -266,6 +272,28 @@ const University=(props:{universityid:string})=>{
                         <Dashboarditem {...dashboardInfo[5]} index={1}/>
                     </View>
                 </View>
+                {/* <View style={{gap:10}}>
+                    <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Rating</Text>
+                    <View>
+                    {
+                        ratings==undefined || ratings.keys.length==0
+                        ?
+                        <Text>Ratings not available</Text>
+                        :
+                        <View style={{gap:15}}>
+                        {
+                            ratings.keys.map((item,i)=>
+                            <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
+                                <View style={{width:7,height:7,borderRadius:100,borderWidth:1.5,borderColor:getThemeColor(i%4)}}></View>
+                                <View style={{flex:1}}><Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}}>{item}</Text></View>
+                                <Text style={{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.7)}}>{ratings.values[i]}</Text>
+                            </View>
+                            )
+                        }
+                        </View>
+                    }
+                    </View>
+                </View> */}
             </ScrollView>
             :
             <Text>Loading</Text>
@@ -280,7 +308,7 @@ const Dashboarditem=(data:{label:string,value:string,icon:string,index:number})=
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
-        <View style={[GeneralStyles.dashboard_item_wrapper,styles[Device].dashboard_item_wrapper,{backgroundColor:getThemeColor(data.index)}]}>
+        <View style={[GeneralStyles.dashboard_item_wrapper,styles[Device].dashboard_item_wrapper,{backgroundColor:getLightThemeColor(data.index)}]}>
             <Image style={[styles[Device].dashboard_icon]} source={data.icon}/>
             <Text style={[styles[Device].dashboard_value,{color:"black",fontFamily:Fonts.NeutrifStudio.Bold}]}>{data.value}</Text>
             <Text style={[styles[Device].dashboard_label,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{data.label}</Text>

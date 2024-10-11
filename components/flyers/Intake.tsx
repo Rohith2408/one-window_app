@@ -84,12 +84,12 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     }
 
     const getErrors=(intake:{year:undefined|string,month:undefined|string})=>{
-        //console.log(intake,(new Date().getMonth()+1).toString())
+        console.log(intake,(new Date().getMonth()+1).toString())
         if(intake.year==undefined || intake.month==undefined)
         {
             return "Please select the month and year"
         }
-        else if (intake.year==new Date().getFullYear().toString() && intake.month<(new Date().getMonth()+1).toString())
+        else if (parseInt(intake.year)==new Date().getFullYear() && parseInt(intake.month)<(new Date().getMonth()+1))
         {
             return "Selected intake not available"
         }
