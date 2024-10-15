@@ -7,12 +7,10 @@ import useNavigation from "../../hooks/useNavigation"
 import { getDevice, getFriends, getServerRequestURL, serverRequest } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 import { store } from "../../store"
-import default_icon from '../../assets/images/misc/defaultDP.png'
 import add_icon from '../../assets/images/misc/add-friend.png'
 import loader from '../../assets/images/misc/loader.gif'
 import { useAppSelector } from "../../hooks/useAppSelector"
-import { addChats } from "../../store/slices/chatsSlice"
-import { useAppDispatch } from "../../hooks/useAppDispatch"
+import Chatsearchcard from "../cards/Chatsearchcard"
 
 const GeneralStyles=StyleSheet.create({
     card:{
@@ -130,14 +128,6 @@ const MobileLStyles=StyleSheet.create({
         height:100,
         resizeMode:"contain"
     },
-    dp:{
-        width:20,
-        height:20
-    },
-    name:{
-        fontSize:14
-    }
-
 })
 
 const styles={
@@ -155,8 +145,6 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
     const [users,setUsers]=useState<User[]|undefined>(undefined)
     const chats=useAppSelector((state)=>state.chats).data
     const friends=(getFriends(chats,store.getState().sharedinfo.data?._id))
-    const dispatch=useAppDispatch()
-    const [loading,setLoading]=useState(false);
 
     const getUsers=async ()=>{
         console.log(getServerRequestURL("users-search","GET",{search:search}))
@@ -168,21 +156,6 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
         {
             setUsers(res.data)
         }
-    }
-
-    const addFriend=async (user:User)=>{
-        setLoading(true)
-        console.log("urrr",getServerRequestURL("add-friend","GET")+"/"+user._id)
-        let res:ServerResponse=await serverRequest({
-            url:getServerRequestURL("add-friend","GET")+"/"+user._id,
-            reqType: "GET"
-        })
-        console.log("new friend",res);
-        if(res.success)
-        {
-            dispatch(addChats(res.data));
-        }
-        setLoading(false)
     }
 
     const openChat=()=>{
@@ -213,16 +186,7 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
                 {
                     users.map((user,i)=>
                     <View key={user._id} style={[GeneralStyles.card]}>
-                        <Image source={user.displayPicSrc?user.displayPicSrc:default_icon} style={[styles[Device].dp,{borderRadius:100}]}/>
-                        <View style={{flex:1}}><Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{user.firstName+" "+user.lastName}</Text></View>
-                        {
-                            !friends.find((item)=>item?._id==user._id)
-                            ?
-                            <Pressable onPress={()=>!loading?addFriend(user):null}><Image source={loading?loader:add_icon} style={[styles[Device].add_icon]}/></Pressable>
-                            :
-                            null
-                            // <Pressable><Text>Chat</Text></Pressable>
-                        }
+                        <Chatsearchcard index={i} {...user} alreadyFriend={friends.find((item)=>item?._id==user._id)!=undefined}/>
                     </View>
                     )
                 }
