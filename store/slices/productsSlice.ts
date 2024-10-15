@@ -15,7 +15,7 @@ export const productsSlice=createSlice({
     initialState:initialState,
     reducers:{
         initProducts:(state,action:PayloadAction<Request<PurchasedProduct[]>>)=>({...action.payload}),
-        addProduct:(state,action:PayloadAction<PurchasedProduct>)=>{state.data.push(action.payload)},
+        setProducts:(state,action:PayloadAction<PurchasedProduct[]>)=>{state.data=(action.payload)},
         addProducts:(state,action:PayloadAction<PurchasedProduct[]>)=>{state.data=[...state.data,...action.payload]},
         updateProduct:(state,action:PayloadAction<PurchasedProduct>)=>{
             let index=state.data.findIndex((item)=>item._id==action.payload._id);
@@ -30,5 +30,5 @@ export const productsSlice=createSlice({
     }
 })
 
-export const {initProducts,addProduct,addProducts,updateProduct,removeProduct,resetProducts}=productsSlice.actions;
+export const {initProducts,addProduct,setProducts,addProducts,updateProduct,removeProduct,resetProducts}=productsSlice.actions;
 export default productsSlice.reducer;

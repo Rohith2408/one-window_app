@@ -32,7 +32,7 @@ import { initSuggestedPackage } from "../../store/slices/suggestedpackageSlice"
 import { initProducts } from "../../store/slices/productsSlice"
 import { store } from "../../store"
 import { initChats, updateChat, updateParticipantActivity, updateParticipantsActivity } from "../../store/slices/chatsSlice"
-import socket from "../../socket"
+import { getSocket, initiateSocketConnection } from "../../socket"
 
 const Student=(props:{screens:string[],params:any})=>{
 
@@ -45,7 +45,7 @@ const Student=(props:{screens:string[],params:any})=>{
             url:getServerRequestURL("profile","GET"),
             reqType: "GET"
         })
-        console.log("ress",res.data.otp)
+        //console.log("ress",res.data.otp)
         if(!res.success)
         {
             if(res.message==serverResponses.VerificationFailed || res.message==serverResponses.InvalidTokens || res.message==serverResponses.TokenMissing)
@@ -246,9 +246,10 @@ const Student=(props:{screens:string[],params:any})=>{
     }
     
     const triggerRoot=(triggerObj:TriggerObject)=>{
-        console.log("trigger chat",triggerObj.action);
+        console.log("trigger chat",triggerObj.sender?.firstName,triggerObj.action);
         switch(triggerObj.action){
             case "activityList":
+                console.log("acctivityyy",triggerObj.data);
                 dispatch(updateParticipantsActivity(triggerObj.data))
                 break
 
@@ -270,6 +271,7 @@ const Student=(props:{screens:string[],params:any})=>{
                 break;
         }
     }
+    
 
     useEffect(()=>{
         if(!initialSetup.current)
@@ -278,23 +280,25 @@ const Student=(props:{screens:string[],params:any})=>{
                 if(res.success)
                 {
                     let user={ _id:res.data._id,firstName:res.data.firstName,lastName:res.data.lastName}
-                    socket.emit('join',user)
-                    socket.on("trigger",triggerRoot);
+                    initiateSocketConnection(user._id);
+                    //basicInfoChecker();
+                    //socket.emit('join',user)
+                    getSocket().on("trigger",triggerRoot);
                     fetchChats().then((res2)=>{
                         if(res2.success)
                         {
                             let friends:any=getFriends(res2.data,user._id);
-                            console.log("Friends",friends.map((item)=>item.firstName))
+                            //console.log("user",user.firstName,user._id,"Friends",friends.map((item)=>({name:item.firstName,id:item._id})))
                             let triggerObj:TriggerObject={
                                 action:"ping",
                                 sender:{...user,userType:"student"},
                                 recievers:friends,
                                 data:{respond:false,status:'online'}
                             }
-                            socket.emit('trigger',triggerObj);
+                            getSocket().emit('trigger',triggerObj);
                             AppState.addEventListener('change',(state)=>{
                                 console.log("state",state);
-                                socket.emit('trigger',{...triggerObj,data:{respond:false,status:state=="active"?"online":"offline"}});
+                                getSocket().emit('trigger',{...triggerObj,data:{respond:false,status:state=="active"?"online":"offline"}});
                             })
                         }
                     })
@@ -302,10 +306,15 @@ const Student=(props:{screens:string[],params:any})=>{
             })
             fetchActivity()
             initialSetup.current=true
+
         }
     },[])   
 
-    console.log("trigger root",socket.listeners("trigger"))
+    const basicInfoChecker=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"details",forminitialdataid:"login"}}}):null
+    }
+
+    //console.log("trigger root",getSocket().listeners("trigger"))
     
     return(
         <View style={{width:"100%",height:"100%"}}>

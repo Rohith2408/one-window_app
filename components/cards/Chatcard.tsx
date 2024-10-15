@@ -253,7 +253,7 @@ const Chatcard=(props:Chat & {index:number})=>{
         navigate({type:"AddScreen",payload:{screen:"Message",params:{chatId:props._id}}});
     }
 
-    //console.log("ac",props.participants.map((item)=>(item.activity)));
+    console.log("ac",lastMessageInfo.status);
 
     return(
         <Pressable onPress={openChat} style={[GeneralStyles.wrapper]}>

@@ -58,21 +58,24 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Successfull=(props:{message:string})=>{
+const Successfull=(props:{message:string,preventAutoHide?:boolean,hideInterval?:number})=>{
 
     const [path,navigate]=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     useEffect(()=>{
-        setTimeout(()=>{
-            navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
-        },1500)
+        if(!props.preventAutoHide)
+        {
+            setTimeout(()=>{
+                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
+            },props.hideInterval?props.hideInterval:2500)
+        }
     },[])
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <Text style={[styles[Device].text,{color:"green",fontFamily:Fonts.NeutrifStudio.Bold}]}>Success!</Text>
-            <Text style={[styles[Device].subtext,{color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.message}</Text>
+            <Text style={[styles[Device].subtext,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.message}</Text>
         </View>
     )
 }

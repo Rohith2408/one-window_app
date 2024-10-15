@@ -14,10 +14,9 @@ import default_icon from '../../assets/images/misc/defaultDP.png'
 const GeneralStyles=StyleSheet.create({
     wrapper:{
         display:"flex",
-        flex:1,
         justifyContent:"center",
         alignItems:'center',
-        padding:15
+        // backgroundColor:'red'
     },
     sub_wrapper:{
         display:"flex",
@@ -256,6 +255,8 @@ const Messagecard=(props:Message & {index:number})=>{
 }
 
 const Seen=(props:Message)=>{
+
+    console.log("seen",props);
 
     return(
         <View style={{alignSelf:"flex-end"}}>

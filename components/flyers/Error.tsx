@@ -19,7 +19,8 @@ const TabStyles=StyleSheet.create({
         fontSize:24
     },
     subtext:{
-        fontSize:16
+        fontSize:16,
+        lineHeight:28
     }
 })
 
@@ -28,7 +29,8 @@ const MobileSStyles=StyleSheet.create({
         fontSize:26
     },
     subtext:{
-        fontSize:14
+        fontSize:14,
+        lineHeight:20
     }
 })
 
@@ -37,7 +39,8 @@ const MobileMStyles=StyleSheet.create({
         fontSize:28
     },
     subtext:{
-        fontSize:16
+        fontSize:16,
+        lineHeight:24
     }
 })
 
@@ -46,7 +49,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:24
     },
     subtext:{
-        fontSize:16
+        fontSize:16,
+        lineHeight:24
     }
     
 })
@@ -58,21 +62,24 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Error=(props:{error:string})=>{
+const Error=(props:{error:string,preventAutoHide?:boolean,hideInterval?:number})=>{
 
     const [path,navigate]=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     useEffect(()=>{
-        setTimeout(()=>{
-            navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
-        },2500)
+        if(!props.preventAutoHide)
+        {
+            setTimeout(()=>{
+                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
+            },props.hideInterval?props.hideInterval:2500)
+        }
     },[])
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <Text style={[styles[Device].text,{color:"red",fontFamily:Fonts.NeutrifStudio.Bold}]}>Oops!</Text>
-            <Text style={[styles[Device].subtext,{color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.error}</Text>
+            <Text style={[styles[Device].subtext,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.error}</Text>
         </View>
     )
 }

@@ -12,7 +12,7 @@ import { setEducationHistory } from "../store/slices/educationHistorySlice";
 import { setTests } from "../store/slices/testScoresSlice";
 import { setWorkExperience } from "../store/slices/workexperienceSlice";
 import { AdditionalFilterInfo, Address, Advisor, AppliedFilter, AppliedQuickFilter, Countrycode, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, FamilyInfo, FormData, FormField, FormInfo, Institute, ListInfo, ListItem, Meeting, Personalinfo, Phone as PhoneType, ServerResponse, Sharedinfo, Test, UG_Institutes, WorkExperience } from "../types";
-import { Word2Sentence, fetchCities, fetchCountries, fetchStates,  getMergedFilters,  getServerRequestURL, profileUpdator, serverRequest, setWordCase} from "../utils";
+import { Word2Sentence, cleanObject, fetchCities, fetchCountries, fetchStates,  getMergedFilters,  getServerRequestURL, profileUpdator, serverRequest, setWordCase} from "../utils";
 import { validations} from "../utils/validations";
 import { addToBasket, getBasket, getFullBasket} from "./basket";
 import { Countries, GradingSystems, Industries, Languages, Nationalities, Tests, boards, disciplines, intakes, pgCourses, studyLevel, subDisciplines, undergradCourses } from "./misc";
@@ -35,6 +35,7 @@ import Checkbox from "../components/resources/Checkbox";
 import Phoneinput from "../components/resources/Phoneinput";
 import { setFamilyinfo } from "../store/slices/familyInfoSlice";
 import { setPersonalInfo } from "../store/slices/personalinfoSlice";
+import { requiredinfo } from "./requiredinfo";
 
 export const testToForm=(testname:string)=>{
     const testData=store.getState().testscores.data.find((test)=>test.name==testname)
@@ -570,6 +571,261 @@ const forms:FormInfo[]=[
                     event:"onFocus"
                 }
             }
+        ]
+    },
+    {
+        id:"details",
+        title:"Please provide the details",
+        getInitialData:(id:string)=>{
+            console.log("iddddd",id)
+            let data:string[]=requiredinfo.find((item)=>item.id==id)?.dataRequired;
+            return [
+                {id:"firstname",value:""},
+                {id:"lastname",value:""},
+                {id:"email",value:{email:"",verified:false}},
+                {id:"phone",value:{countryCode:[],phoneNumber:"",verified:false}}
+            ].filter((item)=>data.find((item2)=>item2==item.id));
+        },
+        submit:{
+            dataConverter:(data:FormData[],id?:string)=>{
+                let sharedinfo:Sharedinfo={
+                    firstName:data.findIndex((item)=>item.id=="firstname")!=-1?data[data.findIndex((item)=>item.id=="firstname")].value:undefined,
+                    lastName:data.findIndex((item)=>item.id=="lastname")!=-1?data[data.findIndex((item)=>item.id=="lastname")].value:undefined,
+                    email:data.findIndex((item)=>item.id=="email")!=-1?data[data.findIndex((item)=>item.id=="email")].value.email:undefined,
+                    phone:data.findIndex((item)=>item.id=="phone")!=-1?{countryCode:data[data.findIndex((item)=>item.id=="phone")].value.countryCode[0].dial_code,number:data[data.findIndex((item)=>item.id=="phone")].value.phoneNumber}:undefined,
+                }
+
+                return {sharedinfo:cleanObject(sharedinfo)}
+            },
+            onSubmit:async (data:{sharedinfo:Sharedinfo})=>{
+                let res:ServerResponse=await profileUpdator({...data.sharedinfo},(res)=>{
+                    res.success?store.dispatch(setSharedInfo({...store.getState().sharedinfo.data,...data.sharedinfo})):null
+                    //res.success?store.dispatch(setPersonalInfo(res.data.personalDetails)):null
+                })
+                return res
+            },
+            successText:"Success!",
+            failureText:"Failed :(",
+            idleText:"Submit"
+        },
+        allFields:[
+            {
+                id:"firstname",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"First Name",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"lastname",
+                componentInfo:{
+                    component:Textbox,
+                    props:{placeholder:""}
+                },
+                title:"Last Name",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"email",
+                componentInfo:{
+                    component:Email,
+                    props:{
+                        placeholder:"Until verified email will not be saved"
+                    }
+                },
+                title:"Email",
+                // validator:(data:{email:string,verified:boolean})=>{
+                //     let validationData=validations.EMAIL
+                //     return {
+                //         success:validationData.regex.test(data.email),
+                //         message:validationData.errorMessage,
+                //         data:undefined
+                //     }
+                // },
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"phone",
+                componentInfo:{
+                    component:Phone,
+                    props:{
+                        codes:{
+                            options:{
+                                card:Dialcode,
+                                list:Countrycodes,
+                                labelExtractor:(item:Countrycode)=>item.dial_code,
+                                idExtractor:(item:Countrycode)=>item.code,
+                                searchEvaluator:(item:Countrycode,search:string)=>item.name.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                            },
+                            apply:(data:Countrycode[])=>{
+                                let current:PhoneType=getBasket("phone")
+                                console.log("phone data",current);
+                                return ({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"phone",newvalue:{...current,countryCode:data}}}})
+                            },
+                            selectionMode:"single",
+                            basketid:"phonecodes-dropdown"
+                        }
+                    }
+                },
+                //isOptional:true,
+                validator:(data:{countryCode:ListItem[],phoneNumber:string,verified:boolean})=>({
+                    success:validations.PHONENUMBER.regex.test(data.phoneNumber),
+                    data:undefined,
+                    message:validations.PHONENUMBER.errorMessage
+                }),
+                emptyChecker:(data:{countryCode:ListItem[],phoneNumber?:string,verified?:boolean})=>({success:!(data.countryCode.length>0 && (data.phoneNumber && data.phoneNumber.length>0)),message:data.countryCode.length?"Dial code cannot be empty":"Phone number cannot be empty",data:undefined}),
+                title:"Phone",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"dateofbirth",
+                componentInfo:{
+                    component:Datetime,
+                    props:undefined
+                },
+                title:"Date of Birth",
+                onUpdate:{
+                    event:"onTextInput",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onFocus"
+                }
+            },
+            {
+                id:"gender",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:[
+                                {label:"Male",value:"male"},
+                                {label:"Female",value:"female"},
+                                {label:"Other",value:"other"},
+                                {label:"Rather not say",value:"rather not say"},
+                            ],
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gender",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"gender-dropdown"
+                    },
+                },
+                title:"Gender",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"nationality",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:Nationalities.map((item)=>({label:item,value:item})),
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"nationality",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"nationality-dropdown"
+                    },
+                },
+                title:"Nationality",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"countryofbirth",
+                componentInfo:{
+                    component:Countrydropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let countries=await fetchCountries();
+                                return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"countryofbirth",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"country-dropdown",
+                    }
+                },
+                title:"Country",
+                onUpdate:{
+                    event:"onSelect",
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"maritalstatus",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            list:[
+                                {label:"Married",value:"married"},
+                                {label:"Bachelor",value:"bachelor"},
+                            ],
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"maritalstatus",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"gender-dropdown"
+                    },
+                },
+                title:"Marital Status",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
         ]
     },
     {

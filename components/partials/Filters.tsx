@@ -4,6 +4,7 @@ import { AdditionalFilterInfo, AppliedFilter } from "../../types"
 import { getBasket } from "../../constants/basket"
 import React, { useEffect, useRef, useState } from "react"
 import { lists } from "../../constants"
+import Form from "../resources/Form"
 
 const Filters=(props:{filtersbasketid:string,filterslistid:string,filtersupdate:{id:string,newvalue:any}})=>{
 
@@ -19,17 +20,10 @@ const Filters=(props:{filtersbasketid:string,filterslistid:string,filtersupdate:
         }
     },[props.filtersupdate])
 
-    console.log("flyyyyyyyy")
 
     return(
         <View style={{flex:1}}>
-            <ScrollView style={{flex:1}}>
-            {
-                Filtersinfo?.additional.map((item:AdditionalFilterInfo)=>
-                <Filercontainer info={item} applied={additionalFilters.find((itemApplied)=>item.type==itemApplied.type)}/>
-                )
-            }
-            </ScrollView>
+            <Form formid="Programsfilter" />
         </View>
     )
 }

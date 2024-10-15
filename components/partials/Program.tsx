@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
-import { Course, Event, ServerResponse } from "../../types"
-import { PackageProductsValidator, Word2Sentence, getDevice, getLightThemeColor, getServerRequestURL, getThemeColor, serverRequest } from "../../utils";
+import { Course, Event, Package, Product, ServerResponse } from "../../types"
+import { PackageProductsValidator, Word2Sentence, compareProducts, getDevice, getLightThemeColor, getServerRequestURL, getThemeColor, serverRequest } from "../../utils";
 import { cartRequest } from "../../utils/serverrequests";
 import useNavigation from "../../hooks/useNavigation";
 import { addToBasket } from "../../constants/basket";
@@ -351,9 +351,6 @@ const Program=(props:{programid:string})=>{
 
     let [programInfo,setProgramInfo]=useState<Course|undefined>();
     const [path,navigate]=useNavigation();
-    //console.log("Orders",store.getState().orders.data)
-    //const freePackageInfo=useRef(store.getState().suggestedpackages.data.find((item)=>item.priceDetails.totalPrice==0)).current;
-    //const feePackagePurchased=useRef(store.getState().orders.data.find((order)=>order.Package.priceDetails.totalPrice==0)?true:false).current
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const dashboardInfo=[
         {icon:fee_icon,label:"Duration",value:programInfo?.duration},
@@ -364,19 +361,7 @@ const Program=(props:{programid:string})=>{
         {icon:fee_icon,label:"Currency",value:programInfo?.currency?.symbol}
     ]
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
-
-    const order=(event:Event)=>{
-        //console.log(event);
-        addToBasket(props.programid,{
-            package:freePackageInfo,
-            products:[{
-                intake:new Date(event.data.year,parseInt(event.data.month)-1,10).toISOString(),
-                category:programInfo?.elite?"elite application":"premium application",
-                course:{name:programInfo?.name,id:programInfo?._id}
-            }]
-        }) 
-        navigate?navigate({type:"AddScreen",payload:{screen:"Order",params:{orderinfoid:props.programid}}}):null
-    }
+    const [isLoading,setLoading]=useState(false);
 
     const fetchProgram=async ()=>{
         console.log("id",props.programid)
@@ -412,6 +397,10 @@ const Program=(props:{programid:string})=>{
             if(serverRes?.success)
             {
                 requestInfo?.responseHandler(serverRes);
+                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
+                setTimeout(()=>{
+                    navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Item added to cart successfully!"}}}}):null;
+                },100)
             }
         }
     }
@@ -424,6 +413,106 @@ const Program=(props:{programid:string})=>{
             intake:"10"+event.data.month.padStart(2, '0')+"/"+"/"+event.data.year
         })
         //res.success?removeCart():null
+    }
+
+    const placeFreeOrder=async (products:Product[],Package:Package)=>{
+        let requestInfo=requests.find((item)=>item.id=="placeorder");
+        let inputvalidation=requestInfo?.inputValidator({packageId:Package,products:products.map((item)=>({
+            category:item.category,
+            courseId:item.course?._id,
+            intake:item.intake
+        }))})
+        if(inputvalidation?.success)
+        {
+            let serverRes=await requestInfo?.serverCommunicator(inputvalidation.data);
+            //console.log("server res",JSON.stringify(serverRes,null,2));
+            if(serverRes?.success)
+            {
+                requestInfo?.responseHandler(serverRes);
+                await removeCartItems(products);
+            }
+            return serverRes
+        }
+    }
+
+    const addToFreeOrder=async (orderId:string,products:Product[])=>{
+        let data={
+            orderId:orderId,
+            products:products.map((item)=>({
+                category: item.category,
+                courseId:item.course._id,
+                intake: item.intake
+            }))
+        }
+        //console.log("input",data);
+        let serverRes={success:false,message:"",data:undefined};
+        let requestInfo=requests.find((item)=>item.id=="addproducts");
+        let validation=requestInfo?.inputValidator(data);
+        console.log("validation",validation);
+        if(validation?.success)
+        {
+            serverRes=await requestInfo?.serverCommunicator(data);
+            console.log("Server res",JSON.stringify(serverRes,null,2))
+            if(serverRes?.success)
+            {
+                requestInfo?.responseHandler(serverRes);
+                await removeCartItems(products);
+                
+            }
+        }
+        return serverRes
+    }
+
+    const applyForFree=async (event:Event)=>{
+        let products=[{
+            category:programInfo?.elite?"elite application":"premium application",
+            intake:(event.data.month).padStart(2, '0')+"/"+"10"+"/"+event.data.year,
+            course:programInfo
+        }];
+        let Package=store.getState().suggestedpackages.data.find((pkg)=>pkg.priceDetails.totalPrice==0)
+        let freeOrder=store.getState().orders.data.find((order)=>order.paymentDetails.amount==0)
+        let res:ServerResponse={success:false,data:undefined,message:""};
+        //console.log("freeeee",freeOrder?.products.length,Package?.products)
+        if(freeOrder && freeOrder?.products.length==Package?.products.find((item)=>item.category=="premium application")?.quantity)
+        {
+            navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
+            setTimeout(()=>{
+                navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Error",flyerdata:{error:"Seems like you have exhausted all your free applications",preventAutoHide:true}}}}):null;
+            },100)
+        }
+        else
+        {
+            res=freeOrder==undefined?await placeFreeOrder(products,Package?._id):await addToFreeOrder(freeOrder._id,products)
+            console.log("server res",res);
+            if(res.success)
+            {
+                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
+                setTimeout(()=>{
+                    navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"You can check the application progress in the products section",hideInterval:4000}}}}):null;
+                },100)
+            }
+        }
+        return res.success;
+    }
+
+    const removeCartItems=async (products:Product[])=>{
+        let data={
+            action:"remove",
+            itemIds:store.getState().cart.data.filter((cartitem)=>products.find((orderitem)=>compareProducts(cartitem,orderitem))).map((item)=>item._id)
+        }
+        let serverRes={success:false,message:"",data:undefined};
+        let requestInfo=requests.find((item)=>item.id=="removeFromCart");
+        let validation=requestInfo?.inputValidator(data);
+        console.log("Res",serverRes,requestInfo);
+        if(validation?.success)
+        {
+            serverRes=await requestInfo?.serverCommunicator(data);
+            console.log("Server res",JSON.stringify(serverRes,null,2))
+            if(serverRes?.success)
+            {
+                requestInfo?.responseHandler(serverRes);
+            }
+        }
     }
 
     const openUniversity=()=>{
@@ -452,9 +541,19 @@ const Program=(props:{programid:string})=>{
                             <Pressable onPress={openUniversity} style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([programInfo.university?.name,programInfo.university?.location?.country],"")}</Text></Pressable>
                         </View>
                         <View style={[GeneralStyles.actions_wrapper]}>
-                            <Pressable onPress={()=>showIntakes(addToCart)} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
+                            {
+                                !programInfo.elite
+                                ?
+                                <Pressable onPress={()=>showIntakes(applyForFree)} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
+                                    <Image source={cart_icon} style={[styles[Device].cart_icon]}/>
+                                    <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Apply for Free</Text>
+                                </Pressable>
+                                :
+                                null
+                            }
+                            <Pressable  onPress={()=>showIntakes(addToCart)} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
                                 <Image source={cart_icon} style={[styles[Device].cart_icon]}/>
-                                <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Add to Cart</Text>
+                                {/* <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Add to Cart</Text> */}
                             </Pressable>
                         </View>
                     </View>

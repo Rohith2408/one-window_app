@@ -17,9 +17,9 @@ import send_icon from '../../assets/images/misc/send.png'
 import loading_icon from '../../assets/images/misc/loader.gif'
 import Messagecard from "../cards/Messagecard"
 import { store } from "../../store"
-import socket from "../../socket"
 import default_icon from '../../assets/images/misc/defaultDP.png'
 import { TypingAnimation } from 'react-native-typing-animation';
+import { getSocket } from "../../socket"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -174,24 +174,34 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     no_meetings:{
-        fontSize:14
+        fontSize:16
     },
     click_message:{
-        fontSize:10,
+        fontSize:12,
         lineHeight:20
     },
     emptylist_image:{
-        width:80,
-        height:80,
+        width:100,
+        height:100,
         resizeMode:"contain"
     },
     loadingview_name:{
         width:150,
         height:30
     },
+    add:{
+        width:20,
+        height:20,
+        objectFit:"contain"
+    },
+    send:{
+        width:20,
+        height:20,
+        objectFit:"contain"
+    },
     activity_indicator:{
-        width:26,
-        height:26,
+        width:30,
+        height:30,
         objectFit:"contain"
     }
 })
@@ -374,6 +384,7 @@ const Message=(props:{chatId:string})=>{
             }))
             //dispatch(addMessage({...res.data[0],content:"I am fine",sender:chat?.participants.find((item)=>item._id!=profile.data?._id)}))
         }
+        return res
     }
 
     const showPicker=async ()=>{
@@ -420,15 +431,21 @@ const Message=(props:{chatId:string})=>{
         let keyboardWillShow,keyboardWillHide
         if(!called.current)
         {
-            if(!socket.listeners("trigger").includes(triggerMessages))
+            if(!getSocket().listeners("trigger").includes(triggerMessages))
             {
-                socket.on("trigger",triggerMessages)
+                getSocket().on("trigger",triggerMessages)
             }
             keyboardWillShow = Keyboard.addListener('keyboardWillShow', (event) => setKeyboard({duration:event.duration,height:event.endCoordinates.height}));
             keyboardWillHide = Keyboard.addListener('keyboardWillHide', (event) => setKeyboard({duration:event.duration,height:0})); 
             called.current=true
         }
-        fetchMessages()
+
+        fetchMessages().then((res)=>{
+            if(res.success)
+            {
+                getUnseenMessages(profile.data?._id,chat).length!=0?seen_message():null
+            }
+        })
 
         return ()=>{
             keyboardWillShow?.remove();
@@ -456,6 +473,21 @@ const Message=(props:{chatId:string})=>{
         } 
     }
 
+    const seen_message=async ()=>{
+        let data={chatId:props.chatId};
+        let requestInfo=requests.find((item)=>item.id=="message-seen");
+        let validation=requestInfo?.inputValidator(data);
+        if(validation?.success)
+        {
+            let serverRes=await requestInfo?.serverCommunicator(data);
+            if(serverRes?.success)
+            {
+                seenTrigger(serverRes.data)
+                requestInfo?.responseHandler(serverRes);
+            }
+        } 
+    }
+
     const typingTrigger=(action:"start"|"stop")=>{
         console.log(chat?.participants.filter((item)=>item._id!=profile.data?._id));
         let triggerObj:TriggerObject={
@@ -464,7 +496,7 @@ const Message=(props:{chatId:string})=>{
             recievers:chat?.participants.filter((item)=>item._id!=profile.data?._id),
             data:action
         }
-        socket.emit("trigger",triggerObj);
+        getSocket().emit("trigger",triggerObj);
     }     
 
     const messageTrigger=(message:MessageType,chat:Chat)=>{
@@ -474,11 +506,21 @@ const Message=(props:{chatId:string})=>{
             recievers:chat?.participants.filter((item)=>item._id!=profile.data?._id),
             data:{message,chat}
         }
-        socket.emit("trigger",triggerObj);
+        getSocket().emit("trigger",triggerObj);
+    }
+
+    const seenTrigger=(chat:Chat)=>{
+        let triggerObj:TriggerObject={
+            action:"seen",
+            sender:{...profile.data,userType:"student",role:"student"},
+            recievers:chat?.participants.filter((item)=>item._id!=profile.data?._id),
+            data:chat
+        }
+        getSocket().emit("trigger",triggerObj);
     }
 
     //console.log("trigger message",socket.listeners("trigger"))
-    console.log("Message",JSON.stringify(messages.data[messages.data.length-1],null,2));
+    //console.log("Message",JSON.stringify(bakedMessages,null,2));
 
     return(
         <View style={[GeneralStyles.wrapper]}>
@@ -502,7 +544,7 @@ const Message=(props:{chatId:string})=>{
                     ?
                     <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
                     :
-                    messages.data.length==0
+                    bakedMessages.length==0
                     ?
                     <View style={{flex:1,gap:10,justifyContent:"center",alignItems:"center"}}>
                         <Image source={emptylist} style={[styles[Device].emptylist_image]}/>
@@ -510,10 +552,10 @@ const Message=(props:{chatId:string})=>{
                         {/* <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button above to schedule a meet with the expert</Text> */}
                     </View>
                     :
-                    <ScrollView ref={scrollRef} onContentSizeChange={()=>scrollRef.current?.scrollToEnd({ animated: true })} style={{flex:1}} contentContainerStyle={{gap:10,paddingBottom:keyboard.height}}>
+                    <ScrollView ref={scrollRef} onContentSizeChange={()=>scrollRef.current?.scrollToEnd({ animated: true })} style={{flex:1}} contentContainerStyle={{gap:30,paddingBottom:keyboard.height}}>
                     {
-                        messages.data.map((msg,i)=>
-                        <Pressable onLongPress={()=>setRepliedTo(msg)} key={msg._id} style={[styles[Device].card_wrapper]}>
+                        bakedMessages.map((msg,i)=>
+                        <Pressable onLongPress={()=>setRepliedTo(msg)} key={msg._id}>
                             <Messagecard {...msg} index={i}/>
                         </Pressable>
                         )
@@ -606,6 +648,10 @@ const setParticipantsOrder=(participants:Participant[])=>{
 
 const bakeMessages=(chat:Chat,userId:string,messages:MessageType[])=>{
     return setLastSeenMessage(chat,messages,userId)//[...setLastSeenMessage(chat,messages,userId),...chat.participants.filter((participant)=>participant.activity=="typing").map((item)=>({_id:item.firstName+"/typing",content:setWordCase(item.firstName)+" is typing",sender:item,type:"typing"}))]
+}
+
+const getUnseenMessages=(currentUserId:string,chat:Chat)=>{
+    return chat.unSeenMessages.filter((msg)=>!msg.seen.find((userId)=>userId==currentUserId))
 }
 
 export default Message

@@ -111,6 +111,7 @@ export type ScreenInfo={
     swipeDirection?:"X"|"Y"|"XY",
     shiftOriginToCenter?:boolean,
     isTransparent?:boolean,
+    nonClosable?:boolean,
     showTouchCaptureScreen?:boolean,
     occupyFullScreen?:boolean,
     animationStyle?:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTopPartial"|"VerticalSlideToTop"|"CenterPopIn"|"CenterFadeIn"|"FadeIn"|"Custom",
@@ -209,6 +210,7 @@ export type FormInfo={
         },
         title:string,
         isOptional?:boolean,
+        comment?:string,
         emptyChecker?:(data:any)=>ServerResponse,
         validator?:(data:any)=>ServerResponse,
         onUpdate:{

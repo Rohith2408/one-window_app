@@ -12,7 +12,8 @@ import { requests } from "../../constants/requests";
 import { Image } from "expo-image";
 import location_icon from '../../assets/images/misc/location.png'
 import fee_icon from '../../assets/images/misc/fee.png'
-import { Fonts, Themes } from "../../constants";
+import sample_icon from '../../assets/images/profile/personal.png'
+import { Fonts, Themes } from "../../constants";    
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -272,7 +273,8 @@ const University=(props:{universityid:string})=>{
                         <Dashboarditem {...dashboardInfo[5]} index={1}/>
                     </View>
                 </View>
-                {/* <View style={{gap:10}}>
+
+                <View style={{gap:10}}>
                     <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Rating</Text>
                     <View>
                     {
@@ -283,17 +285,20 @@ const University=(props:{universityid:string})=>{
                         <View style={{gap:15}}>
                         {
                             ratings.keys.map((item,i)=>
-                            <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
-                                <View style={{width:7,height:7,borderRadius:100,borderWidth:1.5,borderColor:getThemeColor(i%4)}}></View>
-                                <View style={{flex:1}}><Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}}>{item}</Text></View>
-                                <Text style={{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.7)}}>{ratings.values[i]}</Text>
+                            <View style={{flexDirection:"row",gap:5,alignItems:"center",borderRadius:100,backgroundColor:getLightThemeColor(i%4)}}>
+                                <View style={{position:"relative"}}>
+                                    {/* <View style={{position:"absolute",width:10,height:10,borderRadius:100,backgroundColor:getLightThemeColor(i%4)}}></View> */}
+                                    {/* <Image source={sample_icon} style={[{width:26,height:26}]}/> */}
+                                </View>
+                                <View style={{flex:1}}><Text style={{fontFamily:Fonts.NeutrifStudio.Regular,padding:10}}>{item}</Text></View>
+                                <Text style={{fontFamily:Fonts.NeutrifStudio.Regular}}>{ratings.values[i]}</Text>
                             </View>
                             )
                         }
                         </View>
                     }
                     </View>
-                </View> */}
+                </View>
             </ScrollView>
             :
             <Text>Loading</Text>

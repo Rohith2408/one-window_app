@@ -14,7 +14,7 @@ import { resetChats } from "../store/slices/chatsSlice";
 import { resetDocuments } from "../store/slices/documentsSlice";
 import { resetEducationHistory } from "../store/slices/educationHistorySlice";
 import { resetFamilyInfo } from "../store/slices/familyInfoSlice";
-import { resetMessages } from "../store/slices/messagesSlice";
+import { resetMessages, seenMessage } from "../store/slices/messagesSlice";
 import { resetNotifications } from "../store/slices/notificationsSlice";
 import { resetPersonalInfo } from "../store/slices/personalinfoSlice";
 import { resetPreferences } from "../store/slices/preferencesSlice";
@@ -837,37 +837,73 @@ export const camelCaseToString=(camelstr:string)=>{
 }
 
 export const setLastSeenMessage=(chat:Chat,messages:Message[],userId:string)=>{
+  let updatedMessages=[...messages];
   let unsetParticipants=chat.participants.filter((item)=>item._id!=userId);
-  let i=messages.length-1;
-  for(i=messages.length-1;i>=0 && unsetParticipants.length>0;i--)
+  let i=updatedMessages.length-1;
+  for(i=updatedMessages.length-1;i>=0 && unsetParticipants.length>0;i--)
   {
-    if(messages[i].sender?._id==userId)
+    if(updatedMessages[i].sender?._id==userId)
     {
-      let unseen=chat.unSeenMessages.find((item)=>item.message._id==messages[i]._id)
+      let unseen=chat.unSeenMessages.find((item)=>item.message._id==updatedMessages[i]._id)
       if(unseen){
         unsetParticipants.forEach(participant => {
             if(unseen?.seen.find((item)=>item==participant._id))
             {
-              messages.splice(i+1,0,{_id:participant.firstName+"/seen",content:"Seen by "+setWordCase(participant.firstName),sender:participant,type:"seen"})
+              updatedMessages.splice(i+1,0,{
+                _id:participant.firstName+"/seen",
+                content:"Seen by "+setWordCase(participant.firstName),
+                sender:{
+                  _id: participant._id,
+                  displayPicSrc: participant.displayPicSrc,
+                  email: participant.email,
+                  userType: participant.userType,
+                  firstName: participant.firstName,
+                  lastName: participant.lastName
+                },
+                type:"seen"
+              })
               unsetParticipants=unsetParticipants.filter((item)=>item._id!=participant._id)
             }
         });
       }
       else
       {
+        if(unsetParticipants.length>0)
+        {
+          let seenMessages:Message[]=unsetParticipants.map((participant:Participant)=>({
+            _id:participant.firstName+"/seen",
+            content:"Seen by "+setWordCase(participant.firstName),
+            sender:{
+              _id: participant._id,
+              displayPicSrc: participant.displayPicSrc,
+              email: participant.email,
+              userType: participant.userType,
+              firstName: participant.firstName,
+              lastName: participant.lastName,
+            },
+            type:"seen"
+          }));
+          //console.log("unset participants",JSON.stringify(seenMessages[0],null,2),JSON.stringify(updatedMessages[0],null,2));
+          updatedMessages.splice(i+1,0,...seenMessages)
+        }
         break;
       }
     }
   }
-  if(i!=-1)
-  {
-    //m
-    if(unsetParticipants.length>0)
-    {
-      messages.splice(i+1,0,...unsetParticipants.map((participant:Participant)=>({_id:participant.firstName+"/seen",content:"Seen by "+setWordCase(participant.firstName),sender:participant,type:"seen"})))
-    }
-  }
-  return messages
+  console.log("updated",updatedMessages.map((msg)=>msg.content))
+  return updatedMessages
+}
+
+export const cleanObject=(obj:any)=>{
+  let keys=Object.keys(obj);
+  let values=Object.values(obj);
+  values.forEach((item,i)=> {
+      if(item==undefined)
+      {
+        delete obj[keys[i]]
+      }
+  });
+  return obj;
 }
 
 // export const bakeFilters=(additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[])=>{

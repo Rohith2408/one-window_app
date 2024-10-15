@@ -3,8 +3,9 @@ import { setCart } from "../store/slices/cartSlice";
 import { updateChat } from "../store/slices/chatsSlice";
 import { addMessage } from "../store/slices/messagesSlice";
 import { addOrders, setOrders, updateOrder } from "../store/slices/ordersSlice";
+import { addProducts, setProducts } from "../store/slices/productsSlice";
 import { setRecommendations } from "../store/slices/recommendationsSlice";
-import { Product, Recommendation, RecommendationType, RequestInfo, ServerResponse, ServerUnpurchasedProduct } from "../types";
+import { Product, PurchasedProduct, Recommendation, RecommendationType, RequestInfo, ServerResponse, ServerUnpurchasedProduct } from "../types";
 import { ISOtoIntakeformat, Word2Sentence, getServerRequestURL, keyVerifier, profileUpdator, serverRequest } from "../utils";
 import { cartRequest } from "../utils/serverrequests";
 
@@ -94,6 +95,7 @@ const requests:RequestInfo[]=[
             if(res.success)
             {
                 store.dispatch(addOrders(res.data.order));
+                store.dispatch(addProducts(res.data.products));
             }
         }
     },
@@ -101,7 +103,7 @@ const requests:RequestInfo[]=[
         id:"addproducts",
         inputValidator:(data:{products:ServerUnpurchasedProduct[],orderid:string})=>{
             console.log("Order I/P Recieved ",JSON.stringify(data,null,2));
-            let keyVerifierResponse=keyVerifier(data,["orderId2","products"])
+            let keyVerifierResponse=keyVerifier(data,["orderId","products"])
             let emptyProductsRes={success:data.products.length!=0,data:undefined,message:data.products.length==0?"Products cant be empty":""}
             let res={success:keyVerifierResponse.success && emptyProductsRes.success,data:data,message:Word2Sentence([keyVerifierResponse.message,emptyProductsRes.message])}
             return res
@@ -119,6 +121,7 @@ const requests:RequestInfo[]=[
             if(res.success)
             {
                 store.dispatch(updateOrder(res.data));
+                store.dispatch(setProducts([...store.getState().products.data.filter((pdct)=>!res.data.products.find((item:PurchasedProduct)=>item._id==pdct._id)),...res.data.products]));
             }
         }
     },
@@ -156,7 +159,7 @@ const requests:RequestInfo[]=[
                 reqType: "POST",
                 body:data
             })
-            console.log("Message Rec Server Response ",res);
+            console.log("Message send response ",res);
             return res;
         },
         responseHandler:(res:ServerResponse)=>{
@@ -164,6 +167,27 @@ const requests:RequestInfo[]=[
             {
                 store.dispatch(updateChat(res.data.chat))
                 store.dispatch(addMessage({...res.data.message,type:"normal"}))
+            }
+        }
+    },
+    {
+        id:"message-seen",
+        inputValidator:(data:{chatId:string})=>{
+            let allFields=(data.chatId)?true:false
+            return {success:allFields,data:undefined,message:allFields?"":"All fields are not present"}
+        },
+        serverCommunicator:async (data:{chatId:string})=>{
+            let res:ServerResponse=await serverRequest({
+                url:getServerRequestURL("message-seen","GET")+"/"+data.chatId,
+                reqType: "GET"
+            })
+            console.log("Message seen response ",res);
+            return res;
+        },
+        responseHandler:(res:ServerResponse)=>{
+            if(res.success)
+            {
+                store.dispatch(updateChat(res.data))
             }
         }
     },

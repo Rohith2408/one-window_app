@@ -76,10 +76,10 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
 
     const apply=async ()=>{
         await info.onselection({name:"apply",data:intake});
-        navigate?navigate({type:"RemoveScreen"}):null
-        setTimeout(()=>{
-            navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Item added to cart successfully!"}}}}):null;
-        },100)
+        // navigate?navigate({type:"RemoveScreen"}):null
+        // setTimeout(()=>{
+        //     navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Item added to cart successfully!"}}}}):null;
+        // },100)
         return true;
     }
 
