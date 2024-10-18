@@ -314,6 +314,8 @@ const Student=(props:{screens:string[],params:any})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"details",forminitialdataid:"login"}}}):null
     }
 
+    //console.log("oddd",JSON.stringify(store.getState().orders.data[0].products[0],null,2));
+    //console.log("prodddd",JSON.stringify(store.getState().products.data[0],null,2));
     //console.log("trigger root",getSocket().listeners("trigger"))
     
     return(

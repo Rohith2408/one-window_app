@@ -16,6 +16,7 @@ import Asynchronousbutton from "../resources/Asynchronousbutton"
 import emptylist from '../../assets/images/misc/emptylist.png'
 import { Image } from "expo-image"
 import Chatcard from "../cards/Chatcard"
+import Userdoesntexist from "../cards/Userdoesntexistcard"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -144,6 +145,7 @@ const Chats=()=>{
     const ref=useRef<any>()
     const tabs=useRef([{label:"Experts",value:"experts"},{label:"Community",value:"Community"}]).current
     const [dimensions,setDimensions]=useState<LayoutRectangle>({width:0,height:0,x:0,y:0})
+    let profile=useAppSelector((state)=>state.sharedinfo)
     let experts=chats.data?.filter((chat)=>getChatType(chat)=="advisors")
     let community=chats.data?.filter((chat)=>getChatType(chat)=="community");
 
@@ -201,7 +203,7 @@ const Chats=()=>{
                                 <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:0,paddingBottom:30}}>
                                 {
                                     experts.map((item,i)=>
-                                    <Chatcard {...item} index={i}/>
+                                    <View key={item._id}><Chatcard {...item} index={i}/></View>
                                     )
                                 }
                                 </ScrollView>
@@ -220,7 +222,11 @@ const Chats=()=>{
                                 <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:0,paddingBottom:30}}>
                                 {
                                     community.map((item,i)=>
-                                    <Chatcard {...item} index={i}/>
+                                    (item.participants.length==1)
+                                    ?
+                                    <Userdoesntexist/>
+                                    :
+                                    <View key={item._id}><Chatcard {...item} index={i}/></View>
                                     )
                                 }
                                 </ScrollView>

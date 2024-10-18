@@ -14,6 +14,7 @@ import { store } from "../../store"
 import { addToBasket } from "../../constants/basket"
 import { Verified } from "../../store/slices/verificationSlice"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
+import { setSharedInfo } from "../../store/slices/sharedinfoSlice"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -119,6 +120,7 @@ const Email=(props:{value:{email:string|undefined,verified:boolean},placeholder:
     // }
 
     const requestOtp=async ()=>{
+
         setIsLoading(true)
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("add-phone/email","POST"),
@@ -128,6 +130,7 @@ const Email=(props:{value:{email:string|undefined,verified:boolean},placeholder:
             }    
         });
         console.log("email res",res)
+        res.success?dispatch(setSharedInfo({...store.getState().sharedinfo.data,email:props.value.email})):null
         !res.success?setError(setWordCase(res.message)):setMessage("Verification link has been sent to your email");
         addToBasket("verification-callback",{callback:verifyOtp})
         res.success?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Verifyuser",flyerdata:{type:"email",data:{email:props.value.email}}}}}):null:null
@@ -147,7 +150,10 @@ const Email=(props:{value:{email:string|undefined,verified:boolean},placeholder:
         if(res.success)
         {
             dispatch(Verified("email"));
-            navigate({type:"RemovePages",payload:[{id:"Form"},{id:"Flyer"}]});
+            navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.id,newvalue:{...props.value,verified:true}}}}):null
+            setTimeout(()=>{
+                navigate({type:"RemovePages",payload:[{id:"Flyer"}]});
+            },100)
         }
         console.log("res",JSON.stringify(res,null,2));
         return res;

@@ -552,10 +552,10 @@ const Message=(props:{chatId:string})=>{
                         {/* <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button above to schedule a meet with the expert</Text> */}
                     </View>
                     :
-                    <ScrollView ref={scrollRef} onContentSizeChange={()=>scrollRef.current?.scrollToEnd({ animated: true })} style={{flex:1}} contentContainerStyle={{gap:30,paddingBottom:keyboard.height}}>
+                    <ScrollView ref={scrollRef} onContentSizeChange={()=>scrollRef.current?.scrollToEnd({ animated: true })} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:20,paddingBottom:keyboard.height}}>
                     {
                         bakedMessages.map((msg,i)=>
-                        <Pressable onLongPress={()=>setRepliedTo(msg)} key={msg._id}>
+                        <Pressable onLongPress={()=>(msg.sender && msg.sender._id)?setRepliedTo(msg):null} key={msg._id}>
                             <Messagecard {...msg} index={i}/>
                         </Pressable>
                         )
@@ -592,7 +592,7 @@ const Activitybar=(props:{participants:Participant[]})=>{
     return (
         <View style={{flex:1,flexDirection:'row',gap:5}}>
         {
-            setParticipantsOrder(props.participants).map((item)=>
+            setParticipantsOrder(props.participants.filter((item)=>item && item._id)).map((item)=>
             <View key={item._id}><Activityindicator participant={item}/></View>
             )
         }

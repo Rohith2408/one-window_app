@@ -24,6 +24,12 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"delete-account",
+        category:"student",
+        tail:"delete-account",
+        type:"GET",
+    },
+    {
         id:"verify-otp",
         category:"student",
         tail:"verify-otp",

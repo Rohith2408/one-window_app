@@ -159,6 +159,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
         //if()
 
         getList().then((res:ServerResponse|undefined)=>{
+            console.log("server res",res);
             maxPages.current=res?.data.totalPages;
             (res && res.success)?setList(props.page==1?[...res.data.list]:[...list,...res.data.list]):null
         })

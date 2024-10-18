@@ -295,6 +295,13 @@ const Normal=(props:Message)=>{
 
     return(
         <View style={{alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start"}}>
+            {
+                props.sender && props.sender._id==undefined
+                ?
+                <Text style={[styles[Device].repliedTo,{color:"grey",padding:10,alignSelf:"flex-end"}]}>User doesn't exist</Text>
+                :
+                null
+            }
             <View style={{flexDirection:"row",alignItems:"center",backgroundColor:(props.sender?._id==profile?._id)?Themes.Light.OnewindowLightBlue:"#F6F6F6",borderRadius:20}}>
                 {
                     props.sender?._id!=profile?._id
@@ -315,7 +322,7 @@ const Normal=(props:Message)=>{
             {
                 props.repliedTo
                 ?
-                <Text style={[styles[Device].repliedTo,{color:"grey",padding:10}]}>{"Replied to "+props.repliedTo.decoded}</Text>
+                <Text style={[styles[Device].repliedTo,{color:"grey",padding:10}]}>{"Replied to "+props.repliedTo.content}</Text>
                 :
                 null
             }

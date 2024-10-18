@@ -6,7 +6,7 @@ import { Fonts, Themes, secureStoreKeys, setComponentInfo } from "../../constant
 import * as SecureStore from 'expo-secure-store'
 import { Image } from "expo-image";
 import sample_pic from '../../assets/images/misc/sampledp.png'
-import { Word2Sentence, getDevice, resetStore } from "../../utils";
+import { Word2Sentence, getDevice, getServerRequestURL, resetStore, serverRequest } from "../../utils";
 import personal_icon from '../../assets/images/profile/personal.png'
 import cart_icon from '../../assets/images/profile/cart.png'
 import expert_icon from '../../assets/images/profile/expert.png'
@@ -18,6 +18,7 @@ import ai_icon from '../../assets/images/profile/ai.png'
 import { useAppSelector } from "../../hooks/useAppSelector";
 import Loadingview from "../resources/Loadingview";
 import defaultDP from '../../assets/images/misc/defaultDP.png'
+import { addToBasket } from "../../constants/basket";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -84,7 +85,7 @@ const GeneralStyles=StyleSheet.create({
     },
     logout:{
         borderRadius:100,
-        borderWidth:1
+        // borderWidth:1
     }
 })
 
@@ -128,6 +129,11 @@ const TabStyles=StyleSheet.create({
         paddingLeft:17,
         paddingRight:17,
         fontWeight:"500"
+    },
+    delete_account:{
+        fontSize:12,
+        paddingTop:12,
+        paddingBottom:12
     },
     loadingview_name:{
         width:150,
@@ -185,6 +191,11 @@ const MobileSStyles=StyleSheet.create({
         paddingRight:12,
         fontWeight:"500"
     },
+    delete_account:{
+        fontSize:10,
+        paddingTop:10,
+        paddingBottom:10
+    },
     loadingview_name:{
         width:150,
         height:20
@@ -241,6 +252,11 @@ const MobileMStyles=StyleSheet.create({
         paddingRight:15,
         fontWeight:"500"
     },
+    delete_account:{
+        fontSize:12,
+        paddingTop:10,
+        paddingBottom:10
+    },
     loadingview_name:{
         width:150,
         height:20
@@ -295,7 +311,10 @@ const MobileLStyles=StyleSheet.create({
         paddingBottom:10,
         paddingLeft:15,
         paddingRight:15,
-        fontWeight:"500"
+    },
+    delete_account:{
+        fontSize:12,
+        paddingTop:10
     },
     loadingview_name:{
         width:150,
@@ -359,6 +378,27 @@ const Profile=(props:any)=>{
         screen?navigate?navigate({type:"AddScreen",payload:{screen:screen}}):null:null
     }
 
+    const deleteAccount=async ()=>{
+        let res=await serverRequest({
+            url:getServerRequestURL("delete-account","GET"),
+            reqType:"PUT"
+        })
+        console.log("delete",res);
+        if(res.success)
+        {
+            await logout();
+            setTimeout(()=>{
+                navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Account Deleted Successfully"}}}}):null;
+            },500)
+        }
+        return res.success
+    }
+
+    const deleteWarning=()=>{
+        addToBasket("warning",{warningMessage:"Are you sure you want to delete your account , this action can't be undone!",proceedCallback:deleteAccount,yesLabel:"Delete",noLabel:"No"});
+        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Warning"}}}):null;
+    }
+
     //console.log(sharedInfo.responseStatus!="recieved")
 
     return(
@@ -385,7 +425,9 @@ const Profile=(props:any)=>{
             <View style={[GeneralStyles.logout_wrapper]}>
                 <Pressable onPress={logout} style={[GeneralStyles.logout,{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]}><Text style={[GeneralStyles.logout,styles[Device].logout,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Logout</Text></Pressable>
             </View>
-            
+            <View style={[GeneralStyles.logout_wrapper]}>
+                <Pressable onPress={deleteWarning} style={[GeneralStyles.logout,{borderWidth:0,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]}><Text style={[GeneralStyles.logout,styles[Device].delete_account,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Medium}]}>Delete Account?</Text></Pressable>
+            </View>
         </View>
     )
 }

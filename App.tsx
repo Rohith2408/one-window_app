@@ -21,7 +21,7 @@ import NetInfo from '@react-native-community/netinfo';
 export default function App() {
 
   const [theme,setTheme]=useState<"light"|"dark">("light");
-  const [path,navigate]=useReducer(NavigationReducer,"onewindow://Student/Base?tab=home")//"onewindow://Student/Base/Profile?tab=home"
+  const [path,navigate]=useReducer(NavigationReducer,"onewindow://Student/Base?tab=home")//onewindow://Student/Base?tab=home //onewindow://Guest/Guestbase
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined);

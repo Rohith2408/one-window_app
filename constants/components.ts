@@ -64,19 +64,29 @@ import Message from "../components/partials/Message"
 import Address from "../components/partials/Address"
 import Chatsearch from "../components/partials/Chatsearch"
 import Basicinfo from "../components/flyers/Basicinfo"
+import Guest from "../components/layouts/Guest"
+import Guestbase from "../components/partials/Guestbase"
+import Gettoken from "../components/flyers/Gettoken"
+import Warning from "../components/flyers/Warning"
+import Userdoesntexist from "../components/cards/Userdoesntexistcard"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Home",component:Home,type:"Screen",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Profile",component:Profile,type:"Screen",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Student",component:Student,type:"Layout"},
+    {id:"Guest",component:Guest,type:"Layout"},
     {id:"Login",component:Login,type:"Layout"},
     {id:"Register",component:Register,type:"Layout"},
     {id:"Verifyuser",component:Verifyuser,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Popup",component:Popup,props:["popupid","popupdata"],swipeDirection:"XY",type:"Screen",animationStyle:"Custom",customPlacement:{initial:{x:0,y:0,scale:0,opacity:1,height:0,width:0},final:{x:0.25,y:0.25,scale:1,opacity:1,height:0.5,width:0.5}}},
     {id:"Error",component:Error,props:["message"],type:"Popup"},
+    {id:"Warning",component:Warning,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Loginbase",component:Loginbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
     {id:"Registerbase",component:Registerbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
+    {id:"Userdoesntexist",component:Userdoesntexist,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Guestbase",component:Guestbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
+    {id:"Gettoken",component:Gettoken,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Forgotpassword",component:Forgotpassword,title:"Forgot Password",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",type:"Partial"},
     {id:"Form",component:Form,type:"Partial",title:"Form",props:["formid","forminitialdataid","formupdate","formerrors","formbasket"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Flyer",component:Flyer,type:"Flyer",props:["flyerid","flyerdata"],showTouchCaptureScreen:true,swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},

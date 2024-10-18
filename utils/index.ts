@@ -838,7 +838,7 @@ export const camelCaseToString=(camelstr:string)=>{
 
 export const setLastSeenMessage=(chat:Chat,messages:Message[],userId:string)=>{
   let updatedMessages=[...messages];
-  let unsetParticipants=chat.participants.filter((item)=>item._id!=userId);
+  let unsetParticipants=chat.participants.filter((item)=>item._id && item._id!=userId);
   let i=updatedMessages.length-1;
   for(i=updatedMessages.length-1;i>=0 && unsetParticipants.length>0;i--)
   {

@@ -95,7 +95,7 @@ const requests:RequestInfo[]=[
             if(res.success)
             {
                 store.dispatch(addOrders(res.data.order));
-                store.dispatch(addProducts(res.data.products));
+                store.dispatch(addProducts(res.data.order.products));
             }
         }
     },
@@ -121,6 +121,7 @@ const requests:RequestInfo[]=[
             if(res.success)
             {
                 store.dispatch(updateOrder(res.data));
+                console.log("order",JSON.stringify(res.data,null,2));
                 store.dispatch(setProducts([...store.getState().products.data.filter((pdct)=>!res.data.products.find((item:PurchasedProduct)=>item._id==pdct._id)),...res.data.products]));
             }
         }

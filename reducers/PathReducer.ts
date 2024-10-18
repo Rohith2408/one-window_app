@@ -62,7 +62,7 @@ export const NavigationReducer=(state:string,action:NavigationActions)=>{
     let encodedPath=encodePath(state);
     switch(action.type){
         case "SetLayout":
-            return baseAppUrl+action.payload.layoutScreen+action.payload.screens.reduce((acc,curr)=>acc+"/"+screen,"")+"?"+formatQueryParamsToString(action.payload.params)
+            return baseAppUrl+action.payload.layoutScreen+action.payload.screens.reduce((acc,curr)=>acc+"/"+curr,"")+"?"+formatQueryParamsToString(action.payload.params)
             break;
 
         case "AddScreen":
