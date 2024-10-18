@@ -9,18 +9,26 @@ import add_icon from '../../assets/images/misc/add.png'
 import { Image } from "expo-image"
 import { getDevice } from "../../utils"
 import { Fonts, Themes } from "../../constants"
-import emptylist from '../../assets/images/misc/emptylist.png'
+import emptylist from '../../assets/images/illustrations/angry.png'
 import { addToBasket } from "../../constants/basket"
 import Familydetailscard from "../cards/Familydetailscard"
 
 const GeneralStyles=StyleSheet.create({
     add_wrapper:{
+        display:"flex",
+        flexDirection:"row",
+        alignItems:"center",
         position:'absolute',
+        gap:7.5,
         bottom:20,
         right:0,
         zIndex:1,
         backgroundColor:"white",
-        borderRadius:100
+        borderRadius:100,
+        shadowOpacity:0.1,
+        shadowRadius:5,
+        elevation:2,
+        padding:7
     }
 })
 
@@ -44,6 +52,9 @@ const TabStyles=StyleSheet.create({
     card:{
         width:'100%',
         height:75
+    },
+    add_text:{
+        fontSize:16
     }
 })
 
@@ -61,19 +72,22 @@ const MobileSStyles=StyleSheet.create({
         lineHeight:16
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:90,
+        height:90,
         resizeMode:"contain"
     },
     card:{
         width:"100%",
         height:50
+    },
+    add_text:{
+        fontSize:12
     }
 })
 const MobileMStyles=StyleSheet.create({
     add_icon:{
-        width:38,
-        height:38,
+        width:30,
+        height:30,
         resizeMode:"contain"
     },
     no_workexperience:{
@@ -84,19 +98,22 @@ const MobileMStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:110,
+        height:110,
         resizeMode:"contain"
     },
     card:{
         width:"100%",
         height:75
+    },
+    add_text:{
+        fontSize:14
     }
 })
 const MobileLStyles=StyleSheet.create({
     add_icon:{
-        width:34,
-        height:34,
+        width:30,
+        height:30,
         resizeMode:"contain"
     },
     no_workexperience:{
@@ -106,15 +123,17 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:110,
+        height:110,
         resizeMode:"contain"
     },
     card:{
         width:'100%',
         height:75
+    },
+    add_text:{
+        fontSize:14
     }
-
 })
 
 const styles={
@@ -136,8 +155,7 @@ const Familydetails=(props:any)=>{
 
     },[])
 
-    const addWork=(currentlyworking:boolean)=>{
-        console.log("currently",currentlyworking)
+    const add=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Familydetails"}}}):null
     }
 
@@ -149,7 +167,10 @@ const Familydetails=(props:any)=>{
             <Loadinglistscreen cardStyles={styles[Device].card} cardGap={30} count={3} direction="vertical"/>
             :
             <View style={{flex:1,gap:30}}>
-                <Pressable onPress={addWork} style={[GeneralStyles.add_wrapper]}><Image style={[styles[Device].add_icon]} source={add_icon}></Image></Pressable>
+                <Pressable onPress={add} style={[GeneralStyles.add_wrapper]}>
+                    <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].add_text]}>Add Family Member</Text>
+                    <Image style={[styles[Device].add_icon]} source={add_icon}></Image>
+                </Pressable>
                 <View style={{flex:1}}>
                 {
                     familyDetails.data.length==0

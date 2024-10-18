@@ -5,7 +5,7 @@ import Loadinglistscreen from "../resources/Loadinglistscreen"
 import { useRef } from "react"
 import { getDevice } from "../../utils"
 import { Image } from "expo-image"
-import emptylist from '../../assets/images/misc/emptylist.png'
+import emptylist from '../../assets/images/illustrations/angry.png'
 import { Fonts, Themes } from "../../constants"
 
 const GeneralStyles=StyleSheet.create({
@@ -59,8 +59,8 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     no_products_image:{
-        width:74,
-        height:74,
+        width:90,
+        height:90,
         resizeMode:"contain"
     }
 })
@@ -81,8 +81,8 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     no_products_image:{
-        width:85,
-        height:85,
+        width:110,
+        height:110,
         resizeMode:"contain"
     }
 })
@@ -103,8 +103,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:14
     },
     no_products_image:{
-        width:100,
-        height:100,
+        width:110,
+        height:110,
         resizeMode:"contain"
     }
 })
@@ -132,7 +132,7 @@ const Myproducts=()=>{
                 ?
                 <View style={{flex:1,justifyContent:'center',alignItems:'center',gap:10}}>
                     <Image source={emptylist} style={[styles[Device].no_products_image]}/>
-                    <Text style={[styles[Device].no_products,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Not purchased any products</Text>
+                    <Text style={[styles[Device].no_products,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Not purchased any products yet!</Text>
                 </View>
                 :
                 <ScrollView style={{flex:1}}>

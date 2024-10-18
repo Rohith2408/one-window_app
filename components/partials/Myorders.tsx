@@ -6,7 +6,7 @@ import Ordercard from "../cards/Ordercard";
 import { Image } from "expo-image";
 import Loadinglistscreen from "../resources/Loadinglistscreen";
 import { Fonts, Themes } from "../../constants";
-import emptylist from '../../assets/images/misc/emptylist.png'
+import emptylist from '../../assets/images/illustrations/sad_male.png'
 import { useRef } from "react";
 import { getDevice } from "../../utils";
 
@@ -37,8 +37,8 @@ const TabStyles=StyleSheet.create({
         fontSize:14
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:120,
+        height:120,
         resizeMode:"contain"
     },
     card:{
@@ -56,8 +56,8 @@ const MobileSStyles=StyleSheet.create({
         lineHeight:16
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:90,
+        height:90,
         resizeMode:"contain"
     },
     card:{
@@ -74,8 +74,8 @@ const MobileMStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:110,
+        height:110,
         resizeMode:"contain"
     },
     card:{
@@ -91,8 +91,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:110,
+        height:110,
         resizeMode:"contain"
     },
     card:{

@@ -13,7 +13,7 @@ import Loader from "../resources/Loader"
 import { Fonts, Themes } from "../../constants"
 import Listselection from "../resources/Listselection"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
-import emptylist from '../../assets/images/misc/emptylist.png'
+import emptylist from '../../assets/images/illustrations/happy.png'
 import { Image } from "expo-image"
 
 const GeneralStyles=StyleSheet.create({
@@ -44,8 +44,8 @@ const TabStyles=StyleSheet.create({
         fontSize:14
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:120,
+        height:120,
         resizeMode:"contain"
     },
 })
@@ -69,8 +69,8 @@ const MobileSStyles=StyleSheet.create({
         lineHeight:16
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:90,
+        height:90,
         resizeMode:"contain"
     },
 })
@@ -94,8 +94,8 @@ const MobileMStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:110,
+        height:110,
         resizeMode:"contain"
     },
 })
@@ -120,8 +120,8 @@ const MobileLStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:120,
-        height:120,
+        width:110,
+        height:110,
         resizeMode:"contain"
     }
 })

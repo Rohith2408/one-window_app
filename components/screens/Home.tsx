@@ -15,7 +15,7 @@ import List from "../resources/List"
 import Product from "../cards/Productcard"
 import Loadinglistscreen from "../resources/Loadinglistscreen"
 import { store } from "../../store"
-import emptylist from '../../assets/images/misc/emptylist.png'
+import emptylist from '../../assets/images/illustrations/thinking.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -144,8 +144,8 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     no_products_image:{
-        width:64,
-        height:64,
+        width:74,
+        height:74,
         resizeMode:"contain"
     }
 })
@@ -195,8 +195,8 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     no_products_image:{
-        width:70,
-        height:70,
+        width:80,
+        height:80,
         resizeMode:"contain"
     }
 })
@@ -310,9 +310,9 @@ const Home=(props:undefined|{name:string})=>{
                         :
                             products.data.length==0
                             ?
-                            <View style={{flexDirection:"column",justifyContent:"center",alignItems:'center',gap:10}}>
+                            <View style={{flexDirection:"row",justifyContent:"center",alignItems:'center',gap:10}}>
+                                <Text style={[styles[Device].no_products,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>Not purchased any products</Text>
                                 <Image source={emptylist} style={[styles[Device].no_products_image]}/>
-                                <Text style={[styles[Device].no_products,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Not purchased any products</Text>
                             </View>
                             :
                             <List cardStyles={styles[Device].card} list={products.data} card={Product} direction="Horizontal" mode="Scroll"></List>

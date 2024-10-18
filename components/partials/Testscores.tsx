@@ -14,7 +14,7 @@ import delete_icon from '../../assets/images/misc/delete.png'
 import edit_icon from '../../assets/images/misc/edit.png'
 import test_icon from '../../assets/images/misc/test.png'
 import { Fonts, Tests, Themes } from "../../constants"
-import emptylist from '../../assets/images/misc/emptylist.png'
+import emptylist from '../../assets/images/illustrations/thinking.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -68,6 +68,22 @@ const GeneralStyles=StyleSheet.create({
         alignItems:"center",
         gap:10
     },
+    add_wrapper:{
+        display:"flex",
+        flexDirection:"row",
+        alignItems:"center",
+        position:'absolute',
+        gap:7.5,
+        bottom:20,
+        right:0,
+        zIndex:1,
+        backgroundColor:"white",
+        borderRadius:100,
+        shadowOpacity:0.1,
+        shadowRadius:5,
+        elevation:2,
+        padding:7
+    },
     header:{
         display:"flex",
         flexDirection:"row",
@@ -78,8 +94,8 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     add_icon:{
-        width:24,
-        height:24,
+        width:34,
+        height:34,
         resizeMode:"contain"
     },
     edit_icon:{
@@ -132,16 +148,19 @@ const TabStyles=StyleSheet.create({
         fontSize:14
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:120,
+        height:120,
         resizeMode:"contain"
     },
+    add_text:{
+        fontSize:16
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
     add_icon:{
-        width:20,
-        height:20,
+        width:28,
+        height:28,
         resizeMode:"contain"
     },
     edit_icon:{
@@ -195,15 +214,18 @@ const MobileSStyles=StyleSheet.create({
         lineHeight:16
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:90,
+        height:90,
         resizeMode:"contain"
     },
+    add_text:{
+        fontSize:12
+    }
 })
 const MobileMStyles=StyleSheet.create({
     add_icon:{
-        width:20,
-        height:20,
+        width:30,
+        height:30,
         resizeMode:"contain"
     },
     edit_icon:{
@@ -257,15 +279,18 @@ const MobileMStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:110,
+        height:110,
         resizeMode:"contain"
     },
+    add_text:{
+        fontSize:14
+    }
 })
 const MobileLStyles=StyleSheet.create({
     add_icon:{
-        width:24,
-        height:24,
+        width:30,
+        height:30,
         resizeMode:"contain"
     },
     edit_icon:{
@@ -319,10 +344,13 @@ const MobileLStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:120,
-        height:120,
+        width:110,
+        height:110,
         resizeMode:"contain"
     },
+    add_text:{
+        fontSize:14
+    }
 })
 
 const styles={
@@ -349,7 +377,11 @@ const Testscores=()=>{
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.sub_wrapper]}>
-                <Pressable onPress={add}><Image style={[styles[Device].add_icon]} source={add_icon}/></Pressable>
+                <Pressable onPress={add} style={[GeneralStyles.add_wrapper]}>
+                    <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].add_text]}>Add Test</Text>
+                    <Image style={[styles[Device].add_icon]} source={add_icon}></Image>
+                </Pressable>
+                {/* <Pressable onPress={add}><Image style={[styles[Device].add_icon]} source={add_icon}/></Pressable> */}
                 <View style={{flex:1,alignSelf:"stretch"}}>
                 {
                     tests.data.length==0

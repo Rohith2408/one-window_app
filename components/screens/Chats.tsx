@@ -13,7 +13,7 @@ import Loader from "../resources/Loader"
 import { Fonts, Themes } from "../../constants"
 import Listselection from "../resources/Listselection"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
-import emptylist from '../../assets/images/misc/emptylist.png'
+import emptylist from '../../assets/images/illustrations/sad.png'
 import { Image } from "expo-image"
 import Chatcard from "../cards/Chatcard"
 import Userdoesntexist from "../cards/Userdoesntexistcard"

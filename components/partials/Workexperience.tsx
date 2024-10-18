@@ -9,7 +9,7 @@ import add_icon from '../../assets/images/misc/add.png'
 import { Image } from "expo-image"
 import { getDevice } from "../../utils"
 import { Fonts, Themes } from "../../constants"
-import emptylist from '../../assets/images/misc/emptylist.png'
+import emptylist from '../../assets/images/illustrations/thinking.png'
 import { addToBasket } from "../../constants/basket"
 import { store } from "../../store"
 
@@ -52,13 +52,16 @@ const TabStyles=StyleSheet.create({
     card:{
         width:'100%',
         height:75
+    },
+    add_text:{
+        fontSize:16
     }
 })
 
 const MobileSStyles=StyleSheet.create({
     add_icon:{
-        width:34,
-        height:34,
+        width:28,
+        height:28,
         resizeMode:"contain"
     },
     no_workexperience:{
@@ -76,12 +79,15 @@ const MobileSStyles=StyleSheet.create({
     card:{
         width:"100%",
         height:50
+    },
+    add_text:{
+        fontSize:12
     }
 })
 const MobileMStyles=StyleSheet.create({
     add_icon:{
-        width:26,
-        height:26,
+        width:30,
+        height:30,
         resizeMode:"contain"
     },
     no_workexperience:{
@@ -92,19 +98,22 @@ const MobileMStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:110,
+        height:110,
         resizeMode:"contain"
     },
     card:{
         width:"100%",
         height:75
+    },
+    add_text:{
+        fontSize:14
     }
 })
 const MobileLStyles=StyleSheet.create({
     add_icon:{
-        width:34,
-        height:34,
+        width:30,
+        height:30,
         resizeMode:"contain"
     },
     no_workexperience:{
@@ -121,6 +130,9 @@ const MobileLStyles=StyleSheet.create({
     card:{
         width:'100%',
         height:75
+    },
+    add_text:{
+        fontSize:14
     }
 
 })
@@ -163,7 +175,7 @@ const Workexperience=(props:any)=>{
             :
             <View style={{flex:1,gap:30}}>
                 <Pressable onPress={openCurrentlyWorkingFlyer} style={[GeneralStyles.add_wrapper]}>
-                    <Text style={{fontFamily:Fonts.NeutrifStudio.Medium}}>Add Experience</Text>
+                    <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].add_text]}>Add Experience</Text>
                     <Image style={[styles[Device].add_icon]} source={add_icon}></Image>
                 </Pressable>
                 <View style={{flex:1}}>

@@ -6,7 +6,7 @@ import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
 import { Fonts, Themes } from "../../constants"
 import Loadingview from "../resources/Loadingview"
-import emptylist from '../../assets/images/misc/emptylist.png'
+import emptylist from '../../assets/images/illustrations/sad_male.png'
 import Loadinglistscreen from "../resources/Loadinglistscreen"
 import { Chat,Message as MessageType, Participant, ServerResponse, TriggerObject } from "../../types"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
@@ -181,8 +181,8 @@ const MobileSStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:90,
+        height:90,
         resizeMode:"contain"
     },
     loadingview_name:{
@@ -249,8 +249,8 @@ const MobileMStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:110,
+        height:110,
         resizeMode:"contain"
     },
     loadingview_name:{
@@ -316,8 +316,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:110,
+        height:110,
         resizeMode:"contain"
     },
     loadingview_name:{

@@ -8,7 +8,7 @@ import Meetingcard from "../cards/Meetingcard"
 import { Fonts, Themes } from "../../constants"
 import add_icon from '../../assets/images/misc/add.png'
 import useNavigation from "../../hooks/useNavigation"
-import emptylist from '../../assets/images/misc/emptylist.png'
+import emptylist from '../../assets/images/illustrations/sad_male.png'
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{

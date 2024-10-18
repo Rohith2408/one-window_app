@@ -9,7 +9,7 @@ import { ISOtoIntakeformat, formatDate, getDevice } from "../../utils";
 import { addToBasket } from "../../constants/basket";
 import Cartcard from "../cards/Cartcard";
 import { Fonts, Themes } from "../../constants";
-import empty_image from "../../assets/images/misc/emptylist.png"
+import empty_image from "../../assets/images/illustrations/sad.png"
 import { Image } from "expo-image";
 import Asynchronousbutton from "../resources/Asynchronousbutton";
 import products_icon from '../../assets/images/misc/products.png'
@@ -62,10 +62,10 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     not_found:{
-        fontSize:16
+        fontSize:14
     },
     not_found_sub:{
-        fontSize:12
+        fontSize:11
     },
     items_count:{
         fontSize:12
@@ -98,10 +98,10 @@ const MobileMStyles=StyleSheet.create({
         fontSize:14
     },
     not_found:{
-        fontSize:18
+        fontSize:16
     },
     not_found_sub:{
-        fontSize:14
+        fontSize:12
     },
     items_count:{
         fontSize:14
@@ -129,10 +129,10 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     not_found:{
-        fontSize:20
+        fontSize:18
     },
     not_found_sub:{
-        fontSize:16
+        fontSize:14
     },
     items_count:{
         fontSize:14
