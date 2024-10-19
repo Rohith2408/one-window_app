@@ -207,7 +207,12 @@ const Cartcard=(props:CartItem & {index:number})=>{
         let dropdowndata={
             list:props?.course.startDate,
             onselection:updateItem,
-            selected:props.intake
+            selected:props.intake,
+            product:{
+                category:props.category,
+                intake:undefined,
+                course:props.course
+            }
         }
         addToBasket("intakes-dropdownoptions",dropdowndata);
         navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null

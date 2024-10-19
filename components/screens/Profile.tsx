@@ -349,7 +349,7 @@ const Profile=(props:any)=>{
         {title:"Experts",icon:expert_icon,screen:"Experts"},
         {title:"Preferences",icon:preferences_icon,screen:"Preferences"},
         {title:"AI",icon:ai_icon,screen:"Recommendations"},
-        {title:"Favourites",icon:favourites_icon,screen:""},
+        {title:"Wishlist",icon:favourites_icon,screen:"Wishlist"},
         {title:"Cart",icon:cart_icon,screen:"Cart"},
         {title:"My Orders",icon:orders_icon,screen:"Myorders"},
         {title:"My Products",icon:products_icon,screen:"Myproducts"}

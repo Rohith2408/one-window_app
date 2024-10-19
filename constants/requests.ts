@@ -5,6 +5,7 @@ import { addMessage } from "../store/slices/messagesSlice";
 import { addOrders, setOrders, updateOrder } from "../store/slices/ordersSlice";
 import { addProducts, setProducts } from "../store/slices/productsSlice";
 import { setRecommendations } from "../store/slices/recommendationsSlice";
+import { setWishlist } from "../store/slices/wishlistSlice";
 import { Product, PurchasedProduct, Recommendation, RecommendationType, RequestInfo, ServerResponse, ServerUnpurchasedProduct } from "../types";
 import { ISOtoIntakeformat, Word2Sentence, getServerRequestURL, keyVerifier, profileUpdator, serverRequest } from "../utils";
 import { cartRequest } from "../utils/serverrequests";
@@ -200,16 +201,17 @@ const requests:RequestInfo[]=[
         serverCommunicator:async (data:{action:string,courseId:string})=>{
             let res=await serverRequest({
                 url:getServerRequestURL("wishlist","POST"),
-                reqType:"POST"
+                reqType:"POST",
+                body:data
             })
             console.log("wishlist Server Response ",res);
             return res;
         },
         responseHandler:(res:ServerResponse)=>{
-            // if(res.success)
-            // {
-            //     store.dispatch(setRecommendations(res.data));
-            // }
+            if(res.success)
+            {
+                store.dispatch(setWishlist(res.data));
+            }
         }
     },
 ]

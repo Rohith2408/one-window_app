@@ -15,6 +15,7 @@ export const wishlistSlice=createSlice({
     initialState:initialState,
     reducers:{
         initWishlist:(state,action:PayloadAction<Request<wishlistItem[]>>)=>({...action.payload}),
+        setWishlist:(state,action:PayloadAction<wishlistItem[]>)=>{state.data=action.payload},
         addWishlist:(state,action:PayloadAction<wishlistItem>)=>{state.data.push(action.payload)},
         updateWishlist:(state,action:PayloadAction<wishlistItem>)=>{
             let index=state.data.findIndex((item)=>item._id==action.payload._id);
@@ -25,5 +26,5 @@ export const wishlistSlice=createSlice({
     }
 })
 
-export const {initWishlist,addWishlist,removeWishlist,updateWishlist,resetWishlist}=wishlistSlice.actions;
+export const {initWishlist,addWishlist,removeWishlist,updateWishlist,resetWishlist,setWishlist}=wishlistSlice.actions;
 export default wishlistSlice.reducer;

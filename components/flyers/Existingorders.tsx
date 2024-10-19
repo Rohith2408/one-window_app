@@ -76,7 +76,7 @@ const Existingorders=()=>{
     const [path,navigate]=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const dispatch=useAppDispatch()
-    const orders=useAppSelector((state)=>state.orders).data.filter((item)=>item.Package)
+    const orders=useAppSelector((state)=>state.orders).data.filter((item)=>item.Package && (item.products.length!=item.Package.products.reduce((acc,curr)=>(acc+curr.quantity),0)))
     const [selected,setSelected]=useState<undefined|Order>(undefined)
     const [loading,setloading]=useState(false);
     const orderinfo:{package:Package|undefined,products:Product[]}=getBasket("orderinfo");

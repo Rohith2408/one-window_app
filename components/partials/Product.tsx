@@ -368,11 +368,9 @@ const Product=(props:{productId:string})=>{
                         <View style={[GeneralStyles.location_wrapper]}>
                             <Image source={location_icon} style={[styles[Device].location_icon]}/>
                             <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.65)}]}>{Word2Sentence([product.course.name,product.course.university.name],"","|",true)}</Text></View>
-                            {/* <Pressable onPress={openUniversity} style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([product.course.name,product.course.university.name],"","|",true)}</Text></Pressable> */}
                         </View>
                         <View style={[GeneralStyles.actions_wrapper]}>
                             <Pressable onPress={showOrderDetails} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
-                                {/* <Image source={cart_icon} style={[styles[Device].cart_icon]}/> */}
                                 <Text style={[styles[Device].show_order_details,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Show Order Details</Text>
                             </Pressable>
                         </View>
@@ -381,10 +379,6 @@ const Product=(props:{productId:string})=>{
                 <View style={[{alignSelf:'center',borderRadius:100,backgroundColor:Themes.Light.OnewindowLightBlue}]}>
                     <Text style={[{padding:10},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].status]}>{Word2Sentence([product.status,product.stage],"","-",true)}</Text>
                 </View>
-                {/* <View style={[GeneralStyles.dashboard_wrapper,styles[Device].dashboard_wrapper]}>
-                    <Dashboarditem icon={fee_icon} label="University" value={product.course.university.name} index={0}/>
-                    <Dashboarditem icon={fee_icon} label="Program" value={product.course.name} index={1}/>
-                </View> */}
                 <View style={{gap:10}}>
                     <Text style={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Experts Assigned</Text>
                     <View style={{gap:20}}>

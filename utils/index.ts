@@ -697,7 +697,7 @@ export const getCategoriesFromProducts=(products: Product[])=>{
 }
 
 export const compareProducts=(product1:Product,product2:Product)=>{
-  return product1.category==product2.category && product1.course._id==product2.course._id && product1.intake==product2.intake
+  return product1.category==product2.category && product1.course._id==product2.course._id && (new Date(product1.intake).getMonth()==new Date(product2.intake).getMonth() && new Date(product1.intake).getFullYear()==new Date(product2.intake).getFullYear())
 }
 
 export const listHandler=(id:string,data:Listquery)=>{

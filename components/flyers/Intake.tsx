@@ -6,8 +6,9 @@ import Intakecard from "../cards/Intakecard";
 import { useRef, useState } from "react";
 import useNavigation from "../../hooks/useNavigation";
 import { Fonts, Themes } from "../../constants";
-import { getDevice } from "../../utils";
+import { compareProducts, getDevice } from "../../utils";
 import Asynchronousbutton from "../resources/Asynchronousbutton";
+import { store } from "../../store";
 
 const GeneralStyles=StyleSheet.create({
     
@@ -70,7 +71,6 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     }
 
     const monthSelected=(data:ProgramIntake[])=>{
-        console.log((data[0].courseStartingMonth+1))
         setIntake({...intake,month:data.length==0?undefined:(data[0].courseStartingMonth+1).toString()})
     }
 
@@ -84,7 +84,6 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     }
 
     const getErrors=(intake:{year:undefined|string,month:undefined|string})=>{
-        console.log(intake,(new Date().getMonth()+1).toString())
         if(intake.year==undefined || intake.month==undefined)
         {
             return "Please select the month and year"
@@ -93,15 +92,14 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
         {
             return "Selected intake not available"
         }
-        else
+        else if(info.product && store.getState().products.data.find((product)=>compareProducts(product,{...info.product,intake:new Date(intake.year,parseInt(intake.month)-1,1)})))
         {
+            return "Already applied for the selected intake"
+        }
+        else{
             return undefined
         }
     }
-
-
-
-    //console.log("info",info);
 
     return(
         <View style={{flex:1,flexDirection:'column',justifyContent:"center",alignItems:'center',gap:35,padding:5,paddingTop:15,paddingBottom:35}}>

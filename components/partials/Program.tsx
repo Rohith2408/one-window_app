@@ -14,6 +14,10 @@ import location_icon from '../../assets/images/misc/location.png'
 import fee_icon from '../../assets/images/misc/fee.png'
 import cart_icon from '../../assets/images/misc/cart.png'
 import { Fonts, Themes } from "../../constants";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import wishlist_icon from '../../assets/images/misc/wishlist.png'
+import wishlisted_icon from '../../assets/images/misc/wishlisted.png'
+import Loader from "../resources/Loader";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -350,6 +354,7 @@ const styles={
 const Program=(props:{programid:string})=>{
 
     let [programInfo,setProgramInfo]=useState<Course|undefined>();
+    let wishlist=useAppSelector((state)=>state.wishlist);
     const [path,navigate]=useNavigation();
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const dashboardInfo=[
@@ -375,7 +380,12 @@ const Program=(props:{programid:string})=>{
     const showIntakes=(callback:any)=>{
         let dropdowndata={
             list:programInfo?.startDate,
-            onselection:callback
+            onselection:callback,
+            product:{
+                category:programInfo?.elite?"elite application":"premium application",
+                intake:undefined,
+                course:programInfo
+            }
         }
         addToBasket("intakes-dropdownoptions",dropdowndata);
         navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
@@ -515,9 +525,29 @@ const Program=(props:{programid:string})=>{
         }
     }
 
+    const modilfyWishlist=async ()=>{
+        setLoading(true);
+        let data={
+            action:wishlist.data.find((item)=>item._id==programInfo?._id)?"pull":"push",
+            courseId:programInfo?._id
+        }
+        let requestInfo=requests.find((item)=>item.id=="modify-wishlist");
+        let validation=requestInfo?.inputValidator(data);
+        if(validation?.success)
+        {
+            let serverRes=await requestInfo?.serverCommunicator(data);
+            if(serverRes?.success)
+            {
+                requestInfo?.responseHandler(serverRes);
+            }
+        }
+        setLoading(false);
+    }
+
     const openUniversity=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"University",params:{universityid:programInfo?.university?._id}}}):null
     }
+
 
     useEffect(()=>{
         fetchProgram();
@@ -535,7 +565,16 @@ const Program=(props:{programid:string})=>{
                         <View style={[styles[Device].uni_icon_bg,{position:"absolute",zIndex:-1,backgroundColor:getThemeColor(0)}]}></View>
                     </View>
                     <View style={[GeneralStyles.uni_info_wrapper]}>
-                        <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{programInfo.name}</Text>
+                        <View style={{flexDirection:"row",alignItems:'center'}}>
+                            <View style={{flex:1}}><Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{programInfo.name}</Text></View>
+                            {
+                                isLoading
+                                ?
+                                <Loader  isLoading={isLoading} loaderStyles={[styles[Device].cart_icon]}/>
+                                :
+                                <Pressable onPress={!isLoading?modilfyWishlist:null}><Image style={[styles[Device].cart_icon]} source={wishlist.data.find((item)=>item._id==programInfo?._id)?wishlisted_icon:wishlist_icon}/></Pressable>
+                            }
+                        </View>
                         <View style={[GeneralStyles.location_wrapper]}>
                             <Image source={location_icon} style={[styles[Device].location_icon]}/>
                             <Pressable onPress={openUniversity} style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([programInfo.university?.name,programInfo.university?.location?.country],"")}</Text></Pressable>
