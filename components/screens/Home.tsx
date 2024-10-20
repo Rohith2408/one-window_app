@@ -90,6 +90,9 @@ const TabStyles=StyleSheet.create({
     products_title:{
         fontSize:16
     },
+    no_products_title:{
+        fontSize:16
+    },
     no_products:{
         fontSize:15
     },
@@ -139,6 +142,9 @@ const MobileSStyles=StyleSheet.create({
     loader_card:{
         width:230,
         height:160
+    },
+    no_products_title:{
+        fontSize:14
     },
     no_products:{
         fontSize:12
@@ -191,12 +197,15 @@ const MobileMStyles=StyleSheet.create({
         width:250,
         height:205
     },
+    no_products_title:{
+        fontSize:15
+    },
     no_products:{
         fontSize:12
     },
     no_products_image:{
-        width:80,
-        height:80,
+        width:100,
+        height:100,
         resizeMode:"contain"
     }
 })
@@ -242,12 +251,15 @@ const MobileLStyles=StyleSheet.create({
         width:250,
         height:205
     },
+    no_products_title:{
+        fontSize:16
+    },
     no_products:{
         fontSize:14
     },
     no_products_image:{
-        width:80,
-        height:80,
+        width:100,
+        height:100,
         resizeMode:"contain"
     }
 })
@@ -269,13 +281,15 @@ const Home=(props:undefined|{name:string})=>{
     const exploreTabs=useRef([
         {text:"Destinations",icon:destinations_icon,handler:()=>{}},//navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Destinations",destinationsadditionalfilters:[],destinationsquickfilters:[],search:"",destinationspage:1}}}):null
         {text:"Universities",icon:universities_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Universities",programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null},
-        //{text:"Universities",icon:universities_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{courselistid:"Programs",courseadditionalFilters:[],coursequickFilters:[],coursesearch:"",coursepage:1}}}):null},
-        //{text:"Programs",icon:universities_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{courselistid:"Programs",courseadditionalFilters:[],coursequickFilters:[],coursesearch:"",coursepage:1}}}):null},
         {text:"Programs",icon:programs_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null}
     ]).current
 
     const openSearch=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Search"}}):null
+    }
+
+    const openExplore=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null
     }
 
     //console.log("ver",store.getState().products);
@@ -286,10 +300,10 @@ const Home=(props:undefined|{name:string})=>{
                 <View style={{position:"relative",gap:10}}>
                     <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
                     <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?(personalinfo.data.firstName):"User")}!</Text>
-                    <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
+                    {/* <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
                         <Image source={university_icon} style={[GeneralStyles.explore_icon,{width:24,height:24,resizeMode:"contain"}]}></Image>
                         <Text style={{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.5)}}>Malla Reddy University</Text>
-                    </View>
+                    </View> */}
                 </View>
                 <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
                     <Text style={[GeneralStyles.search_text,styles[Device].search_text,{fontFamily:Fonts.NeutrifStudio.Regular}]}>Search for "Harvard University"</Text>
@@ -311,7 +325,10 @@ const Home=(props:undefined|{name:string})=>{
                             products.data.length==0
                             ?
                             <View style={{flexDirection:"row",justifyContent:"center",alignItems:'center',gap:10}}>
-                                <Text style={[styles[Device].no_products,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>Not purchased any products</Text>
+                                <View style={{flex:1,flexDirection:"column",alignItems:"flex-start",justifyContent:"center",gap:10}}>
+                                    <View><Text style={[styles[Device].no_products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>Not purchased any products yet</Text></View>
+                                    <Pressable onPress={openExplore}><Text style={[styles[Device].no_products,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>Explore now!</Text></Pressable>
+                                </View>
                                 <Image source={emptylist} style={[styles[Device].no_products_image]}/>
                             </View>
                             :

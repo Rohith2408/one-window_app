@@ -377,15 +377,19 @@ const Program=(props:{programid:string})=>{
         res.success?setProgramInfo(res.data):null
     }
 
-    const showIntakes=(callback:any)=>{
+    const showIntakes=(callback:any,type:string)=>{
+        let product={
+            category:programInfo?.elite?"elite application":"premium application",
+            intake:undefined,
+            course:programInfo
+        }
         let dropdowndata={
             list:programInfo?.startDate,
             onselection:callback,
-            product:{
-                category:programInfo?.elite?"elite application":"premium application",
-                intake:undefined,
-                course:programInfo
-            }
+            validation:{
+                validator:(intake)=>type=="order"?!store.getState().products.data.find((product)=>compareProducts(product,{...product,intake:new Date(intake.year,parseInt(intake.month)-1,1).toISOString()})):!store.getState().cart.data.find((cartItem)=>compareProducts(cartItem,{...product,intake:new Date(intake.year,parseInt(intake.month)-1,1).toISOString()})),
+                errorMessage:type=="order"?"Already applied for the program with the selected intake":"Program with the selected intake already exists in the cart"
+            },            
         }
         addToBasket("intakes-dropdownoptions",dropdowndata);
         navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
@@ -583,14 +587,14 @@ const Program=(props:{programid:string})=>{
                             {
                                 !programInfo.elite
                                 ?
-                                <Pressable onPress={()=>showIntakes(applyForFree)} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
+                                <Pressable onPress={()=>showIntakes(applyForFree,"order")} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
                                     <Image source={cart_icon} style={[styles[Device].cart_icon]}/>
                                     <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Apply for Free</Text>
                                 </Pressable>
                                 :
                                 null
                             }
-                            <Pressable  onPress={()=>showIntakes(addToCart)} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
+                            <Pressable  onPress={()=>showIntakes(addToCart,"cart")} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
                                 <Image source={cart_icon} style={[styles[Device].cart_icon]}/>
                                 {/* <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Add to Cart</Text> */}
                             </Pressable>

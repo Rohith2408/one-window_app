@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import { CartItem, Event, ServerResponse } from "../../types"
 import { useEffect, useRef, useState } from "react"
 import { requests } from "../../constants/requests"
-import { formatDate, getDevice, getLightThemeColor, getThemeColor, setWordCase } from "../../utils"
+import { compareProducts, formatDate, getDevice, getLightThemeColor, getThemeColor, setWordCase } from "../../utils"
 import { addToBasket, removeFromBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
@@ -12,6 +12,7 @@ import go_icon from '../../assets/images/misc/back.png'
 import loader from '../../assets/images/misc/loader.gif'
 import { Fonts, Themes } from "../../constants"
 import delete_icon from '../../assets/images/misc/delete-black.png'
+import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -204,14 +205,18 @@ const Cartcard=(props:CartItem & {index:number})=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     const showIntakes=()=>{
+        let product={
+            category:props.category,
+            intake:undefined,
+            course:props.course
+        }
         let dropdowndata={
             list:props?.course.startDate,
             onselection:updateItem,
             selected:props.intake,
-            product:{
-                category:props.category,
-                intake:undefined,
-                course:props.course
+            validation:{
+                validator:(intake)=>!store.getState().products.data.find((product)=>compareProducts(product,{...product,intake:new Date(intake.year,parseInt(intake.month)-1,1).toISOString()})),
+                errorMessage:"Already applied for the program with the selected intake"
             }
         }
         addToBasket("intakes-dropdownoptions",dropdowndata);

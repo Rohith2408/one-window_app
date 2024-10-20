@@ -188,7 +188,7 @@ const Cart=()=>{
     }
 
     const checkout=()=>{
-        let existingOrders:Order[]|undefined=store.getState().orders.data.filter((item)=>item.Package!=undefined);
+        let existingOrders:Order[]|undefined=store.getState().orders.data.filter((item)=>item.Package!=undefined && (item.products.length!=item.Package.products.reduce((acc,curr)=>(acc+curr.quantity),0)));
         addToBasket("orderinfo",{
             package:undefined,
             products:cart.data

@@ -163,12 +163,12 @@ const Addtoorder=(props:{orderinfoid:string})=>{
     
     let validation=PackageProductsValidator(orderInfo.package,Products)
     errors.current={category:validation.categoryErrors,products:validation.productsErrors,general:validation.generalErrors}
-    console.log("infff",orderInfo);
+    console.log("infff",JSON.stringify(errors.current,null,2));
 
     return(
         <View style={{flex:1,paddingBottom:20}}>
             <View style={{padding:5,gap:15}}>
-                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Suggested Packages</Text>
+                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Package</Text>
                 <View>
                     <Packagecard {...orderInfo.package} index={0}/>
                 </View>

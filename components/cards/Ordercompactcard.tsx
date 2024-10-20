@@ -1,5 +1,5 @@
 import { Animated, LayoutRectangle, Pressable, StyleSheet, Text, View } from "react-native"
-import { Event, WorkExperience, wishlistItem } from "../../types"
+import { Event, Order, WorkExperience, wishlistItem } from "../../types"
 import { useRef, useState } from "react"
 import Loadingview from "../resources/Loadingview"
 import clock_icon from '../../assets/images/misc/clock.png'
@@ -16,6 +16,7 @@ import { setWorkExperience } from "../../store/slices/workexperienceSlice"
 import useNavigation from "../../hooks/useNavigation"
 import { addToBasket } from "../../constants/basket"
 import { requests } from "../../constants/requests"
+import products_icon from '../../assets/images/misc/products.png'
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -128,13 +129,13 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:14
+        fontSize:12
     },
     text2:{
-        fontSize:12
+        fontSize:10
     },
     text3:{
-        fontSize:12
+        fontSize:10
     },
     title:{
         fontSize:10
@@ -170,13 +171,13 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:16
+        fontSize:14
     },
     text2:{
-        fontSize:14
+        fontSize:12
     },
     text3:{
-        fontSize:14
+        fontSize:12
     },
     title:{
         fontSize:12
@@ -212,13 +213,13 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:16
+        fontSize:14
     },
     text2:{
-        fontSize:14
+        fontSize:12
     },
     text3:{
-        fontSize:14
+        fontSize:12
     },
     title:{
         fontSize:12
@@ -232,7 +233,7 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Wishlistcard=(props:{data:wishlistItem,index:number})=>{
+const Ordercompactcard=(props:Order & {index:number})=>{
 
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
     const Device=useRef<keyof typeof styles>(getDevice()).current
@@ -249,68 +250,7 @@ const Wishlistcard=(props:{data:wishlistItem,index:number})=>{
         }).start()
     }
 
-    const remove=async ()=>{
-        setIsLoading(true);
-        let data={
-            action:"pull",
-            courseId:props.data._id
-        }
-        let requestInfo=requests.find((item)=>item.id=="modify-wishlist");
-        let validation=requestInfo?.inputValidator(data);
-        if(validation?.success)
-        {
-            let serverRes=await requestInfo?.serverCommunicator(data);
-            if(serverRes?.success)
-            {
-                requestInfo?.responseHandler(serverRes);
-            }
-        }
-        setIsLoading(false)
-    }
-
-    const addToCart=async (event:Event)=>{
-        console.log("res",event);
-        let data={
-            action:"add",
-            category:props.data?.elite?"elite application":"premium application",
-            courseId:props.data._id,
-            intake:(event.data.month).padStart(2, '0')+"/"+"10"+"/"+event.data.year
-        }
-        let requestInfo=requests.find((item)=>item.id=="addToCart");
-        let validation=requestInfo?.inputValidator(data);
-        if(validation?.success)
-        {
-            let serverRes=await requestInfo?.serverCommunicator(data);
-            if(serverRes?.success)
-            {
-                requestInfo?.responseHandler(serverRes);
-                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
-                setTimeout(()=>{
-                    navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Item added to cart successfully!"}}}}):null;
-                },100)
-            }
-        }
-    }
-
-    const showIntakes=(callback:any)=>{
-        let product={
-            category:props.data?.elite?"elite application":"premium application",
-            intake:undefined,
-            course:props.data
-        }
-        let dropdowndata={
-            list:props.data.startDate,
-            onselection:callback,
-            validation:{
-                validator:(intake)=>!store.getState().cart.data.find((cartItem)=>compareProducts(cartItem,{...product,intake:new Date(intake.year,parseInt(intake.month)-1,1).toISOString()})),
-                errorMessage:"Program with the selected intake already exists in the cart"
-            }
-        }
-        addToBasket("intakes-dropdownoptions",dropdowndata);
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
-    }
-
-    //console.log("wishlist",props.data.discipline)
+    console.log("ordercompact",props)
 
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,padding:5}}>
@@ -318,25 +258,21 @@ const Wishlistcard=(props:{data:wishlistItem,index:number})=>{
             dimensions
             ?
             <View style={{flex:1,flexDirection:'row',gap:10}}>
-                <View style={[GeneralStyles.icon_wrapper]}><Image source={props.data.university?.logoSrc} style={[styles[Device].card_icon,{borderRadius:100}]} /></View>
+                <View style={[GeneralStyles.icon_wrapper]}><Image source={products_icon} style={[styles[Device].card_icon,{borderRadius:100}]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.35)} style={[GeneralStyles.title_wrapper,{transform:[{translateY:titleTranslate}]}]}>
                         <View style={{width:5,height:5,borderRadius:100,backgroundColor:"lightgreen"}}></View>
-                        <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.data.studyLevel}</Text>
+                        <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.Package?props.Package.name:"Direct Purchase"}</Text>
                     </Animated.View>
-                    <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.data.name}</Text>
+                    <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{"Order placed on "+formatDate(props.paymentDetails.created_at)}</Text>
                     <View style={{flexDirection:"row",gap:5}}>
                         <Image style={[styles[Device].info_icon]} source={clock_icon}/>
-                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence(props.data.subDiscipline,"",",")}</Text>
+                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Products- "+props.products.length+" | "+"Paid- "+props.paymentDetails.currency.toUpperCase()+" "+props.paymentDetails.amount}</Text>
                     </View>
-                    <View style={{flexDirection:"row",gap:5}}>
+                    {/* <View style={{flexDirection:"row",gap:5}}>
                         <Image style={[styles[Device].location_icon]} source={apply_icon}/>
                         <Text style={[styles[Device].text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.data.startDate?("Start Dates: "+Word2Sentence(props.data.startDate?.map((item)=>getMonth(item.courseStartingMonth+1,true)),"",",")):null}</Text>
-                    </View>
-                </View>
-                <View style={[GeneralStyles.actions_wrapper]}>
-                    <Pressable onPress={()=>showIntakes(addToCart)} style={{flex:1}}><Image source={apply_icon} style={[styles[Device].edit_icon]} /></Pressable>
-                    <Pressable onPress={!isLoading?remove:undefined} style={{flex:1,display:"flex",justifyContent:"flex-end"}}><Image source={isLoading?loading_gif:delete_icon} style={[styles[Device].delete_icon]} /></Pressable>
+                    </View> */}
                 </View>
             </View>
             :
@@ -347,4 +283,4 @@ const Wishlistcard=(props:{data:wishlistItem,index:number})=>{
 
 }
 
-export default Wishlistcard
+export default Ordercompactcard

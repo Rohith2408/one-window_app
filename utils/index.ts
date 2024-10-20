@@ -656,6 +656,7 @@ export const PackageProductsValidator=(Package:Package|undefined,Products:Produc
           }
           else
           {
+            console.log("category error",categoryproducts.length,categoryInPackage.quantity)
             if(categoryproducts.length>categoryInPackage.quantity)
             {
               categoryErrors.push({category:category,error:"Only "+categoryInPackage.quantity+" "+category+" allowed "})

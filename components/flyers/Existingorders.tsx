@@ -14,17 +14,26 @@ import { Image } from "expo-image"
 import Listselection from "../resources/Listselection"
 import Ordercard from "../cards/Ordercard"
 import { addToBasket, getBasket } from "../../constants/basket"
+import Ordercompactcard from "../cards/Ordercompactcard"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
         flex:1,
-        padding:20,
+        padding:10,
         gap:10
     }
 })
 
 const TabStyles=StyleSheet.create({
-    
+    option:{
+        fontSize:12
+    },
+    heading:{
+        fontSize:14
+    },
+    checkout:{
+        fontSize:12
+    },
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -44,7 +53,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:16
     },
     heading:{
-        fontSize:18,
+        fontSize:16,
         lineHeight:24
     },
     checkout:{
@@ -109,16 +118,6 @@ const Existingorders=()=>{
         <View style={[GeneralStyles.wrapper,{gap:20}]}>
             <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Do you want to add the products to an existing purchase?</Text>
             <View style={{flex:1}}>
-            {/* <ScrollView style={{flex:1}}>
-            {
-                orders.map((item)=>
-                <View>
-                    <Text style={[]}>{item.Package.name}</Text>
-                    <Text>{formatDate(item.paymentDetails.created_at)}</Text>
-                </View>
-                )
-            }
-            </ScrollView> */}
             <Listselection
                 {...{
                     direction:"vertical",
@@ -130,7 +129,7 @@ const Existingorders=()=>{
                     options:{
                         list:orders,
                         idExtractor:(item:Order)=>item._id,
-                        card:Ordercard,
+                        card:Ordercompactcard,
                         selectionMode:"single"
                     }}}
                 />
@@ -143,7 +142,7 @@ const Existingorders=()=>{
                     :
                     null
                 }
-                <Pressable style={{alignSelf:"center",padding:5,paddingLeft:15,paddingRight:15,borderRadius:100,borderWidth:1.5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={newOrder}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Place A New Order</Text></Pressable>
+                <Pressable style={{alignSelf:"center",padding:5,paddingLeft:15,paddingRight:15,borderRadius:100,borderWidth:1.5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={newOrder}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Place a new Order</Text></Pressable>
             </View>
         </View>
     )

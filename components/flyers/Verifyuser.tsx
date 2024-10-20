@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
 import { Phone, ServerResponse } from "../../types"
 import { getDevice, getServerRequestURL, replaceCharacters, serverRequest } from "../../utils"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import useNavigation from "../../hooks/useNavigation"
 import { Fonts, Themes } from "../../constants"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
@@ -85,12 +85,16 @@ const Verifyuser=(props:{type:"mobile"|"email",data:idData,callback:(otp:string,
         return res.success
     }
 
+    useEffect(()=>{
+        otp.length==otpLength?verify():null
+    },[otp])
+
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <Text style={[GeneralStyles.heading,styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Please enter the otp sent to {props.type=="email"?replaceCharacters(props.data.email,3,props.data.email.length-3,"*"):replaceCharacters(props.data.phone.phoneNumber,3,props.data.phone.phoneNumber.length-2,"*")}</Text>
             <View style={{flex:1}}><TextInput placeholder="OTP" style={[styles[Device].otp,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)},{borderBottomWidth:1,borderBottomColor:"#E3E3E3"}]} onChangeText={(txt)=>setOtp(txt)}></TextInput></View>
             {
-                otp.length>=otpLength
+                otp.length==otpLength
                 ?
                 <Asynchronousbutton idleText="Verify" successText="Success!" failureText="Failed" callback={verify}/>
                 // <Pressable onPress={verify}><Text>Verify</Text></Pressable>

@@ -84,6 +84,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     }
 
     const getErrors=(intake:{year:undefined|string,month:undefined|string})=>{
+        console.log("validation",info.validation);
         if(intake.year==undefined || intake.month==undefined)
         {
             return "Please select the month and year"
@@ -92,9 +93,9 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
         {
             return "Selected intake not available"
         }
-        else if(info.product && store.getState().products.data.find((product)=>compareProducts(product,{...info.product,intake:new Date(intake.year,parseInt(intake.month)-1,1)})))
+        else if(info.validation && !info.validation.validator(intake))
         {
-            return "Already applied for the selected intake"
+            return info.validation.errorMessage
         }
         else{
             return undefined
@@ -146,7 +147,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
             {
                 getErrors(intake)!=undefined
                 ?
-                <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:"red"}]}>{getErrors(intake)}</Text>
+                <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,textAlign:"center",color:"red"}]}>{getErrors(intake)}</Text>
                 :
                 null
             }        
