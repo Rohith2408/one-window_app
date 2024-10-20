@@ -3,7 +3,6 @@ import { Advisor } from "../../types"
 import { Word2Sentence, camelCaseToString, getDevice, getLightThemeColor, getThemeColor, setWordCase } from "../../utils"
 import { Image } from "expo-image"
 import { useRef } from "react"
-import expert_icon from '../../assets/images/misc/expert.png'
 import { Fonts, Themes } from "../../constants"
 
 const GeneralStyles=StyleSheet.create({
@@ -13,7 +12,7 @@ const GeneralStyles=StyleSheet.create({
         borderRadius:30,
         display:"flex",
         flexDirection:"column",
-        gap:20,
+        gap:10,
         position:"relative"
     },
     bg_wrapper:{
@@ -26,9 +25,10 @@ const GeneralStyles=StyleSheet.create({
     sub_wrapper:{
         display:"flex",
         flexDirection:"column",
+        justifyContent:"center",
         flex:1,
         alignSelf:"stretch",
-        padding:15
+        padding:10
     },
     superset_wrapper:{
         display:"flex",
@@ -77,9 +77,9 @@ const TabStyles=StyleSheet.create({
         left:10,
         top:10,
     },
-    icon:{
-        width:18,
-        height:18,
+    info_icon:{
+        width:12,
+        height:12,
         resizeMode:"contain"
     },
     course_name:{
@@ -98,7 +98,7 @@ const MobileSStyles=StyleSheet.create({
 
     },
     sub_wrapper:{
-        gap:15,
+        gap:7,
         borderRadius:25
     },
     bg_wrapper:{
@@ -109,9 +109,9 @@ const MobileSStyles=StyleSheet.create({
     superset_text:{
         fontSize:9
     },
-    icon:{
-        width:14,
-        height:14,
+    info_icon:{
+        width:8,
+        height:8,
         resizeMode:"contain"
     },
     course_name:{
@@ -135,7 +135,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:10
     },
     sub_wrapper:{
-        gap:20,
+        gap:10,
         borderRadius:30
     },
     bg_wrapper:{
@@ -143,9 +143,9 @@ const MobileMStyles=StyleSheet.create({
         left:10,
         top:10,
     },
-    icon:{
-        width:16,
-        height:16,
+    info_icon:{
+        width:12,
+        height:12,
         resizeMode:"contain"
     },
     course_name:{
@@ -172,9 +172,9 @@ const MobileLStyles=StyleSheet.create({
         left:10,
         top:10,
     },
-    icon:{
-        width:16,
-        height:16,
+    info_icon:{
+        width:12,
+        height:12,
         resizeMode:"contain"
     },
     course_name:{
@@ -209,6 +209,7 @@ const Expertcard=(props:Advisor & {index:number})=>{
                     <View style={{borderRadius:100,backgroundColor:getThemeColor(props.index%4)}}>
                         <Text style={[GeneralStyles.superset_text,styles[Device].superset_text,{color:"rgba(0,0,0,0.3)",fontFamily:Fonts.NeutrifStudio.Regular,padding:5}]}>{Word2Sentence(camelCaseToString(props.info.role),"","",true)}</Text>
                     </View>
+                    {/* <View><Image style={[styles[Device].info_icon,{borderRadius:100}]} source={info_icon}/></View> */}
                     {/* <Pressable onPress={!isLoading?deleteItem:null}>
                         <Image style={{width:14,height:14,resizeMode:'contain'}} source={isLoading?loader:delete_icon}/>
                     </Pressable> */}
@@ -223,16 +224,10 @@ const Expertcard=(props:Advisor & {index:number})=>{
                     </View>
                     {/* <View style={{display:"flex",flexDirection:"row",alignItems:'center',transform:[{scaleX:-1}]}}><Image source={go_icon} style={[styles[Device].go_icon]}/></View> */}
                 </View>
-                {
-                    props.assignedCountries.length>0
-                    ?
-                    <View style={[GeneralStyles.footer_wrapper]}>
-                        <Text style={[styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Regular,color:"grey"}]}>Assigned for:</Text>
-                        <Text style={[GeneralStyles.footer,styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence(props.assignedCountries,"",",",true)}</Text>
-                    </View>
-                    :
-                    null
-                }
+                <View style={[GeneralStyles.footer_wrapper]}>
+                    <Text style={[styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Regular,color:"grey"}]}>Assigned for:</Text>
+                    <Text style={[GeneralStyles.footer,styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.assignedCountries.length>0?Word2Sentence(props.assignedCountries,"",",",true):"All Countries"}</Text>
+                </View>
             </View>
         </View>
     )

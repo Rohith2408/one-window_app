@@ -1,10 +1,10 @@
 import { useRef, useState } from "react"
-import { Pressable, ScrollView, StyleSheet, View } from "react-native"
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import Loadinglistscreen from "../resources/Loadinglistscreen"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { getDevice } from "../../utils"
 import Expertcard from "../cards/Expertcard"
-import { Themes } from "../../constants"
+import { Fonts, Themes } from "../../constants"
 import { Advisor } from "../../types"
 import useNavigation from "../../hooks/useNavigation"
 import { store } from "../../store"
@@ -29,6 +29,9 @@ const TabStyles=StyleSheet.create({
         width:"100%",
         height:210,
         borderRadius:25
+    },
+    briefing:{
+        fontSize:16
     }
 })
 
@@ -37,14 +40,20 @@ const MobileSStyles=StyleSheet.create({
         width:"100%",
         height:150,
         borderRadius:25
+    },
+    briefing:{
+        fontSize:12
     }
 })
 
 const MobileMStyles=StyleSheet.create({
     card_wrapper:{
         width:"100%",
-        height:175,
+        height:150,
         borderRadius:25
+    },
+    briefing:{
+        fontSize:14
     }
 })
 
@@ -53,6 +62,9 @@ const MobileLStyles=StyleSheet.create({
         width:"100%",
         height:190,
         borderRadius:25
+    },
+    briefing:{
+        fontSize:14
     }
 })
 
@@ -74,6 +86,10 @@ const Experts=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Expert",params:{expertid:expert.info._id}}}):null
     }
 
+    const showExperts=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Expertintro"}}):null
+    }
+
     return(
         <View style={{flex:1,padding:5}}>
         {
@@ -81,8 +97,11 @@ const Experts=()=>{
             ?
             <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
             :
-            <View style={{flex:1}}>
-                <ScrollView style={{flex:1}} contentContainerStyle={{gap:40,paddingBottom:20}}>
+            <View style={{flex:1,gap:10}}>
+                <Pressable onPress={showExperts} style={[{alignSelf:'center',borderRadius:100,backgroundColor:Themes.Light.OnewindowLightBlue}]}>
+                    <Text style={[{padding:10},{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)},styles[Device].briefing]}>Confused? Click here for a brief introduction</Text>
+                </Pressable>
+                <ScrollView style={{flex:1}} contentContainerStyle={{gap:15,paddingBottom:20}}>
                 {
                     store.getState().preferences.data?.country?.map((country)=>
                     !alreadyAssigned(experts.data,country)

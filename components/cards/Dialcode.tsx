@@ -8,7 +8,7 @@ const Dialcode=(props:Countrycode)=>{
 
     return(
         <View style={{flex:1}}>
-            <Text style={[{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.dial_code+" - "+props.name}</Text>
+            <Text style={[{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{(props.dial_code+"     ").substring(0,4)+" - "+props.name}</Text>
         </View>
     )
 

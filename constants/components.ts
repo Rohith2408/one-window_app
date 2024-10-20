@@ -70,6 +70,7 @@ import Gettoken from "../components/flyers/Gettoken"
 import Warning from "../components/flyers/Warning"
 import Userdoesntexist from "../components/cards/Userdoesntexistcard"
 import Wishlist from "../components/partials/Wishlist"
+import Expertsintro from "../components/partials/Expertsintro"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -108,6 +109,7 @@ const components:ScreenInfo[]=[
     {id:"Testscores",component:Testscores,type:"Partial",title:"Test Scores",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Experts",component:Experts,type:"Partial",title:"Experts",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Expert",props:["expertid"],component:Expert,type:"Partial",occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Expertintro",component:Expertsintro,title:"Experts",type:"Partial",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Testoptions",component:Testoptions,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Mydetails",component:Mydetails,type:"Partial",title:"My Details",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Address",component:Address,type:"Partial",title:"Address",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
