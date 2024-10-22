@@ -30,7 +30,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     card:{
-        height:100,
+        height:140,
         width:"100%"
     },
     quickfilter_icon:{
@@ -42,6 +42,17 @@ const TabStyles=StyleSheet.create({
         fontSize:14
     },
     allfilters:{
+        fontSize:14
+    },
+    filter_icon:{
+        width:18,
+        height:18,
+        resizeMode:"contain"
+    },
+    not_found:{
+        fontSize:20
+    },
+    not_found_sub:{
         fontSize:14
     }
 })

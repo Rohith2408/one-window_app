@@ -31,7 +31,7 @@ const TabStyles=StyleSheet.create({
         borderRadius:25
     },
     briefing:{
-        fontSize:16
+        fontSize:18
     }
 })
 

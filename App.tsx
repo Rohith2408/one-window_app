@@ -77,8 +77,6 @@ export default function App() {
     }
   });
 
-  // Cleanup the subscription on unmount
-
   return () => {
     unsubscribe();
     Linking.removeAllListeners("url")
@@ -91,7 +89,7 @@ export default function App() {
   },[])
 
   const encodedData:{screens:string[],props:any}=encodePath(path)
-  console.log("screens data",path)
+  //console.log("screens data",path)
 
   return (
     <StoreProvider store={store}>

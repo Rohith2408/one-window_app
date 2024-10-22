@@ -64,49 +64,49 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     info_wrapper:{
-        height:110,
+        height:130,
         width:"100%",
         display:"flex",
     },
     name:{
-        fontSize:18
+        fontSize:22
     },
     email:{
-        fontSize:12
+        fontSize:16
     },
     dp:{
-        width:50,
-        height:50,
+        width:70,
+        height:70,
         resizeMode:"contain"
     },
     dp_bg:{
-        width:50,
-        height:50,
+        width:70,
+        height:70,
         top:-5,
         left:10
     },
     meeting_heading:{
-        fontSize:14
+        fontSize:18
     },
     card_wrapper:{
         height:100,
         width:"100%"
     },
     add_icon:{
-        width:20,
-        height:20,
+        width:24,
+        height:24,
         resizeMode:"contain"
     },
     no_meetings:{
         fontSize:18
     },
     click_message:{
-        fontSize:14,
+        fontSize:16,
         lineHeight:20
     },
     emptylist_image:{
-        width:120,
-        height:120,
+        width:170,
+        height:170,
         resizeMode:"contain"
     }
 })
@@ -305,7 +305,7 @@ const Expert=(props:{expertid:string})=>{
                         <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button above to schedule a meet with the expert</Text>
                     </View>
                     :
-                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:10}}>
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:10,paddingTop:15}}>
                     {
                         meetings.map((meeting,i)=>
                         <View key={meeting._id} style={[styles[Device].card_wrapper]}><Meetingcard data={meeting} index={i}/></View>

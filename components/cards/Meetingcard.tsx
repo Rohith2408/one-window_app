@@ -53,7 +53,39 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    icon:{
+        width:34,
+        height:34,
+        resizeMode:'contain'
+    },
+    title:{
+        fontSize:18
+    },
+    datetime:{
+        fontSize:14
+    },
+    attendees:{
+        fontSize:14,
+        lineHeight:16
+    },
+    edit:{
+        width:20,
+        height:20,
+        resizeMode:'contain'
+    },
+    delete:{
+        width:20,
+        height:20,
+        resizeMode:'contain'
+    },
+    clock:{
+        width:14,
+        height:14,
+        resizeMode:"contain"
+    },
+    status:{
+        fontSize:12
+    }
 })
 
 const MobileSStyles=StyleSheet.create({

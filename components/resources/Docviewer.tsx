@@ -53,17 +53,17 @@ const GeneralStyles=StyleSheet.create({
 const TabStyles=StyleSheet.create({
     name:{
         lineHeight:20,
-        fontSize:13
+        fontSize:16
     },
     category:{
-        fontSize:12
+        fontSize:16
     },
     intake:{
         fontSize:11
     },
     icon:{
-        width:16,
-        height:16,
+        width:20,
+        height:20,
         resizeMode:"contain",
         borderRadius:100
     },
@@ -73,8 +73,8 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain",
     },
     upload_icon:{
-        width:16,
-        height:16,
+        width:20,
+        height:20,
         resizeMode:"contain"
     }
 })
@@ -247,8 +247,8 @@ const Docviewer=(props:{value:Document|undefined,title:string,id:string,eventHan
                 {
                 props.value==undefined
                 ?
-                <View style={{flex:1,flexDirection:'row'}}>
-                    <View style={{flex:1}}><Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text></View>
+                <View style={{flex:1,flexDirection:'row',alignItems:'center'}}>
+                    <View style={{flex:1}}><Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text></View>
                     <Pressable onPress={!isLoading?upload:null}>
                         <Image style={[styles[Device].upload_icon]} source={isLoading?loader:upload_icon}/>
                     </Pressable>

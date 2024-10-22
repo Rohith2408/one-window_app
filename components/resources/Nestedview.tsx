@@ -23,7 +23,7 @@ const TabStyles=StyleSheet.create({
         height:10
     },
     title:{
-        fontSize:14
+        fontSize:16
     }
 })
 
@@ -80,7 +80,7 @@ const Nestedview=(props:{title:string,maxHeight:number,children:React.ReactNode}
 
     return(
         <View style={[GeneralStyles.wrapper]}>
-            <Pressable style={{flexDirection:"row"}} onPress={()=>setIsFocussed(!isFocussed)}>
+            <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} style={{flexDirection:"row"}} onPress={()=>setIsFocussed(!isFocussed)}>
                 <View style={{flex:1}}><Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.title}</Text></View>
                 <Animated.Image source={arrow_icon} style={[styles[Device].arrow,{transform:[{rotate:height.interpolate({inputRange:[0,1],outputRange:["90deg","-90deg"]})}]}]}></Animated.Image>
             </Pressable>

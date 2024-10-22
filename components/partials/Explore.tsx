@@ -20,20 +20,35 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    search:{
+        fontSize:18
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
-
+    search:{
+        fontSize:14
+    }
 })
 
 const MobileMStyles=StyleSheet.create({
-
+    search:{
+        fontSize:16
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
-
+    search:{
+        fontSize:16
+    }
 })
+
+const styles={
+    Tab:TabStyles,
+    MobileS:MobileSStyles,
+    MobileM:MobileMStyles,
+    MobileL:MobileLStyles
+}
 
 const ITEM_WIDTH = Dimensions.get("screen").width * 0.9;  
 const ITEM_MARGIN = 10;   
@@ -73,7 +88,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
     const tabs=useRef([{label:"Programs",value:"programs"},{label:"Universities",value:"universities"}]).current
     const [path,navigate]=useNavigation()
     const timer=useRef<any>()
-    const Device=useRef<keyof typeof styles>(getDevice()).current
+    const Device=useRef(getDevice()).current
 
     const tabSelected=(selected:ListItem[])=>{
         //console.log("selected scsc",ref.current.scrollTo,dimensions.width,tabs.findIndex((tab)=>tab.label==selected[0].label));
@@ -185,7 +200,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
 
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:15}}>
-            <Pressable style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100}} onPress={openSearch}><Text style={{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}}>{props.programslistquery.search?props.programslistquery.search:"Search..."}</Text></Pressable>
+            <Pressable style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100}} onPress={openSearch}><Text style={[styles[Device].search,{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}]}>{props.programslistquery.search?props.programslistquery.search:"Search..."}</Text></Pressable>
             <Listselection
                 direction="horizontal"
                 selectionStyle="background"
@@ -215,18 +230,5 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        gap:20
-      //paddingHorizontal: ITEM_MARGIN, 
-    },
-    item: {
-      width: ITEM_WIDTH,
-      //marginHorizontal: ITEM_MARGIN,
-      borderRadius: 10,
-      overflow: 'hidden',
-    },
-});
 
 export default Explore

@@ -52,11 +52,11 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     icon:{
-        width:30,
-        height:30
+        width:50,
+        height:50
     },
     text:{
-        fontSize:12
+        fontSize:18
     },
     highlighter:{
         // width:"90%",
@@ -93,11 +93,11 @@ const MobileMStyles=StyleSheet.create({
 })
 const MobileLStyles=StyleSheet.create({
     icon:{
-        width:30,
-        height:30
+        width:36,
+        height:36
     },
     text:{
-        fontSize:12
+        fontSize:14
     },
     highlighter:{
         // width:60,

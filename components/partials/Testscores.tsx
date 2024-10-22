@@ -94,23 +94,23 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     add_icon:{
-        width:34,
-        height:34,
+        width:36,
+        height:36,
         resizeMode:"contain"
     },
     edit_icon:{
-        width:15,
-        height:15,
+        width:17,
+        height:17,
         resizeMode:"contain"
     },
     delete_icon:{
-        width:15,
-        height:15,
+        width:17,
+        height:17,
         resizeMode:"contain"
     },
     test_icon:{
-        width:18,
-        height:18,
+        width:22,
+        height:22,
         resizeMode:"contain",
         position:"relative"
     },
@@ -124,32 +124,33 @@ const TabStyles=StyleSheet.create({
         top:4
     },
     test_name:{
-        fontSize:14
+        fontSize:16
     },
     section_name:{
-        fontSize:12
+        fontSize:14
     },
     score:{
-        fontSize:12
+        fontSize:14
     },
     total_heading:{
-        fontSize:12
+        fontSize:14
     },
     total:{
-        fontSize:12
+        fontSize:14
     },
     test_date:{
-        fontSize:11
+        fontSize:12
     },
     no_workexperience:{
         fontSize:18
     },
     click_message:{
-        fontSize:14
+        fontSize:14,
+        lineHeight:20
     },
     emptylist_image:{
-        width:120,
-        height:120,
+        width:150,
+        height:150,
         resizeMode:"contain"
     },
     add_text:{

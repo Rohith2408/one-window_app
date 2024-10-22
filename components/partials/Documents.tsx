@@ -30,7 +30,6 @@ const GeneralStyles=StyleSheet.create({
     document_wrapper:{
         flexDirection:'row',
         alignItems:"flex-start",
-        //padding:10
     }
 })
 
@@ -39,10 +38,10 @@ const TabStyles=StyleSheet.create({
         height:100
     },
     document_title:{
-        fontSize:14
+        fontSize:16
     },
     document_info:{
-        fontSize:10,
+        fontSize:12,
         maxWidth:"70%",
         lineHeight:18
     },

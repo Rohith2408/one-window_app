@@ -26,12 +26,6 @@ const GeneralStyles=StyleSheet.create({
     card_wrapper:{
 
     },
-    icon_wrapper:{
-        display:'flex',
-        flexDirection:"row",
-        alignItems:"flex-start",
-        justifyContent:'center'
-    },
     info_wrapper:{
         flex:1,
         display:'flex',
@@ -269,9 +263,9 @@ const Addresscard=(props:{data:Address|undefined,type:"permanent"|"temporary"})=
             props.data==undefined || Object.keys(props.data).length==0
             ?
             <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
-                <View style={[GeneralStyles.icon_wrapper]}><Image source={location_icon} style={[styles[Device].card_icon]} /></View>
+                <View><Image source={location_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={{flex:1}}><Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.type=="permanent"?"Permanent Address":"Temporary Address"}</Text></View>
-                <Pressable onPress={openForm} style={{flex:1}}><Image source={add_icon} style={[styles[Device].edit_icon]} /></Pressable>
+                <Pressable onPress={openForm}><Image source={add_icon} style={[styles[Device].edit_icon]} /></Pressable>
             </View>
             :
             <View style={{flexDirection:'row',gap:10}}>
@@ -281,7 +275,7 @@ const Addresscard=(props:{data:Address|undefined,type:"permanent"|"temporary"})=
                         <View style={{width:5,height:5,borderRadius:100,backgroundColor:"lightgreen"}}></View>
                         <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.type=="permanent"?"Permanent Address":"Temporary Address"}</Text>
                     </Animated.View>
-                    <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.data.addressLine1+","+(props.data.addressLine2?props.data.addressLine2:"")+(props.data.addressLine3?props.data.addressLine3:"")}</Text>
+                    <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.data.addressLine1+", "+(props.data.addressLine2?props.data.addressLine2:"")+", "+(props.data.addressLine3?props.data.addressLine3:"")}</Text>
                     <View style={{flexDirection:"row",gap:5}}>
                         <Image style={[styles[Device].location_icon]} source={edit_icon}/>
                         <Text style={[styles[Device].text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.city,props.data.state,props.data.country],"",",")+"-"+props.data.pinCode}</Text>

@@ -90,40 +90,53 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
+    main_wrapper:{
+        paddingBottom:10
+    },
     sub_wrapper:{
-        gap:20
+        gap:30,
+        borderRadius:30
+    },
+    bg_wrapper:{
+        borderRadius:30,
+        left:6,
+        top:6,
     },
     category_text:{
-        fontSize:11
+        fontSize:14
     },
     product_name:{
-        fontSize:12
+        fontSize:16,
+        lineHeight:24
     },
     uni_name:{
-        fontSize:9,
-        lineHeight:13
+        fontSize:14,
     },
     intake:{
-        fontSize:9
+        fontSize:14
     },
     status_text:{
-        fontSize:8
+        fontSize:12
     },
     uni_icon:{
-        width:14,
-        height:14,
+        width:13,
+        height:13,
         objectFit:"contain",
         alignSelf:"flex-start"
     },
     intake_icon:{
-        width:14,
-        height:14,
+        width:13,
+        height:13,
         objectFit:"contain"
     },
     status_icon:{
         width:10,
         height:10,
         objectFit:"contain"
+    },
+    seperator:{
+        width:2,
+        height:13
     }
 })
 
@@ -144,7 +157,8 @@ const MobileSStyles=StyleSheet.create({
         fontSize:11
     },
     product_name:{
-        fontSize:12
+        fontSize:12,
+        lineHeight:18
     },
     uni_name:{
         fontSize:9,
@@ -195,7 +209,8 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     product_name:{
-        fontSize:14
+        fontSize:14,
+        lineHeight:20
     },
     uni_name:{
         fontSize:12,
@@ -246,7 +261,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     product_name:{
-        fontSize:14
+        fontSize:14,
+        lineHeight:22
     },
     uni_name:{
         fontSize:12,
@@ -328,7 +344,7 @@ const Productcard=(props:PurchasedProduct & {index:number})=>{
                 <View style={[GeneralStyles.status_wrapper]}>
                     <View style={[GeneralStyles.status]}>
                         <Image source={processing_icon} style={[styles[Device].status_icon]} />
-                        <Text style={[styles[Device].status_text,{color:"white",fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.stage}</Text>
+                        <Text style={[styles[Device].status_text,{textAlign:"right",color:"grey",fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.stage}</Text>
                     </View>
                 </View>
             </View>

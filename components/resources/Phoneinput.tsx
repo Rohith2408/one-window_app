@@ -28,7 +28,17 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    text:{
+        fontSize:16
+    },
+    verified_icon:{
+        width:14,
+        height:14,
+        resizeMode:'contain'
+    },
+    verify:{
+        fontSize:14
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -60,7 +70,17 @@ const MobileMStyles=StyleSheet.create({
 })
 
 const MobileLStyles=StyleSheet.create({
-    
+    text:{
+        fontSize:16
+    },
+    verified_icon:{
+        width:18,
+        height:18,
+        resizeMode:'contain'
+    },
+    verify:{
+        fontSize:12
+    }
 })
 
 const styles={
@@ -93,7 +113,7 @@ const Phoneinput=(props:{codes:DropdownType,eventHandler:(event:Event)=>void,id:
             <View style={[GeneralStyles.sub_wrapper]}>
                 <View style={{flex:2}}><Dropdown eventHandler={codeSelected} {...props.codes} value={props.value.countryCode} id={props.id}/></View>
                 <View style={[{flex:5,padding:10,flexDirection:"row"},!props.value.verified?{borderWidth:1,borderRadius:5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}:{}]}>
-                    <TextInput style={{flex:1,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}} onChangeText={(txt)=>phoneInput(txt)} value={props.value.phoneNumber}/>
+                    <TextInput style={[styles[Device].text,{flex:1,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]} onChangeText={(txt)=>phoneInput(txt)} value={props.value.phoneNumber}/>
                 </View>
             </View>
         </View>

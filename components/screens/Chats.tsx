@@ -31,7 +31,7 @@ const GeneralStyles=StyleSheet.create({
 const TabStyles=StyleSheet.create({
     card:{
         width:"100%",
-        height:200,
+        height:250,
         borderRadius:30
     },
     loader:{
@@ -40,16 +40,19 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     no_workexperience:{
-        fontSize:18
+        fontSize:20
     },
     click_message:{
-        fontSize:14
+        fontSize:16
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:180,
+        height:180,
         resizeMode:"contain"
     },
+    search:{
+        fontSize:18
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -75,6 +78,9 @@ const MobileSStyles=StyleSheet.create({
         height:100,
         resizeMode:"contain"
     },
+    search:{
+        fontSize:14
+    }
 })
 
 const MobileMStyles=StyleSheet.create({
@@ -100,6 +106,9 @@ const MobileMStyles=StyleSheet.create({
         height:100,
         resizeMode:"contain"
     },
+    search:{
+        fontSize:16
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
@@ -125,6 +134,9 @@ const MobileLStyles=StyleSheet.create({
         width:120,
         height:120,
         resizeMode:"contain"
+    },
+    search:{
+        fontSize:16
     }
 })
 
@@ -174,7 +186,7 @@ const Chats=()=>{
                 <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
                 :
                 <View style={{flex:1,gap:25}}>
-                    <Pressable style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100}} onPress={openSearch}><Text style={{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}}>{"Search..."}</Text></Pressable>
+                    <Pressable style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100}} onPress={openSearch}><Text style={[styles[Device].search,{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}]}>{"Search..."}</Text></Pressable>
                     <Listselection
                         direction="horizontal"
                         selectionStyle="background"

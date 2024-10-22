@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { getDevice } from "../../utils"
 import { addToBasket } from "../../constants/basket"
+import { Fonts, Themes } from "../../constants"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -15,7 +16,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:16
+        fontSize:18
     }
 })
 
@@ -54,7 +55,7 @@ const Textitem=(props:{eventHandler:(event:Event)=>void,value:{label:string,valu
 
     return(
         <View style={[GeneralStyles.wrapper]}>
-            <Text>{props.value?.label}</Text>
+            <Text style={[styles[Device].text,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.value?.label}</Text>
         </View>
     )
 }

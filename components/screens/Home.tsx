@@ -16,6 +16,7 @@ import Product from "../cards/Productcard"
 import Loadinglistscreen from "../resources/Loadinglistscreen"
 import { store } from "../../store"
 import emptylist from '../../assets/images/illustrations/thinking.png'
+import Dynamicplaceholder from "../resources/Dynamicplaceholder"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -68,37 +69,55 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
+    
+    prop:{
+        top:10,
+        left:-10,
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
     sub_wrapper:{
-        maxWidth:500
+        // maxWidth:500,
+        gap:40
     },
     welcome_message:{
-        fontSize:20
+        fontSize:30,
+        fontWeight:"700"
     },
     search_text:{
-        fontSize:12
+        fontSize:18
     },
     explore_icon:{
-        width:60,
-        height:60
+        width:40,
+        height:40
     },
     explore_text:{
-        fontSize:12
+        fontSize:16
     },
     products_wrapper:{
-        height:200
+        gap:10
     },
     products_title:{
-        fontSize:16
+        fontSize:22
+    },
+    card:{
+        width:285,
+        height:235
+    },
+    loader_card:{
+        width:285,
+        height:235
     },
     no_products_title:{
-        fontSize:16
+        fontSize:18
     },
     no_products:{
-        fontSize:15
+        fontSize:16
     },
     no_products_image:{
-        width:100,
-        height:100,
+        width:130,
+        height:130,
         resizeMode:"contain"
     }
 })
@@ -112,7 +131,7 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     sub_wrapper:{
-        maxWidth:500,
+        // maxWidth:500,
         gap:30
     },
     welcome_message:{
@@ -166,7 +185,7 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     sub_wrapper:{
-        maxWidth:500,
+        // maxWidth:500,
         gap:40
     },
     welcome_message:{
@@ -220,7 +239,7 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     sub_wrapper:{
-        maxWidth:500,
+        // maxWidth:500,
         gap:40
     },
     welcome_message:{
@@ -306,7 +325,8 @@ const Home=(props:undefined|{name:string})=>{
                     </View> */}
                 </View>
                 <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
-                    <Text style={[GeneralStyles.search_text,styles[Device].search_text,{fontFamily:Fonts.NeutrifStudio.Regular}]}>Search for "Harvard University"</Text>
+                    <Dynamicplaceholder/>
+                    {/* <Text style={[GeneralStyles.search_text,styles[Device].search_text,{fontFamily:Fonts.NeutrifStudio.Regular}]}>Search for "Harvard University"</Text> */}
                 </Pressable>
                 <View style={[GeneralStyles.explore_wrapper]}>
                 {

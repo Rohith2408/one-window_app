@@ -21,6 +21,7 @@ const GeneralStyles=StyleSheet.create({
         width:"100%",
         height:"100%",
         zIndex:-1,
+        transform:[{rotate:"0.75deg"}]
     },
     sub_wrapper:{
         display:"flex",
@@ -56,10 +57,10 @@ const GeneralStyles=StyleSheet.create({
 const TabStyles=StyleSheet.create({
     sub_wrapper:{
         gap:25,
-        borderRadius:30
+        borderRadius:40
     },
     bg_wrapper:{
-        borderRadius:30,
+        borderRadius:40,
         left:15,
         top:15,
     },

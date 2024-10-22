@@ -10,7 +10,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     wrapper:{
-        width:700
+        width:"100%"
     }
 })
 

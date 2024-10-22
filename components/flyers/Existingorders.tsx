@@ -90,9 +90,7 @@ const Existingorders=()=>{
     const [loading,setloading]=useState(false);
     const orderinfo:{package:Package|undefined,products:Product[]}=getBasket("orderinfo");
 
-
     const onselect=(order:Order[])=>{
-        //console.log("sel",order);
         setSelected(order[0])
     }
 
@@ -111,8 +109,6 @@ const Existingorders=()=>{
         navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
         navigate?navigate({type:"AddScreen",payload:{screen:"Order",params:{orderinfoid:"orderinfo"}}}):null
     }
-
-    console.log("info",orderinfo.products[0].course);
 
     return(
         <View style={[GeneralStyles.wrapper,{gap:20}]}>

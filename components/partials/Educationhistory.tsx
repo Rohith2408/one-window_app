@@ -70,48 +70,48 @@ const GeneralStyles=StyleSheet.create({
 const TabStyles=StyleSheet.create({
     card_wrapper:{
         width:"100%",
-        height:75
+        height:100
     },
     info_wrapper:{
         gap:10
     },
     card_icon:{
-        width:25,
-        height:25,
+        width:30,
+        height:30,
         resizeMode:'contain'
     },
     edit_icon:{
-        width:15,
-        height:15,
+        width:18,
+        height:18,
         resizeMode:'contain'
     },
     delete_icon:{
-        width:15,
-        height:15,
+        width:18,
+        height:18,
         resizeMode:'contain'
     },
     location_icon:{
-        width:10,
-        height:10,
+        width:12,
+        height:12,
         resizeMode:'contain'
     },
     info_icon:{
-        width:10,
-        height:10,
+        width:12,
+        height:12,
         resizeMode:'contain'
     },
     text1:{
-        fontSize:14,
-        lineHeight:24
+        fontSize:16,
+        lineHeight:20
     },
     text2:{
-        fontSize:12
+        fontSize:14
     },
     text3:{
-        fontSize:12
+        fontSize:14
     },
     title:{
-        fontSize:10
+        fontSize:11
     },
     nodetails_icon:{
         width:15,

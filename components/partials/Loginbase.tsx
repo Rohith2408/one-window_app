@@ -92,7 +92,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     header_wrapper:{
-        height:125,
+        height:160,
         width:"100%",
         display:"flex",
     },
@@ -116,27 +116,27 @@ const TabStyles=StyleSheet.create({
         fontSize:14
     },
     logo:{
-        width: 175,
+        width:300,
         resizeMode: "contain"
     },
     airplane:{
-        width:40,
-        height:40,
+        width:60,
+        height:60,
         top:-25,
-        left:-80,
+        left:-120,
         resizeMode:"contain"
     },
     passport:{
-        width:26,
-        height:26,
+        width:46,
+        height:46,
         top:35,
-        left:210,
+        left:400,
         resizeMode:"contain"
     },
     girl_peek:{
-        width:80,
-        height:80,
-        top:-62,
+        width:120,
+        height:120,
+        top:-93,
         left:"60%",
         zIndex:-1,
         resizeMode:"contain"

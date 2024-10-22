@@ -30,11 +30,14 @@ const TabStyles=StyleSheet.create({
         fontSize:20
     },
     book:{
-        fontSize:12
+        fontSize:18
+    },
+    datetime:{
+        fontSize:18
     },
     loading:{
-        width:17,
-        height:17,
+        width:20,
+        height:20,
         resizeMode:'contain'
     }
 })
@@ -48,6 +51,9 @@ const MobileSStyles=StyleSheet.create({
     },
     book:{
         fontSize:12
+    },
+    datetime:{
+        fontSize:14
     },
     loading:{
         width:17,
@@ -65,6 +71,9 @@ const MobileMStyles=StyleSheet.create({
     book:{
         fontSize:12
     },
+    datetime:{
+        fontSize:16
+    },
     loading:{
         width:17,
         height:17,
@@ -77,6 +86,9 @@ const MobileLStyles=StyleSheet.create({
     },
     time:{
         fontSize:20
+    },
+    datetime:{
+        fontSize:16
     },
     book:{
         fontSize:12
@@ -115,8 +127,8 @@ const Datetimepro=(props:{datesFetcher:any,value:string,id:string})=>{
 
     return(
         <View style={{flex:1}}>
-            <Pressable style={{alignSelf:"center",display:'flex',flexDirection:"row"}} onPress={!isLoading?openSelector:null}>
-                <View style={{flexDirection:'row',justifyContent:"center"}}><Text style={[{padding:5,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Word2Sentence([formatDate(props.value),formatTime(props.value)],"","|")}</Text></View>
+            <Pressable style={{alignSelf:"center",display:'flex',flexDirection:"row",alignItems:"center"}} onPress={!isLoading?openSelector:null}>
+                <View style={[{flexDirection:'row',justifyContent:"center"}]}><Text style={[styles[Device].datetime,{padding:5,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Word2Sentence([formatDate(props.value),formatTime(props.value)],"","|")}</Text></View>
                 {
                     !isLoading
                     ?

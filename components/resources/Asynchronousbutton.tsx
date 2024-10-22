@@ -26,11 +26,11 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:16
+        fontSize:18
     },
     loader:{
-        width:17,
-        height:17,
+        width:20,
+        height:20,
         resizeMode:"contain"
     },
     wrapper:{

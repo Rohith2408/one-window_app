@@ -91,30 +91,30 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     name:{
-        fontSize:26,
+        fontSize:28,
     },
     email:{
-        fontSize:14
+        fontSize:16
     },
     dp:{
-        width:75,
-        height:75,
+        width:85,
+        height:85,
         objectFit:"contain"
     },
     dpBg:{
         width:75,
         height:75,
         objectFit:"contain",
-        bottom:10,
-        right:0
+        bottom:5,
+        right:35
     },
     option_icon:{
-        width:40,
-        height:40,
+        width:50,
+        height:50,
         objectFit:'contain'
     },
     options_text:{
-        fontSize:14
+        fontSize:16
     },
     user_wrapper:{
         flex:1
@@ -123,29 +123,27 @@ const TabStyles=StyleSheet.create({
         flex:6,
     },
     logout:{
-        fontSize:14,
-        paddingTop:12,
-        paddingBottom:12,
-        paddingLeft:17,
-        paddingRight:17,
-        fontWeight:"500"
+        fontSize:18,
+        paddingTop:10,
+        paddingBottom:10,
+        paddingLeft:15,
+        paddingRight:15,
     },
     delete_account:{
-        fontSize:12,
-        paddingTop:12,
-        paddingBottom:12
+        fontSize:14,
+        paddingTop:10
     },
     loadingview_name:{
-        width:150,
-        height:30
+        width:175,
+        height:26
     },
     loadingview_email:{
-        width:100,
-        height:20
+        width:120,
+        height:22
     },
     loadingview_dp:{
-        width:65,
-        height:65,
+        width:85,
+        height:85,
         borderRadius:100
     }
 })

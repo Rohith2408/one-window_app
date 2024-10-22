@@ -60,23 +60,23 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     icon:{
-        width:26,
-        height:26,
+        width:30,
+        height:30,
         resizeMode:'contain'
     },
     title:{
-        fontSize:14
+        fontSize:18
     },
     datetime:{
-        fontSize:12
+        fontSize:14
     },
     attendees:{
         fontSize:12,
         lineHeight:16
     },
     edit:{
-        width:14,
-        height:14,
+        width:10,
+        height:10,
         resizeMode:'contain'
     },
     delete:{
@@ -90,8 +90,8 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     indicators:{
-        width:12,
-        height:12,
+        width:10,
+        height:10,
         resizeMode:"contain"
     },
     status:{

@@ -120,16 +120,29 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     no_meetings:{
-        fontSize:18
+        fontSize:16
     },
     click_message:{
-        fontSize:14,
-        lineHeight:20
+        fontSize:12
     },
     emptylist_image:{
-        width:120,
-        height:120,
+        width:110,
+        height:110,
         resizeMode:"contain"
+    },
+    loadingview_name:{
+        width:150,
+        height:30
+    },
+    add:{
+        width:20,
+        height:20,
+        objectFit:"contain"
+    },
+    send:{
+        width:20,
+        height:20,
+        objectFit:"contain"
     },
     activity_indicator:{
         width:30,

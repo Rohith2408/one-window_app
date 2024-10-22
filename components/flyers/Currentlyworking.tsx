@@ -12,7 +12,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     title:{
-        fontSize:16
+        fontSize:18
     },
     check_circle:{
         width:17,
@@ -111,7 +111,7 @@ const Currentlyworking=(props:{currentlyWorkingBasketid:string})=>{
     return(
         <View style={{paddingTop:20,gap:15}}>
             <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Please let us know your current employment status at this company?</Text>
-            <View style={{gap:15}}>
+            <View style={{gap:20}}>
                 <View>
                     <Pressable onPress={()=>setIsCompleted(false)} style={{flexDirection:'row',alignItems:'center',gap:5}}>
                         <View style={[styles[Device].check_circle,{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}]}>

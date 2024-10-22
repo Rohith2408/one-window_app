@@ -4833,7 +4833,7 @@ const forms:FormInfo[]=[
             let data:Advisor|undefined=id?store.getState().advisors.data.find((item)=>item.info._id==id):undefined
             return [
                 {id:"expert",value:{
-                        label:Word2Sentence([data.info.firstName,data.info.lastName],""," "),
+                        label:Word2Sentence([data.info.firstName,data.info.lastName],"",""),
                         value:data.info._id
                 }},
                 {id:"description",value:""},
@@ -4975,7 +4975,7 @@ const forms:FormInfo[]=[
             let data:Meeting|undefined=id?store.getState().meeting.data.find((item)=>item._id==id):undefined
             return [
                 {id:"expert",value:{
-                    label:Word2Sentence([data?.member.firstName,data?.member.lastName],""," "),
+                    label:Word2Sentence([data?.member.firstName,data?.member.lastName],"",""),
                     value:data?.member._id
                 }},
                 {id:"description",value:data?data.description:""},

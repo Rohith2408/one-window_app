@@ -35,15 +35,15 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     main_wrapper:{
-        gap:7
+        gap:10
     },
     option_icon:{
-        width:16,
-        height:16,
+        width:30,
+        height:30,
         objectFit:'contain'
     },
     options_text:{
-        fontSize:14
+        fontSize:18
     },
     options_wrapper:{
         flex:5,

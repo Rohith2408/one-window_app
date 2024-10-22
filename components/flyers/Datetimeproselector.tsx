@@ -13,6 +13,7 @@ const GeneralStyles=StyleSheet.create({
         flex:1,
         display:'flex',
         flexDirection:"column",
+        paddingTop:10
     },
     date_wrapper:{
 
@@ -23,7 +24,20 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    date:{
+        fontSize:24
+    },
+    time:{
+        fontSize:24
+    },
+    book:{
+        fontSize:18
+    },
+    loading:{
+        width:17,
+        height:17,
+        resizeMode:'contain'
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -43,10 +57,36 @@ const MobileSStyles=StyleSheet.create({
     }
 })
 const MobileMStyles=StyleSheet.create({
-    
+    date:{
+        fontSize:24
+    },
+    time:{
+        fontSize:20
+    },
+    book:{
+        fontSize:12
+    },
+    loading:{
+        width:17,
+        height:17,
+        resizeMode:'contain'
+    }
 })
 const MobileLStyles=StyleSheet.create({
-    
+    date:{
+        fontSize:24
+    },
+    time:{
+        fontSize:20
+    },
+    book:{
+        fontSize:12
+    },
+    loading:{
+        width:17,
+        height:17,
+        resizeMode:'contain'
+    }
 })
 
 const styles={
@@ -85,7 +125,7 @@ const Datetimeproselector=(props:{id:string})=>{
             {
                 dimensions
                 ?
-                <View style={{flex:1,gap:20}}>
+                <View style={{flex:1,gap:30}}>
                     <View style={[GeneralStyles.date_wrapper]}>
                         <Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}}>Date</Text>
                         <ScrollView 

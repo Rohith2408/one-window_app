@@ -34,8 +34,8 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     add_icon:{
-        width:40,
-        height:40,
+        width:38,
+        height:38,
         resizeMode:"contain"
     },
     no_workexperience:{
@@ -45,8 +45,8 @@ const TabStyles=StyleSheet.create({
         fontSize:14
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:150,
+        height:150,
         resizeMode:"contain"
     },
     card:{

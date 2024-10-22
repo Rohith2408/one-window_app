@@ -49,6 +49,9 @@ const TabStyles=StyleSheet.create({
     },
     item_text:{
         fontSize:16
+    },
+    search:{
+        fontSize:18
     }
 })
 
@@ -57,7 +60,10 @@ const MobileSStyles=StyleSheet.create({
         fontSize:14
     },
     item_text:{
-        fontSize:16
+        fontSize:14
+    },
+    search:{
+        fontSize:14
     }
 })
 
@@ -67,6 +73,9 @@ const MobileMStyles=StyleSheet.create({
     },
     item_text:{
         fontSize:16
+    },
+    search:{
+        fontSize:16
     }
 })
 
@@ -75,6 +84,9 @@ const MobileLStyles=StyleSheet.create({
         fontSize:16
     },
     item_text:{
+        fontSize:16
+    },
+    search:{
         fontSize:16
     }
 })
@@ -192,7 +204,7 @@ const Dropdownoptions=(props:{basketid:string})=>{
                     {
                         info.options.searchEvaluator
                         ?
-                        <TextInput placeholder="Search..." style={[GeneralStyles.search,{borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)}]} value={search} onChangeText={(text)=>setSearch(text)}></TextInput>
+                        <TextInput placeholder="Search..." style={[GeneralStyles.search,styles[Device].search,{borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)}]} value={search} onChangeText={(text)=>setSearch(text)}></TextInput>
                         :
                         null
                     }

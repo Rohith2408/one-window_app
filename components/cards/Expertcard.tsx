@@ -66,14 +66,15 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     superset_text:{
-        fontSize:12
+        fontSize:14
     },
     sub_wrapper:{
         gap:25,
-        borderRadius:30
+        borderRadius:40,
+        padding:15
     },
     bg_wrapper:{
-        borderRadius:30,
+        borderRadius:40,
         left:10,
         top:10,
     },
@@ -83,13 +84,13 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     course_name:{
-        fontSize:16
+        fontSize:18
     },
     uni_name:{
-        fontSize:14
+        fontSize:16
     },
     footer:{
-        fontSize:14
+        fontSize:16
     }
 })
 

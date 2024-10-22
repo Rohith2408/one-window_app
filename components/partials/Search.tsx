@@ -6,12 +6,13 @@ import { Fonts, Themes, disciplines, subDisciplines, topUniversities } from "../
 import { Image } from "expo-image"
 import go_icon from '../../assets/images/misc/back.png'
 import discipline_icon from '../../assets/images/misc/discipline.png'
-import sample_illustration from '../../assets/images/misc/sample_iIlustration.png'
+import sample_illustration from '../../assets/images/illustrations/sad_male.png'
 import useNavigation from "../../hooks/useNavigation"
 import { getBasket } from "../../constants/basket"
 import Loader from "../resources/Loader"
 import Listselection from "../resources/Listselection"
 import Universitysearchcard from "../cards/Universitysearchcard"
+import Dynamicsearch from "../resources/Dynamicsearch"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -45,11 +46,70 @@ const GeneralStyles=StyleSheet.create({
         alignItems:'center',
         gap:5,
         padding:3
-    },
+    }
 })
 
 const TabStyles=StyleSheet.create({
-    
+    uni_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain",
+        borderRadius:100
+    },
+    uni_icon_bg:{
+        width:20,
+        height:20,
+        borderRadius:100,
+        left:3,
+        top:10
+    },
+    uni_text1:{
+        fontSize:14
+    },
+    uni_text2:{
+        fontSize:12
+    },
+    location_icon:{
+        width:12,
+        height:12,
+        resizeMode:"contain"
+    },
+    go_icon:{
+        width:7,
+        height:7,
+        resizeMode:"contain"
+    },
+    discipline_icon:{
+        width:26,
+        height:26,
+        resizeMode:"contain"
+    },
+    discipline:{
+        fontSize:16
+    },
+    subdiscipline:{
+        fontSize:16
+    },
+    loader:{
+        width:22,
+        height:22,
+        objectFit:"contain"
+    },
+    not_found:{
+        fontSize:18
+    },
+    not_found_sub:{
+        fontSize:14 
+    },
+    illustration:{
+        width:210,
+        height:210,
+        // aspectRatio:2,
+        resizeMode:"contain"
+    },
+    search:{
+        fontSize:18
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -108,6 +168,9 @@ const MobileSStyles=StyleSheet.create({
         width:200,
         aspectRatio:2,
         resizeMode:"contain"
+    },
+    search:{
+        fontSize:14
     }
 })
 const MobileMStyles=StyleSheet.create({
@@ -164,10 +227,69 @@ const MobileMStyles=StyleSheet.create({
         width:250,
         aspectRatio:2,
         resizeMode:"contain"
+    },
+    search:{
+        fontSize:16
     }
 })
 const MobileLStyles=StyleSheet.create({
-    
+    list_heading:{
+        fontSize:12
+    },
+    uni_icon:{
+        width:19,
+        height:19,
+        resizeMode:"contain",
+        borderRadius:100
+    },
+    uni_icon_bg:{
+        width:19,
+        height:19,
+        borderRadius:100,
+        left:3,
+        top:10
+    },
+    uni_text1:{
+        fontSize:14
+    },
+    uni_text2:{
+        fontSize:12
+    },
+    location_icon:{
+        width:10,
+        height:10,
+        resizeMode:"contain"
+    },
+    go_icon:{
+        width:9,
+        height:9,
+        resizeMode:"contain"
+    },
+    discipline_icon:{
+        width:18,
+        height:18,
+        resizeMode:"contain"
+    },
+    discipline:{
+        fontSize:14
+    },
+    subdiscipline:{
+        fontSize:14
+    },
+    not_found:{
+        fontSize:18
+    },
+    not_found_sub:{
+        fontSize:14
+    },
+    illustration:{
+        width:250,
+        aspectRatio:2,
+        resizeMode:"contain"
+    },
+    search:{
+        fontSize:16
+    }
 })
 
 const styles={
@@ -356,77 +478,6 @@ const Search=(props:{initialSearch:string})=>{
 
 }
 
-const Dynamicsearch=(props:{onSearch:any,initialSearch:string})=>{
-
-    const [mode,setMode]=useState<"display"|"input">(props.initialSearch?"input":"display")
-    const [search,setSearch]=useState(props.initialSearch?props.initialSearch:"")
-
-    useEffect(()=>{
-        props.onSearch(search)
-    },[search])
-    
-    return(
-        <View style={{padding:10}}>
-        {
-            mode=="display"
-            ?
-            <Pressable onPress={()=>setMode("input")} style={{flexDirection:"row",justifyContent:'center',alignItems:"center"}}>
-                <Dynamicplaceholder/>
-            </Pressable>
-            :
-            <TextInput autoFocus value={search} onChangeText={(txt)=>setSearch(txt)} autoFocus onBlur={()=>search.length==0?setMode("display"):null}/>
-        }
-        </View>
-    )
-
-}
-
-const Dynamicplaceholder=()=>{
-
-    const animstate=useRef(new Animated.Value(0)).current
-    const [placeholder,setPlaceholder]=useState(0)
-    const placeholders=useRef([...topUniversities,...disciplines,...subDisciplines]).current
-
-    const getIndex=(prev:number)=>{
-        console.log(prev)
-        return prev==placeholders.length?0:prev+1
-    }
-
-    useEffect(()=>{
-        animstate.addListener((val)=>{
-            if(val.value==1)
-            {
-                setPlaceholder(((prev)=>getIndex(prev)))
-            }
-        })
-    },[animstate])
-
-    useEffect(()=>{
-        Animated.loop(
-            Animated.sequence([
-              Animated.timing(animstate, {
-                delay:1000,
-                toValue: 1,
-                duration: 500,
-                useNativeDriver: false,
-              }),
-              Animated.timing(animstate, {
-                delay:500,
-                toValue: 0,
-                duration: 500,
-                useNativeDriver: false,
-              }),
-            ])
-        ).start();
-    },[])
-
-    return(
-        <View style={{flexDirection:'row'}}>
-            <Text style={{color:Themes.Light.OnewindowPrimaryBlue(0.5)}}>Search for </Text>
-            <Animated.Text style={{flex:1,color:Themes.Light.OnewindowPrimaryBlue(0.5),transform:[{translateY:animstate.interpolate({inputRange:[0,1],outputRange:[0,10]})}],opacity:Animated.subtract(new Animated.Value(1),animstate)}}>{truncateString(placeholders[placeholder],30,true)}</Animated.Text>
-        </View>
-    )
-}
 
 export default Search
 

@@ -28,16 +28,16 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     uni_icon:{
-        width:24,
-        height:24,
+        width:26,
+        height:26,
         resizeMode:"contain",
         borderRadius:100
     },
     uni_icon_bg:{
-        width:24,
-        height:24,
+        width:26,
+        height:26,
         borderRadius:100,
-        left:3,
+        left:1,
         top:10
     },
     uni_text1:{

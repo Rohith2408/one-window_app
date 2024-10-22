@@ -48,6 +48,9 @@ const TabStyles=StyleSheet.create({
     },
     name:{
         fontSize:16
+    },
+    search:{
+        fontSize:18
     }
 })
 
@@ -79,6 +82,9 @@ const MobileSStyles=StyleSheet.create({
     },
     name:{
         fontSize:12
+    },
+    search:{
+        fontSize:14
     }
 })
 const MobileMStyles=StyleSheet.create({
@@ -109,6 +115,9 @@ const MobileMStyles=StyleSheet.create({
     },
     name:{
         fontSize:14
+    },
+    search:{
+        fontSize:16
     }
 })
 const MobileLStyles=StyleSheet.create({
@@ -121,13 +130,28 @@ const MobileLStyles=StyleSheet.create({
         fontSize:16
     },
     click_message:{
-        fontSize:12
+        fontSize:12,
+        lineHeight:20
     },
     emptylist_image:{
         width:100,
         height:100,
         resizeMode:"contain"
     },
+    card:{
+        width:"100%",
+        height:75
+    },
+    dp:{
+        width:20,
+        height:20
+    },
+    name:{
+        fontSize:14
+    },
+    search:{
+        fontSize:16
+    }
 })
 
 const styles={
@@ -168,7 +192,7 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
 
     return(
         <View style={{flex:1,paddingTop:30}}>
-        <View style={{borderRadius:100,borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}><TextInput autoFocus onChangeText={(txt)=>setSearch(txt)} placeholder="Search..." value={search} style={{padding:10}}/></View>
+        <View style={{borderRadius:100,borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}><TextInput autoFocus onChangeText={(txt)=>setSearch(txt)} placeholder="Search..." value={search} style={[styles[Device].search,{padding:10}]}/></View>
         {
             users!=undefined
             ?
@@ -184,9 +208,9 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
                 :
                 <ScrollView style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:20}}>
                 {
-                    users.map((user,i)=>
+                    users.filter((user)=>!friends.find((item)=>item?._id==user._id)).map((user,i)=>
                     <View key={user._id} style={[GeneralStyles.card]}>
-                        <Chatsearchcard index={i} {...user} alreadyFriend={friends.find((item)=>item?._id==user._id)!=undefined}/>
+                        <Chatsearchcard index={i} {...user}/>
                     </View>
                     )
                 }

@@ -41,11 +41,11 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     field_title:{
-        fontSize:16,
+        fontSize:18,
         paddingLeft:10
     },
     form_title:{
-        fontSize:16,
+        fontSize:18,
         marginTop:30,
         marginBottom:30
     }

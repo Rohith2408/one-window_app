@@ -9,7 +9,7 @@ import expert_icon from '../../assets/images/misc/expert.png'
 const GeneralStyles=StyleSheet.create({
     wrapper:{
         flexDirection:"column",
-        gap:2,
+        gap:5,
         alignItems:"flex-start",
         justifyContent:"center",
         paddingLeft:8,
@@ -19,10 +19,10 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     role:{
-        fontSize:16
+        fontSize:18
     },
     description:{
-        fontSize:14,
+        fontSize:16,
         lineHeight:28
     },
     icon:{
@@ -33,8 +33,8 @@ const TabStyles=StyleSheet.create({
     icon_wrapper:{
         width:24,
         height:24,
-        left:-12,
-        top:7
+        left:-10,
+        top:3
     }
 })
 
@@ -52,10 +52,10 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     icon_wrapper:{
-        width:18,
-        height:18,
-        left:-8,
-        top:4
+        width:14,
+        height:14,
+        left:-6,
+        top:2
     }
 })
 
@@ -73,10 +73,10 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     icon_wrapper:{
-        width:20,
-        height:20,
+        width:16,
+        height:16,
         left:-8,
-        top:5
+        top:2
     }
 })
 
@@ -89,15 +89,15 @@ const MobileLStyles=StyleSheet.create({
         lineHeight:24
     },
     icon:{
-        width:20,
-        height:20,
+        width:18,
+        height:18,
         resizeMode:'contain'
     },
     icon_wrapper:{
         width:20,
         height:20,
         left:-8,
-        top:5
+        top:3
     }
 })
 
@@ -117,7 +117,7 @@ const Expertintrocard=(props:{role:string,description:string,index:number})=>{
         <View style={[GeneralStyles.wrapper]}>
             <View style={{flexDirection:"row",alignItems:"center",gap:5,position:"relative"}}>
                 <View style={[styles[Device].icon_wrapper,{borderRadius:100,position:"absolute",backgroundColor:getLightThemeColor(props.index%4)}]}></View>
-                <Image style={[styles[Device].icon]} source={expert_icon}/>
+                {/* <Image style={[styles[Device].icon]} source={expert_icon}/> */}
                 <Text style={[{textAlign:"left"},{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].role]}>{props.role}</Text>
             </View>
             <View><Text style={[{textAlign:"left"},{color:Themes.Light.OnewindowPrimaryBlue(0.6),fontFamily:Fonts.NeutrifStudio.Regular},styles[Device].description]}>{props.description}</Text></View>

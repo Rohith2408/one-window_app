@@ -60,13 +60,12 @@ const Testoptions=()=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     const openForm=(test:string)=>{
-        // console.log("ll",JSON.stringify(testFields(test),null,2))
         navigate?navigate({type:"RemoveScreen"}):null
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:test,forminitialdataid:test}}}):null
     }
 
     return(
-        <View style={{flex:1,padding:5,paddingTop:15,gap:20}}>
+        <View style={{flex:1,padding:5,paddingTop:25,gap:30}}>
         {
             Tests.filter((test)=>!store.getState().testscores.data?.find((item)=>item.name==test.name)).map((test)=>
             <Pressable style={{gap:5}} onPress={()=>openForm(test.name)}>

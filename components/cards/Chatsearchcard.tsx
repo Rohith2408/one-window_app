@@ -21,15 +21,15 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     dp:{
-        width:20,
-        height:20
+        width:26,
+        height:26
     },
     name:{
-        fontSize:14
+        fontSize:16
     },
     add_icon:{
-        width:18,
-        height:18,
+        width:22,
+        height:22,
         resizeMode:"contain"
     },
 })
@@ -113,14 +113,7 @@ const Chatsearchcard=(props:User & {index:number,alreadyFriend:boolean})=>{
         <View style={[GeneralStyles.main_wrapper]}>
             <Image source={props.displayPicSrc?props.displayPicSrc:default_icon} style={[styles[Device].dp,{borderRadius:100}]}/>
             <View style={{flex:1}}><Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.firstName+" "+props.lastName}</Text></View>
-            {
-                !props.alreadyFriend
-                ?
-                <Pressable onPress={()=>!loading?addFriend(props):null}><Image source={loading?loader:add_icon} style={[styles[Device].add_icon]}/></Pressable>
-                :
-                null
-                // <Pressable><Text>Chat</Text></Pressable>
-            }
+            <Pressable onPress={()=>!loading?addFriend(props):null}><Image source={loading?loader:add_icon} style={[styles[Device].add_icon]}/></Pressable>
         </View>
     )
     

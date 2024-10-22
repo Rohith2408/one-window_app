@@ -19,7 +19,7 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     title:{
-        fontSize:16
+        fontSize:18
     }
 })
 
@@ -68,12 +68,11 @@ const Quickfiltercard=(props:QuickFilterInfo)=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
-        <View style={{display:'flex',flexDirection:'row',alignItems:"center",gap:5,padding:5}}>
+        <View style={{display:'flex',flexDirection:'row',alignItems:"center",gap:5,padding:5,paddingLeft:10,paddingRight:10}}>
             {/* <Image style={[styles[Device].icon]} source={props.icon}/> */}
             <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text>
         </View>
     )
-
 }
 
 export default Quickfiltercard
