@@ -4,7 +4,7 @@ import Datetime from "../components/resources/Datetime";
 import Dropdown from "../components/resources/Dropdown";
 import Email from "../components/resources/Email";
 import Phone from "../components/resources/Phone";
-// import Institutename from "../components/resources/Institutename";
+//import Institutename from "../components/resources/Institutename";
 import Statedropdown from "../components/resources/Statedropdown";
 import Textbox from "../components/resources/Textbox";
 import { store } from "../store";
@@ -44,7 +44,7 @@ export const testToForm=(testname:string)=>{
     return [
       {id:"testname",value:testInfo?.name},
       {id:"testdate",value:testData?testData.testDate:""},
-    //   {id:"testdocument",value:undefined},
+    //{id:"testdocument",value:undefined},
       ...scores
     ]
   }

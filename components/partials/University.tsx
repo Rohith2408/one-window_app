@@ -285,11 +285,12 @@ const University=(props:{universityid:string})=>{
                         <View style={{gap:15}}>
                         {
                             ratings.keys.map((item,i)=>
-                            <View style={{flexDirection:"row",gap:5,alignItems:"center",borderRadius:100,backgroundColor:getLightThemeColor(i%4)}}>
-                                <View style={{position:"relative"}}>
-                                    {/* <View style={{position:"absolute",width:10,height:10,borderRadius:100,backgroundColor:getLightThemeColor(i%4)}}></View> */}
-                                    {/* <Image source={sample_icon} style={[{width:26,height:26}]}/> */}
-                                </View>
+                            <View style={{flexDirection:"row",gap:5,alignItems:"center",borderRadius:100}}>
+                                {/* <View style={{position:"relative"}}>
+                                    <View style={{position:"absolute",width:10,height:10,borderRadius:100,backgroundColor:getLightThemeColor(i%4)}}></View>
+                                    <Image source={sample_icon} style={[{width:26,height:26}]}/>
+                                </View> */}
+                                <Image source={sample_icon} style={[{width:26,height:26}]}/>
                                 <View style={{flex:1}}><Text style={{fontFamily:Fonts.NeutrifStudio.Regular,padding:10}}>{item}</Text></View>
                                 <Text style={{fontFamily:Fonts.NeutrifStudio.Regular}}>{ratings.values[i]}</Text>
                             </View>

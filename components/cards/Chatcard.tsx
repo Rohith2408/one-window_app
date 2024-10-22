@@ -253,7 +253,7 @@ const Chatcard=(props:Chat & {index:number})=>{
         navigate({type:"AddScreen",payload:{screen:"Message",params:{chatId:props._id}}});
     }
 
-    console.log("ac",lastMessageInfo.status);
+    console.log("ac",props.lastMessage?._id,lastMessageInfo);
 
     return(
         <Pressable onPress={openChat} style={[GeneralStyles.wrapper]}>
@@ -311,12 +311,13 @@ const BakeLastmessage=(chat:Chat,profile:Sharedinfo)=>{
     let sender=(chat.lastMessage?.sender==profile._id)?"current":"other";
     let status;
     let lastMessageSeenInfo=chat.unSeenMessages.find((msg)=>msg.message._id==chat.lastMessage?._id)?.seen
+    console.log("seen",lastMessageSeenInfo);
     if(sender=="current"){
         status=lastMessageSeenInfo==undefined?"seen":"unseen";
     }
     else
     {
-        status=!lastMessageSeenInfo?.find((user)=>user==profile._id)?"unseen":"seen";
+        status=(lastMessageSeenInfo==undefined || lastMessageSeenInfo?.find((user)=>user==profile._id))?"seen":"unseen";
     }
     return {sender,status}
 }

@@ -428,6 +428,7 @@ const Message=(props:{chatId:string})=>{
         switch(triggerObject.action){
             case "send":
                 dispatch(addMessage({...triggerObject.data.message,type:"normal"}))
+                seen_message()
                 break;
 
             case "typing":
