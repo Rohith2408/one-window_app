@@ -5421,34 +5421,122 @@ const forms:FormInfo[]=[
         // {type:'openNow',title:"Open now?",selectionType:"custom",customContainer:{name:"opennowfiltercontainer"},handler:openNowFilterhandler,filterUpdateEventName:"onToggle"},
         // {type:"AcademicTestName",dropdownDirection:"bottom2top",title:"Academic Test",options:["GRE", "GMAT"].map((item)=>({label:item,value:item})),selectionType:"multi",focusEventName:"onToggle",filterUpdateEventName:"onPress",styles:{zIndex:1}},
         allFields:[
+            // {
+            //     id:"country",
+            //     componentInfo:{
+            //         component:Dropdown,
+            //         props:{
+            //             options:{
+            //                 fetcher:(data:AppliedFilter)=>{
+            //                     let baseFilter:AppliedQuickFilter|undefined=getBasket("Universitiesfilter").baseFilters.find((item)=>item.type=="country");
+            //                     let options=Countries.map((country)=>({label:country,value:country}))
+            //                     return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
+            //                 },
+            //                 //list:Countries.map((country)=>({label:country,value:country})),
+            //                 idExtractor:(item:ListItem)=>item.label,
+            //                 labelExtractor:(item:ListItem)=>item.label
+            //             },
+            //             apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+            //             selectionMode:"single",
+            //             basketid:"sector-dropdown"
+            //         }
+            //     },
+            //     isOptional:true,
+            //     title:"Country",
+            //     onUpdate:{
+            //         event:"onTextInput",
+            //         handler:undefined
+            //     },
+            //     onFocus:{
+            //         event:"onFocus"
+            //     }
+            // },
             {
                 id:"country",
+                componentInfo:{
+                    component:Countrydropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let countries=await fetchCountries();
+                                return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"country-dropdown",
+                        cityFieldId:"city",
+                        stateFieldId:"state"
+                    }
+                },
+                title:"Country",
+                onUpdate:{
+                    event:"onSelect",
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"state",
+                componentInfo:{
+                    component:Statedropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let states=selectedCountry?await fetchStates(selectedCountry):undefined
+                                return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"state-dropdown",
+                        cityFieldId:"city"
+                    }
+                },
+                title:"State",
+                onUpdate:{
+                    event:"onSelect",
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"city",
                 componentInfo:{
                     component:Dropdown,
                     props:{
                         options:{
-                            fetcher:(data:AppliedFilter)=>{
-                                let baseFilter:AppliedQuickFilter|undefined=getBasket("Universitiesfilter").baseFilters.find((item)=>item.type=="country");
-                                let options=Countries.map((country)=>({label:country,value:country}))
-                                return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
+                            fetcher:async ()=>{
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let selectedState=getBasket("state")[0]?.label
+                                let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
+                                return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             },
-                            //list:Countries.map((country)=>({label:country,value:country})),
+                            labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
-                            labelExtractor:(item:ListItem)=>item.label
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
-                        basketid:"sector-dropdown"
-                    }
+                        basketid:"city-dropdown"
+                        }
                 },
-                isOptional:true,
-                title:"Country",
+                title:"City",
                 onUpdate:{
-                    event:"onTextInput",
+                    event:"onSelect",
                     handler:undefined
                 },
                 onFocus:{
-                    event:"onFocus"
+                    event:"onToggle"
                 }
             },
             {

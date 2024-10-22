@@ -146,6 +146,16 @@ const lists:ListInfo[]=[
                     icon:sample_icon
                 },
                 {
+                    type:"state",
+                    title:"State",
+                    icon:sample_icon
+                },
+                {
+                    type:"city",
+                    title:"City",
+                    icon:sample_icon
+                },
+                {
                     type:"Type",
                     title:"Universaity Type",
                     icon:sample_icon

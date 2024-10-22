@@ -304,7 +304,7 @@ const Home=(props:undefined|{name:string})=>{
     ]).current
 
     const openSearch=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Search"}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Search",params:{initialSearch:""}}}):null
     }
 
     const openExplore=()=>{

@@ -106,7 +106,7 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     title:{
-        fontSize:12
+        fontSize:14
     },
     datetime:{
         fontSize:10,
@@ -147,7 +147,7 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     title:{
-        fontSize:14
+        fontSize:16
     },
     datetime:{
         fontSize:12
