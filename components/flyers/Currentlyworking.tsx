@@ -5,6 +5,7 @@ import { getDevice } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 import { getBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
+import Styledtext from "../resources/Styledtext"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -110,7 +111,7 @@ const Currentlyworking=(props:{currentlyWorkingBasketid:string})=>{
 
     return(
         <View style={{paddingTop:20,gap:15}}>
-            <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Please let us know your current employment status at this company?</Text>
+            <Styledtext styles={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="current employment status" text="Please let us know your current employment status at this company?"/>
             <View style={{gap:20}}>
                 <View>
                     <Pressable onPress={()=>setIsCompleted(false)} style={{flexDirection:'row',alignItems:'center',gap:5}}>
@@ -131,7 +132,7 @@ const Currentlyworking=(props:{currentlyWorkingBasketid:string})=>{
             </View>
             <View>
             <Pressable onPress={next} style={[{alignSelf:"center",borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}]}>
-                <Text style={[{padding:5,paddingLeft:15,paddingRight:15,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)},styles[Device].next]}>Next</Text>
+                <Text style={[{padding:10,paddingLeft:15,paddingRight:15,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)},styles[Device].next]}>Next</Text>
             </Pressable>
             </View>
         </View>

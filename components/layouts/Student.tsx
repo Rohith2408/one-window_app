@@ -249,12 +249,12 @@ const Student=(props:{screens:string[],params:any})=>{
         console.log("trigger chat",triggerObj.sender?.firstName,triggerObj.action);
         switch(triggerObj.action){
             case "activityList":
-                console.log("acctivityyy",triggerObj.data);
+                //console.log("acctivityyy",triggerObj.data);
                 dispatch(updateParticipantsActivity(triggerObj.data))
                 break
 
             case "ping":
-                console.log("recievd",triggerObj.sender.firstName,triggerObj.data);
+                //console.log("recievd",triggerObj.sender.firstName,triggerObj.data);
                 dispatch(updateParticipantActivity({...triggerObj.sender,role:"",activity:triggerObj.data.status}))
                 break;
 

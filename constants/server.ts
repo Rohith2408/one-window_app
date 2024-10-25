@@ -309,6 +309,12 @@ const endPoints=[
         type:"GET",
     },
     {
+        id:"payment-summary",
+        category:"student",
+        tail:"payment-summary",
+        type:"POST",
+    },
+    {
         id:"add-products",
         category:"student",
         tail:"order",

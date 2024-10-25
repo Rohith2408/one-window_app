@@ -7,14 +7,17 @@ import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
 import { Fonts, Themes } from "../../constants"
 import location_icon from '../../assets/images/misc/location.png'
-import products_icon from '../../assets/images/misc/products.png'
+import products_icon from '../../assets/images/misc/order.png'
 import Productcard from "../cards/Productcard"
+import Productcompactcard from "../cards/Productcompactcard"
+import Styledtext from "../resources/Styledtext"
+import Productcompact2card from "../cards/Productcompactcard2"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         width:"100%",
         height:"100%",
-        padding:20,
+        padding:5,
         backgroundColor:'white',
         gap:20
     },
@@ -24,7 +27,7 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:"row",
         alignItems:"flex-start",
         gap:10,
-        padding:10
+        paddingTop:10
     },
     uni_icon_wrapper:{
         display:"flex",
@@ -36,7 +39,7 @@ const GeneralStyles=StyleSheet.create({
         flex:1,
         flexDirection:"column",
         alignItems:"flex-start",
-        gap:10
+        gap:7
     },
     location_wrapper:{
         display:"flex",
@@ -66,7 +69,6 @@ const TabStyles=StyleSheet.create({
     uni_icon:{
         width:28,
         height:28,
-        borderRadius:100,
         resizeMode:"contain"
     },
     uni_icon_bg:{
@@ -84,12 +86,15 @@ const TabStyles=StyleSheet.create({
         fontSize:18
     },
     product_card:{
-        height:250
+        height:200
     }
 })
 
 const MobileSStyles=StyleSheet.create({
 
+    products_heading:{
+        fontSize:14
+    },
     location_icon:{
         width:8,
         height:8,
@@ -99,7 +104,6 @@ const MobileSStyles=StyleSheet.create({
     uni_icon:{
         width:20,
         height:20,
-        borderRadius:100,
         resizeMode:"contain"
     },
     uni_icon_bg:{
@@ -122,6 +126,9 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
+    products_heading:{
+        fontSize:16
+    },
     location_icon:{
         width:10,
         height:10,
@@ -131,7 +138,6 @@ const MobileMStyles=StyleSheet.create({
     uni_icon:{
         width:22,
         height:22,
-        borderRadius:100,
         resizeMode:"contain"
     },
     uni_icon_bg:{
@@ -142,19 +148,22 @@ const MobileMStyles=StyleSheet.create({
         top:5
     },
     uni_location:{
-        fontSize:11,
+        fontSize:14,
         lineHeight:16
     },
     program_name:{
-        fontSize:15
+        fontSize:16
     },
     product_card:{
-        height:190
+        height:135
     }
 })
 
 const MobileLStyles=StyleSheet.create({
 
+    products_heading:{
+        fontSize:16
+    },
     location_icon:{
         width:12,
         height:12,
@@ -164,7 +173,6 @@ const MobileLStyles=StyleSheet.create({
     uni_icon:{
         width:26,
         height:26,
-        borderRadius:100,
         resizeMode:"contain"
     },
     uni_icon_bg:{
@@ -182,7 +190,7 @@ const MobileLStyles=StyleSheet.create({
         fontSize:16
     },
     product_card:{
-        height:210
+        height:160
     }
 })
 
@@ -217,17 +225,21 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
         {
             order
             ?
-            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:44}}>
+            <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:40}}>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
                         <Image source={products_icon} style={[styles[Device].uni_icon]}/>
-                        <View style={[styles[Device].uni_icon_bg,{position:"absolute",zIndex:-1,backgroundColor:getThemeColor(0)}]}></View>
+                        {/* <View style={[styles[Device].uni_icon_bg,{position:"absolute",zIndex:-1,backgroundColor:getThemeColor(0)}]}></View> */}
                     </View>
                     <View style={[GeneralStyles.uni_info_wrapper]}>
                         <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{"Order Placed on "+formatDate(order.paymentDetails.created_at)}</Text>
                         <View style={[GeneralStyles.location_wrapper]}>
                             <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <View  style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([order.Package?"Order Placed with "+order.Package.name:"Order placed without a package","Amount-"+(order.paymentDetails.currency.toUpperCase()+" "+order.paymentDetails.amount/100),"Payment Status "+order.paymentDetails.paymentStatus],"","|")}</Text></View>
+                            <View  style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{(order.Package?("Package purchased- "+order.Package.name):"Order placed without a package ")+(order.paymentDetails.paymentStatus=="pending"?+" to be ":"")}</Text></View>
+                        </View>
+                        <View style={[GeneralStyles.location_wrapper]}>
+                            <Image source={location_icon} style={[styles[Device].location_icon]}/>
+                            <View  style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Amount"+(order.paymentDetails.paymentStatus=="pending"?+" to be ":"")+" paid "+ (order.paymentDetails.currency+" "+order.paymentDetails.amount/100)+" | "+order.products.length+" products"}</Text></View>
                         </View>
                         {
                             order.paymentDetails.paymentStatus=="pending"
@@ -243,18 +255,20 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                         }
                     </View>
                 </View>
-                <View style={{gap:10}}>
-                    <Text style={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products Purchased</Text>
-                    <View style={{gap:10}}>
-                    {
-                        order.products.map((product,i)=>
-                        <Pressable onPress={()=>showProduct(product._id)} style={[{padding:10},styles[Device].product_card]}><Productcard {...product} index={i}/></Pressable>
-                        )
-                    }
+                <View style={{gap:0}}>
+                    <Styledtext styles={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Products Purchased" focusWord="Purchased"/>
+                    <View style={{height:300}}>
+                        <ScrollView style={{flex:1}} contentContainerStyle={{gap:10,paddingTop:10}}>
+                        {
+                            order.products.map((product,i)=>
+                            <Pressable onPress={()=>showProduct(product._id)} style={[{padding:10}]}><Productcompact2card {...product} index={i}/></Pressable>
+                            )
+                        }
+                        </ScrollView>
                     </View>
                 </View>
                 <View>
-                    <Text style={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Payment Details</Text>
+                    <Styledtext styles={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Payment Details" focusWord="Details"/>
                     <View>
                     {/* {
                         product.docChecklist.map((item)=>
@@ -264,7 +278,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                     </View>
                 </View>
                 <View>
-                    <Text style={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Logs</Text>
+                    <Text style={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]}>Logs</Text>
                     <View>
                     {/* {
                         product.docChecklist.map((item)=>
@@ -273,7 +287,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                     } */}
                     </View>
                 </View>
-            </ScrollView>
+            </View>
             :
             null
         }

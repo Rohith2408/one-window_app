@@ -1,7 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Package, Product } from "../../types"
 import { addToBasket, getBasket } from "../../constants/basket"
-import { compareProducts, formatDate, getDevice } from "../../utils"
+import { compareProducts, formatDate, getDevice, getServerRequestURL, serverRequest } from "../../utils"
 import { requests } from "../../constants/requests"
 import useNavigation from "../../hooks/useNavigation"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
@@ -10,7 +10,7 @@ import { Image } from "expo-image"
 import Packagecard from "../cards/Packagecard"
 import Unpurchasedproductscard from "../cards/Unpurchasedproductcard"
 import { Fonts, Themes } from "../../constants"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import loader from '../../assets/images/misc/loader.gif'
 import { store } from "../../store"
 
@@ -147,6 +147,26 @@ const Ordersummary=()=>{
             }
         }
     }
+
+    const getPaymentDetails=async ()=>{
+        let details={
+            packageId:orderInfo.package?._id,
+            products:orderInfo.products.map((item)=>({
+                category: item.category,
+                courseId:item.course._id,
+                intake: item.intake
+            }))}
+        let res=await serverRequest({
+            url:getServerRequestURL("payment-summary","POST"),
+            reqType:"POST",
+            body:details
+        })
+        console.log("response",JSON.stringify(res,null,2));
+    }
+
+    useEffect(()=>{
+        getPaymentDetails()
+    },[])
 
     return(
         <View style={{flex:1,gap:30}}>

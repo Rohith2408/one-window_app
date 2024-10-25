@@ -28,7 +28,7 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     text:{
-        fontSize:14
+        fontSize:16
     }
 })
 
@@ -55,7 +55,7 @@ const Textitem=(props:{eventHandler:(event:Event)=>void,value:{label:string,valu
 
     return(
         <View style={[GeneralStyles.wrapper]}>
-            <Text style={[styles[Device].text,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.value?.label}</Text>
+            <Text style={[styles[Device].text,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.value?.label}</Text>
         </View>
     )
 }

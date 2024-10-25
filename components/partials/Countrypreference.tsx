@@ -73,15 +73,15 @@ const styles={
 const Countrypreference=(props)=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
-    const selectedPreferences=useAppSelector((state)=>state.preferences.data)?.country;
     const [search,setSearch]=useState("");
-    const [allPreferences,setAllPreferences]=useState(Countries);
+    const selectedPreferences=useAppSelector((state)=>state.preferences.data)?.country;
+    const [allPreferences,setAllPreferences]=useState(Countries.map((country)=>country.name));
     const preferencedata=preferences.find((item)=>item.id=="country");
     const [isloading,setIsloading]=useState(false)
     const selected=useRef("")
 
     useEffect(()=>{
-        setAllPreferences(Countries.filter((item)=>item.includes(search)))
+        setAllPreferences(Countries.filter((item)=>item.name.includes(search)).map((country)=>country.name))
     },[search])
 
     const onselect=async (selitem)=>{
@@ -117,7 +117,7 @@ const Countrypreference=(props)=>{
                 )
             }
             {
-                allPreferences.filter((item)=>!selectedPreferences.find((item2)=>item2==item)).map((item)=>
+                allPreferences.filter((item)=>!selectedPreferences?.find((item2)=>item2==item)).map((item)=>
                 <Pressable key={item} onPress={()=>onselect(item)} style={[GeneralStyles.card_wrapper]}>
                     <Image style={[styles[Device].icon]} source={countrypreference_icon} />
                     <View style={{flex:1}}><Text>{item}</Text></View>

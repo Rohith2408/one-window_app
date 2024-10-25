@@ -128,7 +128,7 @@ const Datetimepro=(props:{datesFetcher:any,value:string,id:string})=>{
     return(
         <View style={{flex:1}}>
             <Pressable style={{alignSelf:"center",display:'flex',flexDirection:"row",alignItems:"center"}} onPress={!isLoading?openSelector:null}>
-                <View style={[{flexDirection:'row',justifyContent:"center"}]}><Text style={[styles[Device].datetime,{padding:5,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Word2Sentence([formatDate(props.value),formatTime(props.value)],"","|")}</Text></View>
+                <View style={[{flexDirection:'row',justifyContent:"center",backgroundColor:Themes.Light.OnewindowLightBlue,borderRadius:100}]}><Text style={[styles[Device].datetime,{padding:5,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1),padding:10}]}>{Word2Sentence([formatDate(props.value),formatTime(props.value)],"","|")}</Text></View>
                 {
                     !isLoading
                     ?

@@ -180,7 +180,8 @@ export type Dropdown={
     isAsync?:boolean,
     basketid:string,
     selectionMode:"single"|"multi",
-    apply:(data:any[])=>NavigationActions
+    pathHandler:(data:any)=>NavigationActions,
+    //apply:(data:any[])=>NavigationActions
     //eventHandler?:(event:Event)=>void
     //isFocussed?:boolean,
     //optionsCard?:React.FC<any>,
@@ -1299,6 +1300,23 @@ export interface RequestInfo{
     responseHandler:(data:ServerResponse)=>void
 }
 
+export interface Paymentsummary{
+    items: {
+        originalPrice: 14900,
+        currency: {
+            symbol: string,
+            code:string
+        },
+        finalPrice:number,
+        details: {
+            category: string,
+            courseId: string,
+            intake: string
+        }
+    }[],
+    totalPrice: number
+}
+
 export interface PreferenceInfo{
     id:string,
     title:string,
@@ -1316,3 +1334,9 @@ export interface PreferenceInfo{
     getInitialData:()=>any
 }
 
+export type Banner={
+    title:string,
+    subTitle:string,
+    url:string,
+    image:string
+}

@@ -1,298 +1,226 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { Product as ProductType, PurchasedProduct} from "../../types"
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { Animated, LayoutRectangle, Pressable, StyleSheet, Text, View } from "react-native"
 import { Fonts, Themes } from "../../constants"
-import { formatDate, getDevice, getLightThemeColor, getThemeColor, setWordCase, truncateString } from "../../utils"
+import { Word2Sentence, formatDate, getDevice, getLightThemeColor, getThemeColor, setWordCase, truncateString } from "../../utils"
 import { Image } from "expo-image"
-import clock from '../../assets/images/misc/clock-black.png'
 import processing_icon from '../../assets/images/products/processing.png'
 import useNavigation from "../../hooks/useNavigation"
+import { useAppDispatch } from "../../hooks/useAppDispatch"
+import clock_icon from '../../assets/images/misc/clock.png'
+import go_icon from '../../assets/images/misc/back.png'
 
 const GeneralStyles=StyleSheet.create({
-    main_wrapper:{
-        width:"100%",
-        height:"100%",
-        borderRadius:20,
-        //padding:20
-    },
-    bg_wrapper:{
-        position:"absolute",
-        width:"100%",
-        height:"100%",
-        zIndex:-1,
-        transform:[{rotate:"1.5deg"}]
-    },
-    sub_wrapper:{
-        display:'flex',
+    wrapper:{
         flex:1,
-        flexDirection:"column",
-        padding:15,
-        alignSelf:"stretch",
-        justifyContent:'center',
+        paddingTop:10
     },
-    category_wrapper:{
-        display:"flex",
+    card_wrapper:{
+
+    },
+    icon_wrapper:{
+        display:'flex',
         flexDirection:"row",
-        alignItems:"center",
-        justifyContent:"flex-end",
-    },
-    category:{
-        borderRadius:100,
-        backgroundColor:"rgba(255,255,255,0.2)",
-        padding:5
+        alignItems:"flex-start",
+        justifyContent:'center'
     },
     info_wrapper:{
+        flex:1,
         display:'flex',
         flexDirection:"column",
         alignItems:"flex-start",
-        justifyContent:"center",
-        gap:10
+        justifyContent:"flex-start"
     },
-    misc_wrapper:{
-        display:"flex",
+    actions_wrapper:{
+        display:'flex',
         flexDirection:"column",
-        justifyContent:"center",
-        alignItems:"flex-start",
-        gap:7.5
+        alignItems:"center",
+        justifyContent:'center'
     },
-    uni_wrapper:{
-        // flex:2,
+    title_wrapper:{
+        position:'absolute',
+        top:0,
+        left:0,
         display:"flex",
         flexDirection:"row",
-        justifyContent:"center",
-        alignItems:"center",
-        gap:5
-    },
-    intake_wrapper:{
-        // flex:1,
-        display:"flex",
-        flexDirection:"row",
-        justifyContent:"center",
-        alignItems:"center",
-        gap:5
-    },
-    status_wrapper:{
-        display:"flex",
-        flexDirection:"row",
-        justifyContent:"flex-end",
-        alignItems:"center",
-    },
-    status:{
-        display:"flex",
-        flexDirection:"row",
-        justifyContent:"flex-end",
-        alignItems:"center",
-        gap:5
-    },
-    uni_icon:{
-        borderRadius:100
+        gap:5,
+        alignItems:"center"
     }
 })
 
 const TabStyles=StyleSheet.create({
-    main_wrapper:{
-        paddingBottom:10
+    info_wrapper:{
+        gap:12
     },
-    sub_wrapper:{
-        gap:30,
-        borderRadius:30
+    card_icon:{
+        width:28,
+        height:28,
+        resizeMode:'contain'
     },
-    bg_wrapper:{
-        borderRadius:30,
-        left:6,
-        top:6,
+    edit_icon:{
+        width:18,
+        height:18,
+        resizeMode:'contain'
     },
-    category_text:{
+    delete_icon:{
+        width:18,
+        height:18,
+        resizeMode:'contain'
+    },
+    location_icon:{
+        width:14,
+        height:14,
+        resizeMode:'contain'
+    },
+    info_icon:{
+        width:14,
+        height:14,
+        resizeMode:'contain'
+    },
+    text1:{
+        fontSize:18,
+        lineHeight:28
+    },
+    text2:{
         fontSize:14
     },
-    product_name:{
-        fontSize:16,
-        lineHeight:24
-    },
-    uni_name:{
-        fontSize:14,
-    },
-    intake:{
+    text3:{
         fontSize:14
     },
-    status_text:{
-        fontSize:12
-    },
-    uni_icon:{
-        width:13,
-        height:13,
-        objectFit:"contain",
-        alignSelf:"flex-start"
-    },
-    intake_icon:{
-        width:13,
-        height:13,
-        objectFit:"contain"
-    },
-    status_icon:{
-        width:10,
-        height:10,
-        objectFit:"contain"
-    },
-    seperator:{
-        width:2,
-        height:13
+    title:{
+        fontSize:13
     }
 })
 
 const MobileSStyles=StyleSheet.create({
-    main_wrapper:{
-        paddingBottom:6
+    info_wrapper:{
+        gap:10
     },
-    sub_wrapper:{
-        gap:20,
-        borderRadius:25
+    card_icon:{
+        width:25,
+        height:25,
+        resizeMode:'contain'
     },
-    bg_wrapper:{
-        borderRadius:30,
-        left:6,
-        top:6,
+    edit_icon:{
+        width:8,
+        height:8,
+        resizeMode:'contain'
     },
-    category_text:{
-        fontSize:11
+    delete_icon:{
+        width:15,
+        height:15,
+        resizeMode:'contain'
     },
-    product_name:{
-        fontSize:12,
-        lineHeight:18
-    },
-    uni_name:{
-        fontSize:9,
-        lineHeight:13
-    },
-    intake:{
-        fontSize:9
-    },
-    status_text:{
-        fontSize:8
-    },
-    uni_icon:{
-        width:11,
-        height:11,
-        objectFit:"contain",
-        alignSelf:"flex-start"
-    },
-    intake_icon:{
-        width:11,
-        height:11,
-        objectFit:"contain"
-    },
-    status_icon:{
+    location_icon:{
         width:10,
         height:10,
-        objectFit:"contain"
+        resizeMode:'contain'
     },
-    seperator:{
-        width:2,
-        height:13
-    }
-})
-
-const MobileMStyles=StyleSheet.create({
-    main_wrapper:{
-        paddingBottom:10
+    info_icon:{
+        width:10,
+        height:10,
+        resizeMode:'contain'
     },
-    sub_wrapper:{
-        gap:27,
-        borderRadius:30
-    },
-    bg_wrapper:{
-        borderRadius:30,
-        left:6,
-        top:6,
-    },
-    category_text:{
-        fontSize:12
-    },
-    product_name:{
+    text1:{
         fontSize:14,
         lineHeight:20
     },
-    uni_name:{
-        fontSize:12,
-        lineHeight:13
-    },
-    intake:{
-        fontSize:11
-    },
-    status_text:{
-        fontSize:10
-    },
-    uni_icon:{
-        width:13,
-        height:13,
-        objectFit:"contain",
-        alignSelf:"flex-start"
-    },
-    intake_icon:{
-        width:13,
-        height:13,
-        objectFit:"contain"
-    },
-    status_icon:{
-        width:10,
-        height:10,
-        objectFit:"contain"
-    },
-    seperator:{
-        width:2,
-        height:13
-    }
-})
-
-const MobileLStyles=StyleSheet.create({
-    main_wrapper:{
-        paddingBottom:10
-    },
-    sub_wrapper:{
-        gap:30,
-        borderRadius:30
-    },
-    bg_wrapper:{
-        borderRadius:30,
-        left:6,
-        top:6,
-    },
-    category_text:{
+    text2:{
         fontSize:12
     },
-    product_name:{
-        fontSize:14,
-        lineHeight:22
+    text3:{
+        fontSize:12
     },
-    uni_name:{
-        fontSize:12,
-        lineHeight:13
-    },
-    intake:{
-        fontSize:11
-    },
-    status_text:{
+    title:{
         fontSize:10
     },
-    uni_icon:{
-        width:13,
-        height:13,
-        objectFit:"contain",
-        alignSelf:"flex-start"
+})
+const MobileMStyles=StyleSheet.create({
+    info_wrapper:{
+        gap:10
     },
-    intake_icon:{
-        width:13,
-        height:13,
-        objectFit:"contain"
+    card_icon:{
+        width:25,
+        height:25,
+        resizeMode:'contain'
     },
-    status_icon:{
+    edit_icon:{
         width:10,
         height:10,
-        objectFit:"contain"
+        resizeMode:'contain'
     },
-    seperator:{
-        width:2,
-        height:13
+    delete_icon:{
+        width:15,
+        height:15,
+        resizeMode:'contain'
+    },
+    location_icon:{
+        width:10,
+        height:10,
+        resizeMode:'contain'
+    },
+    info_icon:{
+        width:10,
+        height:10,
+        resizeMode:'contain'
+    },
+    text1:{
+        fontSize:16,
+        lineHeight:22
+    },
+    text2:{
+        fontSize:14
+    },
+    text3:{
+        fontSize:14,
+        lineHeight:20
+    },
+    title:{
+        fontSize:12
+    },
+})
+const MobileLStyles=StyleSheet.create({
+    info_wrapper:{
+        gap:10
+    },
+    card_icon:{
+        width:25,
+        height:25,
+        resizeMode:'contain'
+    },
+    edit_icon:{
+        width:10,
+        height:10,
+        resizeMode:'contain'
+    },
+    delete_icon:{
+        width:15,
+        height:15,
+        resizeMode:'contain'
+    },
+    location_icon:{
+        width:10,
+        height:10,
+        resizeMode:'contain'
+    },
+    info_icon:{
+        width:10,
+        height:10,
+        resizeMode:'contain'
+    },
+    text1:{
+        fontSize:16,
+        lineHeight:22
+    },
+    text2:{
+        fontSize:14
+    },
+    text3:{
+        fontSize:14,
+        lineHeight:20
+    },
+    title:{
+        fontSize:12
     }
 })
 
@@ -305,14 +233,13 @@ const styles={
 
 const Productcard=(props:PurchasedProduct & {index:number})=>{
 
-    const bgColors=useRef([
-        Themes.Light.OnewindowRed(1),
-        Themes.Light.OnewindowPurple(1),
-        Themes.Light.OnewindowTeal(1),
-        Themes.Light.OnewindowYellow(1)
-    ]).current
+    const [dimensions,setDimensions]=useState<LayoutRectangle>()
     const Device=useRef<keyof typeof styles>(getDevice()).current
-    const [path,navigate]=useNavigation();
+    const [isLoading,setIsLoading]=useState(false);
+    const dispatch=useAppDispatch()
+    const [path,navigate]=useNavigation()
+    const titleTranslate=useRef(new Animated.Value(0)).current
+    const titleHeight=useRef().current
 
     const showProduct=()=>{
         navigate({type:"RemoveSpecificScreen",payload:{id:"Product"}})
@@ -321,34 +248,66 @@ const Productcard=(props:PurchasedProduct & {index:number})=>{
         },100)
     }
 
+    const animate=(y:number)=>{
+        Animated.spring(titleTranslate,{
+            toValue:y,
+            useNativeDriver:false
+        }).start()
+    }
+
     return(
-        <Pressable onPress={showProduct} style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>
-            <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
-            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:getLightThemeColor(props.index%4)}]}>
-                <View style={[GeneralStyles.category_wrapper]}>
-                    <View style={[GeneralStyles.category]}><Text style={[styles[Device].category_text,{color:getThemeColor(props.index%4),fontFamily:Fonts.NeutrifStudio.Bold}]}>{setWordCase(props.category)}</Text></View>
-                </View>
-                <View style={[GeneralStyles.info_wrapper]}>
-                    <Text style={[styles[Device].product_name,{color:"black",fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.course.name}</Text>
-                    <View style={[GeneralStyles.misc_wrapper]}>
-                        <View style={[GeneralStyles.uni_wrapper]}>
-                            <Image source={props.course.university.logoSrc} style={[styles[Device].uni_icon,GeneralStyles.uni_icon]}/>
-                            <View style={{flex:1}}><Text style={[styles[Device].uni_name,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{truncateString(props.course.university.name,30,true)}</Text></View>
-                        </View>
-                        <View style={[GeneralStyles.intake_wrapper,{alignSelf:"flex-start"}]}>
-                            <Image source={clock} style={[styles[Device].intake_icon]}/>
-                            <Text style={[styles[Device].intake,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Course Start: "+formatDate(props.intake)}</Text>
-                        </View>
-                    </View> 
-                </View>
-                <View style={[GeneralStyles.status_wrapper]}>
-                    <View style={[GeneralStyles.status]}>
-                        <Image source={processing_icon} style={[styles[Device].status_icon]} />
-                        <Text style={[styles[Device].status_text,{textAlign:"right",color:"grey",fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.stage}</Text>
+        <Pressable onPress={showProduct} onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,padding:5}}>
+        {
+            dimensions
+            ?
+            <View style={{flex:1,flexDirection:'row',gap:10}}>
+                <View style={[GeneralStyles.icon_wrapper]}><Image source={props.course.university.logoSrc} style={[styles[Device].card_icon,{borderRadius:100}]} /></View>
+                <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
+                    <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.35)} style={[GeneralStyles.title_wrapper,{transform:[{translateY:titleTranslate}]}]}>
+                        <View style={{width:5,height:5,borderRadius:100,backgroundColor:"lightgreen"}}></View>
+                        <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.category)}</Text>
+                    </Animated.View>
+                    <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.course.name}</Text>
+                    <View style={{flexDirection:"row",gap:5}}>
+                        {/* <Image style={[styles[Device].info_icon]} source={clock_icon}/> */}
+                        <Text style={[styles[Device].text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.course.university.name}</Text>
+                    </View>
+                    <View style={{flexDirection:"row",gap:5,backgroundColor:Themes.ExtraLight.OnewindowPurple,borderRadius:100}}>
+                        {/* <Image style={[styles[Device].location_icon]} source={processing_icon}/> */}
+                        <Text style={[styles[Device].text3,{padding:7.5,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.stage}</Text>
                     </View>
                 </View>
+                <View style={[GeneralStyles.actions_wrapper]}>
+                    <View style={{alignSelf:"center"}}><Image source={go_icon} style={[styles[Device].edit_icon,{transform:[{scaleX:-1}]}]} /></View>
+                </View>
             </View>
+            :
+            null
+        }
         </Pressable>
+        // <Pressable onPress={showProduct} style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>
+        //     <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
+        //     <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:getLightThemeColor(props.index%4)}]}>
+        //         <View style={[GeneralStyles.category_wrapper]}>
+        //             <View style={[GeneralStyles.category]}><Text style={[styles[Device].category_text,{color:getThemeColor(props.index%4),fontFamily:Fonts.NeutrifStudio.Bold}]}>{setWordCase(props.category)}</Text></View>
+        //         </View>
+        //         <View style={[GeneralStyles.info_wrapper]}>
+        //             <Text style={[styles[Device].product_name,{color:"black",fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.course.name}</Text>
+        //             <View style={[GeneralStyles.misc_wrapper]}>
+        //                 <View style={[GeneralStyles.uni_wrapper]}>
+        //                     <Image source={props.course.university.logoSrc} style={[styles[Device].uni_icon,GeneralStyles.uni_icon]}/>
+        //                     <View style={{flex:1}}><Text style={[styles[Device].uni_name,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{truncateString(props.course.university.name,30,true)}</Text></View>
+        //                 </View>
+        //             </View> 
+        //         </View>
+        //         <View style={[GeneralStyles.status_wrapper]}>
+        //             <View style={[GeneralStyles.status]}>
+        //                 <Image source={processing_icon} style={[styles[Device].status_icon]} />
+        //                 <Text style={[styles[Device].status_text,{textAlign:"right",color:"grey",fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.stage}</Text>
+        //             </View>
+        //         </View>
+        //     </View>
+        // </Pressable>
     )   
 
 }

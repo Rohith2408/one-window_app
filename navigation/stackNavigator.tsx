@@ -1,6 +1,6 @@
-import { Animated, Dimensions, Easing, Keyboard, PanResponder, Pressable, StyleSheet, Text, View } from "react-native"
+import { Animated, Dimensions, Easing, Keyboard, LayoutRectangle, PanResponder, Pressable, StyleSheet, Text, View } from "react-native"
 import { StackNavigator, StackScreen as StackScreenType } from "../types"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import useNavigation from "../hooks/useNavigation"
 import { getComponent } from "../utils"
 import React from "react"
@@ -35,6 +35,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
 
   const screenInfo=useRef(components.find((component)=>component.id==props.id)).current
   const getState=(type:"initial"|"final")=>{
+    console.log("screen info",screenInfo)
     if(screenInfo?.animationStyle=="Custom")
     {
       if(screenInfo.customPlacement)
@@ -62,6 +63,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
   const width=useRef(new Animated.Value(initialState?initialState.width:0)).current;
   const height=useRef(new Animated.Value(initialState?initialState.height:0)).current
   const swipeThreshold = 100;
+  const [screenDimensions,setScreenDimensions]=useState<LayoutRectangle>()
   const [path,navigate]=useNavigation();
 
 
@@ -176,6 +178,8 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
 
   },[])
 
+  console.log("screen",initialState,finalState);
+
   const animate=(animData:{property:Animated.Value,style?:"timing"|"spring",value:number,duration:number,native?:boolean}[],callBack?:any)=>{
     let animations=animData.map((data)=>Animated[data.style?data.style:"timing"](data.property,{toValue:data.value,duration:data.duration,easing:Easing.ease,useNativeDriver:false}));
     Animated.parallel(animations).start(callBack)
@@ -197,7 +201,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
   //console.log(screenInfo)
 
   return(
-      <Animated.View key={props.id} style={[styles.screenWrapper,!screenInfo?.occupyFullScreen?{paddingLeft:0.06*Dimensions.get("screen").width,paddingRight:0.06*Dimensions.get("screen").width,}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,screenInfo?.type=="Flyer"?{borderRadius:20,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{},{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
+      <Animated.View onLayout={(e)=>setScreenDimensions(e.nativeEvent.layout)} key={props.id} style={[styles.screenWrapper,!screenInfo?.occupyFullScreen?{paddingLeft:0.06*Dimensions.get("screen").width,paddingRight:0.06*Dimensions.get("screen").width,}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,screenInfo?.type=="Flyer"?{borderRadius:20,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{},{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
         {
           props.index!=0 && screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY"
           ?
@@ -312,15 +316,15 @@ const Presets={
           x:0,
           y:1,
           scale:1,
-          height:1,
+          height:0.5,
           width:1,
           opacity:1
         },
         end:{
           x:0,
-          y:1/2,
+          y:0.5,
           scale:1,
-          height:1/2,
+          height:0.5,
           width:1,
           opacity:1
         }

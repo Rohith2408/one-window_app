@@ -6,9 +6,10 @@ import { useEffect, useRef } from "react"
 import { Image } from "expo-image"
 import upload_icon from '../../assets/images/misc/upload.png'
 import clock_icon from '../../assets/images/misc/clock.png'
-import products_icon from '../../assets/images/misc/products.png'
+import products_icon from '../../assets/images/misc/order.png'
 import { Word2Sentence, formatDate, getDevice, getThemeColor, setWordCase } from "../../utils"
 import { Fonts, Themes } from "../../constants"
+import go_icon from '../../assets/images/misc/back.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -63,11 +64,15 @@ const TabStyles=StyleSheet.create({
         width:16,
         height:16,
         resizeMode:"contain",
-        borderRadius:100
     },
     clock_icon:{
         width:10,
         height:10,
+        resizeMode:"contain",
+    },
+    go_icon:{
+        width:12,
+        height:12,
         resizeMode:"contain",
     }
 })
@@ -86,7 +91,6 @@ const MobileSStyles=StyleSheet.create({
         width:14,
         height:14,
         resizeMode:"contain",
-        borderRadius:100
     },
     clock_icon:{
         width:10,
@@ -95,26 +99,35 @@ const MobileSStyles=StyleSheet.create({
     },
     paynow:{
         fontSize:12
+    },
+    go_icon:{
+        width:8,
+        height:8,
+        resizeMode:"contain",
     }
 })
 
 const MobileMStyles=StyleSheet.create({
     name:{
-        fontSize:14
+        fontSize:16
     },
     category:{
-        fontSize:12
+        fontSize:14
     },
     intake:{
-        fontSize:13
+        fontSize:14
     },
     icon:{
-        width:18,
-        height:18,
+        width:24,
+        height:24,
         resizeMode:"contain",
-        borderRadius:100
     },
     clock_icon:{
+        width:10,
+        height:10,
+        resizeMode:"contain",
+    },
+    go_icon:{
         width:10,
         height:10,
         resizeMode:"contain",
@@ -135,9 +148,13 @@ const MobileLStyles=StyleSheet.create({
         width:16,
         height:16,
         resizeMode:"contain",
-        borderRadius:100
     },
     clock_icon:{
+        width:10,
+        height:10,
+        resizeMode:"contain",
+    },
+    go_icon:{
         width:10,
         height:10,
         resizeMode:"contain",
@@ -159,7 +176,6 @@ const Ordercard=(props:Order & {index:number})=>{
 
     const redirectToPayment=async ()=>{
         console.log("Payment data",props.paymentDetails)
-        //addToBasket("payment_options",props.paymentDetails);
         navigate?navigate({type:"AddScreen",payload:{screen:"Payment",params:{paymentOrderId:props._id}}}):null
     }
 
@@ -189,18 +205,18 @@ const Ordercard=(props:Order & {index:number})=>{
             <Image source={products_icon} style={[styles[Device].icon]}/>
         </View>
         <View style={[GeneralStyles.info_wrapper]}>
-            {/* <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
-                <View style={{width:5,height:5,borderRadius:10,backgroundColor:"#69FF6F"}}></View>
-                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{formatDate(props.paymentDetails.created_at)}</Text>
-            </Animated.View> */}
+            <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
+                <View style={{width:5,height:5,borderRadius:10,backgroundColor:"orange"}}></View>
+                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.products.length+" products"}</Text>
+            </Animated.View>
             <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.Package?props.Package.name:"Direct Purchase"}</Text>
             <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
                 <Image style={[styles[Device].clock_icon]} source={clock_icon} />
-                <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Order placed on "+formatDate(props.paymentDetails.created_at)}</Text>
+                <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Order placed on "+formatDate(props.paymentDetails.created_at)}</Text>
             </View>
             <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
                 <Image style={[styles[Device].clock_icon]} source={upload_icon} />
-                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Price - "+props.paymentDetails.currency+" "+props.paymentDetails.amount/100+" | "+setWordCase(props.paymentDetails.paymentStatus)+" | "+"Products-"+props.products.length}</Text>
+                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Amount"+(props.paymentDetails.paymentStatus=="pending"?+" to be ":"")+" paid "+ (props.paymentDetails.currency+" "+props.paymentDetails.amount/100)}</Text>
             </View>
         </View>
         {
@@ -210,7 +226,7 @@ const Ordercard=(props:Order & {index:number})=>{
                 <Text style={[styles[Device].paynow,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Pay Now</Text>
             </Pressable>
             :
-            null
+            <View style={{alignSelf:"center"}}><Image source={go_icon} style={[styles[Device].go_icon,{transform:[{scaleX:-1}]}]} /></View>
         }
     </Pressable>
 )}

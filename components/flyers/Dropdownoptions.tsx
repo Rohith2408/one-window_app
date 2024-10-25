@@ -156,10 +156,10 @@ const Dropdownoptions=(props:{basketid:string})=>{
     },[])
 
     const apply=(selected:any)=>{
-        //console.log("apply",info.apply)
         info.eventHandler?info.eventHandler({name:"onSelect",data:selected,triggerBy:"dropdownoptions"}):null
-        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null;
-        navigate?navigate(info.apply?info.apply(selected):{type:"UpdateParam",payload:{param:"formupdate",newValue:{id:info?.fieldid,newvalue:selected}}}):null
+        info.pathHandler?navigate?navigate(info.pathHandler(selected)):null:null
+        !info.preventCloseOnApply?navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null:null
+        //console.log("apply",info.apply)
     }
 
     setLayoutAnimation()
@@ -178,6 +178,8 @@ const Dropdownoptions=(props:{basketid:string})=>{
     else{
         options.current=info.options.list.slice(0,(page+1)*itemsPerPage)
     }
+
+    console.log("info",JSON.stringify(info,null,2));
 
     // useEffect(()=>{
     //     setSelected([]);

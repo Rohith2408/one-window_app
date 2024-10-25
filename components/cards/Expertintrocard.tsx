@@ -12,8 +12,8 @@ const GeneralStyles=StyleSheet.create({
         gap:5,
         alignItems:"flex-start",
         justifyContent:"center",
-        paddingLeft:8,
-        paddingRight:8
+        // paddingLeft:8,
+        // paddingRight:8
     },
 })
 
@@ -40,10 +40,10 @@ const TabStyles=StyleSheet.create({
 
 const MobileSStyles=StyleSheet.create({
     role:{
-        fontSize:12
+        fontSize:14
     },
     description:{
-        fontSize:10,
+        fontSize:12,
         lineHeight:20
     },
     icon:{
@@ -61,10 +61,10 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     role:{
-        fontSize:14
+        fontSize:16
     },
     description:{
-        fontSize:12,
+        fontSize:14,
         lineHeight:24
     },
     icon:{
@@ -82,10 +82,10 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     role:{
-        fontSize:14
+        fontSize:16
     },
     description:{
-        fontSize:12,
+        fontSize:14,
         lineHeight:24
     },
     icon:{
@@ -116,7 +116,7 @@ const Expertintrocard=(props:{role:string,description:string,index:number})=>{
     return(
         <View style={[GeneralStyles.wrapper]}>
             <View style={{flexDirection:"row",alignItems:"center",gap:5,position:"relative"}}>
-                <View style={[styles[Device].icon_wrapper,{borderRadius:100,position:"absolute",backgroundColor:getLightThemeColor(props.index%4)}]}></View>
+                {/* <View style={[styles[Device].icon_wrapper,{borderRadius:100,position:"absolute",backgroundColor:getLightThemeColor(props.index%4)}]}></View> */}
                 {/* <Image style={[styles[Device].icon]} source={expert_icon}/> */}
                 <Text style={[{textAlign:"left"},{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].role]}>{props.role}</Text>
             </View>

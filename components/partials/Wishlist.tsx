@@ -13,6 +13,7 @@ import emptylist from '../../assets/images/illustrations/thinking.png'
 import { addToBasket } from "../../constants/basket"
 import { store } from "../../store"
 import Wishlistcard from "../cards/Wishlistcard"
+import Transitionview from "../resources/Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     add_wrapper:{
@@ -183,9 +184,11 @@ const Wishlist=(props:any)=>{
                     <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,paddingTop:20}}>
                     {
                         wishlist.data.map((item,i)=>
-                        <View key={item._id} style={[styles[Device].card]}>
-                            <Wishlistcard data={item} index={i}/>
-                        </View>
+                        <Transitionview effect="pan" delay={100*i}>
+                            <View key={item._id} style={[styles[Device].card]}>
+                                <Wishlistcard data={item} index={i}/>
+                            </View>
+                        </Transitionview>
                         )
                     }
                     </ScrollView>

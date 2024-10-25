@@ -12,6 +12,7 @@ import useNavigation from "../../hooks/useNavigation"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
 import { updateMeeting } from "../../store/slices/meetingsSlice"
 import loading_gif from '../../assets/images/misc/loader.gif'
+import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -41,7 +42,9 @@ const GeneralStyles=StyleSheet.create({
     },
     actions_wrapper:{
         display:'flex',
-        flexDirection:"column"
+        flexDirection:"column",
+        justifyContent:"center",
+        alignItems:'center'
     },
     status:{
         position:"absolute",
@@ -66,7 +69,7 @@ const TabStyles=StyleSheet.create({
     },
     attendees:{
         fontSize:14,
-        lineHeight:16
+        lineHeight:20
     },
     edit:{
         width:20,
@@ -102,7 +105,8 @@ const MobileSStyles=StyleSheet.create({
         lineHeight:16
     },
     attendees:{
-        fontSize:10
+        fontSize:10,
+        lineHeight:16
     },
     edit:{
         width:14,
@@ -126,27 +130,28 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     icon:{
-        width:26,
-        height:26,
+        width:28,
+        height:28,
         resizeMode:'contain'
     },
     title:{
-        fontSize:14
+        fontSize:16
     },
     datetime:{
-        fontSize:12
+        fontSize:14
     },
     attendees:{
-        fontSize:12
+        fontSize:14,
+        lineHeight:18
     },
     edit:{
-        width:14,
-        height:14,
+        width:16,
+        height:16,
         resizeMode:'contain'
     },
     delete:{
-        width:14,
-        height:14,
+        width:16,
+        height:16,
         resizeMode:'contain'
     },
     clock:{
@@ -155,7 +160,7 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     status:{
-        fontSize:10
+        fontSize:12
     }
 })
 
@@ -173,7 +178,7 @@ const MobileLStyles=StyleSheet.create({
     },
     attendees:{
         fontSize:12,
-        lineHeight:16
+        lineHeight:18
     },
     edit:{
         width:14,
@@ -259,7 +264,7 @@ const Meetingcard=(props:{data:Meeting,index:number})=>{
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
-                        <View style={{width:5,height:5,borderRadius:10,backgroundColor:"#69FF6F"}}></View>
+                        <View style={{width:5,height:5,borderRadius:10,backgroundColor:"lightgreen"}}></View>
                         <Text style={[styles[Device].status,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.data.status)}</Text>
                     </Animated.View>
                     <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.data.description}</Text>
@@ -270,15 +275,15 @@ const Meetingcard=(props:{data:Meeting,index:number})=>{
                     <View style={{gap:5,flexDirection:"row"}}>
                         {/* <Text style={[styles[Device].attendees,{color:'black',fontFamily:Fonts.NeutrifStudio.Regular}]}>Attendees </Text> */}
                         <Image style={[styles[Device].clock]} source={clock_icon} />
-                        <Text style={[styles[Device].attendees,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{Word2Sentence(props.data.attendees,"",",")}</Text>
+                        <Text style={[styles[Device].attendees,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{Word2Sentence(props.data.attendees.filter((attendee)=>attendee.toLowerCase()!=store.getState().sharedinfo.data?.email?.toLowerCase()),"",",",true)}</Text>
                     </View>
                 </View>
                 {
                     props.data.status!="cancelled"
                     ?
                     <View style={[GeneralStyles.actions_wrapper]}>
-                        <Pressable onPress={reschedule} style={{flex:1,alignSelf:'flex-start'}}><Image style={[styles[Device].edit]} source={edit_icon}/></Pressable>
-                        <Pressable onPress={()=>!(isLoading)?cancel():null} style={{flex:1,alignSelf:'flex-end'}}><Image style={[styles[Device].delete]} source={(isLoading)?loading_gif:delete_icon}/></Pressable>
+                        <Pressable onPress={reschedule} style={{flex:1}}><Image style={[styles[Device].edit]} source={edit_icon}/></Pressable>
+                        <Pressable onPress={()=>!(isLoading)?cancel():null} style={{justifyContent:'flex-end'}}><Image style={[styles[Device].delete]} source={(isLoading)?loading_gif:delete_icon}/></Pressable>
                     </View>
                     :
                     null

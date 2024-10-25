@@ -32,7 +32,7 @@ const preferences:PreferenceInfo[]=[
         id:"country",
         title:"Country",
         options:{
-            list:Countries.map((item)=>({label:item,value:item})),
+            list:Countries.map((item)=>({label:item.name,value:item.name})),
             idExtractor:(item:ListItem)=>item.label,
             labelExtractor:(item:ListItem)=>item.label,
             card:Degreepreference,

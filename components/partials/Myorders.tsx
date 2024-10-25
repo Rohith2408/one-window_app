@@ -9,6 +9,7 @@ import { Fonts, Themes } from "../../constants";
 import emptylist from '../../assets/images/illustrations/sad_male.png'
 import { useRef } from "react";
 import { getDevice } from "../../utils";
+import Transitionview from "../resources/Transitionview";
 
 const GeneralStyles=StyleSheet.create({
     add_wrapper:{
@@ -138,10 +139,13 @@ const Myorders=()=>{
                     <Pressable onPress={openExplore}><Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Start exploring now</Text></Pressable>
                 </View>
                 :
-                <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,paddingTop:20}}>
+                <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,paddingTop:25}}>
                 {
                     orders.data.map((order,i)=>
-                    <View key={order._id}><Ordercard index={i} {...order}/></View>
+                    <Transitionview effect="pan" delay={100*i}>
+                        <View key={order._id}><Ordercard index={i} {...order}/></View>
+                    </Transitionview>
+                    
                 )}
                 </ScrollView>
             }

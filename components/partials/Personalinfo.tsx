@@ -10,17 +10,15 @@ import test_icon from '../../assets/images/profile/personalinfo/tests.png'
 import go_icon from '../../assets/images/misc/back.png'
 import expert_icon from '../../assets/images/profile/expert.png'
 import preferences_icon from '../../assets/images/profile/preferences.png'
-import { getDevice } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { getDevice, getServerRequestURL, resetStore, serverRequest } from "../../utils"
+import { Fonts, Themes, secureStoreKeys } from "../../constants"
 import useNavigation from "../../hooks/useNavigation"
-import { store } from "../../store"
-import { Verified, setVerification, updateVerification } from "../../store/slices/verificationSlice"
-import { useAppDispatch } from "../../hooks/useAppDispatch"
+import * as SecureStore from 'expo-secure-store'
+import { addToBasket } from "../../constants/basket"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        width:"100%",
-        height:"100%",
+        flex:1,
         backgroundColor:'white',
         paddingTop:10
     },
@@ -34,7 +32,11 @@ const GeneralStyles=StyleSheet.create({
     },
     go_icon:{
         transform:[{scaleX:-1}]
-    }
+    },
+    logout_wrapper:{
+        alignSelf:"flex-end",
+        padding:10
+    },
 })
 
 const TabStyles=StyleSheet.create({
@@ -162,19 +164,49 @@ const Personalinfo=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:screen.id,params:screen.params}}):null
     }
 
+    const logout=async ()=>{
+        await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,"");
+        resetStore();
+        navigate?navigate({type:"Logout"}):null
+    }
+
+    const deleteAccount=async ()=>{
+        let res=await serverRequest({
+            url:getServerRequestURL("delete-account","GET"),
+            reqType:"PUT"
+        })
+        console.log("delete",res);
+        if(res.success)
+        {
+            await logout();
+            setTimeout(()=>{
+                navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Account Deleted Successfully"}}}}):null;
+            },500)
+        }
+        return res.success
+    }
+
+    const deleteWarning=()=>{
+        addToBasket("warning",{warningMessage:"Are you sure you want to delete your account , this action can't be undone!",proceedCallback:deleteAccount,yesLabel:"Delete",noLabel:"No"});
+        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Warning"}}}):null;
+    }
+
     useEffect(()=>{
-        console.log("perrr")
-       // dispatch(setVerification([{type:"phone",status:true},{type:"email",status:true}]));
-        //updateVerification({type:"email",status:true});
+
     },[])
 
     return(
-        <View style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>
-        {
-            options.map((option)=>
-            <Pressable key={option.title} onPress={()=>openScreen(option.screen)}><Option {...option} Device={Device}></Option></Pressable>
-            )
-        }
+        <View style={{flex:1,flexDirection:"column"}}>
+            <View style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>
+            {
+                options.map((option)=>
+                <Pressable key={option.title} onPress={()=>openScreen(option.screen)}><Option {...option} Device={Device}></Option></Pressable>
+                )
+            }
+            </View>
+            <View style={[GeneralStyles.logout_wrapper]}>
+                <Pressable onPress={deleteWarning} style={[GeneralStyles.logout,{borderWidth:0,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]}><Text style={[GeneralStyles.logout,styles[Device].delete_account,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Medium}]}>Delete Account?</Text></Pressable>
+            </View>
         </View>
     )
 

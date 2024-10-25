@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import Listselection from "../resources/Listselection"
 import { getBasket } from "../../constants/basket"
-import { ListItem, ProgramIntake } from "../../types";
+import { ListItem, Paymentsummary, ProgramIntake, Request, ServerResponse } from "../../types";
 import Intakecard from "../cards/Intakecard";
 import { useRef, useState } from "react";
 import useNavigation from "../../hooks/useNavigation";
@@ -65,6 +65,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     const [error,setError]=useState<string|undefined>(undefined)
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [isLoading,setIsloading]=useState(false)
+    const [paymentDetails,setPaymentDetails]=useState<Request<Paymentsummary>>()
 
     const yearSelected=(data:ListItem[])=>{
         setIntake({...intake,year:data.length==0?undefined:data[0].value})
@@ -103,7 +104,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     }
 
     return(
-        <View style={{flex:1,flexDirection:'column',justifyContent:"center",alignItems:'center',gap:35,padding:5,paddingTop:15,paddingBottom:35}}>
+        <View style={{flexDirection:'column',justifyContent:"center",alignItems:'center',gap:20,padding:5,paddingTop:20,paddingBottom:0}}>
             <View style={{alignSelf:'stretch',gap:7}}>
                 <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the year</Text>
                 <View>
@@ -123,7 +124,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
                     />
                 </View>
             </View>
-            <View style={{flex:1,alignSelf:'stretch',gap:7}}>
+            <View style={{alignSelf:'stretch',gap:7,maxHeight:150}}>
                 <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the Month</Text>
                 <View>
                     <Listselection 

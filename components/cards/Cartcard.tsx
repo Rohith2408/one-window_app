@@ -135,7 +135,7 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     superset_text:{
-        fontSize:12
+        fontSize:13
     },
     sub_wrapper:{
         gap:20,
@@ -152,13 +152,13 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     course_name:{
-        fontSize:14
+        fontSize:16
     },
     uni_name:{
-        fontSize:13
+        fontSize:14
     },
     footer:{
-        fontSize:13
+        fontSize:14
     }
 })
 

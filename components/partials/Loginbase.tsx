@@ -12,6 +12,7 @@ import airplane from '../../assets/images/props/airplane.png'
 import girlPeek_image from '../../assets/images/misc/girl-peek.png'
 import passport from '../../assets/images/props/passport.png'
 import logo from '../../assets/images/logo.png'
+import banner from '../../assets/images/illustrations/login.png'
 import { addToBasket, removeFromBasket } from "../../constants/basket"
 import Listselection from "../resources/Listselection"
 
@@ -140,6 +141,11 @@ const TabStyles=StyleSheet.create({
         left:"60%",
         zIndex:-1,
         resizeMode:"contain"
+    },
+    banner:{
+        width:250,
+        height:250,
+        resizeMode:"contain"
     }
 })
 
@@ -212,6 +218,11 @@ const MobileSStyles=StyleSheet.create({
         left:"60%",
         zIndex:-1,
         resizeMode:"contain"
+    },
+    banner:{
+        width:205,
+        height:205,
+        resizeMode:"contain"
     }
 })
 
@@ -264,6 +275,11 @@ const MobileMStyles=StyleSheet.create({
         top:-62,
         left:"60%",
         zIndex:-1,
+        resizeMode:"contain"
+    },
+    banner:{
+        width:250,
+        height:250,
         resizeMode:"contain"
     }
 })
@@ -318,6 +334,11 @@ const MobileLStyles=StyleSheet.create({
         left:"60%",
         zIndex:-1,
         resizeMode:"contain"
+    },
+    banner:{
+        width:225,
+        height:225,
+        resizeMode:"contain"
     }
 })
 
@@ -336,35 +357,6 @@ const Loginbase=(props:{auth:string})=>{
     const tabs=useRef([{label:"Email",value:"email"},{label:"Phone",value:"phone"}]).current
     const [loginType,setLoginType]=useState("email");
 
-    // const login=async (email:string,password:string)=>{
-    //     let validEmail=validations.EMAIL.regex.test(email)
-    //     let validPassword=validations.PASSWORD.regex.test(password)
-    //     if(validEmail && validPassword)
-    //     {
-    //         let deviceToken=await SecureStore.getItemAsync(secureStoreKeys.DEVICE_TOKEN);
-    //         let res:ServerResponse=await serverRequest({url:getServerRequestURL("login","POST"),reqType:"POST",routeType:"public",body:{email:email,password:password,DeviceToken:deviceToken}})
-    //         console.log("err",res);
-    //         if(res.success)
-    //         {
-    //             navigate?navigate({type:"Login"}):null
-    //         }
-    //         else{
-    //             //setErrors([{id:"password",error:res.message}]);
-    //         }
-    //     }
-    //     if(validEmail && !validPassword)
-    //     {
-    //         console.log("invalid password")
-    //     }
-    //     if(!validEmail && validPassword){
-
-    //     }
-    //     if(!validEmail && !validPassword)
-    //     {
-
-    //     }
-    // }
-
     const openSignup=()=>{
         navigate?navigate({type:"Register"}):null
         setTimeout(()=>{
@@ -375,107 +367,6 @@ const Loginbase=(props:{auth:string})=>{
     const openForgotPassword=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Forgotpassword"}}}):null
     }
-
-    // const eventHandler=async (event:Event)=>{
-    //     switch(event.name){
-    //         case "emailInput":
-    //             setEmail(event.data);
-    //             break;
-
-    //         case "passwordInput":
-    //             setPassword(event.data)
-    //         break;
-
-    //         case "getSavedCredentials":
-    //             // let authRes=await LocalAuthentication.authenticateAsync()
-    //             // if(authRes.success)
-    //             // {
-    //             //     SecureStore.getItemAsync("8b5a309a4f01cfa2").then((res)=>{
-    //             //         let credentials=JSON.parse(res);
-    //             //         console.log(JSON.stringify(credentials));
-    //             //         let currentUserCredentials=credentials.find((credential)=>credential.email==event.data.label)
-    //             //         setState({email:currentUserCredentials.email,password:currentUserCredentials.password})
-    //             //         eventHandler({name:"login",data:{email:currentUserCredentials.email,password:currentUserCredentials.password}})
-    //             //     })
-    //             // }
-    //             // else
-    //             // {
-    //             //     setState({email:event.data.label,password:""})
-    //             //     //console.log("error");
-    //             // }
-    //             break;
-
-    //         case "login":
-    //             login(email,password)
-    //             // console.log("login",saveLoginInfo)
-    //             // setLoginRequest({...initialState,requestStatus:"initiated"});
-    //             // let deviceToken=await SecureStore.getItemAsync(EXPOSTORE.DEVICE_TOKEN);
-    //             // let resp=await login(event.data.email,event.data.password,deviceToken);
-    //             // if(resp.success)
-    //             // {
-    //             //     setLoginRequest({...initialState,requestStatus:"initiated",responseStatus:"recieved",haveAnIssue:false});
-    //             //     await SecureStore.setItemAsync(EXPOSTORE.ACCESSTOKEN,resp.data.AccessToken);
-    //             //     saveLoginInfo?await rememberMe(event.data.email,event.data.password,"8b5a309a4f01cfe7","8b5a309a4f01cfa2"):await forgetMe(event.data.email,"8b5a309a4f01cfe7","8b5a309a4f01cfa2")
-    //             //     Keyboard.isVisible()?Keyboard.dismiss():null
-    //             //     setTimeout(()=>{
-    //             //         dispatch(setUserAuthStatus({
-    //             //             isAuthorized:true,
-    //             //             isRegistered:true,
-    //             //             role:"student"
-    //             //          }));
-    //             //     },300)
-    //             // }
-    //             // else
-    //             // {
-    //             //     setLoginRequest({...initialState,requestStatus:"initiated",responseStatus:"recieved",haveAnIssue:true});
-    //             //     setTimeout(()=>{
-    //             //         setLoginRequest({...initialState});
-    //             //     },100)
-    //             //     dispatch(setError({
-    //             //         show:true,
-    //             //         message:resp.message
-    //             //     }))
-    //             // }
-    //             break;
-
-    //         case "guestlogin":
-    //             // dispatch(setUserAuthStatus({
-    //             //     isAuthorized:false,
-    //             //     isRegistered:false,
-    //             //     role:"guest"
-    //             //  }));
-    //             break;
-
-    //         case "openRegistrationPage":
-    //             // dispatch(setUserAuthStatus({
-    //             //     isAuthorized: false,
-    //             //     isRegistered: false,
-    //             //     role: "student"
-    //             // }))
-    //             break;
-
-    //         case "forgotpassword":
-    //             // dispatch(setPopup({
-    //             //     show: true,
-    //             //     data:{
-    //             //         container:{
-    //             //             name:"forgotpasswordpopuppopup",
-    //             //             dimensions:{
-    //             //                 width:Dimensions.get('screen').width*0.75,
-    //             //                 height:Dimensions.get('screen').height*(Platform.OS=="android"?0.7:0.6)
-    //             //             },
-    //             //         },
-    //             //         type:"custom",
-    //             //         headerIcon:face_icon
-    //             //     }
-    //             // }))
-    //             break;
-        
-    //         case "setSaveLoginInfo":
-    //             //setSaveLoginInfo(!event.data);
-    //             break;
-    //         }
-    // }
 
     const tabSelected=(tab:ListItem[])=>{
         console.log("tab",tab[0].value)
@@ -493,24 +384,16 @@ const Loginbase=(props:{auth:string})=>{
     }
 
     const verify_email=async (otp:string,data:{ email: string })=>{
-        
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("verify-user","POST"),
             reqType: "POST",
             routeType:"public",
             body:{email:data.email,otp:otp,type:"email"}
         })
-        // if(res.success)
-        // {
-        //     navigate({type:"RemoveSpecificScreen",payload:{id:"Verifyloginotp"}})
-        //     navigate({type:"Login"})
-        // }
         if(res.success)
         {
-            //navigate({type:"RemoveSpecificScreen",payload:{id:"Verifyuser"}})
             navigate({type:"Login"})
         }
-        //res.success?navigate({type:""}):null
         return res.success
     }
 
@@ -522,17 +405,10 @@ const Loginbase=(props:{auth:string})=>{
             routeType:"public",
             body:{...data.phone,otp:otp,type:"phone"}
         })
-        // if(res.success)
-        // {
-        //     navigate({type:"RemoveSpecificScreen",payload:{id:"Verifyloginotp"}})
-        //     navigate({type:"Login"})
-        // }
         if(res.success)
         {
-            //navigate({type:"RemoveSpecificScreen",payload:{id:"Verifyuser"}})
             navigate({type:"Login"})
         }
-        //res.success?navigate({type:""}):null
         return res.success
     }
 
@@ -545,6 +421,15 @@ const Loginbase=(props:{auth:string})=>{
         //     removeFromBasket("login_email")
         // }
     },[loginType])
+
+    const emailLogin=()=>{
+        // navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Emaillogin"}}})
+        navigate({type:"AddScreen",payload:{screen:"Emaillogin"}})
+    }
+
+    const phoneLogin=()=>{
+        navigate({type:"AddScreen",payload:{screen:"Phonelogin"}})
+    }
 
     //console.log("current tab",loginType);
 
@@ -561,7 +446,15 @@ const Loginbase=(props:{auth:string})=>{
                     <Image style={[styles[Device].passport,{position:"absolute",transform:[{rotate:"20deg"}]}]} source={passport}/>
                     <Image style={[styles[Device].logo,{aspectRatio:5}]} source={logo}/>
                 </View>
-                <Listselection
+                <View style={{display:"flex",flexDirection:"column",gap:10}}>
+                    <Image source={banner} style={[{alignSelf:"center"},styles[Device].banner]}/>
+                    <Text style={[styles[Device].login,{textAlign:"center",fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>We make studying abroad easier</Text>
+                </View>
+                <View style={{flexDirection:"row",gap:5,alignItems:'center',padding:10}}>
+                    <Pressable onPress={emailLogin} style={{flex:1}}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(0.6),fontFamily:Fonts.NeutrifStudio.Medium}}>Proceed with email</Text></Pressable>
+                    <Pressable onPress={phoneLogin} style={{flex:1}}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(0.6),fontFamily:Fonts.NeutrifStudio.Medium}}>Proceed with phone</Text></Pressable>
+                </View>
+                {/* <Listselection
                     direction="horizontal"
                     selectionStyle="background"
                     initialSelection={[tabs[0]]}
@@ -581,7 +474,7 @@ const Loginbase=(props:{auth:string})=>{
                     <Form key="email" formid="Login_email" formbasket="login_email"/>
                     :
                     <Form key="phone" formid="Login_phone" formbasket="login_phone"/>
-                }
+                } */}
                 {/* <View style={[GeneralStyles.actions_wrapper]}>
                     <View>
                         <Pressable onPress={openSignup}><Text style={[styles[Device].noaccount,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Don't have an account?</Text></Pressable>

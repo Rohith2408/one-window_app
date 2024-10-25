@@ -2,13 +2,19 @@ import { useRef, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import Loadinglistscreen from "../resources/Loadinglistscreen"
 import { useAppSelector } from "../../hooks/useAppSelector"
-import { getDevice } from "../../utils"
+import { getChatType, getDevice } from "../../utils"
 import Expertcard from "../cards/Expertcard"
 import { Fonts, Themes } from "../../constants"
 import { Advisor } from "../../types"
 import useNavigation from "../../hooks/useNavigation"
 import { store } from "../../store"
 import Requestcounsellorcard from "../cards/Requestcounsellorcard"
+import Styledtext from "../resources/Styledtext"
+import Transitionview from "../resources/Transitionview"
+import { Image } from "expo-image"
+import add_icon from '../../assets/images/misc/add.png'
+import stars_icon from '../../assets/images/misc/stars.png'
+import next_icon from '../../assets/images/misc/next.png'
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -21,6 +27,22 @@ const GeneralStyles=StyleSheet.create({
     verify_wrapper:{
         borderWidth:1,
         borderRadius:20
+    },
+    add_wrapper:{
+        display:"flex",
+        flexDirection:"row",
+        alignItems:"center",
+        position:'absolute',
+        gap:7.5,
+        bottom:20,
+        right:0,
+        zIndex:1,
+        backgroundColor:"white",
+        borderRadius:100,
+        shadowOpacity:0.1,
+        shadowRadius:5,
+        elevation:2,
+        padding:7
     }
 })
 
@@ -54,6 +76,16 @@ const MobileMStyles=StyleSheet.create({
     },
     briefing:{
         fontSize:14
+    },
+    next_icon:{
+        width:30,
+        height:30,
+        resizeMode:"contain"
+    },
+    stars_icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
     }
 })
 
@@ -65,6 +97,11 @@ const MobileLStyles=StyleSheet.create({
     },
     briefing:{
         fontSize:14
+    },
+    next_icon:{
+        width:30,
+        height:30,
+        resizeMode:"contain"
     }
 })
 
@@ -91,16 +128,24 @@ const Experts=()=>{
     }
 
     return(
-        <View style={{flex:1,padding:5}}>
+        <View style={{flex:1,paddingTop:15}}>
         {
             experts.responseStatus=="not_recieved"
             ?
             <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
             :
-            <View style={{flex:1,gap:10}}>
-                <Pressable onPress={showExperts} style={[{alignSelf:'center',borderRadius:100,backgroundColor:Themes.Light.OnewindowLightBlue}]}>
-                    <Text style={[{padding:10},{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)},styles[Device].briefing]}>Confused? Click here for a brief introduction</Text>
+            <View style={{flex:1,gap:20}}>
+                <View style={[GeneralStyles.add_wrapper]}>
+                    <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].add_text]}>Who’s Here to Help?</Text>
+                    <Image style={[styles[Device].next_icon]} source={next_icon}></Image>
+                </View>
+                <Pressable onPress={showExperts} style={[{flexDirection:"row",alignItems:'center',borderRadius:100,borderWidth:2,borderColor:Themes.Light.OnewindowLightBlue,gap:5,padding:10}]}>
+                    <Image style={[styles[Device].stars_icon]} source={stars_icon}></Image>
+                    <Styledtext styles={[{lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].briefing]} text="Your Study Abroad Success Starts with Our Expert Guidance" focusWord="Study Abroad"/>
                 </Pressable>
+                {/* <Pressable onPress={showExperts} style={[{alignSelf:'center',borderRadius:100,borderWidth:2,borderColor:Themes.Light.OnewindowLightBlue}]}>
+                    <Styledtext styles={[{padding:10,textAlign:"center",lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].briefing]} text="Wondering Who’s Here to Help? Discover Our Dedicated Team" focusWord="Discover Our Dedicated Team"/>
+                </Pressable> */}
                 <ScrollView style={{flex:1}} contentContainerStyle={{gap:15,paddingBottom:20}}>
                 {
                     store.getState().preferences.data?.country?.map((country)=>
@@ -113,7 +158,7 @@ const Experts=()=>{
                 }
                 {
                     experts.data?.map((expert,i)=>
-                    <Pressable onPress={()=>showDetails(expert)} key={expert.info._id} style={[styles[Device].card_wrapper]}><Expertcard index={i} {...expert}/></Pressable>
+                    <Transitionview delay={100*i} effect="pan"><Pressable onPress={()=>showDetails(expert)} key={expert.info._id} style={[styles[Device].card_wrapper]}><Expertcard index={i} {...expert}/></Pressable></Transitionview>
                     )
                 }
                 </ScrollView>

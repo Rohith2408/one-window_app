@@ -71,6 +71,8 @@ import Warning from "../components/flyers/Warning"
 import Userdoesntexist from "../components/cards/Userdoesntexistcard"
 import Wishlist from "../components/partials/Wishlist"
 import Expertsintro from "../components/partials/Expertsintro"
+import Emaillogin from "../components/flyers/Emailogin"
+import Phonelogin from "../components/flyers/Phonelogin"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -115,6 +117,8 @@ const components:ScreenInfo[]=[
     {id:"Address",component:Address,type:"Partial",title:"Address",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Datetimeproselector",component:Datetimeproselector,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Successfull",component:Successfull,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Emaillogin",component:Emaillogin,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",removalThreshold:5/6,customPlacement:{initial:{x:0,y:1,scale:1,height:0.3,width:1,opacity:1},final:{x:0,y:0.7,scale:1,opacity:1,height:0.3,width:1}}},
+    {id:"Phonelogin",component:Phonelogin,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",removalThreshold:5/6,customPlacement:{initial:{x:0,y:1,scale:1,height:0.3,width:1,opacity:1},final:{x:0,y:0.7,scale:1,opacity:1,height:0.3,width:1}}},
     {id:"Nointernet",component:Nointernet,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Error",component:Error,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Search",component:Search,props:["initialSearch"],type:"Partial",title:"Search",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},

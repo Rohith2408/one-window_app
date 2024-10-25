@@ -56,7 +56,7 @@ const Textbox=(props:{readonly:boolean,placeholder:string,eventHandler:(event:Ev
 
     return(
         <View style={[GeneralStyles.wrapper]}>
-            <TextInput  readOnly={props.readonly?props.readonly:false} autoCapitalize="none" style={[styles[Device].text,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,fontWeight:"700"}]} onChangeText={(value)=>props.eventHandler({name:"onTextInput",data:value,triggerBy:"textinput"})} placeholder={props.placeholder} value={props.value}></TextInput>
+            <TextInput  readOnly={props.readonly?props.readonly:false} autoCapitalize="none" style={[styles[Device].text,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]} onChangeText={(value)=>props.eventHandler({name:"onTextInput",data:value,triggerBy:"textinput"})} placeholder={props.placeholder} value={props.value}></TextInput>
         </View>
     )
 }

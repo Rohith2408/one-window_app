@@ -14,6 +14,7 @@ import { Image } from "expo-image";
 import Asynchronousbutton from "../resources/Asynchronousbutton";
 import products_icon from '../../assets/images/misc/products.png'
 import delete_icon from '../../assets/images/misc/delete.png'
+import Transitionview from "../resources/Transitionview";
 
 const GeneralStyles=StyleSheet.create({
     addmore_wrapper:{
@@ -273,7 +274,9 @@ const Cart=()=>{
                         <ScrollView style={{flex:1}} contentContainerStyle={{gap:20,padding:5}}>
                         {
                             cart.data.map((item,i)=>
-                            <Cartcard key={item._id} {...item} index={i}/>
+                            <Transitionview effect="pan" delay={100*i}>
+                                <Cartcard key={item._id} {...item} index={i}/>
+                            </Transitionview>
                             )
                         }
                         </ScrollView>

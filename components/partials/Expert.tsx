@@ -2,13 +2,17 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Advisor } from "../../types"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { useRef } from "react"
-import { Word2Sentence, getDevice } from "../../utils"
+import { Word2Sentence, getChatType, getDevice } from "../../utils"
 import { Image } from "expo-image"
 import Meetingcard from "../cards/Meetingcard"
 import { Fonts, Themes } from "../../constants"
 import add_icon from '../../assets/images/misc/add.png'
 import useNavigation from "../../hooks/useNavigation"
 import emptylist from '../../assets/images/illustrations/sad_male.png'
+import { store } from "../../store"
+import chat_icon from '../../assets/images/misc/chat.png'
+import default_icon from '../../assets/images/misc/defaultDP.png'
+import Transitionview from "../resources/Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -56,9 +60,25 @@ const GeneralStyles=StyleSheet.create({
     meetings_wrapper:{
         flex:1,
         padding:20,
-        gap:20,
+        gap:15,
         backgroundColor:'white',
         borderRadius:30
+    },
+    add_wrapper:{
+        display:"flex",
+        flexDirection:"row",
+        alignItems:"center",
+        position:'absolute',
+        gap:7.5,
+        bottom:20,
+        right:10,
+        zIndex:1,
+        backgroundColor:"white",
+        borderRadius:100,
+        shadowOpacity:0.1,
+        shadowRadius:5,
+        elevation:2,
+        padding:7
     }
 })
 
@@ -93,8 +113,8 @@ const TabStyles=StyleSheet.create({
         width:"100%"
     },
     add_icon:{
-        width:24,
-        height:24,
+        width:30,
+        height:30,
         resizeMode:"contain"
     },
     no_meetings:{
@@ -108,6 +128,9 @@ const TabStyles=StyleSheet.create({
         width:170,
         height:170,
         resizeMode:"contain"
+    },
+    add_text:{
+        fontSize:18
     }
 })
 
@@ -142,8 +165,8 @@ const MobileSStyles=StyleSheet.create({
         width:"100%"
     },
     add_icon:{
-        width:20,
-        height:20,
+        width:22,
+        height:22,
         resizeMode:"contain"
     },
     no_meetings:{
@@ -157,6 +180,9 @@ const MobileSStyles=StyleSheet.create({
         width:80,
         height:80,
         resizeMode:"contain"
+    },
+    add_text:{
+        fontSize:14
     }
 })
 
@@ -167,10 +193,10 @@ const MobileMStyles=StyleSheet.create({
         display:"flex",
     },
     name:{
-        fontSize:18
+        fontSize:20
     },
     email:{
-        fontSize:12
+        fontSize:14
     },
     dp:{
         width:50,
@@ -184,28 +210,31 @@ const MobileMStyles=StyleSheet.create({
         left:10
     },
     meeting_heading:{
-        fontSize:14
+        fontSize:18
     },
     card_wrapper:{
         height:100,
         width:"100%"
     },
     add_icon:{
-        width:20,
-        height:20,
+        width:26,
+        height:26,
         resizeMode:"contain"
     },
     no_meetings:{
-        fontSize:16
+        fontSize:18
     },
     click_message:{
-        fontSize:12,
+        fontSize:14,
         lineHeight:20
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:140,
+        height:140,
         resizeMode:"contain"
+    },
+    add_text:{
+        fontSize:16
     }
 })
 
@@ -216,10 +245,10 @@ const MobileLStyles=StyleSheet.create({
         display:"flex",
     },
     name:{
-        fontSize:18
+        fontSize:20
     },
     email:{
-        fontSize:12
+        fontSize:14
     },
     dp:{
         width:50,
@@ -233,15 +262,15 @@ const MobileLStyles=StyleSheet.create({
         left:10
     },
     meeting_heading:{
-        fontSize:14
+        fontSize:16
     },
     card_wrapper:{
         height:100,
         width:"100%"
     },
     add_icon:{
-        width:20,
-        height:20,
+        width:28,
+        height:28,
         resizeMode:"contain"
     },
     no_meetings:{
@@ -254,6 +283,9 @@ const MobileLStyles=StyleSheet.create({
         width:100,
         height:100,
         resizeMode:"contain"
+    },
+    add_text:{
+        fontSize:16
     }
 })
 
@@ -275,8 +307,18 @@ const Expert=(props:{expertid:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"AddMeeting",forminitialdataid:props.expertid}}}):null
     }
 
+    const chat=()=>{
+        let profile=store.getState().sharedinfo.data;
+        let chatId=store.getState().chats.data.find((chat)=>getChatType(chat)=="advisors" && chat.participants.find((participant)=>participant._id==props.expertid))?._id
+        navigate?navigate({type:"AddScreen",payload:{screen:"Message",params:{chatId:chatId}}}):null
+    }
+
     return(
         <View style={[GeneralStyles.wrapper]}>
+            <Pressable onPress={bookslot} style={[GeneralStyles.add_wrapper]}>
+                <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].add_text]}>Schedule a meeting</Text>
+                <Image style={[styles[Device].add_icon]} source={add_icon}></Image>
+            </Pressable>
             <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                 <View style={[GeneralStyles.info_wrapper_bg,{backgroundColor:Themes.Light.OnewindowRed(1)}]}></View>
                 <View style={[GeneralStyles.info_subwrapper]}>
@@ -286,14 +328,14 @@ const Expert=(props:{expertid:string})=>{
                     </View>
                     <View style={[GeneralStyles.dp_wrapper]}>
                         <View style={[GeneralStyles.dp_bg,styles[Device].dp_bg,{backgroundColor:"#FF9081"}]} />
-                        <Image style={[styles[Device].dp,{borderRadius:100}]} source={expert?.info.displayPicSrc} />
+                        <Image style={[styles[Device].dp,{borderRadius:100}]} source={expert?.info.displayPicSrc?expert.info.displayPicSrc:default_icon} />
                     </View>
                 </View>
             </View>
             <View style={[GeneralStyles.meetings_wrapper]}>
                 <View style={{display:'flex',flexDirection:'row',padding:10}}>
                     <View style={{flex:1}}><Text style={[styles[Device].meeting_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Meetings</Text></View>
-                    <Pressable onPress={()=>bookslot()}><Image style={[styles[Device].add_icon]} source={add_icon}/></Pressable>
+                    <Pressable onPress={chat}><Image style={[styles[Device].add_icon]} source={chat_icon}/></Pressable>
                 </View>
                 <View style={{flex:1}}>
                 {
@@ -305,10 +347,10 @@ const Expert=(props:{expertid:string})=>{
                         <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button above to schedule a meet with the expert</Text>
                     </View>
                     :
-                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:10,paddingTop:15}}>
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:10,paddingTop:0}}>
                     {
                         meetings.map((meeting,i)=>
-                        <View key={meeting._id} style={[styles[Device].card_wrapper]}><Meetingcard data={meeting} index={i}/></View>
+                        <Transitionview effect="pan"><View key={meeting._id}><Meetingcard data={meeting} index={i}/></View></Transitionview>
                         )
                     }
                     </ScrollView>

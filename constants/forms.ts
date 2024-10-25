@@ -236,7 +236,7 @@ const forms:FormInfo[]=[
                                 idExtractor:(item:Countrycode)=>item.code,
                                 searchEvaluator:(item:Countrycode,search:string)=>(item.dial_code+item.code+item.name).toLowerCase().trim().includes(search.toLowerCase().trim()),
                             },
-                            apply:(data:Countrycode[])=>{
+                            pathHandler:(data:Countrycode[])=>{
                                 let current:PhoneType=getBasket("phone")
                                 return ({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"phone",newvalue:{...current,countryCode:data}}}})
                             },
@@ -422,7 +422,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"prefferedlanguage",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"prefferedlanguage",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"prefferedlanguage-dropdown"
                     }
@@ -442,12 +442,12 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
-                            list:Countries.map((country)=>({label:country,value:country})),
+                            list:Countries.map((country)=>({label:country.name,value:country.name})),
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
                         selectionMode:"single",
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"preffereddestinations",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"preffereddestinations",newvalue:data}}}),
                         basketid:"preffereddestinations-dropdown"
                     }
                 },
@@ -677,7 +677,7 @@ const forms:FormInfo[]=[
                                 idExtractor:(item:Countrycode)=>item.code,
                                 searchEvaluator:(item:Countrycode,search:string)=>item.name.toLowerCase().trim().includes(search.toLowerCase().trim()),
                             },
-                            apply:(data:Countrycode[])=>{
+                            pathHandler:(data:Countrycode[])=>{
                                 let current:PhoneType=getBasket("phone")
                                 console.log("phone data",current);
                                 return ({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"phone",newvalue:{...current,countryCode:data}}}})
@@ -733,7 +733,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gender",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gender",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"gender-dropdown"
                     },
@@ -758,7 +758,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"nationality",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"nationality",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"nationality-dropdown"
                     },
@@ -786,7 +786,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"countryofbirth",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"countryofbirth",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                     }
@@ -812,7 +812,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"maritalstatus",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"maritalstatus",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"gender-dropdown"
                     },
@@ -956,7 +956,7 @@ const forms:FormInfo[]=[
                                 idExtractor:(item:Countrycode)=>item.code,
                                 searchEvaluator:(item:Countrycode,search:string)=>item.name.toLowerCase().trim().includes(search.toLowerCase().trim()),
                             },
-                            apply:(data:Countrycode[])=>{
+                            pathHandler:(data:Countrycode[])=>{
                                 let current:PhoneType=getBasket("phone")
                                 console.log("phone data",current);
                                 return ({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"phone",newvalue:{...current,countryCode:data}}}})
@@ -1012,7 +1012,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gender",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gender",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"gender-dropdown"
                     },
@@ -1037,7 +1037,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"nationality",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"nationality",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"nationality-dropdown"
                     },
@@ -1065,7 +1065,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"countryofbirth",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"countryofbirth",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                     }
@@ -1091,7 +1091,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"maritalstatus",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"maritalstatus",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"gender-dropdown"
                     },
@@ -1222,7 +1222,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                         cityFieldId:"city",
@@ -1256,7 +1256,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"state-dropdown",
                         cityFieldId:"city"
@@ -1286,7 +1286,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown"
                         }
@@ -1417,7 +1417,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                         cityFieldId:"city",
@@ -1451,7 +1451,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"state-dropdown",
                         cityFieldId:"city"
@@ -1481,7 +1481,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown"
                         }
@@ -1612,7 +1612,7 @@ const forms:FormInfo[]=[
                                 idExtractor:(item:Countrycode)=>item.code,
                                 searchEvaluator:(item:Countrycode,search:string)=>item.name.toLowerCase().trim().includes(search.toLowerCase().trim()),
                             },
-                            apply:(data:Countrycode[])=>{
+                            pathHandler:(data:Countrycode[])=>{
                                 let current:PhoneType=getBasket("phone")
                                 console.log("phone data",current);
                                 return ({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"phone",newvalue:{...current,countryCode:data}}}})
@@ -1688,7 +1688,7 @@ const forms:FormInfo[]=[
                                 defaultMessage:"Show default relations?"
                             }
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"relationshipwithstudent",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"relationshipwithstudent",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"relation-dropdown"
                     },
@@ -1799,7 +1799,7 @@ const forms:FormInfo[]=[
                                 defaultMessage:"Select a default worktype?"
                             }
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"worktype",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"worktype",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"worktype-dropdown"
                     },
@@ -1828,7 +1828,7 @@ const forms:FormInfo[]=[
                                 defaultMessage:"Select a default sector?"
                             }
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"sector",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"sector",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"sector-dropdown"
                     }
@@ -2021,7 +2021,7 @@ const forms:FormInfo[]=[
                                 defaultMessage:"Select a default worktype?"
                             }
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"worktype",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"worktype",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"worktype-dropdown"
                     },
@@ -2050,7 +2050,7 @@ const forms:FormInfo[]=[
                                 defaultMessage:"Select a default sector?"
                             }
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"sector",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"sector",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"sector-dropdown"
                     }
@@ -2189,7 +2189,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                         cityFieldId:"city",
@@ -2223,7 +2223,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"state-dropdown",
                         cityFieldId:"city"
@@ -2260,7 +2260,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown"
                         }
@@ -2284,7 +2284,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"board",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"board",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"board-dropdown"
                     }
@@ -2313,7 +2313,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"languageofinstruction",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"languageofinstruction",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"language-dropdown"
                     }
@@ -2337,7 +2337,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"gradingsystem-dropdown"
                     }
@@ -2534,7 +2534,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                         cityFieldId:"city",
@@ -2569,7 +2569,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"state-dropdown",
                         cityFieldId:"city"
@@ -2606,7 +2606,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown",
                      }
@@ -2637,7 +2637,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"board",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"board",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown",
                     }
@@ -2666,7 +2666,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"languageofinstruction",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"languageofinstruction",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"language-dropdown"
                     }
@@ -2690,7 +2690,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"gradingsystem-dropdown"
                     }
@@ -2893,7 +2893,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                         cityFieldId:"city",
@@ -2928,7 +2928,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"state-dropdown",
                         cityFieldId:"city"
@@ -2965,7 +2965,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown",
                      }
@@ -2996,7 +2996,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"board",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"board",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown",
                     }
@@ -3025,7 +3025,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"languageofinstruction",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"languageofinstruction",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"language-dropdown"
                     }
@@ -3049,7 +3049,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"gradingsystem-dropdown"
                     }
@@ -3245,7 +3245,7 @@ const forms:FormInfo[]=[
                             //searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         isAsync:true,
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"institutename",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"institutename",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                     }
@@ -3273,7 +3273,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                         cityFieldId:"city",
@@ -3303,7 +3303,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"state-dropdown",
                         cityFieldId:"city"
@@ -3333,7 +3333,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown",
                      }
@@ -3376,7 +3376,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"programmajor",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"programmajor",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"programmajor-dropdown"
                     }
@@ -3400,7 +3400,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"degreeprogram-dropdown"
                     }
@@ -3424,7 +3424,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"gradingsystem-dropdown"
                     }
@@ -3605,7 +3605,7 @@ const forms:FormInfo[]=[
                             //searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
                         isAsync:true,
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"institutename",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"institutename",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                     }
@@ -3633,7 +3633,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                         cityFieldId:"city",
@@ -3663,7 +3663,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"state-dropdown",
                         cityFieldId:"city"
@@ -3693,7 +3693,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown",
                      }
@@ -3736,7 +3736,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"programmajor",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"programmajor",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"programmajor-dropdown"
                     }
@@ -3760,7 +3760,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"degreeprogram-dropdown"
                     }
@@ -3784,7 +3784,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"gradingsystem-dropdown"
                     }
@@ -3974,7 +3974,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                         cityFieldId:"city",
@@ -4008,7 +4008,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"state-dropdown",
                         cityFieldId:"city"
@@ -4045,7 +4045,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown",
                      }
@@ -4088,7 +4088,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"specialization",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"specialization",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"specialization-dropdown"
                     }
@@ -4112,7 +4112,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"degreeprogram-dropdown"
                     }
@@ -4136,7 +4136,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"gradingsystem-dropdown"
                     }
@@ -4327,7 +4327,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                         cityFieldId:"city",
@@ -4361,7 +4361,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"state-dropdown",
                         cityFieldId:"city"
@@ -4398,7 +4398,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown",
                      }
@@ -4441,7 +4441,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"specialization",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"specialization",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"specialization-dropdown"
                     }
@@ -4465,7 +4465,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"degreeprogram",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"degreeprogram-dropdown"
                     }
@@ -4489,7 +4489,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"gradingsystem",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"gradingsystem-dropdown"
                     }
@@ -5159,13 +5159,13 @@ const forms:FormInfo[]=[
                         options:{
                             fetcher:(data:AppliedFilter)=>{
                                 let baseFilter:AppliedQuickFilter|undefined=getBasket("Programsfilter").baseFilters.find((item)=>item.type=="country");
-                                let options=Countries.map((country)=>({label:country,value:country}))
+                                let options=Countries.map((country)=>({label:country.name,value:country.name}))
                                 return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
                             },
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
                     }
                 },
@@ -5195,7 +5195,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"studyLevel",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"studyLevel",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"sector-dropdown"
                     }
@@ -5225,7 +5225,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>{console.log("disci",data);return {type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"discipline",newvalue:data}}}},
+                        pathHandler:(data:ListItem[])=>{console.log("disci",data);return {type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"discipline",newvalue:data}}}},
                         selectionMode:"multi",
                         basketid:"sector-dropdown"
                     }
@@ -5259,7 +5259,7 @@ const forms:FormInfo[]=[
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                             //searchEvaluator:(item:ListItem,query:string)=>item.label.includes(query)
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"subDiscipline",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"subDiscipline",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"sector-dropdown"
                     }
@@ -5289,7 +5289,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"studyMode",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"studyMode",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"sector-dropdown"
                     }
@@ -5374,7 +5374,7 @@ const forms:FormInfo[]=[
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"intake",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"intake",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"sector-dropdown"
                     }
@@ -5436,7 +5436,7 @@ const forms:FormInfo[]=[
             //                 idExtractor:(item:ListItem)=>item.label,
             //                 labelExtractor:(item:ListItem)=>item.label
             //             },
-            //             apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+            //             pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
             //             selectionMode:"single",
             //             basketid:"sector-dropdown"
             //         }
@@ -5459,13 +5459,15 @@ const forms:FormInfo[]=[
                         options:{
                             fetcher:async ()=>{
                                 let countries=await fetchCountries();
-                                return {success:countries?true:false,data:countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):undefined,message:""}
+                                //countries?countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})):[]
+                                //Countries.map((country:any)=>({label:setWordCase(country.name),value:country.name}))
+                                return {success:countries?true:false,data:Countries.map((country:any)=>({label:setWordCase(country.name),value:country.name})),message:""}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"country-dropdown",
                         cityFieldId:"city",
@@ -5488,14 +5490,15 @@ const forms:FormInfo[]=[
                         options:{
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
-                                let states=selectedCountry?await fetchStates(selectedCountry):undefined
-                                return {success:(selectedCountry!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
+                                let countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
+                                let states=countryMapped?await fetchStates(countryMapped):undefined
+                                return {success:(countryMapped!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"state-dropdown",
                         cityFieldId:"city"
@@ -5517,15 +5520,16 @@ const forms:FormInfo[]=[
                         options:{
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
+                                let countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
                                 let selectedState=getBasket("state")[0]?.label
-                                let cities=(selectedCountry && selectedState)?await fetchCities(selectedCountry,selectedState):undefined
+                                let cities=(countryMapped && selectedState)?await fetchCities(countryMapped,selectedState):undefined
                                 return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
                             searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
                         },
-                        apply:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"city-dropdown"
                         }

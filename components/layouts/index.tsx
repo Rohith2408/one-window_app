@@ -1,8 +1,10 @@
-import React, { useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import { StyleSheet, View } from "react-native"
-import { Layout as LayoutType} from "../../types"
+import { Layout as LayoutType, ServerResponse} from "../../types"
 import {components} from "../../constants/components"
-import { getDevice } from "../../utils"
+import { getDevice, getLocation } from "../../utils"
+import { useAppDispatch } from "../../hooks/useAppDispatch"
+import { initLocation } from "../../store/slices/locationSlice"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -44,6 +46,19 @@ const Layout=(props:LayoutType)=>{
     const Container=components.find((item)=>item.id==props.component)?.component
     const Invalidpathscreen=props.invalidPathScreen
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const dispatch=useAppDispatch()
+
+    useEffect(()=>{
+        getLocation().then((res:ServerResponse)=>{
+            dispatch(initLocation({
+              requestStatus: 'initiated',
+              responseStatus: 'recieved',
+              haveAnIssue: res.success,
+              issue:"",
+              data:res.data
+            }))
+          })
+    },[])
 
     return(
         <View style={[styles[Device].wrapper]}>

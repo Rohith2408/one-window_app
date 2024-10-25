@@ -7,11 +7,12 @@ import { getDevice } from "../../utils"
 import { Image } from "expo-image"
 import emptylist from '../../assets/images/illustrations/angry.png'
 import { Fonts, Themes } from "../../constants"
+import Transitionview from "../resources/Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         flex:1,
-        padding:10,
+        padding:0,
         paddingTop:0,
         backgroundColor:'white'
     },
@@ -135,10 +136,12 @@ const Myproducts=()=>{
                     <Text style={[styles[Device].no_products,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Not purchased any products yet!</Text>
                 </View>
                 :
-                <ScrollView style={{flex:1}}>
+                <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,paddingTop:30}}>
                 {
                     products.data.map((product,i)=>
-                    <View style={[styles[Device].card,{padding:10}]}><Product {...product} index={i}/></View>
+                    <Transitionview effect="pan" delay={100*i}>
+                        <View style={[{padding:0}]}><Product {...product} index={i}/></View>
+                    </Transitionview>
                     )
                 }
                 </ScrollView>

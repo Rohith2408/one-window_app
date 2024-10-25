@@ -41,7 +41,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     field_title:{
-        fontSize:18,
+        fontSize:16,
         paddingLeft:10
     },
     form_title:{
@@ -57,7 +57,7 @@ const MobileSStyles=StyleSheet.create({
         paddingLeft:10
     },
     form_title:{
-        fontSize:13,
+        fontSize:14,
         marginTop:30,
         marginBottom:30
     }
@@ -68,18 +68,18 @@ const MobileMStyles=StyleSheet.create({
         paddingLeft:10
     },
     form_title:{
-        fontSize:14,
+        fontSize:16,
         marginTop:30,
         marginBottom:30
     }
 })
 const MobileLStyles=StyleSheet.create({
     field_title:{
-        fontSize:15,
+        fontSize:14,
         paddingLeft:10
     },
     form_title:{
-        fontSize:15,
+        fontSize:16,
         marginTop:30,
         marginBottom:30
     }

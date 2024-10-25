@@ -85,7 +85,7 @@ const MobileSStyles=StyleSheet.create({
         fontSize:13
     },
     category:{
-        fontSize:12
+        fontSize:14
     },
     intake:{
         fontSize:11
@@ -114,7 +114,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:14
     },
     category:{
-        fontSize:12
+        fontSize:14
     },
     intake:{
         fontSize:13
@@ -143,7 +143,7 @@ const MobileLStyles=StyleSheet.create({
         fontSize:14
     },
     category:{
-        fontSize:12
+        fontSize:14
     },
     intake:{
         fontSize:11

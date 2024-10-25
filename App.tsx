@@ -2,11 +2,11 @@ import { StatusBar } from 'expo-status-bar';
 import { Linking, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Stacknavigator from './navigation/stackNavigator';
 import { useEffect, useReducer, useRef, useState } from 'react';
-import { ComponentInfo, StackScreen } from './types';
+import { ComponentInfo, ServerResponse, StackScreen } from './types';
 import Home from './components/screens/Home';
 import Profile from './components/screens/Profile';
 import { NavigationReducer } from './reducers/PathReducer';
-import {  encodePath, registerForPushNotificationsAsync} from './utils';
+import {  encodePath, getLocation, registerForPushNotificationsAsync} from './utils';
 import Invalidpath from './components/partials/Invalidpath';
 import Layout from './components/layouts';
 import * as SecureStore from 'expo-secure-store';
@@ -60,10 +60,6 @@ export default function App() {
   useEffect(()=>{
     Linking.addEventListener('url', (event: { url: string })=>{
   });
-
-  // setTimeout(()=>{
-  //   navigate({type:"add",payload:{params:{popup:"sample",popupdata:"Rohith"},path:"Popup"}})
-  // },2000)
 
   const unsubscribe = NetInfo.addEventListener(state => {
     if(!state.isConnected)

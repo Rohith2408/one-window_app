@@ -17,6 +17,7 @@ import emptylist from '../../assets/images/illustrations/sad.png'
 import { Image } from "expo-image"
 import Chatcard from "../cards/Chatcard"
 import Userdoesntexist from "../cards/Userdoesntexistcard"
+import Transitionview from "../resources/Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -212,10 +213,12 @@ const Chats=()=>{
                                     <Pressable ><Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>No experts assigned , request for an expert?</Text></Pressable>
                                 </View>
                                 :
-                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:0,paddingBottom:30}}>
+                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:15,paddingTop:0,paddingBottom:30}}>
                                 {
                                     experts.map((item,i)=>
-                                    <View key={item._id}><Chatcard {...item} index={i}/></View>
+                                    <Transitionview effect="pan" delay={100*i}>
+                                        <View key={item._id}><Chatcard {...item} index={i}/></View>
+                                    </Transitionview>
                                     )
                                 }
                                 </ScrollView>
@@ -231,14 +234,18 @@ const Chats=()=>{
                                     <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Seems like you have no friends!</Text>
                                 </View>
                                 :
-                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:0,paddingBottom:30}}>
+                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:15,paddingTop:0,paddingBottom:30}}>
                                 {
                                     community.map((item,i)=>
                                     (item.participants.length==1)
                                     ?
-                                    <Userdoesntexist/>
+                                    <Transitionview effect="pan" delay={100*i}>
+                                        <Userdoesntexist/>
+                                    </Transitionview>
                                     :
-                                    <View key={item._id}><Chatcard {...item} index={i}/></View>
+                                    <Transitionview effect="pan" delay={100*i}>
+                                        <View key={item._id}><Chatcard {...item} index={i}/></View>
+                                    </Transitionview>
                                     )
                                 }
                                 </ScrollView>

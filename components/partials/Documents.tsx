@@ -98,7 +98,7 @@ const MobileMStyles=StyleSheet.create({
         height:100
     },
     document_title:{
-        fontSize:14
+        fontSize:16
     },
     document_info:{
         fontSize:10,
@@ -128,7 +128,7 @@ const MobileLStyles=StyleSheet.create({
         height:100
     },
     document_title:{
-        fontSize:14
+        fontSize:16
     },
     document_info:{
         fontSize:10,

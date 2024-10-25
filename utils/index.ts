@@ -30,7 +30,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import Textbox from "../components/resources/Textbox";
 import Datetime from "../components/resources/Datetime";
 import { getBasket } from "../constants/basket";
-
+import * as Location from 'expo-location';
 
 export const propsMapper=(screens:string[],params:any|undefined)=>{
   return screens.map((screen)=>{
@@ -905,6 +905,24 @@ export const cleanObject=(obj:any)=>{
       }
   });
   return obj;
+}
+
+export const getLocation=async ()=>{
+  let res:ServerResponse={success:false,message:"",data:undefined}
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status == 'granted') {
+      let location = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = location.coords;
+      let geocode = await Location.reverseGeocodeAsync({
+        latitude,
+        longitude,
+      });
+      if (geocode.length > 0) {
+        res.success=true;
+        res.data=geocode[0]
+      }
+    }
+    return res;
 }
 
 // export const bakeFilters=(additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[])=>{

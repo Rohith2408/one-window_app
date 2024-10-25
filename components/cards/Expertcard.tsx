@@ -3,7 +3,7 @@ import { Advisor } from "../../types"
 import { Word2Sentence, camelCaseToString, getDevice, getLightThemeColor, getThemeColor, setWordCase } from "../../utils"
 import { Image } from "expo-image"
 import { useRef } from "react"
-import { Fonts, Themes } from "../../constants"
+import { Countries, Fonts, Themes } from "../../constants"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -133,7 +133,7 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     superset_text:{
-        fontSize:10
+        fontSize:12
     },
     sub_wrapper:{
         gap:10,
@@ -150,13 +150,13 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     course_name:{
-        fontSize:14
+        fontSize:16
     },
     uni_name:{
-        fontSize:13
+        fontSize:14
     },
     footer:{
-        fontSize:13
+        fontSize:14
     }
 })
 
@@ -201,6 +201,7 @@ const Expertcard=(props:Advisor & {index:number})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     //console.log(props.assignedCountries,props.info.firstName,props.info.role)
+
     
     return(
         <View style={[GeneralStyles.main_wrapper]}>
@@ -227,7 +228,7 @@ const Expertcard=(props:Advisor & {index:number})=>{
                 </View>
                 <View style={[GeneralStyles.footer_wrapper]}>
                     <Text style={[styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Regular,color:"grey"}]}>Assigned for:</Text>
-                    <Text style={[GeneralStyles.footer,styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.assignedCountries.length>0?Word2Sentence(props.assignedCountries,"",",",true):"All Countries"}</Text>
+                    <Text style={[GeneralStyles.footer,styles[Device].footer,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.assignedCountries.length>0?Word2Sentence(props.assignedCountries.length>1?props.assignedCountries.map((country)=>Countries.find((item)=>item.name.toLowerCase()==country.toLowerCase())?.shortForm):props.assignedCountries,"",",",true):"All Countries"}</Text>
                 </View>
             </View>
         </View>

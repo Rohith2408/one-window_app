@@ -105,7 +105,7 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
         console.log("selected dddd")
         if(props.isAsync)
         {
-            addToBasket(props.basketid+"-dropdownoptions",{options:{...props.options},eventHandler:props.eventHandler,apply:props.apply,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value});
+            addToBasket(props.basketid+"-dropdownoptions",{options:{...props.options},pathHandler:props.pathHandler,eventHandler:props.eventHandler,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value});
             navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptionsasync",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null
         }
         else
@@ -115,13 +115,14 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
             let res:ServerResponse=props.options.fetcher?await props.options.fetcher():{success:true,data:props.options.list,message:''}
             console.log("resi",props.id,props.options.searchEvaluator);
             navigate?navigate({type:"UpdateParam",payload:{param:"formerrors",newValue:{id:props.id,error:res.success?undefined:res.message}}}):null
-            res.success?addToBasket(props.basketid+"-dropdownoptions",{options:{...props.options,list:res.data},eventHandler:props.eventHandler,apply:props.apply,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value}):null
+            res.success?addToBasket(props.basketid+"-dropdownoptions",{options:{...props.options,list:res.data},eventHandler:props.eventHandler,pathHandler:props.pathHandler,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value}):null
             res.success?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null:null
             setTimeout(()=>{
                 setLoading(false)
             },100)
         }
     }
+    //{type:"UpdateParam",payload:{param:"formupdate",newValue:{id:info?.fieldid,newvalue:selected}}}
 
     const removeSelected=(item:ListItem)=>{
         navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.id,newvalue:props.value.filter((data)=>data.label!=item.label)}}}):null

@@ -45,7 +45,7 @@ const Dynamicplaceholder=()=>{
 
     const getIndex=(prev:number)=>{
         //console.log(prev)
-        return prev==placeholders.length?0:prev+1
+        return prev==placeholders.length-1?0:prev+1
     }
 
     useEffect(()=>{

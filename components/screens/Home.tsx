@@ -9,7 +9,7 @@ import destinations_icon from "../../assets/images/explore/destinations.png"
 import universities_icon from '../../assets/images/explore/universities.png'
 import programs_icon from '../../assets/images/explore/programs.png'
 import university_icon from '../../assets/images/misc/mallareddylogo.png'
-import { Device } from "../../types"
+import { Banner, Device } from "../../types"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import List from "../resources/List"
 import Product from "../cards/Productcard"
@@ -17,6 +17,14 @@ import Loadinglistscreen from "../resources/Loadinglistscreen"
 import { store } from "../../store"
 import emptylist from '../../assets/images/illustrations/thinking.png'
 import Dynamicplaceholder from "../resources/Dynamicplaceholder"
+import Carousel from "../resources/Carousel"
+import Bannercard from "../cards/Bannercard"
+import sample_banner from '../../assets/images/banners/sample.png'
+import banner_1 from '../../assets/images/banners/1.png'
+import banner_2 from '../../assets/images/banners/2.png'
+import banner_3 from '../../assets/images/banners/3.png'
+import Productcompactcard from "../cards/Productcompactcard"
+import Transitionview from "../resources/Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -79,7 +87,7 @@ const TabStyles=StyleSheet.create({
     },
     sub_wrapper:{
         // maxWidth:500,
-        gap:40
+        gap:38
     },
     welcome_message:{
         fontSize:30,
@@ -132,7 +140,7 @@ const MobileSStyles=StyleSheet.create({
     },
     sub_wrapper:{
         // maxWidth:500,
-        gap:30
+        gap:26
     },
     welcome_message:{
         fontSize:20,
@@ -172,6 +180,9 @@ const MobileSStyles=StyleSheet.create({
         width:74,
         height:74,
         resizeMode:"contain"
+    },
+    banner_wrapper:{
+        height:300
     }
 })
 
@@ -186,7 +197,7 @@ const MobileMStyles=StyleSheet.create({
     },
     sub_wrapper:{
         // maxWidth:500,
-        gap:40
+        gap:30
     },
     welcome_message:{
         fontSize:26,
@@ -210,7 +221,7 @@ const MobileMStyles=StyleSheet.create({
     },
     card:{
         width:250,
-        height:205
+        height:160
     },
     loader_card:{
         width:250,
@@ -226,6 +237,9 @@ const MobileMStyles=StyleSheet.create({
         width:100,
         height:100,
         resizeMode:"contain"
+    },
+    banner_wrapper:{
+        height:150
     }
 })
 
@@ -240,7 +254,7 @@ const MobileLStyles=StyleSheet.create({
     },
     sub_wrapper:{
         // maxWidth:500,
-        gap:40
+        gap:34
     },
     welcome_message:{
         fontSize:26,
@@ -280,6 +294,9 @@ const MobileLStyles=StyleSheet.create({
         width:100,
         height:100,
         resizeMode:"contain"
+    },
+    banner_wrapper:{
+        height:300
     }
 })
 
@@ -302,6 +319,14 @@ const Home=(props:undefined|{name:string})=>{
         {text:"Universities",icon:universities_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Universities",programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null},
         {text:"Programs",icon:programs_icon,handler:()=>navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null}
     ]).current
+    const banners=useRef<Banner[]>([
+        {title:"Choosing the right university",subTitle:"",image:banner_1,url:"https://onewindow.co/steps-to-select-university/"},
+        // {title:"Scholorship vs Student Loan",subTitle:"",image:sample_banner,url:"https://onewindow.co/scholarship-vs-student-loan-understanding-the-pros-and-cons/"},
+        {title:"Making friends abroad",subTitle:"",image:banner_2,url:"https://onewindow.co/07-tips-to-make-friends-while-you-study-abroad/"},
+        {title:"Academic success strategies",subTitle:"",image:banner_3,url:"https://onewindow.co/top-5-academic-success-strategies-for-study-abroad/"},
+        // {title:"Summer Programs",subTitle:"",image:sample_banner,url:"https://onewindow.co/summer-programs-short-term-opportunities/"}
+    ]).current
+
 
     const openSearch=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Search",params:{initialSearch:""}}}):null
@@ -318,23 +343,33 @@ const Home=(props:undefined|{name:string})=>{
             <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper]}>
                 <View style={{position:"relative",gap:10}}>
                     <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
-                    <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?(personalinfo.data.firstName):"User")}!</Text>
+                    <Transitionview effect="pan"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?(personalinfo.data.firstName):"User")}!</Text></Transitionview>
                     {/* <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
                         <Image source={university_icon} style={[GeneralStyles.explore_icon,{width:24,height:24,resizeMode:"contain"}]}></Image>
                         <Text style={{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.5)}}>Malla Reddy University</Text>
                     </View> */}
                 </View>
-                <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
-                    <Dynamicplaceholder/>
-                    {/* <Text style={[GeneralStyles.search_text,styles[Device].search_text,{fontFamily:Fonts.NeutrifStudio.Regular}]}>Search for "Harvard University"</Text> */}
-                </Pressable>
+                <Transitionview effect="zoom">
+                    <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
+                        <Dynamicplaceholder/>                     
+                    </Pressable>
+                </Transitionview>
                 <View style={[GeneralStyles.explore_wrapper]}>
                 {
-                    exploreTabs.map((item)=>
+                    exploreTabs.map((item,i)=>
                     <Exploreitem key={item.text} {...item} device={Device} theme={theme}></Exploreitem>
+                    // <Transitionview style={[{flex:1,alignSelf:"stretch"}]} effect="pan" delay={i==1?0:100}>
+                    //     <Exploreitem key={item.text} {...item} device={Device} theme={theme}></Exploreitem>
+                    // </Transitionview>
                     )
                 }
                 </View>
+                <View style={[{width:"100%"}]}>
+                    <Carousel data={banners} card={Bannercard}/>
+                </View>
+                {/* <View style={[{width:"100%"}]}>
+                    <Carousel data={banners} card={Bannercard}/>
+                </View> */}
                 <View style={[GeneralStyles.products_wrapper,styles[Device].products_wrapper]}>
                     <Text style={[GeneralStyles.products_title,styles[Device].products_title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
                     {
@@ -352,7 +387,7 @@ const Home=(props:undefined|{name:string})=>{
                                 <Image source={emptylist} style={[styles[Device].no_products_image]}/>
                             </View>
                             :
-                            <List cardStyles={styles[Device].card} list={products.data} card={Product} direction="Horizontal" mode="Scroll"></List>
+                            <List cardStyles={styles[Device].card} list={products.data} card={Productcompactcard} direction="Horizontal" mode="Scroll"></List>
                     }
                 </View>
             </View>

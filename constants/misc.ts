@@ -154,7 +154,8 @@ const Tests=[
     // {name:"American College Testing",shortForm:"ACT",type:"general",sections:[{name:"English",validation:{min:1,max:36}},{name:"Math",validation:{min:1,max:36}},{name:"Reading",validation:{min:1,max:36}},{name:"Science",validation:{min:1,max:36}}]},
 ] 
 
-export const Countries=["United States of America","United Kingdom","Canada","Australia","Ireland","New Zealand"]
+export const Countries=[{name:"United States of America",shortForm:"USA"},{name:"United Kingdom",shortForm:"UK"},{name:"Canada",shortForm:"CAN"},{name:"Australia",shortForm:"AUS"},{name:"New Zealand",shortForm:"NZ"},{name:"Ireland",shortForm:"IRE"}];
+
 
 export const boards=[
     "Central Board of Secondary Education (CBSE)", 

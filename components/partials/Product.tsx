@@ -10,6 +10,8 @@ import location_icon from '../../assets/images/misc/location.png'
 import { store } from "../../store"
 import Expertcard from "../cards/Expertcard"
 import fee_icon from '../../assets/images/misc/fee.png'
+import Expertcompactcard from "../cards/Expertcompactcard"
+import Styledtext from "../resources/Styledtext"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -25,7 +27,7 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:"row",
         alignItems:"flex-start",
         gap:10,
-        padding:10
+        padding:0
     },
     uni_icon_wrapper:{
         display:"flex",
@@ -88,7 +90,7 @@ const TabStyles=StyleSheet.create({
         width:28,
         height:28,
         borderRadius:100,
-        left:-7,
+        left:7,
         top:7
     },
     uni_location:{
@@ -102,10 +104,10 @@ const TabStyles=StyleSheet.create({
         height:175
     },
     advisor_heading:{
-        fontSize:14
+        fontSize:16
     },
     show_order_details:{
-        fontSize:13
+        fontSize:18
     },
     dashboard_icon:{
         height:18,
@@ -130,7 +132,7 @@ const TabStyles=StyleSheet.create({
         fontSize:12
     },
     status:{
-        fontSize:14
+        fontSize:16
     }
 })
 
@@ -151,7 +153,7 @@ const MobileSStyles=StyleSheet.create({
         width:22,
         height:22,
         borderRadius:100,
-        left:-5,
+        left:5,
         top:5
     },
     uni_location:{
@@ -168,7 +170,7 @@ const MobileSStyles=StyleSheet.create({
         fontSize:14
     },
     show_order_details:{
-        fontSize:13
+        fontSize:12
     },
     dashboard_icon:{
         height:18,
@@ -213,12 +215,12 @@ const MobileMStyles=StyleSheet.create({
         width:24,
         height:24,
         borderRadius:100,
-        left:-7,
-        top:7
+        left:5,
+        top:5
     },
     uni_location:{
-        fontSize:12,
-        lineHeight:16
+        fontSize:14,
+        lineHeight:20
     },
     program_name:{
         fontSize:16
@@ -227,10 +229,10 @@ const MobileMStyles=StyleSheet.create({
         height:175
     },
     advisor_heading:{
-        fontSize:14
+        fontSize:16
     },
     show_order_details:{
-        fontSize:13
+        fontSize:14
     },
     dashboard_icon:{
         height:18,
@@ -255,7 +257,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     status:{
-        fontSize:13
+        fontSize:14
     }
 })
 
@@ -276,8 +278,8 @@ const MobileLStyles=StyleSheet.create({
         width:24,
         height:24,
         borderRadius:100,
-        left:-7,
-        top:7
+        left:5,
+        top:5
     },
     uni_location:{
         fontSize:12,
@@ -318,7 +320,7 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     status:{
-        fontSize:13
+        fontSize:14
     }
 })
 
@@ -357,7 +359,7 @@ const Product=(props:{productId:string})=>{
         {
             product
             ?
-            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:24}}>
+            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:30}}>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
                         <Image source={product.course.university.logoSrc} style={[styles[Device].uni_icon]}/>
@@ -367,7 +369,7 @@ const Product=(props:{productId:string})=>{
                         <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(product.category)}</Text>
                         <View style={[GeneralStyles.location_wrapper]}>
                             <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.65)}]}>{Word2Sentence([product.course.name,product.course.university.name],"","|",true)}</Text></View>
+                            <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([product.course.name,product.course.university.name],"","|",true)}</Text></View>
                         </View>
                         <View style={[GeneralStyles.actions_wrapper]}>
                             <Pressable onPress={showOrderDetails} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
@@ -379,18 +381,21 @@ const Product=(props:{productId:string})=>{
                 <View style={[{alignSelf:'center',borderRadius:100,backgroundColor:Themes.Light.OnewindowLightBlue}]}>
                     <Text style={[{padding:10},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].status]}>{Word2Sentence([product.status,product.stage],"","-",true)}</Text>
                 </View>
-                <View style={{gap:10}}>
-                    <Text style={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Experts Assigned</Text>
+                <View style={{gap:15}}>
+                    <Styledtext styles={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Experts Assigned" focusWord="Assigned"/>
                     <View style={{gap:20}}>
                     {
                         product.advisors.map((advisor,i)=>
-                        <Pressable onPress={()=>showExpert(advisor._id)} style={[styles[Device].advisor_card]}><Expertcard index={i} {...advisors?.find((item)=>item.info._id==advisor._id)}/></Pressable>
+                        <Pressable onPress={()=>showExpert(advisor._id)}>
+                            <Expertcompactcard index={i} {...advisors?.find((item)=>item.info._id==advisor._id)}/>
+                            {/* <Expertcard index={i} {...advisors?.find((item)=>item.info._id==advisor._id)}/> */}
+                        </Pressable>
                         )
                     }
                     </View>
                 </View>
                 <View>
-                    <Text style={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Documents</Text>
+                    <Text style={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Documents</Text>
                     <View>
                     {
                         product.docChecklist.map((item)=>

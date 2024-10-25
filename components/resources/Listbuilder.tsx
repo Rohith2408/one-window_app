@@ -131,7 +131,7 @@ const Listbuilder=(props:{placeholder:string,addHandler:(list:string[],current:s
     return(
         <View style={[styles[Device].wrapper]}>
             <View style={[GeneralStyles.input_wrapper]}>
-               <View style={{flex:1}}><TextInput placeholder={props.placeholder} value={item} onChangeText={(txt)=>setItem(txt)} style={[GeneralStyles.input,styles[Device].input,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1),fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}></TextInput></View>
+               <View style={{flex:1}}><TextInput placeholder={props.placeholder} value={item} onChangeText={(txt)=>setItem(txt)} style={[GeneralStyles.input,styles[Device].input,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1),fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}></TextInput></View>
                <Pressable onPress={add}><Image source={add_icon} style={[styles[Device].add]}/></Pressable>
             </View>
             <View style={[styles[Device].list_wrapper]}>
@@ -139,7 +139,7 @@ const Listbuilder=(props:{placeholder:string,addHandler:(list:string[],current:s
                 {
                     props.value.map((item)=>
                     <Pressable key={item} onPress={()=>add(item)}>
-                        <Text style={[styles[Device].selected,{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{item}</Text>
+                        <Text style={[styles[Device].selected,{padding:10,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{item}</Text>
                     </Pressable>
                     )
                 }

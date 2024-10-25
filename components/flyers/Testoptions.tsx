@@ -1,6 +1,6 @@
 
 import { Fonts, Tests, Themes } from "../../constants"
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { useRef } from "react"
 import { getDevice } from "../../utils"
@@ -65,15 +65,17 @@ const Testoptions=()=>{
     }
 
     return(
-        <View style={{flex:1,padding:5,paddingTop:25,gap:30}}>
-        {
-            Tests.filter((test)=>!store.getState().testscores.data?.find((item)=>item.name==test.name)).map((test)=>
-            <Pressable style={{gap:5}} onPress={()=>openForm(test.name)}>
-                <Text style={[styles[Device].shortform,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{test.shortForm}</Text>
-                <Text style={[styles[Device].text,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{test.name}</Text>
-            </Pressable>
-            )
-        }
+        <View>
+            <ScrollView contentContainerStyle={{gap:30,paddingTop:20,paddingBottom:20}}>
+            {
+                Tests.filter((test)=>!store.getState().testscores.data?.find((item)=>item.name==test.name)).map((test)=>
+                <Pressable style={{flexDirection:"column",gap:5}} onPress={()=>openForm(test.name)}>
+                    <Text style={[styles[Device].shortform,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{test.shortForm}</Text>
+                    <Text style={[styles[Device].text,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{test.name}</Text>
+                </Pressable>
+                )
+            }
+            </ScrollView>
         </View>
     )
 }
