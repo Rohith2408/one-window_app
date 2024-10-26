@@ -233,7 +233,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
         {
           screenInfo?.type=="Flyer" || screenInfo?.type=="Popup"
           ?
-          <Pressable hitSlop={{left:25,right:25,top:25,bottom:25}} onPress={()=>!screenInfo?.nonClosable?back(200):null} style={{position:"absolute",zIndex:-1,top:"-125%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}}></Pressable>
+          <Pressable onPress={()=>!screenInfo?.nonClosable?back(200):null} style={{position:"absolute",zIndex:-1,top:"-125%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}}></Pressable>
           :
           null
         }
@@ -435,7 +435,7 @@ const styles=StyleSheet.create({
       width:0.04*Dimensions.get("screen").width,
       position:"absolute",
       //backgroundColor:'black',
-      zIndex:1
+      zIndex:2
     },
     swipeStripR:{
       height:"100%",
@@ -444,7 +444,7 @@ const styles=StyleSheet.create({
       width:0.04*Dimensions.get("screen").width,
       position:"absolute",
       // backgroundColor:'black',
-      zIndex:1
+      zIndex:2
     },
     swipeStripT:{
       height:0.04*Dimensions.get("screen").width,
@@ -453,7 +453,7 @@ const styles=StyleSheet.create({
       width:"100%",
       position:"absolute",
       // backgroundColor:'black',
-      zIndex:1
+      zIndex:2
     },
     swipeStripB:{
       height:0.04*Dimensions.get("screen").width,
@@ -462,7 +462,7 @@ const styles=StyleSheet.create({
       width:"100%",
       position:"absolute",
       // backgroundColor:'black',
-      zIndex:1
+      zIndex:2
     },
     back_icon:{
       width:10,

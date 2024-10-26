@@ -466,6 +466,7 @@ const Message=(props:{chatId:string})=>{
             keyboardWillHide?.remove();
             dispatch(resetMessages());
             typingTrigger("stop");
+            getSocket().removeListener("trigger",triggerMessages)
         }
     },[])
 
@@ -532,6 +533,7 @@ const Message=(props:{chatId:string})=>{
         }
         getSocket().emit("trigger",triggerObj);
     }
+
 
     //console.log("trigger message",socket.listeners("trigger"))
     //console.log("Message",JSON.stringify(bakedMessages,null,2));

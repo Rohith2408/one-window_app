@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 7.8.1"
+    "version": ">= 7.8.1",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -12,24 +13,24 @@
       "channel": "ios_test",
       "distribution": "store"
     },
-    "iosProduction":{
+    "iosProduction": {
       "autoIncrement": true,
       "channel": "ios_production",
-      "distribution":"store"
+      "distribution": "store"
     },
-    "iosAdhoc":{
+    "iosAdhoc": {
       "autoIncrement": true,
       "channel": "ios_adhoc",
-      "distribution":"internal"
+      "distribution": "internal"
     },
-    "androidTest":{
+    "androidTest": {
       "autoIncrement": true,
       "channel": "android_test",
       "android": {
         "buildType": "apk"
       }
     },
-    "androidProduction":{
+    "androidProduction": {
       "autoIncrement": true,
       "channel": "android_production",
       "android": {

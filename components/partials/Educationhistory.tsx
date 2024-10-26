@@ -137,13 +137,13 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     edit_icon:{
-        width:15,
-        height:15,
+        width:18,
+        height:18,
         resizeMode:'contain'
     },
     delete_icon:{
-        width:15,
-        height:15,
+        width:18,
+        height:18,
         resizeMode:'contain'
     },
     location_icon:{
@@ -193,13 +193,13 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     edit_icon:{
-        width:15,
-        height:15,
+        width:18,
+        height:18,
         resizeMode:'contain'
     },
     delete_icon:{
-        width:15,
-        height:15,
+        width:18,
+        height:18,
         resizeMode:'contain'
     },
     location_icon:{
@@ -213,17 +213,18 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:14,
+        fontSize:16,
         lineHeight:18
     },
     text2:{
-        fontSize:12
+        fontSize:14
     },
     text3:{
-        fontSize:12
+        fontSize:14,
+        lineHeight:18
     },
     title:{
-        fontSize:10
+        fontSize:12
     },
     nodetails_icon:{
         width:15,
@@ -249,37 +250,37 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     edit_icon:{
-        width:15,
-        height:15,
+        width:18,
+        height:18,
         resizeMode:'contain'
     },
     delete_icon:{
-        width:15,
-        height:15,
+        width:18,
+        height:18,
         resizeMode:'contain'
     },
     location_icon:{
-        width:10,
-        height:10,
+        width:12,
+        height:12,
         resizeMode:'contain'
     },
     info_icon:{
-        width:10,
-        height:10,
+        width:12,
+        height:12,
         resizeMode:'contain'
     },
     text1:{
-        fontSize:14,
+        fontSize:16,
         lineHeight:20
     },
     text2:{
-        fontSize:12
+        fontSize:14
     },
     text3:{
-        fontSize:12
+        fontSize:14
     },
     title:{
-        fontSize:10
+        fontSize:12
     },
     nodetails_icon:{
         width:15,

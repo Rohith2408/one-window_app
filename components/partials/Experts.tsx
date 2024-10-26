@@ -135,17 +135,19 @@ const Experts=()=>{
             <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
             :
             <View style={{flex:1,gap:20}}>
-                <View style={[GeneralStyles.add_wrapper]}>
+                <Pressable onPress={showExperts} style={[GeneralStyles.add_wrapper]}>
                     <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].add_text]}>Who’s Here to Help?</Text>
                     <Image style={[styles[Device].next_icon]} source={next_icon}></Image>
-                </View>
-                <Pressable onPress={showExperts} style={[{flexDirection:"row",alignItems:'center',borderRadius:100,borderWidth:2,borderColor:Themes.Light.OnewindowLightBlue,gap:5,padding:10}]}>
+                </Pressable>
+                <View style={[{flexDirection:"row",alignItems:'center',borderRadius:100,borderWidth:2,borderColor:Themes.Light.OnewindowLightBlue,gap:5,padding:10}]}>
                     <Image style={[styles[Device].stars_icon]} source={stars_icon}></Image>
                     <Styledtext styles={[{lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].briefing]} text="Your Study Abroad Success Starts with Our Expert Guidance" focusWord="Study Abroad"/>
-                </Pressable>
-                {/* <Pressable onPress={showExperts} style={[{alignSelf:'center',borderRadius:100,borderWidth:2,borderColor:Themes.Light.OnewindowLightBlue}]}>
+                </View>
+                {/* 
+                <Pressable onPress={showExperts} style={[{alignSelf:'center',borderRadius:100,borderWidth:2,borderColor:Themes.Light.OnewindowLightBlue}]}>
                     <Styledtext styles={[{padding:10,textAlign:"center",lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].briefing]} text="Wondering Who’s Here to Help? Discover Our Dedicated Team" focusWord="Discover Our Dedicated Team"/>
-                </Pressable> */}
+                </Pressable> 
+                */}
                 <ScrollView style={{flex:1}} contentContainerStyle={{gap:15,paddingBottom:20}}>
                 {
                     store.getState().preferences.data?.country?.map((country)=>

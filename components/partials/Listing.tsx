@@ -74,8 +74,8 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     filter_icon:{
-        width:15,
-        height:15,
+        width:18,
+        height:18,
         resizeMode:"contain"
     },
     not_found:{
@@ -103,8 +103,8 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     filter_icon:{
-        width:15,
-        height:15,
+        width:18,
+        height:18,
         resizeMode:"contain"
     },
     not_found:{
@@ -132,8 +132,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     filter_icon:{
-        width:15,
-        height:15,
+        width:20,
+        height:20,
         resizeMode:"contain"
     },
     not_found:{
@@ -269,7 +269,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
                         }}
                     />
                 </View>
-                <Pressable style={{display:'flex',flexDirection:'row',alignItems:"center",justifyContent:"center"}} onPress={openAllFilters}>
+                <Pressable hitSlop={{left:15,right:15,top:15,bottom:15}} style={{display:'flex',flexDirection:'row',alignItems:"center",justifyContent:"center"}} onPress={openAllFilters}>
                     <Image style={[styles[Device].filter_icon]} source={filter_icon}/>
                     {/* <Text style={[styles[Device].allfilters]}>All Filters</Text> */}
                 </Pressable>

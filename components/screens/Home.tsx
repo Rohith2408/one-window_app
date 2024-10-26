@@ -15,7 +15,7 @@ import List from "../resources/List"
 import Product from "../cards/Productcard"
 import Loadinglistscreen from "../resources/Loadinglistscreen"
 import { store } from "../../store"
-import emptylist from '../../assets/images/illustrations/thinking.png'
+import emptylist from '../../assets/images/illustrations/sad.png'
 import Dynamicplaceholder from "../resources/Dynamicplaceholder"
 import Carousel from "../resources/Carousel"
 import Bannercard from "../cards/Bannercard"

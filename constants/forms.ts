@@ -5247,7 +5247,8 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:()=>{
-                                //let discipline=getBasket("discipline");
+                                let discipline=getBasket("discipline");
+                                console.log("discipline selected",discipline)
                                 let baseFilter=getBasket("Programsfilter").baseFilters.find((item)=>item.type=="subDiscipline");
                                 //console.log("baseeeee",JSON.stringify(discipline,null,2))
                                 let options=subDisciplines.map((discipline)=>({label:discipline,value:discipline}));
@@ -5345,6 +5346,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"Type",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"unitype-dropdown"
                     },

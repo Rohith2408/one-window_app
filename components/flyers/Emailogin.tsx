@@ -1,4 +1,4 @@
-import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
+import { Keyboard, LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
 import { ServerResponse } from "../../types"
 import { getDevice, getServerRequestURL, serverRequest } from "../../utils"
 import { useEffect, useRef, useState } from "react"
@@ -157,12 +157,12 @@ const Emaillogin=()=>{
         {
             dimensions
             ?
-            <ScrollView scrollEnabled={false} ref={scrollRef} horizontal pagingEnabled style={{flex:1}}>
+            <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false} ref={scrollRef} horizontal pagingEnabled style={{flex:1}}>
                 <View style={{width:dimensions.width,gap:30}}>
                     <View style={{flexDirection:"column",gap:15}}>
                         <Styledtext styles={[styles[Device].enter_text,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="email" text="Please enter your email id"/>
                         <View style={{gap:10,flexDirection:"column"}}>
-                            <TextInput autoCapitalize="none" onChangeText={(txt)=>setEmail(txt)} value={email} placeholder="Ex. user@gmail.com" style={[{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)},{borderWidth:1,borderColor:"#E3E3E3",padding:10,borderRadius:5}]}/>
+                            <TextInput returnKeyType="next" autoCapitalize="none" onChangeText={(txt)=>setEmail(txt)} value={email} placeholder="Ex. user@gmail.com" style={[{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)},{borderWidth:1,borderColor:"#E3E3E3",padding:10,borderRadius:5}]}/>
                             {
                                 error
                                 ?
@@ -193,7 +193,7 @@ const Emaillogin=()=>{
                 <View style={{width:dimensions.width}}>
                     <View style={{flexDirection:"row",alignItems:'center',gap:5}}>
                         <Image source={back_icon} style={[styles[Device].back_icon,{opacity:0.5}]}/>
-                        <Pressable onPress={()=>setScreen("request-otp")}><Text style={[styles[Device].no_code,{alignSelf:"flex-start"},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Don't have a code?</Text></Pressable>
+                        <Pressable onPress={()=>{setScreen("request-otp")}}><Text style={[styles[Device].no_code,{alignSelf:"flex-start"},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Don't have a code?</Text></Pressable>
                     </View>
                     <View style={{flex:1}}>
                         {
