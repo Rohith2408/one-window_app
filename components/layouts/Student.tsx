@@ -280,9 +280,8 @@ const Student=(props:{screens:string[],params:any})=>{
                 if(res.success)
                 {
                     let user={ _id:res.data._id,firstName:res.data.firstName,lastName:res.data.lastName}
+                    basicInfoChecker();
                     initiateSocketConnection(user._id);
-                    //basicInfoChecker();
-                    //socket.emit('join',user)
                     getSocket().on("trigger",triggerRoot);
                     fetchChats().then((res2)=>{
                         if(res2.success)
@@ -306,17 +305,16 @@ const Student=(props:{screens:string[],params:any})=>{
             })
             fetchActivity()
             initialSetup.current=true
+        }
 
+        return ()=>{
+            getSocket().removeListener("trigger",triggerRoot);
         }
     },[])   
 
     const basicInfoChecker=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"details",forminitialdataid:"login"}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Basicinfo"}}):null
     }
-
-    //console.log("oddd",JSON.stringify(store.getState().orders.data[0].products[0],null,2));
-    //console.log("prodddd",JSON.stringify(store.getState().products.data[0],null,2));
-    //console.log("trigger root",getSocket().listeners("trigger"))
     
     return(
         <View style={{width:"100%",height:"100%"}}>
