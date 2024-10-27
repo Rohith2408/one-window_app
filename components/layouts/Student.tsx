@@ -308,7 +308,7 @@ const Student=(props:{screens:string[],params:any})=>{
         }
 
         return ()=>{
-            getSocket().removeListener("trigger",triggerRoot);
+            getSocket()?.removeListener("trigger",triggerRoot);
         }
     },[])   
 
