@@ -280,7 +280,7 @@ const Student=(props:{screens:string[],params:any})=>{
                 if(res.success)
                 {
                     let user={ _id:res.data._id,firstName:res.data.firstName,lastName:res.data.lastName}
-                    basicInfoChecker();
+                    //basicInfoChecker();
                     initiateSocketConnection(user._id);
                     getSocket().on("trigger",triggerRoot);
                     fetchChats().then((res2)=>{
