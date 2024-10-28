@@ -13,8 +13,12 @@ import girlPeek_image from '../../assets/images/misc/girl-peek.png'
 import passport from '../../assets/images/props/passport.png'
 import logo from '../../assets/images/logo.png'
 import banner from '../../assets/images/illustrations/login.png'
+import next_icon from '../../assets/images/misc/next.png'
+import pie_icon from '../../assets/images/props/pie.png'
 import { addToBasket, removeFromBasket } from "../../constants/basket"
 import Listselection from "../resources/Listselection"
+import Transitionview from "../resources/Transitionview"
+import Styledtext from "../resources/Styledtext"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -88,6 +92,16 @@ const GeneralStyles=StyleSheet.create({
         left:"60%",
         zIndex:-1,
         resizeMode:"contain"
+    },
+    login_button_wrapper:{
+        borderRadius:7.5,
+        borderWidth:1.2,
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:'center',
+        paddingLeft:20,
+        paddingRight:20,
+        alignSelf:"stretch"
     }
 })
 
@@ -123,15 +137,15 @@ const TabStyles=StyleSheet.create({
     airplane:{
         width:60,
         height:60,
-        top:-25,
-        left:-120,
+        top:0,
+        left:0,
         resizeMode:"contain"
     },
     passport:{
         width:46,
         height:46,
-        top:35,
-        left:400,
+        top:"50%",
+        left:"90%",
         resizeMode:"contain"
     },
     girl_peek:{
@@ -146,6 +160,18 @@ const TabStyles=StyleSheet.create({
         width:250,
         height:250,
         resizeMode:"contain"
+    },
+    banner_text:{
+        fontSize:20,
+        lineHeight:38
+    },
+    next_icon:{
+        width:20,
+        height:20,
+        objectFit:"contain"
+    },
+    login_text:{
+        fontSize:18
     }
 })
 
@@ -198,17 +224,17 @@ const MobileSStyles=StyleSheet.create({
         resizeMode: "contain"
     },
     airplane:{
-        width:40,
-        height:40,
-        top:-25,
-        left:-75,
+        width:44,
+        height:44,
+        top:0,
+        left:0,
         resizeMode:"contain"
     },
     passport:{
         width:30,
         height:30,
-        top:25,
-        left:185,
+        top:"50%",
+        left:"90%",
         resizeMode:"contain"
     },
     girl_peek:{
@@ -223,6 +249,18 @@ const MobileSStyles=StyleSheet.create({
         width:205,
         height:205,
         resizeMode:"contain"
+    },
+    banner_text:{
+        fontSize:16,
+        lineHeight:30
+    },
+    next_icon:{
+        width:14,
+        height:14,
+        objectFit:"contain"
+    },
+    login_text:{
+        fontSize:14
     }
 })
 
@@ -252,21 +290,21 @@ const MobileMStyles=StyleSheet.create({
         fontSize:14
     },
     logo:{
-        width: 175,
+        width: 150,
         resizeMode: "contain"
     },
     airplane:{
-        width:50,
-        height:50,
-        top:-25,
-        left:-80,
+        width:46,
+        height:46,
+        top:0,
+        left:0,
         resizeMode:"contain"
     },
     passport:{
-        width:30,
-        height:30,
-        top:35,
-        left:210,
+        width:32,
+        height:32,
+        top:"50%",
+        left:"90%",
         resizeMode:"contain"
     },
     girl_peek:{
@@ -278,9 +316,21 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     banner:{
-        width:250,
-        height:250,
+        width:230,
+        height:230,
         resizeMode:"contain"
+    },
+    banner_text:{
+        fontSize:18,
+        lineHeight:34
+    },
+    next_icon:{
+        width:16,
+        height:16,
+        objectFit:"contain"
+    },
+    login_text:{
+        fontSize:16
     }
 })
 
@@ -310,21 +360,21 @@ const MobileLStyles=StyleSheet.create({
         fontSize:14
     },
     logo:{
-        width: 175,
+        width: 150,
         resizeMode: "contain"
     },
     airplane:{
-        width:40,
-        height:40,
-        top:-25,
-        left:-80,
+        width:50,
+        height:50,
+        top:0,
+        left:0,
         resizeMode:"contain"
     },
     passport:{
-        width:26,
-        height:26,
-        top:35,
-        left:210,
+        width:36,
+        height:36,
+        top:"50%",
+        left:"90%",
         resizeMode:"contain"
     },
     girl_peek:{
@@ -336,9 +386,21 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     banner:{
-        width:225,
-        height:225,
+        width:240,
+        height:240,
         resizeMode:"contain"
+    },
+    banner_text:{
+        fontSize:18,
+        lineHeight:34
+    },
+    next_icon:{
+        width:16,
+        height:16,
+        objectFit:"contain"
+    },
+    login_text:{
+        fontSize:16
     }
 })
 
@@ -415,11 +477,6 @@ const Loginbase=(props:{auth:string})=>{
     useEffect(()=>{
         addToBasket("login_phone",{callback:login_phone})
         addToBasket("login_email",{callback:login_email})
-        
-        // return ()=>{
-        //     removeFromBasket("login_phone")
-        //     removeFromBasket("login_email")
-        // }
     },[loginType])
 
     const emailLogin=()=>{
@@ -435,24 +492,37 @@ const Loginbase=(props:{auth:string})=>{
 
     return(
         <View style={[GeneralStyles.wrapper]}>
-            <View style={[GeneralStyles.header_wrapper,styles[Device].header_wrapper]}>
+            <View style={[GeneralStyles.header_wrapper,styles[Device].header_wrapper,{position:"relative"}]}>
+                <Image source={pie_icon} style={{width:30,height:30,resizeMode:"contain",position:'absolute',top:"30%",left:"10%"}}/>
+                <View style={{width:50,height:50,borderRadius:200,backgroundColor:Themes.ExtraLight.OnewindowPurple,transform:[{translateY:-25}],position:'absolute',top:"100%",left:"75%"}}></View>
                 <View style={[GeneralStyles.header_wrapper_bg,{backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
                 {/* <Text style={[styles[Device].login,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Login</Text> */}
             </View>
-            <View style={[GeneralStyles.body_wrapper,{position:"relative"}]}>
-                <Image style={[styles[Device].girl_peek,{position:"absolute"}]} source={girlPeek_image}/>
-                <View style={{alignSelf:'center',margin:20,position:"relative"}}>
-                    <Image style={[styles[Device].airplane,{position:"absolute",transform:[{rotate:"-20deg"}]}]} source={airplane}/>
-                    <Image style={[styles[Device].passport,{position:"absolute",transform:[{rotate:"20deg"}]}]} source={passport}/>
-                    <Image style={[styles[Device].logo,{aspectRatio:5}]} source={logo}/>
+            <View style={[GeneralStyles.body_wrapper,{position:"relative",gap:36}]}>
+                {/* <Image style={[styles[Device].girl_peek,{position:"absolute"}]} source={girlPeek_image}/> */}
+                <Transitionview effect="zoom" delay={400}><View style={{alignSelf:'center',margin:20}}><Image style={[styles[Device].logo,{aspectRatio:5}]} source={logo}/></View></Transitionview>
+                <View style={{display:"flex",flexDirection:"column",gap:10,position:"relative"}}>
+                    <Transitionview effect="pan" delay={300}><Image style={[styles[Device].airplane,{position:"absolute",transform:[{rotate:"-20deg"}]}]} source={airplane}/></Transitionview>
+                    <Transitionview effect="pan" delay={300}><Image style={[styles[Device].passport,{position:"absolute",transform:[{rotate:"20deg"}]}]} source={passport}/></Transitionview>
+                    <View style={{flexDirection:"column",alignItems:'center',gap:40}}>
+                        <Image source={banner} style={[{alignSelf:"center"},styles[Device].banner]}/>
+                        <Transitionview effect="pan" delay={200}>
+                            <Text style={[styles[Device].banner_text,{padding:10,textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular,maxWidth:"80%"}]}>Explore over 8000 Universities and 70000 Courses</Text>
+                            {/* <Styledtext styles={[styles[Device].banner_text,{padding:10,textAlign:"center",fontFamily:Fonts.NeutrifStudio.Regular}]} text="Explore over 8000 Universities and 70000 Courses" focusWord="8000 Universities"/> */}
+                        </Transitionview>
+                        {/* <Text style={[styles[Device].login,{textAlign:"center",fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>We make studying abroad easier</Text> */}
+                    </View>
                 </View>
-                <View style={{display:"flex",flexDirection:"column",gap:10}}>
-                    <Image source={banner} style={[{alignSelf:"center"},styles[Device].banner]}/>
-                    <Text style={[styles[Device].login,{textAlign:"center",fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>We make studying abroad easier</Text>
-                </View>
-                <View style={{flexDirection:"row",gap:5,alignItems:'center',padding:10}}>
-                    <Pressable onPress={emailLogin} style={{flex:1}}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(0.6),fontFamily:Fonts.NeutrifStudio.Medium}}>Proceed with email</Text></Pressable>
-                    <Pressable onPress={phoneLogin} style={{flex:1}}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(0.6),fontFamily:Fonts.NeutrifStudio.Medium}}>Proceed with phone</Text></Pressable>
+                <View style={{flexDirection:"column",gap:25,alignItems:'center',padding:10}}>
+                    <Pressable onPress={emailLogin} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
+                        <Styledtext styles={[styles[Device].login_text,{padding:10,fontFamily:Fonts.NeutrifStudio.Medium}]} text="Login with Email" focusWord="Email"/>
+                        {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
+                    </Pressable>
+                    <Pressable onPress={phoneLogin} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
+                        <Styledtext styles={[styles[Device].login_text,{padding:10,fontFamily:Fonts.NeutrifStudio.Medium}]} text="Login with Mobile" focusWord="Mobile"/>
+                        {/* <Text style={[styles[Device].login_text,{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}></Text> */}
+                        {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
+                    </Pressable>
                 </View>
                 {/* <Listselection
                     direction="horizontal"
