@@ -18,13 +18,13 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     text:{
-        fontSize:14
+        fontSize:16
     }
 })
 
 const MobileLStyles=StyleSheet.create({
     text:{
-        fontSize:14
+        fontSize:16
     }
 })
 

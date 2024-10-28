@@ -30,6 +30,9 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
+    email:{
+        fontSize:18
+    },
     enter_text:{
         fontSize:18
     },
@@ -45,6 +48,9 @@ const TabStyles=StyleSheet.create({
 })
 
 const MobileSStyles=StyleSheet.create({
+    email:{
+        fontSize:14
+    },
     enter_text:{
         fontSize:14
     },
@@ -60,8 +66,11 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
-    enter_text:{
+    email:{
         fontSize:16
+    },
+    enter_text:{
+        fontSize:18
     },
     already_text:{
         fontSize:12
@@ -80,6 +89,9 @@ const MobileMStyles=StyleSheet.create({
 })
 
 const MobileLStyles=StyleSheet.create({
+    email:{
+        fontSize:16
+    },
     enter_text:{
         fontSize:16
     },
@@ -160,9 +172,9 @@ const Emaillogin=()=>{
             <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false} ref={scrollRef} horizontal pagingEnabled style={{flex:1}}>
                 <View style={{width:dimensions.width,gap:30}}>
                     <View style={{flexDirection:"column",gap:15}}>
-                        <Styledtext styles={[styles[Device].enter_text,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="email" text="Please enter your email id"/>
+                        <Styledtext styles={[styles[Device].enter_text,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="Email" text="Please enter your Email id"/>
                         <View style={{gap:10,flexDirection:"column"}}>
-                            <TextInput returnKeyType="next" autoCapitalize="none" onChangeText={(txt)=>setEmail(txt)} value={email} placeholder="Ex. user@gmail.com" style={[{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)},{borderWidth:1,borderColor:"#E3E3E3",padding:10,borderRadius:5}]}/>
+                            <TextInput returnKeyType="next" autoCapitalize="none" onChangeText={(txt)=>setEmail(txt)} value={email} placeholder="Ex. user@gmail.com" style={[styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)},{borderWidth:1,borderColor:"#E3E3E3",padding:10,borderRadius:5}]}/>
                             {
                                 error
                                 ?
@@ -196,14 +208,13 @@ const Emaillogin=()=>{
                         <Pressable onPress={()=>{setScreen("request-otp")}}><Text style={[styles[Device].no_code,{alignSelf:"flex-start"},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Don't have a code?</Text></Pressable>
                     </View>
                     <View style={{flex:1}}>
-                        {
-                            validations.EMAIL.regex.test(email) && !error
-                            ?
-                            <Verifyuser type="email" data={{email:email}}/>
-                            :
-                            null
-                        }
-                        
+                    {
+                        validations.EMAIL.regex.test(email) && !error
+                        ?
+                        <Verifyuser type="email" data={{email:email}}/>
+                        :
+                        null
+                    }  
                     </View>
                 </View>
             </ScrollView>

@@ -1,5 +1,5 @@
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
-import { Countrycode, Event, ServerResponse } from "../../types"
+import { Countrycode, Dropdown, Event, ServerResponse } from "../../types"
 import { getDevice, getLocation, getServerRequestURL, serverRequest } from "../../utils"
 import { useEffect, useRef, useState } from "react"
 import Verifyuser from "./Verifyuser"
@@ -45,8 +45,11 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    enter_text:{
+    phone_number:{
         fontSize:18
+    },
+    enter_text:{
+        fontSize:20
     },
     already_text:{
         fontSize:14
@@ -65,8 +68,11 @@ const TabStyles=StyleSheet.create({
 })
 
 const MobileSStyles=StyleSheet.create({
-    enter_text:{
+    phone_number:{
         fontSize:14
+    },
+    enter_text:{
+        fontSize:16
     },
     already_text:{
         fontSize:11
@@ -85,8 +91,11 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
-    enter_text:{
+    phone_number:{
         fontSize:16
+    },
+    enter_text:{
+        fontSize:18
     },
     already_text:{
         fontSize:12
@@ -110,8 +119,11 @@ const MobileMStyles=StyleSheet.create({
 })
 
 const MobileLStyles=StyleSheet.create({
-    enter_text:{
+    phone_number:{
         fontSize:16
+    },
+    enter_text:{
+        fontSize:18
     },
     already_text:{
         fontSize:12
@@ -187,8 +199,25 @@ const Phonelogin=()=>{
         setPhone({...phone,countryCode:event.data})
     }
 
+    // const showDialcodes=()=>{
+    //     addToBasket("dialcodes-dropdownoptions",{
+    //         options:{
+    //             card:Dialcode,
+    //             list:Countrycodes,
+    //             labelExtractor:(item:Countrycode)=>item.dial_code,
+    //             idExtractor:(item:Countrycode)=>item.code,
+    //             searchEvaluator:(item:Countrycode,search:string)=>(item.dial_code+item.code+item.name).toLowerCase().trim().includes(search.toLowerCase().trim()),
+    //         },
+    //         preventCloseOnApply:true,
+    //         eventHandler:dialcodeSelected,
+    //         selectionMode:"single",
+    //         selected:phone.countryCode
+    //     })
+    //     setScreen("dial-code")
+    // }
+
     const showDialcodes=()=>{
-        addToBasket("dialcodes-dropdownoptions",{
+        let data:Dropdown={
             options:{
                 card:Dialcode,
                 list:Countrycodes,
@@ -196,12 +225,12 @@ const Phonelogin=()=>{
                 idExtractor:(item:Countrycode)=>item.code,
                 searchEvaluator:(item:Countrycode,search:string)=>(item.dial_code+item.code+item.name).toLowerCase().trim().includes(search.toLowerCase().trim()),
             },
-            preventCloseOnApply:true,
+            selected:phone.countryCode[0]?.dial_code?phone.countryCode:[],
             eventHandler:dialcodeSelected,
-            selectionMode:"single",
-            selected:phone.countryCode
-        })
-        setScreen("dial-code")
+            selectionMode:"single"
+        }
+        addToBasket("dial-codes",data)
+        navigate({type:"AddScreen",payload:{screen:"Dropdownoptions",params:{basketid:"dial-codes"}}});
     }
 
     useEffect(()=>{
@@ -220,7 +249,6 @@ const Phonelogin=()=>{
         if(userLocation.responseStatus=="recieved" && userLocation.data)
         {
             let currentCode=Countrycodes.find((code)=>code.name==userLocation.data?.country);
-            //console.log("cccoooddee",currentCode,userLocation.data);
             currentCode?setPhone({...phone,countryCode:[currentCode]}):null
         }
     },[userLocation])
@@ -238,8 +266,8 @@ const Phonelogin=()=>{
                         <Styledtext styles={[styles[Device].enter_text,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="mobile number" text="Please enter your mobile number"/>
                         <View style={{gap:10,flexDirection:"column"}}>
                             <View style={{flexDirection:"row",gap:15}}>
-                                <Pressable style={[GeneralStyles.dial_code_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]} onPress={showDialcodes}><Text style={{padding:10,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}}>{phone.countryCode[0]?.dial_code?phone.countryCode[0].dial_code:"Select"}</Text></Pressable>
-                                <View style={[GeneralStyles.phone_number_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]}><TextInput maxLength={10} style={{padding:10,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}} placeholder="Ex. 9999999999" onChangeText={(txt)=>setPhone({...phone,phoneNumber:txt})} value={phone.phoneNumber}/></View>
+                                <Pressable style={[GeneralStyles.dial_code_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]} onPress={showDialcodes}><Text style={[styles[Device].phone_number,{padding:10,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{phone.countryCode[0]?.dial_code?phone.countryCode[0].dial_code:"Select"}</Text></Pressable>
+                                <View style={[GeneralStyles.phone_number_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]}><TextInput maxLength={10} style={[styles[Device].phone_number,{padding:10,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]} placeholder="Ex. 9999999999" onChangeText={(txt)=>setPhone({...phone,phoneNumber:txt})} value={phone.phoneNumber}/></View>
                             </View>
                             {
                                 error

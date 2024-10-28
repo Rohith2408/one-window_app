@@ -31,11 +31,11 @@ type idData =
 
 const TabStyles=StyleSheet.create({
     heading:{
-        fontSize:18,
+        fontSize:20,
         lineHeight:28
     },
     otp:{
-        fontSize:16
+        fontSize:18
     },
     error:{
         fontSize:11
@@ -54,11 +54,11 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     heading:{
-        fontSize:16,
+        fontSize:18,
         lineHeight:28
     },
     otp:{
-        fontSize:14
+        fontSize:16
     },
     error:{
         fontSize:12
@@ -67,11 +67,11 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     heading:{
-        fontSize:16,
+        fontSize:18,
         lineHeight:28
     },
     otp:{
-        fontSize:14
+        fontSize:16
     },
     error:{
         fontSize:12
