@@ -341,16 +341,6 @@ const endPoints=[
         
     },
     {
-        ENUM:"login",
-        TYPE:"auth",
-        
-    },
-    {
-        ENUM:"student-register",
-        TYPE:"auth",
-        
-    },
-    {
         ENUM:"verify",
         TYPE:"auth",
         

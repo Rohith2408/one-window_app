@@ -176,6 +176,7 @@ const Phonelogin=()=>{
             routeType:"public",
             body:{...phone,countryCode:phone.countryCode[0].dial_code}
         })
+        console.log(res.data);
         res.success?setScreen("verify-otp"):setError(res.message);
         return res.success;
     }
@@ -231,7 +232,7 @@ const Phonelogin=()=>{
         {
             dimensions && userLocation.responseStatus=="recieved"
             ?
-            <ScrollView scrollEnabled={false} ref={scrollRef} horizontal pagingEnabled style={{flex:1}}>
+            <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false} ref={scrollRef} horizontal pagingEnabled style={{flex:1}}>
                 <View style={{width:dimensions.width,gap:30}}>
                     <View style={{flexDirection:"column",gap:15}}>
                         <Styledtext styles={[styles[Device].enter_text,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="mobile number" text="Please enter your mobile number"/>

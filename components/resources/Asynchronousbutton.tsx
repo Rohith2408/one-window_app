@@ -14,7 +14,8 @@ const GeneralStyles=StyleSheet.create({
         borderRadius:100,
         borderWidth:1,
         paddingLeft:15,
-        paddingRight:15
+        paddingRight:15,
+        backgroundColor:'white'
     },
     text:{
         position:"absolute"

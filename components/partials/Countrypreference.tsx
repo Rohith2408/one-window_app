@@ -9,6 +9,7 @@ import { getDevice } from "../../utils";
 import { useEffect, useRef, useState } from "react";
 import { Countries, Themes, disciplines} from "../../constants";
 import { preferences } from "../../constants/preferences";
+import { getBasket } from "../../constants/basket";
 
 const GeneralStyles=StyleSheet.create({
     card_wrapper:{
@@ -79,6 +80,7 @@ const Countrypreference=(props)=>{
     const preferencedata=preferences.find((item)=>item.id=="country");
     const [isloading,setIsloading]=useState(false)
     const selected=useRef("")
+    const info=getBasket("countrypreference-card");
 
     useEffect(()=>{
         setAllPreferences(Countries.filter((item)=>item.name.includes(search)).map((country)=>country.name))
@@ -91,6 +93,7 @@ const Countrypreference=(props)=>{
         let serverRes=await preferencedata?.serverCommunicator(selectedPreferences?.find((item2)=>item2==selitem)?selectedPreferences.filter((item)=>item!=selitem):[...selectedPreferences,selitem]);
         if(serverRes?.success)
         {
+            info?.eventHandler?info.eventHandler({name:"preference-selected",data:serverRes.data.preference.country,triggerBy:"Countrypeference"}):null;
             preferencedata?.responseHandler(serverRes.data.preference)
         }
         setIsloading(false)
@@ -98,7 +101,7 @@ const Countrypreference=(props)=>{
     }
 
     return(
-        <View style={{flex:1,paddingTop:25,gap:20}}>
+        <View style={{paddingTop:info?.eventHandler?0:25,gap:20}}>
             {/* <TextInput placeholder="Search..." onChangeText={(txt)=>setSearch(txt)} value={search.trim()} style={{padding:10,borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}/> */}
             <ScrollView contentContainerStyle={{gap:30,paddingBottom:10}}>
             {

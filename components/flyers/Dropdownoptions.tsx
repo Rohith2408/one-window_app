@@ -158,7 +158,7 @@ const Dropdownoptions=(props:{basketid:string})=>{
     const apply=(selected:any)=>{
         info.eventHandler?info.eventHandler({name:"onSelect",data:selected,triggerBy:"dropdownoptions"}):null
         info.pathHandler?navigate?navigate(info.pathHandler(selected)):null:null
-        !info.preventCloseOnApply?navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null:null
+        !info.preventCloseOnApply?navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Dropdownoptions"}}):null:null
         //console.log("apply",info.apply)
     }
 

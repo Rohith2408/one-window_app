@@ -8,17 +8,17 @@ const Carousel=(props:{card:React.FC,data:any[],preventAutoScroll?:boolean})=>{
     const currentCard=useRef(0)
     const Card=props.card;
 
-    
+
 
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} >
         {
             dimensions
             ?
-            <ScrollView decelerationRate="fast" snapToInterval={dimensions.width*0.9} snapToAlignment="start" pagingEnabled horizontal>
+            <ScrollView decelerationRate="fast" snapToInterval={dimensions.width*0.95} snapToAlignment="start" pagingEnabled horizontal>
             {
                 props.data.map((item,i)=>
-                <View key={i} style={{width:dimensions.width*0.9}}><Card index={i} {...item}/></View>
+                <View key={i} style={{width:dimensions.width*0.95}}><Card index={i} {...item}/></View>
                 )
             }
             </ScrollView>

@@ -116,7 +116,8 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
             console.log("resi",props.id,props.options.searchEvaluator);
             navigate?navigate({type:"UpdateParam",payload:{param:"formerrors",newValue:{id:props.id,error:res.success?undefined:res.message}}}):null
             res.success?addToBasket(props.basketid+"-dropdownoptions",{options:{...props.options,list:res.data},eventHandler:props.eventHandler,pathHandler:props.pathHandler,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value}):null
-            res.success?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null:null
+            res.success?navigate?navigate({type:"AddScreen",payload:{screen:"Dropdownoptions",params:{basketid:props.basketid+"-dropdownoptions"}}}):null:null
+            // res.success?navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptions",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null:null
             setTimeout(()=>{
                 setLoading(false)
             },100)
