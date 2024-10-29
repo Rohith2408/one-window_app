@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Course, Event, Package, Product, ServerResponse } from "../../types"
-import { PackageProductsValidator, Word2Sentence, compareProducts, getDevice, getLightThemeColor, getServerRequestURL, getThemeColor, serverRequest } from "../../utils";
+import { PackageProductsValidator, Word2Sentence, compareProducts, getDevice, getLightThemeColor, getMonth, getServerRequestURL, getThemeColor, serverRequest, setWordCase } from "../../utils";
 import { cartRequest } from "../../utils/serverrequests";
 import useNavigation from "../../hooks/useNavigation";
 import { addToBasket } from "../../constants/basket";
@@ -13,16 +13,20 @@ import { Image } from "expo-image";
 import location_icon from '../../assets/images/misc/location.png'
 import fee_icon from '../../assets/images/misc/fee.png'
 import cart_icon from '../../assets/images/misc/cart.png'
+import start_icon from '../../assets/images/misc/rocket.png'
+import deadline_icon from '../../assets/images/misc/deadline.png'
+import arrow_icon from '../../assets/images/misc/arrow.png'
 import { Fonts, Themes } from "../../constants";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import wishlist_icon from '../../assets/images/misc/wishlist.png'
 import wishlisted_icon from '../../assets/images/misc/wishlisted.png'
+import applicarion_details_template from '../../assets/images/misc/application-details-template.png'
 import Loader from "../resources/Loader";
+import Styledtext from "../resources/Styledtext";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        width:"100%",
-        height:"100%",
+        flex:1,
         padding:20,
         backgroundColor:'white',
         gap:20
@@ -45,12 +49,12 @@ const GeneralStyles=StyleSheet.create({
         flex:1,
         flexDirection:"column",
         alignItems:"flex-start",
-        gap:10
+        gap:7
     },
     location_wrapper:{
         display:"flex",
         flexDirection:"row",
-        alignItems:"center",
+        alignItems:"flex-start",
         gap:5
     },
     dashboard_item_wrapper:{
@@ -76,51 +80,62 @@ const GeneralStyles=StyleSheet.create({
     about_wrapper:{
         display:"flex",
         flexDirection:"column",
-        gap:7,
+        gap:10,
+        alignItems:'flex-start'
+    },
+    keyinfo_wrapper:{
+        display:"flex",
+        flexDirection:"column",
+        gap:15,
         alignItems:'flex-start'
     },
     actions_wrapper:{
         flexDirection:'row',
         gap:10
+    },
+    application_wrapper:{
+        position:"relative"
     }
 })
 
 const TabStyles=StyleSheet.create({
     location_icon:{
-        width:16,
-        height:16,
+        width:0,
+        height:14,
         resizeMode:"contain"
     },
     uni_icon:{
-        width:30,
-        height:30,
+        width:26,
+        height:26,
         borderRadius:100,
         resizeMode:"contain"
     },
     uni_icon_bg:{
-        width:28,
-        height:28,
+        width:24,
+        height:24,
         borderRadius:100,
         left:-7,
         top:7
     },
     uni_location:{
-        fontSize:15
+        fontSize:16,
+        lineHeight:24
     },
     program_name:{
-        fontSize:18
+        fontSize:18,
+        lineHeight:24
     },
     dashboard_icon:{
-        height:22,
-        width:22,
+        height:18,
+        width:18,
         resizeMode:"contain"
     },
     dashboard_item_wrapper:{
-        borderRadius:26,
+        borderRadius:20,
         flex:1
     },
     dashboards_wrapper:{
-        height:280,
+        height:240,
         gap:20
     },
     dashboard_wrapper:{
@@ -130,7 +145,7 @@ const TabStyles=StyleSheet.create({
         fontSize:14
     },
     dashboard_label:{
-        fontSize:13
+        fontSize:12
     },
     about_heading:{
         fontSize:18
@@ -143,22 +158,43 @@ const TabStyles=StyleSheet.create({
         fontSize:16
     },
     cart_icon:{
-        width:24,
-        height:24,
+        width:18,
+        height:18,
+        resizeMode:'contain'
+    },
+    keyinfo_type:{
+        fontSize:15
+    },
+    keyinfo_value:{
+        fontSize:18,
+        lineHeight:24
+    },
+    application_wrapper:{
+        height:120,
+        borderRadius:120
+    },
+    application_title:{
+        fontSize:20
+    },
+    application_fee:{
+        fontSize:18
+    },
+    deadline_icon:{
+        width:22,
+        height:22,
         resizeMode:'contain'
     }
 })
 
 const MobileSStyles=StyleSheet.create({
-
     location_icon:{
-        width:12,
-        height:12,
+        width:0,
+        height:14,
         resizeMode:"contain"
     },
     uni_icon:{
-        width:22,
-        height:22,
+        width:24,
+        height:24,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -166,14 +202,16 @@ const MobileSStyles=StyleSheet.create({
         width:22,
         height:22,
         borderRadius:100,
-        left:-5,
-        top:5
+        left:-7,
+        top:7
     },
     uni_location:{
-        fontSize:10
+        fontSize:12,
+        lineHeight:20
     },
     program_name:{
-        fontSize:12
+        fontSize:14,
+        lineHeight:20
     },
     dashboard_icon:{
         height:16,
@@ -186,28 +224,50 @@ const MobileSStyles=StyleSheet.create({
     },
     dashboards_wrapper:{
         height:220,
-        gap:20
+        gap:16
     },
     dashboard_wrapper:{
-        gap:20
+        gap:16
     },
     dashboard_value:{
         fontSize:12
     },
     dashboard_label:{
-        fontSize:11
-    },
-    about:{
-        fontSize:12,
-        lineHeight:20
-    },
-    about_heading:{
-        fontSize:14,
-    },
-    add_to_cart:{
         fontSize:10
     },
+    about_heading:{
+        fontSize:14
+    },
+    about:{
+        fontSize:14,
+        lineHeight:26
+    },
+    add_to_cart:{
+        fontSize:13
+    },
     cart_icon:{
+        width:16,
+        height:16,
+        resizeMode:'contain'
+    },
+    keyinfo_type:{
+        fontSize:11
+    },
+    keyinfo_value:{
+        fontSize:14,
+        lineHeight:20
+    },
+    application_wrapper:{
+        height:80,
+        borderRadius:80
+    },
+    application_title:{
+        fontSize:16
+    },
+    application_fee:{
+        fontSize:14
+    },
+    deadline_icon:{
         width:16,
         height:16,
         resizeMode:'contain'
@@ -216,8 +276,8 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     location_icon:{
-        width:12,
-        height:12,
+        width:0,
+        height:14,
         resizeMode:"contain"
     },
     uni_icon:{
@@ -234,10 +294,12 @@ const MobileMStyles=StyleSheet.create({
         top:7
     },
     uni_location:{
-        fontSize:12
+        fontSize:14,
+        lineHeight:24
     },
     program_name:{
-        fontSize:16
+        fontSize:16,
+        lineHeight:24
     },
     dashboard_icon:{
         height:18,
@@ -256,22 +318,44 @@ const MobileMStyles=StyleSheet.create({
         gap:20
     },
     dashboard_value:{
-        fontSize:13
+        fontSize:15
     },
     dashboard_label:{
-        fontSize:12
+        fontSize:13
     },
     about_heading:{
-        fontSize:16
+        fontSize:17
     },
     about:{
-        fontSize:14,
-        lineHeight:24
+        fontSize:15,
+        lineHeight:30
     },
     add_to_cart:{
-        fontSize:14
+        fontSize:15
     },
     cart_icon:{
+        width:18,
+        height:18,
+        resizeMode:'contain'
+    },
+    keyinfo_type:{
+        fontSize:13
+    },
+    keyinfo_value:{
+        fontSize:16,
+        lineHeight:22
+    },
+    application_wrapper:{
+        height:100,
+        borderRadius:100
+    },
+    application_title:{
+        fontSize:18
+    },
+    application_fee:{
+        fontSize:16
+    },
+    deadline_icon:{
         width:18,
         height:18,
         resizeMode:'contain'
@@ -281,8 +365,8 @@ const MobileMStyles=StyleSheet.create({
 const MobileLStyles=StyleSheet.create({
 
     location_icon:{
-        width:12,
-        height:12,
+        width:0,
+        height:14,
         resizeMode:"contain"
     },
     uni_icon:{
@@ -299,10 +383,12 @@ const MobileLStyles=StyleSheet.create({
         top:7
     },
     uni_location:{
-        fontSize:12
+        fontSize:14,
+        lineHeight:24
     },
     program_name:{
-        fontSize:16
+        fontSize:16,
+        lineHeight:24
     },
     dashboard_icon:{
         height:18,
@@ -321,24 +407,42 @@ const MobileLStyles=StyleSheet.create({
         gap:20
     },
     dashboard_value:{
-        fontSize:13
+        fontSize:15
     },
     dashboard_label:{
-        fontSize:12
+        fontSize:13
     },
     about_heading:{
-        fontSize:16
+        fontSize:17
     },
     about:{
-        fontSize:14,
-        lineHeight:24
+        fontSize:15,
+        lineHeight:30
     },
     add_to_cart:{
-        fontSize:14
+        fontSize:15
     },
     cart_icon:{
-        width:20,
-        height:20,
+        width:18,
+        height:18,
+        resizeMode:'contain'
+    },
+    keyinfo_type:{
+        fontSize:14
+    },
+    keyinfo_value:{
+        fontSize:16,
+        lineHeight:22
+    },
+    application_title:{
+        fontSize:18
+    },
+    application_fee:{
+        fontSize:16
+    },
+    deadline_icon:{
+        width:18,
+        height:18,
         resizeMode:'contain'
     }
 })
@@ -360,10 +464,15 @@ const Program=(props:{programid:string})=>{
     const dashboardInfo=[
         {icon:fee_icon,label:"Duration",value:programInfo?.duration},
         {icon:fee_icon,label:"Credits",value:programInfo?.totalCredits},
-        {icon:fee_icon,label:"Fees",value:programInfo?.tuitionFee?.tuitionFee+(programInfo?.tuitionFee?.tuitionFeeType=="year"?"/p.a":"")},
+        {icon:fee_icon,label:"Fees",value:(programInfo?.currency?.symbol+" "+programInfo?.tuitionFee?.tuitionFee)+(programInfo?.tuitionFee?.tuitionFeeType=="year"?"/p.a":"")},
         {icon:fee_icon,label:"Study Level",value:programInfo?.studyLevel},
         {icon:fee_icon,label:"Study Mode",value:programInfo?.studyMode},
-        {icon:fee_icon,label:"Currency",value:programInfo?.currency?.symbol}
+        {icon:fee_icon,label:"Course Type",value:programInfo?.stemDetails?(programInfo.stemDetails.stem?"STEM":"NON-STEM"):"No Info"}
+    ]
+    const additionalInfo=[
+        {type:"University Type",value:programInfo?.type?setWordCase(programInfo.type):""},
+        {type:"Discipline",value:programInfo?.discipline?Word2Sentence(programInfo.discipline,"",",",true):""},
+        {type:"Sub Discipline",value:programInfo?.subDiscipline?Word2Sentence(programInfo.subDiscipline,"",",",true):""},
     ]
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
     const [isLoading,setLoading]=useState(false);
@@ -557,48 +666,57 @@ const Program=(props:{programid:string})=>{
         fetchProgram();
     },[])
 
+    console.log(programInfo?.startDate)
+
     return(
         <View style={[GeneralStyles.main_wrapper]}>
         {
             programInfo
             ?
-            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:44}}>
+            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} contentContainerStyle={{gap:38}}>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
                         <Image source={programInfo.university?.logoSrc} style={[styles[Device].uni_icon]}/>
                         <View style={[styles[Device].uni_icon_bg,{position:"absolute",zIndex:-1,backgroundColor:getThemeColor(0)}]}></View>
                     </View>
                     <View style={[GeneralStyles.uni_info_wrapper]}>
-                        <View style={{flexDirection:"row",alignItems:'center'}}>
-                            <View style={{flex:1}}><Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{programInfo.name}</Text></View>
-                            {
-                                isLoading
-                                ?
-                                <Loader  isLoading={isLoading} loaderStyles={[styles[Device].cart_icon]}/>
-                                :
-                                <Pressable onPress={!isLoading?modilfyWishlist:null}><Image style={[styles[Device].cart_icon]} source={wishlist.data.find((item)=>item._id==programInfo?._id)?wishlisted_icon:wishlist_icon}/></Pressable>
-                            }
-                        </View>
+                        <View><Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{programInfo.name}</Text></View>
                         <View style={[GeneralStyles.location_wrapper]}>
                             <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <Pressable onPress={openUniversity} style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([programInfo.university?.name,programInfo.university?.location?.country],"")}</Text></Pressable>
+                            <Pressable onPress={openUniversity} style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([programInfo.university?.name,programInfo.university?.location?.country],"",",",true)}</Text></Pressable>
                         </View>
                         <View style={[GeneralStyles.actions_wrapper]}>
                             {
                                 !programInfo.elite
                                 ?
                                 <Pressable onPress={()=>showIntakes(applyForFree,"order")} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
-                                    <Image source={cart_icon} style={[styles[Device].cart_icon]}/>
-                                    <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Apply for Free</Text>
+                                    {/* <Image source={cart_icon} style={[styles[Device].cart_icon]}/> */}
+                                    <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Apply for Free</Text>
                                 </Pressable>
                                 :
                                 null
                             }
-                            <Pressable  onPress={()=>showIntakes(addToCart,"cart")} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
+                            <Pressable  onPress={()=>showIntakes(addToCart,"cart")} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:programInfo.elite?1.2:0,padding:10,paddingLeft:programInfo.elite?15:5,paddingRight:programInfo.elite?15:5,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
                                 <Image source={cart_icon} style={[styles[Device].cart_icon]}/>
-                                {/* <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Add to Cart</Text> */}
+                                {
+                                    programInfo.elite
+                                    ?
+                                    <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Add to Cart</Text>
+                                    :
+                                    null
+                                }
+                                {/*  */}
                             </Pressable>
                         </View>
+                    </View>
+                    <View>
+                    {
+                        isLoading
+                        ?
+                        <Loader  isLoading={isLoading} loaderStyles={[styles[Device].cart_icon]}/>
+                        :
+                        <Pressable onPress={!isLoading?modilfyWishlist:null}><Image style={[styles[Device].cart_icon]} source={wishlist.data.find((item)=>item._id==programInfo?._id)?wishlisted_icon:wishlist_icon}/></Pressable>
+                    }
                     </View>
                 </View>
                 <View style={[GeneralStyles.dashboards_wrapper,styles[Device].dashboards_wrapper]}>
@@ -614,13 +732,57 @@ const Program=(props:{programid:string})=>{
                     </View>
                 </View>
                 <View style={[GeneralStyles.about_wrapper]}>
-                    <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>About</Text>
+                    <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>About:</Text>
                     <Text style={[styles[Device].about,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{programInfo.about}</Text>
                 </View>
-                {/* <Text>{programInfo.name}</Text>
-                <Text>{programInfo.university?.name}</Text>
-                <Pressable onPress={()=>showIntakes(addToCart)}><Text>Add to cart</Text></Pressable>
-                <Pressable onPress={()=>showIntakes(order)}><Text>Apply</Text></Pressable> */}
+                <View style={[GeneralStyles.keyinfo_wrapper]}>
+                    {/* <Styledtext styles={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Additional Information :" focusWord="Information"/> */}
+                    <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Additional Information:</Text>
+                    <View style={[{flexDirection:"column",gap:20}]}>
+                    {
+                        additionalInfo.map((item,i)=>
+                        <View style={{flexDirection:"row",alignItems:"flex-start",gap:5}}>
+                            <View style={[{flexDirection:"column",alignItems:"flex-start",justifyContent:"center",gap:5}]}>
+                                <View style={{flexDirection:'row',alignItems:"center",gap:3}}>
+                                    {/* <View style={{width:4,height:4,borderRadius:100,backgroundColor:getThemeColor(i%4)}}></View> */}
+                                    <Text style={[styles[Device].keyinfo_type,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.35)}]}>{item.type}</Text>
+                                </View>
+                                <Text style={[styles[Device].keyinfo_value,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{item.value}</Text>
+                            </View>
+                        </View>
+                        )
+                    }
+                    </View>
+                </View>
+                <View style={[GeneralStyles.application_wrapper]}>
+                    <Image style={{width:"100%",aspectRatio:2.2,objectFit:"contain"}} source={applicarion_details_template}/>
+                    <View style={[{position:"absolute",top:"15%",left:"5%",gap:10}]}>
+                        <Text style={[styles[Device].application_title,{fontFamily:Fonts.NeutrifStudio.Medium}]}>Application Details</Text>
+                        <Text style={[styles[Device].application_fee,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{"Fee: "+programInfo.currency?.symbol+" "+programInfo.applicationDetails.applicationFee}</Text>
+                    </View>
+                </View>
+                <View style={[GeneralStyles.about_wrapper]}>
+                    <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Course Start:</Text>
+                    <View style={{flexDirection:'column',alignSelf:"stretch",gap:40}}>
+                    {
+                        programInfo?.startDate?.map((date)=>
+                            <View style={{flexDirection:"row",alignItems:"center"}}>
+                                <View style={{flex:1,flexDirection:"column",alignItems:'center',justifyContent:"center",gap:5}}>
+                                    <Image source={deadline_icon} style={[styles[Device].deadline_icon]}/>
+                                    <Text style={[styles[Device].keyinfo_value,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{getMonth(date.deadlineMonth+1,true)}</Text>
+                                    <Text style={[styles[Device].keyinfo_type,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.35)}]}>Deadline</Text>
+                                </View>
+                                <Image source={arrow_icon} style={{width:40,height:40,objectFit:"contain"}}/>
+                                <View style={{flex:1,flexDirection:"column",alignItems:'center',justifyContent:"center",gap:5}}>
+                                    <Image source={start_icon} style={[styles[Device].deadline_icon]}/>
+                                    <Text style={[styles[Device].keyinfo_value,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{getMonth(date.courseStartingMonth+1,true)}</Text>
+                                    <Text style={[styles[Device].keyinfo_type,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.35)}]}>Start</Text>
+                                </View>
+                            </View>
+                        )
+                    }
+                    </View>
+                </View>
             </ScrollView>
             :
             <Text>Loading</Text>

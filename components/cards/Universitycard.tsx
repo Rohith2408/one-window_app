@@ -65,8 +65,8 @@ const TabStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:16,
-        lineHeight:20
+        fontSize:18,
+        lineHeight:26
     },
     icon:{
         width:20,
@@ -75,10 +75,11 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:14
+        fontSize:16,
+        lineHeight:22
     },
     misc:{
-        fontSize:15
+        fontSize:16
     },
     important:{
         fontSize:12
@@ -104,7 +105,7 @@ const MobileSStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:12,
+        fontSize:14,
         lineHeight:18
     },
     icon:{
@@ -114,7 +115,8 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:11
+        fontSize:12,
+        lineHeight:18
     },
     misc:{
         fontSize:12
@@ -143,8 +145,8 @@ const MobileMStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:14,
-        lineHeight:20
+        fontSize:16,
+        lineHeight:24
     },
     icon:{
         width:18,
@@ -153,7 +155,8 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:12
+        fontSize:14,
+        lineHeight:20
     },
     misc:{
         fontSize:14
@@ -182,8 +185,8 @@ const MobileLStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:14,
-        lineHeight:20
+        fontSize:16,
+        lineHeight:24
     },
     icon:{
         width:18,
@@ -192,7 +195,8 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:12
+        fontSize:14,
+        lineHeight:20
     },
     misc:{
         fontSize:14

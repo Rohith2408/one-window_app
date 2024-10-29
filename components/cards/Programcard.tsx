@@ -65,8 +65,8 @@ const TabStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:16,
-        lineHeight:20
+        fontSize:18,
+        lineHeight:26
     },
     icon:{
         width:20,
@@ -104,8 +104,8 @@ const MobileSStyles=StyleSheet.create({
         top:14,
     },
     name:{
-        fontSize:12,
-        lineHeight:18
+        fontSize:14,
+        lineHeight:20
     },
     icon:{
         width:20,
@@ -143,8 +143,8 @@ const MobileMStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:14,
-        lineHeight:20
+        fontSize:16,
+        lineHeight:24
     },
     icon:{
         width:18,
@@ -153,7 +153,7 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:12
+        fontSize:14
     },
     misc:{
         fontSize:14
@@ -182,8 +182,8 @@ const MobileLStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:14,
-        lineHeight:20
+        fontSize:16,
+        lineHeight:24
     },
     icon:{
         width:18,

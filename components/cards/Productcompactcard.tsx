@@ -329,7 +329,7 @@ const Productcompactcard=(props:PurchasedProduct & {index:number})=>{
                     <View style={[GeneralStyles.category,{backgroundColor:getThemeColor(props.index%4)}]}><Text style={[styles[Device].category_text,{color:"rgba(0,0,0,0.3)",fontFamily:Fonts.NeutrifStudio.Regular,padding:3}]}>{setWordCase(props.category)}</Text></View>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
-                    <Text style={[styles[Device].product_name,{color:"black",fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.course.name}</Text>
+                    <Text style={[styles[Device].product_name,{color:"black",fontFamily:Fonts.NeutrifStudio.Medium}]}>{truncateString(props.course.name,50,true)}</Text>
                     <View style={[GeneralStyles.misc_wrapper]}>
                         <View style={[GeneralStyles.uni_wrapper]}>
                             <Image source={props.course.university.logoSrc} style={[styles[Device].uni_icon,GeneralStyles.uni_icon]}/>
