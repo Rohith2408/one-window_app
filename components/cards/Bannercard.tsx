@@ -20,8 +20,19 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     sub_wrapper:{
-        gap:26,
-        borderRadius:40
+        gap:5,
+        borderRadius:20
+    },
+    title:{
+        fontSize:14
+    },
+    sub_title:{
+        fontSize:12
+    },
+    image:{
+        width:120,
+        height:120,
+        resizeMode:"contain"
     }
 })
 
@@ -35,6 +46,11 @@ const MobileSStyles=StyleSheet.create({
     },
     sub_title:{
         fontSize:12
+    },
+    image:{
+        width:80,
+        height:80,
+        resizeMode:"contain"
     }
 })
 
@@ -66,6 +82,11 @@ const MobileLStyles=StyleSheet.create({
     },
     sub_title:{
         fontSize:14
+    },
+    image:{
+        width:100,
+        height:100,
+        resizeMode:"contain"
     }
 })
 

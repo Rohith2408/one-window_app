@@ -25,10 +25,25 @@ export const productsSlice=createSlice({
             let index=state.data.findIndex((item)=>item._id==action.payload);
             state.data[index].cancellationRequest=true
         },
+        replaceProducts:(state,action:PayloadAction<PurchasedProduct[]>)=>{
+            let unReplacedProducts=[...action.payload]
+            state.data=[...state.data.map((existingItem)=>{
+                let updatedData=unReplacedProducts.find((item2)=>item2._id==existingItem._id)
+                if(updatedData)
+                {
+                    unReplacedProducts=unReplacedProducts.filter((item)=>existingItem._id!=item._id)
+                    return updatedData
+                }
+                else
+                {
+                    return existingItem
+                }
+            }),...unReplacedProducts]
+        },
         removeProduct:(state,action:PayloadAction<string>)=>({...state,data:state.data.filter((item,index)=>item._id!=action.payload)}),
         resetProducts:(state,action:PayloadAction)=>({...initialState}),
     }
 })
 
-export const {initProducts,addProduct,setProducts,addProducts,updateProduct,removeProduct,resetProducts}=productsSlice.actions;
+export const {initProducts,replaceProducts,setProducts,addProducts,updateProduct,removeProduct,resetProducts}=productsSlice.actions;
 export default productsSlice.reducer;

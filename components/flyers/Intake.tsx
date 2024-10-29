@@ -85,7 +85,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     }
 
     const getErrors=(intake:{year:undefined|string,month:undefined|string})=>{
-        console.log("validation",info.validation);
+        //console.log("validation",info.validation);
         if(intake.year==undefined || intake.month==undefined)
         {
             return "Please select the month and year"

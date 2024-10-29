@@ -60,6 +60,11 @@ const TabStyles=StyleSheet.create({
     no_code:{
         fontSize:14
     },
+    back_icon:{
+        width:12,
+        height:12,
+        resizeMode:'contain'
+    },
     loading:{
         width:25,
         height:25,
@@ -82,6 +87,11 @@ const MobileSStyles=StyleSheet.create({
     },
     no_code:{
         fontSize:11
+    },
+    back_icon:{
+        width:8,
+        height:8,
+        resizeMode:'contain'
     },
     loading:{
         width:16,
@@ -135,8 +145,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     back_icon:{
-        width:14,
-        height:14,
+        width:8,
+        height:8,
         resizeMode:'contain'
     },
     loading:{
@@ -256,13 +266,13 @@ const Phonelogin=()=>{
     console.log("number",phone)
 
     return(
-        <View style={{flex:1,paddingTop:15}} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
+        <View style={{flex:1,paddingTop:20}} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
         {
             dimensions && userLocation.responseStatus=="recieved"
             ?
             <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false} ref={scrollRef} horizontal pagingEnabled style={{flex:1}}>
                 <View style={{width:dimensions.width,gap:30}}>
-                    <View style={{flexDirection:"column",gap:15}}>
+                    <View style={{flexDirection:"column",gap:25}}>
                         <Styledtext styles={[styles[Device].enter_text,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="mobile number" text="Please enter your mobile number"/>
                         <View style={{gap:10,flexDirection:"column"}}>
                             <View style={{flexDirection:"row",gap:15}}>

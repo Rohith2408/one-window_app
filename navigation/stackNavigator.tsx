@@ -35,7 +35,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
 
   const screenInfo=useRef(components.find((component)=>component.id==props.id)).current
   const getState=(type:"initial"|"final")=>{
-    console.log("screen info",screenInfo)
+    //console.log("screen info",screenInfo)
     if(screenInfo?.animationStyle=="Custom")
     {
       if(screenInfo.customPlacement)
@@ -178,7 +178,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
 
   },[])
 
-  console.log("screen",initialState,finalState);
+  //console.log("screen",initialState,finalState);
 
   const animate=(animData:{property:Animated.Value,style?:"timing"|"spring",value:number,duration:number,native?:boolean}[],callBack?:any)=>{
     let animations=animData.map((data)=>Animated[data.style?data.style:"timing"](data.property,{toValue:data.value,duration:data.duration,easing:Easing.ease,useNativeDriver:false}));

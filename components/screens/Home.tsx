@@ -182,7 +182,7 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     banner_wrapper:{
-        height:300
+        height:250
     }
 })
 

@@ -142,15 +142,15 @@ const TabStyles=StyleSheet.create({
         fontSize:12
     },
     no_workexperience:{
-        fontSize:18
+        fontSize:20
     },
     click_message:{
-        fontSize:14,
+        fontSize:16,
         lineHeight:20
     },
     emptylist_image:{
-        width:150,
-        height:150,
+        width:160,
+        height:160,
         resizeMode:"contain"
     },
     add_text:{
@@ -211,12 +211,12 @@ const MobileSStyles=StyleSheet.create({
         fontSize:14
     },
     click_message:{
-        fontSize:10,
-        lineHeight:16
+        fontSize:16,
+        lineHeight:20
     },
     emptylist_image:{
-        width:90,
-        height:90,
+        width:160,
+        height:160,
         resizeMode:"contain"
     },
     add_text:{
@@ -273,15 +273,15 @@ const MobileMStyles=StyleSheet.create({
         fontSize:10
     },
     no_workexperience:{
-        fontSize:16
+        fontSize:18
     },
     click_message:{
-        fontSize:12,
+        fontSize:13,
         lineHeight:20
     },
     emptylist_image:{
-        width:110,
-        height:110,
+        width:140,
+        height:140,
         resizeMode:"contain"
     },
     add_text:{
@@ -338,15 +338,15 @@ const MobileLStyles=StyleSheet.create({
         fontSize:11
     },
     no_workexperience:{
-        fontSize:16
+        fontSize:18
     },
     click_message:{
-        fontSize:12,
+        fontSize:13,
         lineHeight:20
     },
     emptylist_image:{
-        width:110,
-        height:110,
+        width:140,
+        height:140,
         resizeMode:"contain"
     },
     add_text:{

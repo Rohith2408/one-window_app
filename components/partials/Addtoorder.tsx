@@ -124,7 +124,7 @@ const Addtoorder=(props:{orderinfoid:string})=>{
         if(validation?.success)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
-            console.log("Server res",JSON.stringify(serverRes,null,2))
+            //console.log("Server res",JSON.stringify(serverRes,null,2))
             if(serverRes?.success)
             {
                 //setIsloading(false);
@@ -148,7 +148,7 @@ const Addtoorder=(props:{orderinfoid:string})=>{
         if(validation?.success)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
-            console.log("Server res",JSON.stringify(serverRes,null,2))
+            //console.log("Server res",JSON.stringify(serverRes,null,2))
             if(serverRes?.success)
             {
                 requestInfo?.responseHandler(serverRes);

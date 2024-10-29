@@ -344,7 +344,10 @@ const Product=(props:{productId:string})=>{
     }
 
     const showOrderDetails=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Orderdetails",params:{orderdetailsid:product?.order}}}):null
+        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Orderdetails"}}):null
+        setTimeout(()=>{
+            navigate?navigate({type:"AddScreen",payload:{screen:"Orderdetails",params:{orderdetailsid:product?.order}}}):null
+        },100)
     }
 
     const showExpert=(id:string)=>{
@@ -366,10 +369,14 @@ const Product=(props:{productId:string})=>{
                         <View style={[styles[Device].uni_icon_bg,{position:"absolute",zIndex:-1,backgroundColor:getThemeColor(0)}]}></View>
                     </View>
                     <View style={[GeneralStyles.uni_info_wrapper]}>
-                        <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(product.category)}</Text>
+                        <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(product.course.name)}</Text>
                         <View style={[GeneralStyles.location_wrapper]}>
                             <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([product.course.name,product.course.university.name],"","|",true)}</Text></View>
+                            <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>{formatDate(product.intake)}</Text></View>
+                        </View>
+                        <View style={[GeneralStyles.location_wrapper]}>
+                            <Image source={location_icon} style={[styles[Device].location_icon]}/>
+                            <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>{Word2Sentence([setWordCase(product.category),product.course.university.name],"","|",true)}</Text></View>
                         </View>
                         <View style={[GeneralStyles.actions_wrapper]}>
                             <Pressable onPress={showOrderDetails} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>

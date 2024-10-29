@@ -12,7 +12,7 @@ const TabStyles=StyleSheet.create({
 
 const MobileSStyles=StyleSheet.create({
     text:{
-        fontSize:12
+        fontSize:14
     }
 })
 

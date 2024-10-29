@@ -3,7 +3,7 @@ import { setCart } from "../store/slices/cartSlice";
 import { updateChat } from "../store/slices/chatsSlice";
 import { addMessage } from "../store/slices/messagesSlice";
 import { addOrders, setOrders, updateOrder } from "../store/slices/ordersSlice";
-import { addProducts, setProducts } from "../store/slices/productsSlice";
+import { addProducts, replaceProducts, setProducts } from "../store/slices/productsSlice";
 import { setRecommendations } from "../store/slices/recommendationsSlice";
 import { setWishlist } from "../store/slices/wishlistSlice";
 import { Product, PurchasedProduct, Recommendation, RecommendationType, RequestInfo, ServerResponse, ServerUnpurchasedProduct } from "../types";
@@ -89,13 +89,13 @@ const requests:RequestInfo[]=[
                 reqType:"POST",
                 body:data
             })
-            //console.log("Order Server Response ",res);
             return res;
         },
         responseHandler:(res:ServerResponse)=>{
             if(res.success)
             {
                 store.dispatch(addOrders(res.data.order));
+                console.log("Order place res",JSON.stringify(res.data.order,null,2));
                 store.dispatch(addProducts(res.data.order.products));
             }
         }
@@ -122,8 +122,8 @@ const requests:RequestInfo[]=[
             if(res.success)
             {
                 store.dispatch(updateOrder(res.data));
-                console.log("order",JSON.stringify(res.data,null,2));
-                store.dispatch(setProducts([...store.getState().products.data.filter((pdct)=>!res.data.products.find((item:PurchasedProduct)=>item._id==pdct._id)),...res.data.products]));
+                //console.log("order",JSON.stringify(res.data,null,2));
+                store.dispatch(replaceProducts(res.data.products));
             }
         }
     },

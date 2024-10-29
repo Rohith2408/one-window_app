@@ -13,6 +13,7 @@ import { Device } from "../../types"
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         flex:1,
+        alignSelf:"center",
         backgroundColor:'white',
         shadowOpacity:0.1,
         shadowRadius:5,

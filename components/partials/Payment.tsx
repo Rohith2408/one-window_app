@@ -10,7 +10,7 @@ import { updateOrder } from "../../store/slices/ordersSlice";
 import { setCart } from "../../store/slices/cartSlice";
 import useNavigation from "../../hooks/useNavigation";
 import { Fonts, Themes } from "../../constants";
-import { addProduct, addProducts } from "../../store/slices/productsSlice";
+import { addProduct, addProducts, replaceProducts } from "../../store/slices/productsSlice";
 import { useAppSelector } from "../../hooks/useAppSelector";
 
 const Payment = (props:{paymentOrderId:string}) => {
@@ -56,10 +56,10 @@ const Payment = (props:{paymentOrderId:string}) => {
       if (response1) {
         //dispatch()
         let order:Order=response1.data
-        console.log("res order",JSON.stringify(response1.data,null,2));
+        console.log("after payment",JSON.stringify(response1.data.products[0].advisors,null,2));
         dispatch(updateOrder(response1.data));
-        dispatch(addProducts(response1.data.products));
-        navigate({type:"RemovePages",payload:[{id:"Payment"},{id:"Order"},{id:"Ordersummary"},{id:"Cart"}]})
+        dispatch(replaceProducts(response1.data.products));
+        navigate({type:"RemovePages",payload:[{id:"Order"},{id:"Ordersummary"},{id:"Cart"}]})
       }
     } 
     else {

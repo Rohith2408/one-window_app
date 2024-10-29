@@ -47,7 +47,7 @@ const styles=StyleSheet.create({
         flex:14
     },
     navWrapper:{
-        flex:1.1,
+        flex:1.1
     }
 })
 

@@ -15,7 +15,8 @@ export type NavigationActions=
         type:"AddScreen",
         payload:{
             screen:string,
-            params?:any
+            params?:any,
+            replaceIfExists?:boolean
         }
     }|
     {
@@ -66,8 +67,17 @@ export const NavigationReducer=(state:string,action:NavigationActions)=>{
             break;
 
         case "AddScreen":
-            encodedPath.screens=[...encodedPath.screens,action.payload.screen]
-            action.payload.params?encodedPath.props={...encodedPath.props,...action.payload.params}:null
+            let exists=encodedPath.screens.find((screen)=>screen==action.payload.screen)
+            if(exists && action.payload.replaceIfExists)
+            {
+                encodedPath.screens=[...encodedPath.screens.filter((screen)=>screen!=action.payload.screen),action.payload.screen]
+                action.payload.params?encodedPath.props={...encodedPath.props,...action.payload.params}:null
+            }
+            else if(!exists)
+            {
+                encodedPath.screens=[...encodedPath.screens,action.payload.screen]
+                action.payload.params?encodedPath.props={...encodedPath.props,...action.payload.params}:null
+            }
             return decodePath(encodedPath)
             break;
 

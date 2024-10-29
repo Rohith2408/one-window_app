@@ -387,7 +387,7 @@ const Program=(props:{programid:string})=>{
             list:programInfo?.startDate,
             onselection:callback,
             validation:{
-                validator:(intake)=>type=="order"?!store.getState().products.data.find((product)=>compareProducts(product,{...product,intake:new Date(intake.year,parseInt(intake.month)-1,1).toISOString()})):!store.getState().cart.data.find((cartItem)=>compareProducts(cartItem,{...product,intake:new Date(intake.year,parseInt(intake.month)-1,1).toISOString()})),
+                validator:(intake)=>type=="order"?!store.getState().products.data.find((existingProduct)=>compareProducts(existingProduct,{...product,intake:new Date(intake.year,parseInt(intake.month)-1,1).toISOString()})):!store.getState().cart.data.find((cartItem)=>compareProducts(cartItem,{...product,intake:new Date(intake.year,parseInt(intake.month)-1,1).toISOString()})),
                 errorMessage:type=="order"?"Already applied for the program with the selected intake":"Program with the selected intake already exists in the cart"
             },            
         }
@@ -462,7 +462,7 @@ const Program=(props:{programid:string})=>{
         let serverRes={success:false,message:"",data:undefined};
         let requestInfo=requests.find((item)=>item.id=="addproducts");
         let validation=requestInfo?.inputValidator(data);
-        console.log("validation",validation);
+        //console.log("validation",validation);
         if(validation?.success)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
@@ -486,7 +486,7 @@ const Program=(props:{programid:string})=>{
         let Package=store.getState().suggestedpackages.data.find((pkg)=>pkg.priceDetails.totalPrice==0)
         let freeOrder=store.getState().orders.data.find((order)=>order.paymentDetails.amount==0)
         let res:ServerResponse={success:false,data:undefined,message:""};
-        //console.log("freeeee",freeOrder?.products.length,Package?.products)
+        
         if(freeOrder && freeOrder?.products.length==Package?.products.find((item)=>item.category=="premium application")?.quantity)
         {
             navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null

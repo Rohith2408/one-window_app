@@ -106,6 +106,12 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
+    body_wrapper:{
+        gap:15
+    },
+    banner_wrapper:{
+        gap:30
+    },
     header_wrapper:{
         height:160,
         width:"100%",
@@ -176,8 +182,14 @@ const TabStyles=StyleSheet.create({
 })
 
 const MobileSStyles=StyleSheet.create({
+    body_wrapper:{
+        gap:5
+    },
+    banner_wrapper:{
+        gap:20
+    },
     header_wrapper:{
-        height:100,
+        height:85,
         width:"100%",
         display:"flex",
     },
@@ -220,7 +232,7 @@ const MobileSStyles=StyleSheet.create({
         fontSize:14
     },
     logo:{
-        width: 150,
+        width:130,
         resizeMode: "contain"
     },
     airplane:{
@@ -246,8 +258,8 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     banner:{
-        width:205,
-        height:205,
+        width:190,
+        height:190,
         resizeMode:"contain"
     },
     banner_text:{
@@ -265,6 +277,12 @@ const MobileSStyles=StyleSheet.create({
 })
 
 const MobileMStyles=StyleSheet.create({
+    body_wrapper:{
+        gap:10
+    },
+    banner_wrapper:{
+        gap:24
+    },
     header_wrapper:{
         height:100,
         width:"100%",
@@ -335,6 +353,12 @@ const MobileMStyles=StyleSheet.create({
 })
 
 const MobileLStyles=StyleSheet.create({
+    body_wrapper:{
+        gap:10
+    },
+    banner_wrapper:{
+        gap:24
+    },
     header_wrapper:{
         height:125,
         width:"100%",
@@ -488,8 +512,6 @@ const Loginbase=(props:{auth:string})=>{
         navigate({type:"AddScreen",payload:{screen:"Phonelogin"}})
     }
 
-    //console.log("current tab",loginType);
-
     return(
         <View style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.header_wrapper,styles[Device].header_wrapper,{position:"relative"}]}>
@@ -498,13 +520,13 @@ const Loginbase=(props:{auth:string})=>{
                 <View style={[GeneralStyles.header_wrapper_bg,{backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
                 {/* <Text style={[styles[Device].login,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Login</Text> */}
             </View>
-            <View style={[GeneralStyles.body_wrapper,{position:"relative",gap:36}]}>
+            <View style={[GeneralStyles.body_wrapper,styles[Device].body_wrapper,{position:"relative"}]}>
                 {/* <Image style={[styles[Device].girl_peek,{position:"absolute"}]} source={girlPeek_image}/> */}
                 <Transitionview effect="zoom" delay={400}><View style={{alignSelf:'center',margin:20}}><Image style={[styles[Device].logo,{aspectRatio:5}]} source={logo}/></View></Transitionview>
                 <View style={{display:"flex",flexDirection:"column",gap:10,position:"relative"}}>
                     <Transitionview effect="pan" delay={300}><Image style={[styles[Device].airplane,{position:"absolute",transform:[{rotate:"-20deg"}]}]} source={airplane}/></Transitionview>
                     <Transitionview effect="pan" delay={300}><Image style={[styles[Device].passport,{position:"absolute",transform:[{rotate:"20deg"}]}]} source={passport}/></Transitionview>
-                    <View style={{flexDirection:"column",alignItems:'center',gap:40}}>
+                    <View style={[styles[Device].banner_wrapper,{flexDirection:"column",alignItems:'center'}]}>
                         <Image source={banner} style={[{alignSelf:"center"},styles[Device].banner]}/>
                         <Transitionview effect="pan" delay={200}>
                             <Text style={[styles[Device].banner_text,{padding:10,textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular,maxWidth:"80%"}]}>Explore over 8000 Universities and 70000 Courses</Text>

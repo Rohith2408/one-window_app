@@ -85,14 +85,12 @@ export default function App() {
   },[])
 
   const encodedData:{screens:string[],props:any}=encodePath(path)
-  //console.log("screens data",path)
 
   return (
     <StoreProvider store={store}>
       <Appcontext.Provider value={{path,navigate,theme,setTheme}}>
         <SafeAreaView style={styles.container} >
           <Layout component={encodedData.screens[0]} screens={encodedData.screens.filter((screen,i)=>i!=0)} props={encodedData.props} invalidPathScreen={Invalidpath}></Layout>
-          {/* <Stacknavigator screens={screens} invalidPathScreen={Invalidpath}/> */}
         </SafeAreaView>
       </Appcontext.Provider>
     </StoreProvider>
