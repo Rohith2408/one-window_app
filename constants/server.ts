@@ -412,6 +412,6 @@ const endPoints=[
     },
 ]
 
-const baseURL="https://83e3-124-123-44-188.ngrok-free.app/api/v1"//"https://campusroot.com/api/v1"
+const baseURL="https://campusroot.com/api/v1"//"https://83e3-124-123-44-188.ngrok-free.app/api/v1"
 
 export {baseURL,endPoints,serverResponses}
