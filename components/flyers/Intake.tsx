@@ -34,7 +34,7 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     apply:{
-        fontSize:14
+        fontSize:16
     },
     heading:{
         fontSize:14
@@ -43,7 +43,7 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     apply:{
-        fontSize:14
+        fontSize:16
     },
     heading:{
         fontSize:14

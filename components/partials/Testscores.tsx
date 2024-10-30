@@ -99,13 +99,13 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     edit_icon:{
-        width:17,
-        height:17,
+        width:18,
+        height:18,
         resizeMode:"contain"
     },
     delete_icon:{
-        width:17,
-        height:17,
+        width:18,
+        height:18,
         resizeMode:"contain"
     },
     test_icon:{
@@ -124,22 +124,22 @@ const TabStyles=StyleSheet.create({
         top:4
     },
     test_name:{
-        fontSize:16
+        fontSize:18
     },
     section_name:{
-        fontSize:14
+        fontSize:16
     },
     score:{
-        fontSize:14
+        fontSize:16
     },
     total_heading:{
-        fontSize:14
+        fontSize:16
     },
     total:{
-        fontSize:14
+        fontSize:16
     },
     test_date:{
-        fontSize:12
+        fontSize:14
     },
     no_workexperience:{
         fontSize:20
@@ -190,25 +190,25 @@ const MobileSStyles=StyleSheet.create({
         top:4
     },
     test_name:{
-        fontSize:13
+        fontSize:14
     },
     section_name:{
-        fontSize:11
+        fontSize:12
     },
     score:{
-        fontSize:11
+        fontSize:12
     },
     total_heading:{
-        fontSize:11
+        fontSize:12
     },
     total:{
-        fontSize:11
+        fontSize:12
     },
     test_date:{
-        fontSize:10
+        fontSize:12
     },
     no_workexperience:{
-        fontSize:14
+        fontSize:16
     },
     click_message:{
         fontSize:16,
@@ -230,18 +230,18 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     edit_icon:{
-        width:14,
-        height:14,
+        width:16,
+        height:16,
         resizeMode:"contain"
     },
     delete_icon:{
-        width:14,
-        height:14,
+        width:16,
+        height:16,
         resizeMode:"contain"
     },
     test_icon:{
-        width:16,
-        height:16,
+        width:18,
+        height:18,
         resizeMode:"contain",
         position:"relative"
     },
@@ -251,23 +251,23 @@ const MobileMStyles=StyleSheet.create({
         borderRadius:100,
         position:"absolute",
         zIndex:-1,
-        left:-5,
+        left:4,
         top:4
     },
     test_name:{
-        fontSize:14
+        fontSize:16
     },
     section_name:{
-        fontSize:12
+        fontSize:14
     },
     score:{
-        fontSize:12
+        fontSize:14
     },
     total_heading:{
-        fontSize:12
+        fontSize:14
     },
     total:{
-        fontSize:12
+        fontSize:14
     },
     test_date:{
         fontSize:10
@@ -276,7 +276,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:18
     },
     click_message:{
-        fontSize:13,
+        fontSize:14,
         lineHeight:20
     },
     emptylist_image:{
@@ -295,13 +295,13 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     edit_icon:{
-        width:15,
-        height:15,
+        width:16,
+        height:16,
         resizeMode:"contain"
     },
     delete_icon:{
-        width:15,
-        height:15,
+        width:16,
+        height:16,
         resizeMode:"contain"
     },
     test_icon:{
@@ -311,37 +311,37 @@ const MobileLStyles=StyleSheet.create({
         position:"relative"
     },
     test_icon_bg:{
-        width:18,
-        height:18,
+        width:16,
+        height:16,
         borderRadius:100,
         position:"absolute",
         zIndex:-1,
-        left:-5,
+        left:4,
         top:4
     },
     test_name:{
-        fontSize:14
+        fontSize:16
     },
     section_name:{
-        fontSize:12
+        fontSize:14
     },
     score:{
-        fontSize:12
+        fontSize:14
     },
     total_heading:{
-        fontSize:12
+        fontSize:14
     },
     total:{
-        fontSize:12
+        fontSize:14
     },
     test_date:{
-        fontSize:11
+        fontSize:10
     },
     no_workexperience:{
         fontSize:18
     },
     click_message:{
-        fontSize:13,
+        fontSize:14,
         lineHeight:20
     },
     emptylist_image:{

@@ -158,8 +158,6 @@ const Recommendations=()=>{
         return res?.success
     }
 
-    //console.log("p",store.getState().preferences.data?.country?.length>0)
-
     useEffect(()=>{
        setTimeout(()=>{
         setLoadPage(true)
