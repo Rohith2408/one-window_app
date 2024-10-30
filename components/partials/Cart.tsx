@@ -41,8 +41,8 @@ const TabStyles=StyleSheet.create({
         fontSize:16
     },
     empty_image:{
-        width:120,
-        height:120,
+        width:160,
+        height:160,
         resizeMode:"contain"
     },
     products_icon:{
@@ -72,8 +72,8 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     empty_image:{
-        width:100,
-        height:100,
+        width:130,
+        height:130,
         resizeMode:"contain"
     },
     products_icon:{
@@ -99,17 +99,17 @@ const MobileMStyles=StyleSheet.create({
         fontSize:14
     },
     not_found:{
-        fontSize:16
+        fontSize:18
     },
     not_found_sub:{
-        fontSize:12
+        fontSize:14
     },
     items_count:{
         fontSize:14
     },
     empty_image:{
-        width:120,
-        height:120,
+        width:140,
+        height:140,
         resizeMode:"contain"
     },
     products_icon:{
@@ -139,8 +139,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:14
     },
     empty_image:{
-        width:120,
-        height:120,
+        width:140,
+        height:140,
         resizeMode:"contain"
     },
     products_icon:{

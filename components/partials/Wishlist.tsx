@@ -74,8 +74,8 @@ const MobileSStyles=StyleSheet.create({
         lineHeight:16
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:130,
+        height:130,
         resizeMode:"contain"
     },
     card:{
@@ -93,15 +93,15 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     no_workexperience:{
-        fontSize:16
+        fontSize:18
     },
     click_message:{
-        fontSize:12,
+        fontSize:14,
         lineHeight:20
     },
     emptylist_image:{
-        width:110,
-        height:110,
+        width:140,
+        height:140,
         resizeMode:"contain"
     },
     card:{
@@ -125,8 +125,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:140,
+        height:140,
         resizeMode:"contain"
     },
     card:{

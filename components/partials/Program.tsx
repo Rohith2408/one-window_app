@@ -595,7 +595,7 @@ const Program=(props:{programid:string})=>{
         let Package=store.getState().suggestedpackages.data.find((pkg)=>pkg.priceDetails.totalPrice==0)
         let freeOrder=store.getState().orders.data.find((order)=>order.paymentDetails.amount==0)
         let res:ServerResponse={success:false,data:undefined,message:""};
-        
+        console.log("Free apply res",res);
         if(freeOrder && freeOrder?.products.length==Package?.products.find((item)=>item.category=="premium application")?.quantity)
         {
             navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null

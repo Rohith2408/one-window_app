@@ -215,8 +215,8 @@ const MobileSStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:160,
-        height:160,
+        width:140,
+        height:140,
         resizeMode:"contain"
     },
     add_text:{

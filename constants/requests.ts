@@ -83,19 +83,28 @@ const requests:RequestInfo[]=[
             console.log("Order I/P Validation Response ",res);
             return res
         },
+        // serverCommunicator:async (data:{products:ServerUnpurchasedProduct[],package:string|undefined})=>{
+        //     let res=await serverRequest({
+        //         url:getServerRequestURL("checkout","POST"),
+        //         reqType:"POST",
+        //         body:data
+        //     })
+        //     return res;
+        // },
         serverCommunicator:async (data:{products:ServerUnpurchasedProduct[],package:string|undefined})=>{
             let res=await serverRequest({
                 url:getServerRequestURL("checkout","POST"),
                 reqType:"POST",
                 body:data
             })
+            // console.log("dummy res",res);
             return res;
         },
         responseHandler:(res:ServerResponse)=>{
             if(res.success)
             {
                 store.dispatch(addOrders(res.data.order));
-                console.log("Order place res",JSON.stringify(res.data.order,null,2));
+                console.log("Order place res",JSON.stringify(res.data.order.products,null,2));
                 store.dispatch(addProducts(res.data.order.products));
             }
         }
@@ -110,8 +119,9 @@ const requests:RequestInfo[]=[
             return res
         },
         serverCommunicator:async (data:{products:ServerUnpurchasedProduct[],orderId:string})=>{
+            console.log("res",);
             let res=await serverRequest({
-                url:getServerRequestURL("add-products","POST"),
+                url:getServerRequestURL("add-products","POST"),//getServerRequestURL("add-products","POST"),
                 reqType:"POST",
                 body:data
             })
