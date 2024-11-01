@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { Message} from "../../types"
 import { useRef, useState } from "react"
 import { getDevice} from "../../utils"
@@ -10,6 +10,8 @@ import { Fonts, Themes } from "../../constants"
 import { TypingAnimation } from 'react-native-typing-animation';
 import { Image } from "expo-image"
 import default_icon from '../../assets/images/misc/defaultDP.png'
+import document_icon from '../../assets/images/misc/document.png'
+import WebView from "react-native-webview"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -47,6 +49,12 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:"row",
         gap:5,
         alignItems:'center'
+    },
+    doc_wrapper:{
+        borderRadius:10,
+        flexDirection:'row',
+        alignItems:"center",
+        gap:5
     }
 })
 
@@ -169,6 +177,16 @@ const MobileMStyles=StyleSheet.create({
         width:20,
         height:20,
         resizeMode:"contain"
+    },
+    doc_wrapper:{
+        height:30,
+        padding:5,
+        resizeMode:"contain"
+    },
+    doc_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
     }
 })
 
@@ -234,7 +252,7 @@ const Messagecard=(props:Message & {index:number})=>{
     const [isLoading,setIsloading]=useState(false)
     const profile=useAppSelector((state)=>state.sharedinfo).data
 
-    console.log("msgs",props.content)
+    //console.log("msgs",props.content)
 
     return(
         <View style={[GeneralStyles.wrapper]}>
@@ -292,9 +310,17 @@ const Normal=(props:Message)=>{
 
     const profile=useAppSelector((state)=>state.sharedinfo).data
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const [path,navigate]=useNavigation()
+
+    const showDoc=()=>{
+        if(props.document?.data.preview_url && props.document?.data.preview_url?.length>0)
+        {
+           navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Documentview",flyerdata:{docpreviewurl:props.document.data.preview_url}}}}):null
+        }
+    }
 
     return(
-        <View style={{alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start"}}>
+        <View style={{gap:5,alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start"}}>
             {
                 props.sender && props.sender._id==undefined
                 ?
@@ -302,7 +328,7 @@ const Normal=(props:Message)=>{
                 :
                 null
             }
-            <View style={{flexDirection:"row",alignItems:"center",backgroundColor:(props.sender?._id==profile?._id)?Themes.Light.OnewindowLightBlue:"#F6F6F6",borderRadius:20}}>
+            <View style={{flexDirection:"row",alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start",alignItems:"center",backgroundColor:(props.sender?._id==profile?._id)?Themes.Light.OnewindowLightBlue:"#F6F6F6",borderRadius:20}}>
                 {
                     props.sender?._id!=profile?._id
                     ?
@@ -319,6 +345,40 @@ const Normal=(props:Message)=>{
                     null
                 }
             </View>
+            {
+                props.document
+                ?
+                <Pressable onPress={showDoc} style={[styles[Device].doc_wrapper,GeneralStyles.doc_wrapper,{backgroundColor:Themes.Light.OnewindowLightBlue}]}>
+                    <Image source={document_icon} style={[styles[Device].doc_icon]}/>
+                    <Text style={[styles[Device].repliedTo,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.document.data.FileName}</Text>
+                   {/* <WebView
+                        setDisplayZoomControls={false}
+                        setBuiltInZoomControls={true}
+                        hideKeyboardAccessoryView={true} 
+                        allowsBackForwardNavigationGestures={false} 
+                        source={{ uri:props.document.data.preview_url}} 
+                        injectedJavaScript={`
+                            const meta = document.createElement('meta');
+                            meta.setAttribute('name', 'viewport');
+                            meta.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+                            document.head.appendChild(meta);
+                            function hideControls() {
+                                const controlsDiv = document.getElementsByClassName('zwd-hide-display zwd-icon-on-hover zwd-icons zwd-tools zwd-c-aligned zwd-atom-previewaction-controls zwd-fmedium zwd-p-left4 zwd-p-right4 ');
+                                if (controlsDiv) {
+                                  controlsDiv[0].style.display = 'none';
+                                } else {
+                                  setTimeout(hideControls, 100); // Retry if element not found yet
+                                }
+                              }  
+                            hideControls();
+                            true; // Note: this is required for the injectedJavaScript to take effect on iOS
+                        `}
+                        style={{ flex:1}}
+                    /> */}
+                </Pressable>
+                :
+                null
+            }
             {
                 props.repliedTo
                 ?

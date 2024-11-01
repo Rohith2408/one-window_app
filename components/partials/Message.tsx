@@ -18,8 +18,10 @@ import loading_icon from '../../assets/images/misc/loader.gif'
 import Messagecard from "../cards/Messagecard"
 import { store } from "../../store"
 import default_icon from '../../assets/images/misc/defaultDP.png'
+import close_icon from '../../assets/images/misc/close.png'
 import { TypingAnimation } from 'react-native-typing-animation';
 import { getSocket } from "../../socket"
+import Transitionview from "../resources/Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -53,7 +55,8 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:'column',
         justifyContent:"center",
         alignItems:"flex-start",
-        gap:5
+        gap:5,
+        paddingLeft:10
     },
     dp_wrapper:{
         display:"flex",
@@ -91,7 +94,7 @@ const TabStyles=StyleSheet.create({
         display:"flex",
     },
     name:{
-        fontSize:18
+        fontSize:24
     },
     email:{
         fontSize:12
@@ -147,6 +150,11 @@ const TabStyles=StyleSheet.create({
     activity_indicator:{
         width:30,
         height:30,
+        objectFit:"contain"
+    },
+    close_icon:{
+        width:16,
+        height:16,
         objectFit:"contain"
     }
 })
@@ -216,6 +224,11 @@ const MobileSStyles=StyleSheet.create({
         width:30,
         height:30,
         objectFit:"contain"
+    },
+    close_icon:{
+        width:10,
+        height:10,
+        objectFit:"contain"
     }
 })
 
@@ -226,7 +239,10 @@ const MobileMStyles=StyleSheet.create({
         display:"flex",
     },
     name:{
-        fontSize:18
+        fontSize:22
+    },
+    activity:{
+        fontSize:14
     },
     email:{
         fontSize:12
@@ -284,6 +300,11 @@ const MobileMStyles=StyleSheet.create({
         width:30,
         height:30,
         objectFit:"contain"
+    },
+    close_icon:{
+        width:12,
+        height:12,
+        objectFit:"contain"
     }
 })
 
@@ -294,7 +315,10 @@ const MobileLStyles=StyleSheet.create({
         display:"flex",
     },
     name:{
-        fontSize:18
+        fontSize:22
+    },
+    activity:{
+        fontSize:14
     },
     email:{
         fontSize:12
@@ -351,6 +375,11 @@ const MobileLStyles=StyleSheet.create({
         width:30,
         height:30,
         objectFit:"contain"
+    },
+    close_icon:{
+        width:12,
+        height:12,
+        objectFit:"contain"
     }
 })
 
@@ -380,6 +409,7 @@ const Message=(props:{chatId:string})=>{
     const scrollRef=useRef<any>();
     let bakedMessages=(chat && messages.data && profile.data)?bakeMessages(chat,profile.data._id,messages.data):[];
     const called=useRef(false);
+    const textInputRef=useRef();
 
     const fetchMessages=async ()=>{
         let res:ServerResponse=await serverRequest({
@@ -405,6 +435,7 @@ const Message=(props:{chatId:string})=>{
         if(res.success)
         {
             setFile(res.data);
+            textInputRef.current?.focus();
         }
         console.log("pickkk",res);
     }
@@ -482,9 +513,11 @@ const Message=(props:{chatId:string})=>{
             {
                 messageTrigger(serverRes.data.message,serverRes.data.chat)
                 requestInfo?.responseHandler(serverRes);
-                setSending(false);
                 setMessage("");
+                setRepliedTo(undefined);
+                setFile(undefined);
             }
+            setSending(false);
         } 
     }
 
@@ -534,6 +567,13 @@ const Message=(props:{chatId:string})=>{
         getSocket().emit("trigger",triggerObj);
     }
 
+    const reply=(msg:MessageType)=>{
+        if(msg.sender && msg.sender._id)
+        {
+            setRepliedTo(msg)
+            textInputRef.current?.focus();
+        }
+    }
 
     //console.log("trigger message",socket.listeners("trigger"))
     //console.log("Message",JSON.stringify(bakedMessages,null,2));
@@ -545,11 +585,21 @@ const Message=(props:{chatId:string})=>{
                 <View style={[GeneralStyles.info_subwrapper]}>
                     <View style={[GeneralStyles.name_wrapper]}>
                         <Loadingview style={[styles[Device].loadingview_name]} isLoading={profile.responseStatus!="recieved"}><Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold}]}>{Word2Sentence([],"")}</Text></Loadingview>
-                        {/* <Text style={[styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{expert?.info.email}</Text> */}
+                        <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{chat?.participants.length==2?chat.participants.find((participant)=>participant._id!=profile.data?._id)?.firstName:"Group Name"}</Text>
+                        {
+                            chat?.participants.length==2
+                            ?
+                            <View style={{flexDirection:'row',alignItems:"center",gap:5}}>
+                                <View style={{width:5,height:5,borderRadius:10,backgroundColor:chat.participants.find((participant)=>participant._id!=profile.data?._id)?.activity=="offline"?"red":"green"}}></View>
+                                <Text style={[styles[Device].activity,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{chat.participants.find((participant)=>participant._id!=profile.data?._id)?.activity}</Text>
+                            </View>
+                            :
+                            null
+                        }
                     </View>
                     <View style={[GeneralStyles.dp_wrapper]}>
                         <View style={[GeneralStyles.dp_bg,styles[Device].dp_bg,{backgroundColor:Themes.Light.OnewindowPurple(1)}]} />
-                        {/* <Image style={[styles[Device].dp,{borderRadius:100}]} source={expert?.info.displayPicSrc} /> */}
+                        <Image style={[styles[Device].dp,{borderRadius:100}]} source={chat?.participants.length==2?chat.participants.find((participant)=>participant._id!=profile.data?._id)?.displayPicSrc:default_icon} />
                     </View>
                 </View>
             </View>
@@ -571,7 +621,7 @@ const Message=(props:{chatId:string})=>{
                     <ScrollView ref={scrollRef} onContentSizeChange={()=>scrollRef.current?.scrollToEnd({ animated: true })} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:20,paddingBottom:keyboard.height}}>
                     {
                         bakedMessages.map((msg,i)=>
-                        <Pressable onLongPress={()=>(msg.sender && msg.sender._id)?setRepliedTo(msg):null} key={msg._id}>
+                        <Pressable onLongPress={()=>reply(msg)} key={msg._id}>
                             <Messagecard {...msg} index={i}/>
                         </Pressable>
                         )
@@ -580,21 +630,39 @@ const Message=(props:{chatId:string})=>{
                 }
                 </View>
                 <Animated.View style={[GeneralStyles.messagebar_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)},{transform:[{translateY:messageBarOffset}]}]}>
-                    <View style={{position:"absolute",top:0,paddingLeft:10}}><Activitybar participants={chat?.participants}/></View>
+                    <View style={{position:"absolute",bottom:"200%",flexDirection:"row",alignItems:"center",paddingLeft:10,gap:10}}>
+                        <Activitybar participants={chat?.participants}/>
+                        {
+                            file
+                            ?
+                            <Transitionview effect="pan" style={[{flexDirection:"row",alignItems:"center",justifyContent:'flex-end'}]}>
+                                <Text  style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}}>{file.name}</Text>
+                            </Transitionview>
+                            :
+                            null
+                        }
+                    </View>
                     <Pressable onPress={showPicker}><Image source={add_icon} style={[styles[Device].add]}/></Pressable>
                     <View style={{flex:1,gap:5}}>
                         {
                             replyTo
                             ?
-                            <Text style={{color:Themes.Light.OnewindowPrimaryBlue(0.75)}}>{"Replying to "+replyTo.content}</Text>
+                            <Transitionview effect="pan" style={[{flexDirection:"row",alignItems:"center",gap:5}]}>
+                                <Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.75)}}>{"Replying to "+replyTo.sender?.firstName+"-"+replyTo.content}</Text>
+                                <Pressable hitSlop={{left:15,right:15,top:15,bottom:15}} onPress={()=>setRepliedTo(undefined)}><Image style={[styles[Device].close_icon]} source={close_icon}/></Pressable>
+                            </Transitionview>
                             :
                             null
                         }
-                        <TextInput onFocus={()=>typingTrigger("start")} onBlur={()=>typingTrigger("stop")} placeholder="Start Typing..." value={message} onChangeText={(txt)=>setMessage(txt)}/>
+                        <TextInput ref={textInputRef} onFocus={()=>typingTrigger("start")} onBlur={()=>typingTrigger("stop")} placeholder="Start Typing..." value={message} onChangeText={(txt)=>setMessage(txt)}/>
                     </View>
-                    <Animated.View style={[{transform:[{scale:sendButtonScale}]}]}>
-                        <Pressable onPress={!sending?send_message:null}><Image source={sending?loading_icon:send_icon} style={[styles[Device].send]}/></Pressable>
-                    </Animated.View>
+                    {
+                        message.length>0
+                        ?
+                        <Transitionview effect="zoom"><Pressable onPress={!sending?send_message:null}><Image source={sending?loading_icon:send_icon} style={[styles[Device].send]}/></Pressable></Transitionview>
+                        :
+                        null
+                    }
                 </Animated.View>
             </View>
         </View>
@@ -603,7 +671,7 @@ const Message=(props:{chatId:string})=>{
 
 const Activitybar=(props:{participants:Participant[]})=>{
 
-
+    //console.log("participants",props.participants,setParticipantsOrder(props.participants.filter((item)=>item && item._id)).map((item)=>item.firstName));
 
     return (
         <View style={{flex:1,flexDirection:'row',gap:5}}>
@@ -631,7 +699,7 @@ const Activityindicator=(props:{participant:Participant})=>{
 
 
     return(
-        <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height)} style={{opacity:props.participant.activity=="offline"?0.3:1,transform:[{translateY:offset}]}}>
+        <Animated.View onLayout={(e)=>animate(0)} style={{opacity:props.participant.activity=="offline"?0.3:1,transform:[{translateY:offset}]}}>
             {
                 props.participant.activity=="online"
                 ?

@@ -318,10 +318,10 @@ const MobileMStyles=StyleSheet.create({
         gap:20
     },
     dashboard_value:{
-        fontSize:15
+        fontSize:14
     },
     dashboard_label:{
-        fontSize:13
+        fontSize:12
     },
     about_heading:{
         fontSize:17
@@ -501,7 +501,8 @@ const Program=(props:{programid:string})=>{
             },            
         }
         addToBasket("intakes-dropdownoptions",dropdowndata);
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Intake",params:{basketid:"intakes-dropdownoptions"}}}):null
+        //navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
     }
 
     const addToCart=async (event:Event)=>{

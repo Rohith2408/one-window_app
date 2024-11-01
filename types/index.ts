@@ -602,6 +602,15 @@ export interface Message{
         lastName: string
     },
     content?:string,
+    document?:{
+        _id: string, 
+        data: {
+            FileName: string,
+            mimetype:string,
+            originalname: string,
+            preview_url: string,
+            resource_id: string
+            }}
     iv?: string,
     chat?: string,
     createdAt?: string,

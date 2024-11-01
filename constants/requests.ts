@@ -166,10 +166,18 @@ const requests:RequestInfo[]=[
             return {success:allFields,data:undefined,message:allFields?"":"All fields are not present"}
         },
         serverCommunicator:async (data:{content:string,chatId:string,repliedTo:string,uploaded_file:any})=>{
+            console.log("send data",data);
+            const formData = new FormData();
+            formData.append('content',data.content);
+            formData.append('chatId',data.chatId);
+            data.repliedTo?formData.append('repliedTo',data.repliedTo):null;
+            data.uploaded_file?formData.append('uploaded_file',data.uploaded_file):null
+            console.log(formData);
             let res:ServerResponse=await serverRequest({
                 url:getServerRequestURL("message-send","POST"),
                 reqType: "POST",
-                body:data
+                body:formData,
+                preventStringify:true
             })
             console.log("Message send response ",res);
             return res;

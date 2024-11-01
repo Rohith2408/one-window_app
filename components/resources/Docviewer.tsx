@@ -198,8 +198,8 @@ const Docviewer=(props:{value:Document|undefined,title:string,id:string,eventHan
         //console.log("Preview url",props.value?.data.preview_url)
         if(props.value?.data.preview_url.length>0)
         {
-            addToBasket("docurl",props.value?.data.preview_url);
-            navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Docview",flyerdata:{}}}}):null
+            //addToBasket("docurl",props.value?.data.preview_url);
+            navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Documentview",flyerdata:{docpreviewurl:props.value?.data.preview_url}}}}):null
         }
     }
 
