@@ -521,7 +521,7 @@ const Program=(props:{programid:string})=>{
             if(serverRes?.success)
             {
                 requestInfo?.responseHandler(serverRes);
-                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
+                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
                 setTimeout(()=>{
                     navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Item added to cart successfully!"}}}}):null;
                 },100)
@@ -599,7 +599,7 @@ const Program=(props:{programid:string})=>{
         console.log("Free apply res",res);
         if(freeOrder && freeOrder?.products.length==Package?.products.find((item)=>item.category=="premium application")?.quantity)
         {
-            navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
+            navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
             setTimeout(()=>{
                 navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Error",flyerdata:{error:"Seems like you have exhausted all your free applications",preventAutoHide:true}}}}):null;
             },100)
@@ -610,7 +610,7 @@ const Program=(props:{programid:string})=>{
             console.log("server res",res);
             if(res.success)
             {
-                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
+                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
                 setTimeout(()=>{
                     navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"You can check the application progress in the products section",hideInterval:4000}}}}):null;
                 },100)

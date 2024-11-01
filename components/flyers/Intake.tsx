@@ -19,7 +19,7 @@ const TabStyles=StyleSheet.create({
         fontSize:16
     },
     heading:{
-        fontSize:16
+        fontSize:18
     }
 })
 
@@ -28,7 +28,7 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     heading:{
-        fontSize:12
+        fontSize:14
     }
 })
 
@@ -37,7 +37,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:16
     },
     heading:{
-        fontSize:14
+        fontSize:16
     }
 })
 
@@ -46,7 +46,7 @@ const MobileLStyles=StyleSheet.create({
         fontSize:16
     },
     heading:{
-        fontSize:14
+        fontSize:16
     }
 })
 
@@ -106,7 +106,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     return(
         <View style={{flexDirection:'column',justifyContent:"center",alignItems:'center',gap:20,padding:5,paddingTop:20,paddingBottom:0}}>
             <View style={{alignSelf:'stretch',gap:7}}>
-                <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the year</Text>
+                <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the year</Text>
                 <View>
                     <Listselection 
                         {...{
@@ -125,7 +125,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
                 </View>
             </View>
             <View style={{alignSelf:'stretch',gap:7,maxHeight:150}}>
-                <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the Month</Text>
+                <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the Month</Text>
                 <View>
                     <Listselection 
                     {...{

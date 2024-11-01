@@ -17,13 +17,13 @@ const TabStyles=StyleSheet.create({
 
 const MobileSStyles=StyleSheet.create({
     text:{
-        fontSize:12
+        fontSize:14
     }
 })
 
 const MobileMStyles=StyleSheet.create({
     text:{
-        fontSize:14
+        fontSize:16
     }
     
 })
@@ -31,7 +31,7 @@ const MobileMStyles=StyleSheet.create({
 const MobileLStyles=StyleSheet.create({
 
     text:{
-        fontSize:14
+        fontSize:16
     }
 })
 
@@ -104,7 +104,7 @@ const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick"|"back
             <View style={{flex:1}}><Card {...props.data.item} index={props.data.index}/></View>
             :
             <View style={{flex:1}}>
-                <Text style={[styles[Device].text,{opacity:(props.data.blurUnSelected && !props.data.selected.find((item)=>props.data.idExtractor(item)==props.data.idExtractor(props.data.item)))?0.35:1,fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:10}]}>{props.data.labelExtractor(props.data.item)}</Text>
+                <Text style={[styles[Device].text,{opacity:(props.data.blurUnSelected && !props.data.selected.find((item)=>props.data.idExtractor(item)==props.data.idExtractor(props.data.item)))?0.35:1,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1),padding:10}]}>{props.data.labelExtractor(props.data.item)}</Text>
             </View>
         }
         {

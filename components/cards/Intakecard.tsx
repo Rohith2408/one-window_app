@@ -44,10 +44,10 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     intakemonth:{
-        fontSize:16
+        fontSize:18
     },
     deadline:{
-        fontSize:14
+        fontSize:16
     },
     go_icon:{
         width:7,
@@ -105,10 +105,10 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     intakemonth:{
-        fontSize:15
+        fontSize:16
     },
     deadline:{
-        fontSize:13
+        fontSize:14
     },
     go_icon:{
         width:7,
@@ -135,10 +135,10 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     intakemonth:{
-        fontSize:14
+        fontSize:16
     },
     deadline:{
-        fontSize:12
+        fontSize:14
     },
     go_icon:{
         width:7,
