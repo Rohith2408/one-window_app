@@ -34,7 +34,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:16
+        fontSize:18
     },
     verified_icon:{
         width:16,
@@ -62,7 +62,7 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     text:{
-        fontSize:14
+        fontSize:16
     },
     verified_icon:{
         width:14,
@@ -204,9 +204,9 @@ const Email=(props:{value:{email:string|undefined,verified:boolean},placeholder:
                 {
                     props.value.verified
                     ?
-                    <Text style={[styles[Device].text,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.value.email}</Text>
+                    <Text style={[styles[Device].text,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.value.email}</Text>
                     :
-                    <TextInput placeholder={props.placeholder} onChangeText={(text)=>updateEmail(text)} value={props.value.email} style={{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,padding:0}}></TextInput>
+                    <TextInput placeholder={props.placeholder} onChangeText={(text)=>updateEmail(text)} value={props.value.email} style={{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular,padding:0}}></TextInput>
                 }
                 {
                     message

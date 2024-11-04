@@ -344,7 +344,7 @@ const Expert=(props:{expertid:string})=>{
                     <View style={{flex:1,gap:10,justifyContent:"center",alignItems:"center"}}>
                         <Image source={emptylist} style={[styles[Device].emptylist_image]}/>
                         <Text style={[styles[Device].no_meetings,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>It's awfully quiet in here...!</Text>
-                        <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button above to schedule a meet with the expert</Text>
+                        <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button below to schedule a meet with the expert</Text>
                     </View>
                     :
                     <ScrollView style={{flex:1}} contentContainerStyle={{gap:10,paddingTop:0}}>

@@ -264,7 +264,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                     :
                     null
                 }
-                <ScrollView style={{flex:1}} contentContainerStyle={[GeneralStyles.fields,{paddingBottom:keyboard.height}]}>
+                <ScrollView style={{flex:1}} contentContainerStyle={[GeneralStyles.fields,{paddingBottom:keyboard.height,paddingRight:15}]}>
                 {
                     fields.map((field,i)=>
                     <Field error={errors.find((item)=>item.id==field.id)?.error} key={field.id} data={field} info={formInfo?.allFields.find((item)=>field.id==item.id)} isFocussed={focussedField==undefined?false:(focussedField==field.id?true:false)} index={i} eventHandler={eventHandler}></Field>

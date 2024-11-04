@@ -62,19 +62,19 @@ const TabStyles=StyleSheet.create({
 
 const MobileSStyles=StyleSheet.create({
     select:{
-        fontSize:12
+        fontSize:14
     }
 })
 
 const MobileMStyles=StyleSheet.create({
     select:{
-        fontSize:14
+        fontSize:16
     }
 })
 
 const MobileLStyles=StyleSheet.create({
     select:{
-        fontSize:14
+        fontSize:16
     }
 })
 
@@ -155,8 +155,8 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
     return(
         <View style={[GeneralStyles.mainWrapper]}>
             <Pressable style={[GeneralStyles.selecttext_wrapper]} onPress={!loading?onSelect:null}>
-                <View style={{flex:1}}><Text style={[styles[Device].select,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold,fontWeight:"700"}]}>{(props.selectionMode=="single" && props.value.length!=0)?props.options.labelExtractor(props.value[0]):"Select"}</Text></View>
-                <Image source={loading?loading_gif:arrow_icon} style={{width:16,height:16,resizeMode:"contain",transform:[{rotate:"-90deg"}]}}></Image>
+                <View style={{flex:1}}><Text style={[styles[Device].select,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular,fontWeight:"700"}]}>{(props.selectionMode=="single" && props.value.length!=0)?props.options.labelExtractor(props.value[0]):"Select"}</Text></View>
+                <Image source={loading?loading_gif:arrow_icon} style={{width:10,height:10,resizeMode:"contain",transform:[{rotate:"-90deg"}]}}></Image>
             </Pressable>
             {
                 props.selectionMode=="multi"

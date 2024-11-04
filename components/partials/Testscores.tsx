@@ -211,12 +211,12 @@ const MobileSStyles=StyleSheet.create({
         fontSize:16
     },
     click_message:{
-        fontSize:16,
+        fontSize:14,
         lineHeight:20
     },
     emptylist_image:{
-        width:140,
-        height:140,
+        width:130,
+        height:130,
         resizeMode:"contain"
     },
     add_text:{
