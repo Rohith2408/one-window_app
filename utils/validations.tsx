@@ -8,5 +8,6 @@ export const validations={
     PERCENTAGE:{regex:/^(100(?:\.0+)?|\d{1,2}(?:\.\d+)?)$/,errorMessage:"Enter a valid percentage"},
     GRADE:{regex:/^[A-Da-d][+-]?$|^F$|^F[+-]?$/,errorMessage:"Enter a valid grade"},
     GPA:{regex:/^(?:4\.0|[0-3](?:\.\d{1,2})?)$/,errorMessage:"Enter a valid GPA"},
-    CGPA:{regex:/^(10(\.0+)?|[0-9](\.\d+)?)$/,errorMessage:"Enter a valid CGPA"}
+    CGPA:{regex:/^(10(\.0+)?|[0-9](\.\d+)?)$/,errorMessage:"Enter a valid CGPA"},
+    TESTSCORE:{regex:/^\d*\.?\d+$/,errorMessage:"Invalid test score"}
 }

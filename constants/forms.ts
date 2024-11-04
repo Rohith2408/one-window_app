@@ -67,7 +67,7 @@ export const testToForm=(testname:string)=>{
         id:"testname",
         componentInfo:{
             component:Textbox,
-            props:{placeholder:""}
+            props:{readonly:true,placeholder:""}
         },
         title:"Test Name",
         onUpdate:{
@@ -93,21 +93,6 @@ export const testToForm=(testname:string)=>{
             event:"onFocus"
         }
       },
-    //   {
-    //     id:"testdocument",
-    //     componentInfo:{
-    //         component:Textbox,
-    //         props:{placeholder:undefined}
-    //     },
-    //     title:"Test Doc",
-    //     onUpdate:{
-    //         event:"onTextInput",
-    //         handler:undefined
-    //     },
-    //     onFocus:{
-    //         event:"onFocus"
-    //     }
-    //   },
       ...testInfo?.sections.map((item)=>({
         id:item.name,
         componentInfo:{
@@ -115,6 +100,11 @@ export const testToForm=(testname:string)=>{
             props:{placeholder:item.validation.min+" - "+item.validation.max}
         },
         title:item.name,
+        validator:(data)=>({
+            success:(validations.TESTSCORE.regex.test(data) && (parseInt(data)>=item.validation.min && parseInt(data)<=item.validation.max)),
+            message:"Test Score needs to be in the range of "+(item.validation.min+" to "+item.validation.max),
+            data:undefined
+        }),
         onUpdate:{
             event:"onTextInput",
             handler:undefined
