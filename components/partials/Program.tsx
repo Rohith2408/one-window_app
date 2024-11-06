@@ -105,14 +105,14 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:26,
-        height:26,
+        width:38,
+        height:38,
         borderRadius:100,
         resizeMode:"contain"
     },
     uni_icon_bg:{
-        width:24,
-        height:24,
+        width:36,
+        height:36,
         borderRadius:100,
         left:-7,
         top:7
@@ -122,7 +122,7 @@ const TabStyles=StyleSheet.create({
         lineHeight:24
     },
     program_name:{
-        fontSize:18,
+        fontSize:20,
         lineHeight:24
     },
     dashboard_icon:{
@@ -142,24 +142,24 @@ const TabStyles=StyleSheet.create({
         gap:20
     },
     dashboard_value:{
-        fontSize:14
+        fontSize:18
     },
     dashboard_label:{
-        fontSize:12
+        fontSize:14
     },
     about_heading:{
         fontSize:18
     },
     about:{
-        fontSize:16,
+        fontSize:18,
         lineHeight:30
     },
     add_to_cart:{
-        fontSize:16
+        fontSize:18
     },
     cart_icon:{
-        width:18,
-        height:18,
+        width:24,
+        height:24,
         resizeMode:'contain'
     },
     keyinfo_type:{

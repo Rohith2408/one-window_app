@@ -60,41 +60,41 @@ const TabStyles=StyleSheet.create({
         gap:12
     },
     card_icon:{
-        width:28,
-        height:28,
+        width:32,
+        height:32,
         resizeMode:'contain'
     },
     edit_icon:{
-        width:18,
-        height:18,
+        width:20,
+        height:20,
         resizeMode:'contain'
     },
     delete_icon:{
-        width:18,
-        height:18,
+        width:20,
+        height:20,
         resizeMode:'contain'
     },
     location_icon:{
-        width:14,
-        height:14,
+        width:16,
+        height:16,
         resizeMode:'contain'
     },
     info_icon:{
-        width:14,
-        height:14,
+        width:16,
+        height:16,
         resizeMode:'contain'
     },
     text1:{
-        fontSize:18
+        fontSize:20
     },
     text2:{
-        fontSize:14
+        fontSize:16
     },
     text3:{
-        fontSize:14
+        fontSize:16
     },
     title:{
-        fontSize:13
+        fontSize:15
     }
 })
 

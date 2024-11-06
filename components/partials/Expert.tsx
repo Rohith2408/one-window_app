@@ -84,7 +84,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     info_wrapper:{
-        height:130,
+        height:110,
         width:"100%",
         display:"flex",
     },
@@ -95,13 +95,13 @@ const TabStyles=StyleSheet.create({
         fontSize:16
     },
     dp:{
-        width:70,
-        height:70,
+        width:50,
+        height:50,
         resizeMode:"contain"
     },
     dp_bg:{
-        width:70,
-        height:70,
+        width:50,
+        height:50,
         top:-5,
         left:10
     },
@@ -113,20 +113,20 @@ const TabStyles=StyleSheet.create({
         width:"100%"
     },
     add_icon:{
-        width:30,
-        height:30,
+        width:34,
+        height:34,
         resizeMode:"contain"
     },
     no_meetings:{
-        fontSize:18
+        fontSize:20
     },
     click_message:{
         fontSize:16,
         lineHeight:20
     },
     emptylist_image:{
-        width:170,
-        height:170,
+        width:200,
+        height:200,
         resizeMode:"contain"
     },
     add_text:{
@@ -342,12 +342,12 @@ const Expert=(props:{expertid:string})=>{
                     meetings.length==0
                     ?
                     <View style={{flex:1,gap:10,justifyContent:"center",alignItems:"center"}}>
-                        <Image source={emptylist} style={[styles[Device].emptylist_image]}/>
+                        <Transitionview effect="zoom"><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
                         <Text style={[styles[Device].no_meetings,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>It's awfully quiet in here...!</Text>
                         <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button below to schedule a meet with the expert</Text>
                     </View>
                     :
-                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:10,paddingTop:0}}>
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:10,paddingTop:5}}>
                     {
                         meetings.map((meeting,i)=>
                         <Transitionview effect="pan"><View key={meeting._id}><Meetingcard data={meeting} index={i}/></View></Transitionview>

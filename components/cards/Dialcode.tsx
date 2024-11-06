@@ -6,7 +6,7 @@ import { useRef } from "react"
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:18
+        fontSize:20
     }
 })
 

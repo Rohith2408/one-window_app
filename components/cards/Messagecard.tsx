@@ -65,10 +65,10 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     title:{
-        fontSize:14
+        fontSize:20
     },
     datetime:{
-        fontSize:12
+        fontSize:18
     },
     attendees:{
         fontSize:12,
@@ -93,8 +93,24 @@ const TabStyles=StyleSheet.create({
         fontSize:10
     },
     sender_dp:{
-        width:15,
-        height:15,
+        width:26,
+        height:26,
+        resizeMode:"contain"
+    },
+    normal_msg:{
+        fontSize:20
+    },
+    repliedTo:{
+        fontSize:16
+    },
+    doc_wrapper:{
+        height:40,
+        padding:5,
+        resizeMode:"contain"
+    },
+    doc_icon:{
+        width:26,
+        height:26,
         resizeMode:"contain"
     }
 })
@@ -137,6 +153,22 @@ const MobileSStyles=StyleSheet.create({
         width:15,
         height:15,
         resizeMode:"contain"
+    },
+    normal_msg:{
+        fontSize:14
+    },
+    repliedTo:{
+        fontSize:10
+    },
+    doc_wrapper:{
+        height:30,
+        padding:5,
+        resizeMode:"contain"
+    },
+    doc_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
     }
 })
 
@@ -177,6 +209,12 @@ const MobileMStyles=StyleSheet.create({
         width:20,
         height:20,
         resizeMode:"contain"
+    },
+    normal_msg:{
+        fontSize:16
+    },
+    repliedTo:{
+        fontSize:12
     },
     doc_wrapper:{
         height:30,

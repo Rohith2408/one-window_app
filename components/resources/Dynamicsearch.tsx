@@ -9,7 +9,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     search:{
-        fontSize:18
+        fontSize:20
     }
 })
 

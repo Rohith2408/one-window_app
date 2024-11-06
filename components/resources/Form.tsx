@@ -7,6 +7,7 @@ import { getDevice } from "../../utils";
 import useNavigation from "../../hooks/useNavigation";
 import Asynchronousbutton from "./Asynchronousbutton";
 import { addToBasket, clearBasket, getBasket, getFullBasket } from "../../constants/basket";
+import Transitionview from "./Transitionview";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -41,11 +42,11 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     field_title:{
-        fontSize:16,
+        fontSize:18,
         paddingLeft:10
     },
     form_title:{
-        fontSize:18,
+        fontSize:20,
         marginTop:30,
         marginBottom:30
     }
@@ -267,7 +268,9 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                 <ScrollView style={{flex:1}} contentContainerStyle={[GeneralStyles.fields,{paddingBottom:keyboard.height,paddingRight:15}]}>
                 {
                     fields.map((field,i)=>
-                    <Field error={errors.find((item)=>item.id==field.id)?.error} key={field.id} data={field} info={formInfo?.allFields.find((item)=>field.id==item.id)} isFocussed={focussedField==undefined?false:(focussedField==field.id?true:false)} index={i} eventHandler={eventHandler}></Field>
+                    <Transitionview style={[GeneralStyles.field]} effect="pan" delay={70*i}>
+                        <Field error={errors.find((item)=>item.id==field.id)?.error} key={field.id} data={field} info={formInfo?.allFields.find((item)=>field.id==item.id)} isFocussed={focussedField==undefined?false:(focussedField==field.id?true:false)} index={i} eventHandler={eventHandler}></Field>
+                    </Transitionview>
                     )
                 }
                 </ScrollView>
@@ -299,7 +302,7 @@ const Field=(props:{info:FieldType,data:FormData,isFocussed:boolean,index:number
     }
 
     return(
-        <View style={[GeneralStyles.field,{zIndex:props.isFocussed?1:-1}]}>
+        <View style={{flex:1,zIndex:props.isFocussed?1:-1}}>
             <Text style={[GeneralStyles.field_title,styles[Device].field_title,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.info.title}</Text>
             <Container id={props.info.id} {...props.info.componentInfo.props} value={props.data.value} isFocussed={props.isFocussed} eventHandler={(e:Event)=>{props.eventHandler({...e,triggerBy:props.info.id})}}></Container>
             {

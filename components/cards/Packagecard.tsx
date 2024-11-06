@@ -16,14 +16,14 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     name:{
-        fontSize:10
+        fontSize:14
     },
     price:{
-        fontSize:18
+        fontSize:22
     },
     wrapper:{
-        width:110,
-        height:105,
+        width:150,
+        height:125,
     }
 })
 

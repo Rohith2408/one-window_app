@@ -205,7 +205,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
         {
           props.index!=0 && screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY"
           ?
-          <View {...panResponder.panHandlers} style={[styles.swipeStripL]}></View>
+          <View {...panResponder.panHandlers} style={[styles.swipeStripL,{backgroundColor:'red'}]}></View>
           :
           null
         }
@@ -237,6 +237,13 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           :
           null
         }
+        {
+          screenInfo?.type=="Partial" && props.index!=0
+          ?
+          <Pressable hitSlop={{left:50,right:50,top:50,bottom:50}} style={[styles.back,{left:10,top:30}]} onPress={()=>{back(200)}}><Image source={back_icon} style={[styles.back_icon]}></Image></Pressable>
+          :
+          null
+        }
         <View style={[styles.screen]}> 
           {
             screenInfo?.title
@@ -244,13 +251,6 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
             <View style={[{flexDirection:"row",justifyContent:'center',alignItems:'center',position:"relative"},(screenInfo?.type=="Partial")?{paddingBottom:20,paddingTop:30}:{}]}>
               <Text style={[{fontSize:13,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{screenInfo.title}</Text>
             </View>
-            :
-            null
-          }
-          {
-            screenInfo?.type=="Partial" && props.index!=0
-            ?
-            <Pressable hitSlop={{left:30,right:30,top:30,bottom:30}} style={[styles.back,screenInfo.occupyFullScreen?{left:20,top:30}:{left:-10,top:30}]} onPress={()=>{back(200)}}><Image source={back_icon} style={[styles.back_icon]}></Image></Pressable>
             :
             null
           }
@@ -425,7 +425,7 @@ const styles=StyleSheet.create({
     },
     back:{
       position:"absolute",
-      zIndex:1
+      zIndex:3,
       //paddingTop:0.04*Dimensions.get("screen").width
     },
     swipeStripL:{
@@ -434,7 +434,6 @@ const styles=StyleSheet.create({
       top:0,
       width:0.04*Dimensions.get("screen").width,
       position:"absolute",
-      //backgroundColor:'black',
       zIndex:2
     },
     swipeStripR:{

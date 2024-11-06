@@ -29,29 +29,29 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     checkout:{
-        fontSize:16
+        fontSize:20
     },
     not_found:{
         fontSize:20
     },
     not_found_sub:{
-        fontSize:16
+        fontSize:18
     },
     items_count:{
         fontSize:16
     },
     empty_image:{
-        width:160,
-        height:160,
+        width:200,
+        height:200,
         resizeMode:"contain"
     },
     products_icon:{
-        width:18,
-        height:18,
+        width:24,
+        height:24,
         resizeMode:"contain"
     },
     addmore:{
-        fontSize:16,
+        fontSize:18,
     },
     addmore_wrapper:{
         padding:16
@@ -246,8 +246,8 @@ const Cart=()=>{
                     <View style={{flex:2,flexDirection:"row",alignItems:'center',gap:5}}>
                         <Image source={products_icon} style={[styles[Device].products_icon]}/>
                         <View style={{flexDirection:"row",alignItems:'center'}}>
-                            <Text style={[styles[Device].item_count,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{cart.data.length}</Text>
-                            <Text style={[styles[Device].item_count,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{(cart.data.length==1?" Item has":" Items have")+" been added"}</Text>
+                            <Text style={[styles[Device].items_count,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{cart.data.length}</Text>
+                            <Text style={[styles[Device].items_count,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{(cart.data.length==1?" Item has":" Items have")+" been added"}</Text>
                         </View>
                     </View>
                     <View style={{flex:1,alignSelf:"stretch"}}>
@@ -263,13 +263,13 @@ const Cart=()=>{
                         <Image source={empty_image} style={[styles[Device].empty_image]}/>
                         <Text style={[styles[Device].not_found,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{"It's awfully quiet in here...!"}</Text>
                         <Text style={[styles[Device].not_found_sub,{textAlign:"center",lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Explore over 80,000 programs and 8,000 universities and get into your dream university!</Text>
-                        <Pressable onPress={openExplore} style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}}>Explore</Text></Pressable>
+                        <Pressable onPress={openExplore} style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1),paddingLeft:15,paddingRight:15,padding:10}]}>Explore</Text></Pressable>
                     </View>
                     :
                     <View style={{flex:1,gap:15}}>
                         <View style={[GeneralStyles.addmore_wrapper,styles[Device].addmore_wrapper,{backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.05)}]}>
                             <Text style={[styles[Device].addmore,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Something is missing?</Text>
-                            <Pressable><Text style={[styles[Device].addmore,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Add more</Text></Pressable>
+                            <Pressable onPress={openExplore}><Text style={[styles[Device].addmore,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Add more</Text></Pressable>
                         </View>
                         <ScrollView style={{flex:1}} contentContainerStyle={{gap:20,padding:5}}>
                         {

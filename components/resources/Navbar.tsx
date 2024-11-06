@@ -57,7 +57,7 @@ const TabStyles=StyleSheet.create({
         height:50
     },
     text:{
-        fontSize:18
+        fontSize:19
     },
     highlighter:{
         // width:"90%",

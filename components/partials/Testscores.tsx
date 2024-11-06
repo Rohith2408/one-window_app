@@ -149,12 +149,12 @@ const TabStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:160,
-        height:160,
+        width:200,
+        height:200,
         resizeMode:"contain"
     },
     add_text:{
-        fontSize:16
+        fontSize:18
     }
 })
 

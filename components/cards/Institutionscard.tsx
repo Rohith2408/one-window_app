@@ -9,7 +9,13 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-
+    name:{
+        fontSize:20,
+        lineHeight:16
+    },
+    location:{
+        fontSize:16
+    }
 })
 
 const MobileSStyles=StyleSheet.create({

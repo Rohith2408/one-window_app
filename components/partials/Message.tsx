@@ -89,7 +89,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     info_wrapper:{
-        height:110,
+        height:125,
         width:"100%",
         display:"flex",
     },
@@ -97,16 +97,16 @@ const TabStyles=StyleSheet.create({
         fontSize:24
     },
     email:{
-        fontSize:12
+        fontSize:16
     },
     dp:{
-        width:50,
-        height:50,
+        width:70,
+        height:70,
         resizeMode:"contain"
     },
     dp_bg:{
-        width:50,
-        height:50,
+        width:70,
+        height:70,
         top:-5,
         left:10
     },
@@ -123,39 +123,42 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     no_meetings:{
-        fontSize:16
+        fontSize:20
     },
     click_message:{
-        fontSize:12
+        fontSize:16
     },
     emptylist_image:{
-        width:110,
-        height:110,
+        width:200,
+        height:200,
         resizeMode:"contain"
     },
     loadingview_name:{
-        width:150,
-        height:30
+        width:170,
+        height:50
     },
     add:{
-        width:20,
-        height:20,
+        width:28,
+        height:28,
         objectFit:"contain"
     },
     send:{
-        width:20,
-        height:20,
-        objectFit:"contain"
-    },
-    activity_indicator:{
         width:30,
         height:30,
         objectFit:"contain"
     },
-    close_icon:{
-        width:16,
-        height:16,
+    activity_indicator:{
+        width:50,
+        height:50,
         objectFit:"contain"
+    },
+    close_icon:{
+        width:20,
+        height:20,
+        objectFit:"contain"
+    },
+    message:{
+        fontSize:18
     }
 })
 
@@ -229,6 +232,9 @@ const MobileSStyles=StyleSheet.create({
         width:10,
         height:10,
         objectFit:"contain"
+    },
+    message:{
+        fontSize:14
     }
 })
 
@@ -305,6 +311,9 @@ const MobileMStyles=StyleSheet.create({
         width:12,
         height:12,
         objectFit:"contain"
+    },
+    message:{
+        fontSize:16
     }
 })
 
@@ -380,6 +389,9 @@ const MobileLStyles=StyleSheet.create({
         width:12,
         height:12,
         objectFit:"contain"
+    },
+    message:{
+        fontSize:16
     }
 })
 
@@ -644,17 +656,17 @@ const Message=(props:{chatId:string})=>{
                     </View>
                     <Pressable onPress={showPicker}><Image source={add_icon} style={[styles[Device].add]}/></Pressable>
                     <View style={{flex:1,gap:5}}>
-                        {
-                            replyTo
-                            ?
-                            <Transitionview effect="pan" style={[{flexDirection:"row",alignItems:"center",gap:5}]}>
-                                <Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.75)}}>{"Replying to "+replyTo.sender?.firstName+"-"+replyTo.content}</Text>
-                                <Pressable hitSlop={{left:15,right:15,top:15,bottom:15}} onPress={()=>setRepliedTo(undefined)}><Image style={[styles[Device].close_icon]} source={close_icon}/></Pressable>
-                            </Transitionview>
-                            :
-                            null
-                        }
-                        <TextInput ref={textInputRef} onFocus={()=>typingTrigger("start")} onBlur={()=>typingTrigger("stop")} placeholder="Start Typing..." value={message} onChangeText={(txt)=>setMessage(txt)}/>
+                    {
+                        replyTo
+                        ?
+                        <Transitionview effect="pan" style={[{flexDirection:"row",alignItems:"center",gap:5}]}>
+                            <Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.75)}}>{"Replying to "+replyTo.sender?.firstName+"-"+replyTo.content}</Text>
+                            <Pressable hitSlop={{left:15,right:15,top:15,bottom:15}} onPress={()=>setRepliedTo(undefined)}><Image style={[styles[Device].close_icon]} source={close_icon}/></Pressable>
+                        </Transitionview>
+                        :
+                        null
+                    }
+                        <TextInput style={[styles[Device].message,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]} ref={textInputRef} onFocus={()=>typingTrigger("start")} onBlur={()=>typingTrigger("stop")} placeholder="Start Typing..." value={message} onChangeText={(txt)=>setMessage(txt)}/>
                     </View>
                     {
                         message.length>0

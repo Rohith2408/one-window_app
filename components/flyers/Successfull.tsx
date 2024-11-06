@@ -16,10 +16,10 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:24
+        fontSize:30
     },
     subtext:{
-        fontSize:16
+        fontSize:18
     }
 })
 

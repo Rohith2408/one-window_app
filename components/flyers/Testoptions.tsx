@@ -13,10 +13,10 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:14,
+        fontSize:16,
     },
     shortform:{
-        fontSize:18,
+        fontSize:20,
     },
     title:{
         fontSize:20

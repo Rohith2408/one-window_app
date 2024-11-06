@@ -91,24 +91,24 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:30,
-        height:30,
+        width:34,
+        height:34,
         borderRadius:100,
         resizeMode:"contain"
     },
     uni_icon_bg:{
-        width:28,
-        height:28,
+        width:34,
+        height:34,
         borderRadius:100,
         left:-7,
         top:7
     },
     uni_location:{
-        fontSize:17,
+        fontSize:18,
         lineHeight:20
     },
     program_name:{
-        fontSize:18
+        fontSize:20
     },
     dashboard_icon:{
         height:22,
@@ -127,7 +127,7 @@ const TabStyles=StyleSheet.create({
         gap:20
     },
     dashboard_value:{
-        fontSize:16
+        fontSize:18
     },
     dashboard_label:{
         fontSize:14
@@ -151,7 +151,14 @@ const TabStyles=StyleSheet.create({
     },
     ranking_value:{
         fontSize:18
-    }
+    },
+    keyinfo_type:{
+        fontSize:15
+    },
+    keyinfo_value:{
+        fontSize:18,
+        lineHeight:22
+    },
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -222,7 +229,14 @@ const MobileSStyles=StyleSheet.create({
     },
     ranking_value:{
         fontSize:14
-    }
+    },
+    keyinfo_type:{
+        fontSize:11
+    },
+    keyinfo_value:{
+        fontSize:14,
+        lineHeight:22
+    },
 })
 
 const MobileMStyles=StyleSheet.create({

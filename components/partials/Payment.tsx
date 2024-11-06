@@ -12,6 +12,7 @@ import useNavigation from "../../hooks/useNavigation";
 import { Fonts, Themes } from "../../constants";
 import { addProduct, addProducts, replaceProducts } from "../../store/slices/productsSlice";
 import { useAppSelector } from "../../hooks/useAppSelector";
+import Transitionview from "../resources/Transitionview";
 
 const Payment = (props:{paymentOrderId:string}) => {
 
@@ -110,10 +111,13 @@ const Payment = (props:{paymentOrderId:string}) => {
           }}
         />
       ) : (
-        <View style={{flex:1,alignItems:"center",justifyContent:"center",gap:10}}>
-          <Text style={[{fontSize:24,fontFamily:Fonts.NeutrifStudio.Bold,color:"green"}]}>Payment Successfull</Text>
-          <Text style={[{fontSize:14,textAlign:"center",fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Order details can be viewed in My Orders section!</Text>
-        </View>
+        <Transitionview effect="pan" style={[{flex:1}]}>
+          <View style={{flex:1,alignItems:"center",justifyContent:"center",gap:10}}>
+            <Text style={[{fontSize:24,fontFamily:Fonts.NeutrifStudio.Bold,color:"green"}]}>Payment Successfull</Text>
+            <Text style={[{fontSize:14,textAlign:"center",fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Order details can be viewed in My Orders section!</Text>
+          </View>
+        </Transitionview>
+        
       )}
     </View>
   );

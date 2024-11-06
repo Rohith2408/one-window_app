@@ -49,13 +49,13 @@ const GeneralStyles=StyleSheet.create({
 const TabStyles=StyleSheet.create({
     name:{
         lineHeight:20,
-        fontSize:13
+        fontSize:20
     },
     category:{
-        fontSize:12
+        fontSize:14
     },
     intake:{
-        fontSize:11
+        fontSize:16
     },
     icon:{
         width:16,

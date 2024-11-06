@@ -28,23 +28,23 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     uni_icon:{
-        width:26,
-        height:26,
+        width:30,
+        height:30,
         resizeMode:"contain",
         borderRadius:100
     },
     uni_icon_bg:{
-        width:26,
-        height:26,
+        width:30,
+        height:30,
         borderRadius:100,
         left:1,
         top:10
     },
     uni_text1:{
-        fontSize:16
+        fontSize:18
     },
     uni_text2:{
-        fontSize:14
+        fontSize:16
     },
     location_icon:{
         width:12,

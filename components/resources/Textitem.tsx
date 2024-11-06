@@ -16,7 +16,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:18
+        fontSize:20
     }
 })
 

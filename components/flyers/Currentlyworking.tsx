@@ -13,18 +13,18 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     title:{
-        fontSize:18
+        fontSize:20
     },
     check_circle:{
-        width:17,
-        height:17,
+        width:20,
+        height:20,
         borderRadius:17
     },
     check_title:{
-        fontSize:16
+        fontSize:18
     },
     next:{
-        fontSize:16
+        fontSize:18
     }
 })
 

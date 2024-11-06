@@ -53,13 +53,13 @@ const GeneralStyles=StyleSheet.create({
 const TabStyles=StyleSheet.create({
     name:{
         lineHeight:20,
-        fontSize:16
+        fontSize:20
     },
     category:{
-        fontSize:16
+        fontSize:18
     },
     intake:{
-        fontSize:11
+        fontSize:16
     },
     icon:{
         width:20,
@@ -231,7 +231,7 @@ const Docviewer=(props:{value:Document|undefined,title:string,id:string,eventHan
                             <View style={{width:5,height:5,borderRadius:10,backgroundColor:"#69FF6F"}}></View>
                             <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.title}</Text>
                         </Animated.View>
-                        <View style={{flex:1}}><Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.value?.data.FileName}</Text></View>
+                        <View style={{flex:1}}><Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.value?.data.FileName}</Text></View>
                         <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
                             <Pressable onPress={viewDoc} style={{borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),borderRadius:100,padding:5}}>
                                 <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>View</Text>

@@ -60,15 +60,15 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     icon:{
-        width:30,
-        height:30,
+        width:34,
+        height:34,
         resizeMode:'contain'
     },
     title:{
-        fontSize:18
+        fontSize:20
     },
     datetime:{
-        fontSize:14
+        fontSize:16
     },
     attendees:{
         fontSize:12,
@@ -95,7 +95,7 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     status:{
-        fontSize:10
+        fontSize:12
     }
 })
 

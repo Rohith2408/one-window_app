@@ -47,19 +47,19 @@ const TabStyles=StyleSheet.create({
         gap:10
     },
     option_icon:{
-        width:34,
-        height:34,
+        width:40,
+        height:40,
         objectFit:'contain'
     },
     options_text:{
-        fontSize:18
+        fontSize:20
     },
     options_wrapper:{
         flex:5,
     },
     go_icon:{
-        width:8,
-        height:8,
+        width:10,
+        height:10,
         objectFit:'contain'
     }
 })

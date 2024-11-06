@@ -1,7 +1,39 @@
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { useState } from 'react'
-import { Platform, Pressable, Text, View } from "react-native"
+import { useRef, useState } from 'react'
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import useNavigation from '../../hooks/useNavigation'
+import { getDevice } from '../../utils'
+
+const TabStyles=StyleSheet.create({
+    text:{
+        fontSize:20
+    }
+})
+
+const MobileSStyles=StyleSheet.create({
+    text:{
+        fontSize:14
+    }
+})
+
+const MobileMStyles=StyleSheet.create({
+    text:{
+        fontSize:16
+    }
+})
+
+const MobileLStyles=StyleSheet.create({
+    text:{
+        fontSize:16
+    }
+})
+
+const styles={
+    Tab:TabStyles,
+    MobileS:MobileSStyles,
+    MobileM:MobileMStyles,
+    MobileL:MobileLStyles
+}
 
 const Datetime=(props:{value:string,id:string,mode?:string})=>{
 
@@ -68,6 +100,7 @@ const AndroidPicker=(props:{date:string,id:string,mode:string})=>{
 const IosPicker=(props:{date:string,id:string,mode:string})=>{
 
     const [path,navigate]=useNavigation()
+    const Device=useRef(getDevice()).current
     //const [state,setState]=useState(props.nonState.initialValue?props.nonState.initialValue:new Date().toISOString());
     // const eventHandler=(event:Event)=>{
     //     setState(event.data)
@@ -87,7 +120,7 @@ const IosPicker=(props:{date:string,id:string,mode:string})=>{
             mode={props.mode}
             is24Hour={true}
             //accentColor={THEME.COLOR.SECONDARY.SUNSHINE(1)}
-            style={{transform:[{scale:0.8}]}}
+            style={styles[Device].text}
             onChange={(e,date)=>navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.id,newvalue:date?.toISOString()}}}):null}
             />
         </View>

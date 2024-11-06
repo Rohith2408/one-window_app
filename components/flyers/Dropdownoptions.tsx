@@ -45,10 +45,10 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     apply_text:{
-        fontSize:16
+        fontSize:18
     },
     item_text:{
-        fontSize:16
+        fontSize:22
     },
     search:{
         fontSize:18

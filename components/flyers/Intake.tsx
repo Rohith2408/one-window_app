@@ -16,7 +16,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     apply:{
-        fontSize:16
+        fontSize:18
     },
     heading:{
         fontSize:18
@@ -104,7 +104,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     }
 
     return(
-        <View style={{flexDirection:'column',justifyContent:"center",alignItems:'center',gap:20,padding:5,paddingTop:20,paddingBottom:0}}>
+        <View style={{flexDirection:'column',justifyContent:"center",alignItems:'center',gap:25,padding:5,paddingTop:20,paddingBottom:0}}>
             <View style={{alignSelf:'stretch',gap:7}}>
                 <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the year</Text>
                 <View>

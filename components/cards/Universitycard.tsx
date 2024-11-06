@@ -82,7 +82,7 @@ const TabStyles=StyleSheet.create({
         fontSize:16
     },
     important:{
-        fontSize:12
+        fontSize:16
     },
     stem_banner_text:{
         fontSize:12

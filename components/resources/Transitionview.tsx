@@ -9,13 +9,15 @@ const Transitionview=(props:{style?:StyleProp<TextStyle>[],effect:"fade"|"zoom"|
         setTimeout(()=>{
             Animated.spring(index,{
                 toValue:1,
-                useNativeDriver:true
+                useNativeDriver:true,
+                friction:5,
+                tension:50
             }).start()
         },props.delay?props.delay:0)
     },[])
 
     return(
-        <Animated.View style={[props.style,{opacity:(props.effect=="fade" || props.effect=="pan")?index:1,transform:[{scale:props.effect=="zoom"?index:1},{translateY:props.effect=="pan"?index.interpolate({inputRange:[0,1],outputRange:[50,0]}):0}]}]}>{props.children}</Animated.View>
+        <Animated.View style={[props.style,{opacity:(props.effect=="fade" || props.effect=="pan")?index:1,transform:[{scale:props.effect=="zoom"?index:1},{translateY:props.effect=="pan"?index.interpolate({inputRange:[0,1],outputRange:[15,0]}):0}]}]}>{props.children}</Animated.View>
     )
 }
 

@@ -21,7 +21,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     title:{
-        fontSize:12
+        fontSize:20
     },
     icon:{
         width:10,
@@ -29,10 +29,10 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     continue:{
-        fontSize:14
+        fontSize:18
     },
     error:{
-        fontSize:14
+        fontSize:16
     }
 })
 
@@ -55,7 +55,7 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     title:{
-        fontSize:14
+        fontSize:16
     },
     icon:{
         width:12,
@@ -72,7 +72,7 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     title:{
-        fontSize:12
+        fontSize:16
     },
     icon:{
         width:10,

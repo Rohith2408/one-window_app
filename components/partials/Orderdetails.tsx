@@ -60,6 +60,9 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
+    products_heading:{
+        fontSize:18
+    },
     location_icon:{
         width:14,
         height:14,
@@ -79,14 +82,17 @@ const TabStyles=StyleSheet.create({
         top:10
     },
     uni_location:{
-        fontSize:14,
+        fontSize:16,
         lineHeight:18
     },
     program_name:{
-        fontSize:18
+        fontSize:20
     },
     product_card:{
         height:200
+    },
+    paynow:{
+        fontSize:18
     }
 })
 
@@ -122,6 +128,9 @@ const MobileSStyles=StyleSheet.create({
     },
     product_card:{
         height:170
+    },
+    paynow:{
+        fontSize:14
     }
 })
 
@@ -156,6 +165,9 @@ const MobileMStyles=StyleSheet.create({
     },
     product_card:{
         height:135
+    },
+    paynow:{
+        fontSize:16
     }
 })
 
@@ -191,6 +203,9 @@ const MobileLStyles=StyleSheet.create({
     },
     product_card:{
         height:160
+    },
+    paynow:{
+        fontSize:16
     }
 })
 
@@ -247,7 +262,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                             <View style={[GeneralStyles.actions_wrapper]}>
                                 <Pressable onPress={makePayment} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
                                     {/* <Image source={cart_icon} style={[styles[Device].cart_icon]}/> */}
-                                    <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Pay Now</Text>
+                                    <Text style={[styles[Device].paynow,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Pay Now</Text>
                                 </Pressable>
                             </View>
                             :
@@ -257,8 +272,8 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                 </View>
                 <View style={{gap:0}}>
                     <Styledtext styles={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Products Purchased" focusWord="Purchased"/>
-                    <View style={{height:300}}>
-                        <ScrollView style={{flex:1}} contentContainerStyle={{gap:10,paddingTop:10}}>
+                    <View style={{maxHeight:300}}>
+                        <ScrollView contentContainerStyle={{gap:10,paddingTop:10}}>
                         {
                             order.products.map((product,i)=>
                             <Pressable onPress={()=>showProduct(product._id)} style={[{padding:10}]}><Productcompact2card {...product} index={i}/></Pressable>

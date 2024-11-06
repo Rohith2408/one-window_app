@@ -62,13 +62,13 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     title:{
-        fontSize:18
+        fontSize:20
     },
     datetime:{
-        fontSize:14
+        fontSize:16
     },
     attendees:{
-        fontSize:14,
+        fontSize:16,
         lineHeight:20
     },
     edit:{
@@ -87,7 +87,7 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     status:{
-        fontSize:12
+        fontSize:14
     }
 })
 
@@ -267,15 +267,15 @@ const Meetingcard=(props:{data:Meeting,index:number})=>{
                         <View style={{width:5,height:5,borderRadius:10,backgroundColor:"lightgreen"}}></View>
                         <Text style={[styles[Device].status,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.data.status)}</Text>
                     </Animated.View>
-                    <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.data.description}</Text>
+                    <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.data.description}</Text>
                     <View style={{display:"flex",alignItems:'center',flexDirection:'row',gap:5}}>
                         <Image style={[styles[Device].clock]} source={clock_icon} />
-                        <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{getdatatime(props.data.startDate.dateTime,props.data.endDate.dateTime)}</Text>
+                        <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(0.7),fontFamily:Fonts.NeutrifStudio.Regular}]}>{getdatatime(props.data.startDate.dateTime,props.data.endDate.dateTime)}</Text>
                     </View>
                     <View style={{gap:5,flexDirection:"row"}}>
                         {/* <Text style={[styles[Device].attendees,{color:'black',fontFamily:Fonts.NeutrifStudio.Regular}]}>Attendees </Text> */}
                         <Image style={[styles[Device].clock]} source={clock_icon} />
-                        <Text style={[styles[Device].attendees,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{Word2Sentence(props.data.attendees.filter((attendee)=>attendee.toLowerCase()!=store.getState().sharedinfo.data?.email?.toLowerCase()),"",",",true)}</Text>
+                        <Text style={[styles[Device].attendees,{color:Themes.Light.OnewindowPrimaryBlue(0.7),fontFamily:Fonts.NeutrifStudio.Regular}]}>{Word2Sentence(props.data.attendees.filter((attendee)=>attendee.toLowerCase()!=store.getState().sharedinfo.data?.email?.toLowerCase()),"",",",true)}</Text>
                     </View>
                 </View>
                 {

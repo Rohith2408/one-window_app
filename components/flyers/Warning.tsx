@@ -5,6 +5,7 @@ import { getDevice } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
 import { getBasket } from "../../constants/basket"
+
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         flex:1,
@@ -20,8 +21,11 @@ const TabStyles=StyleSheet.create({
         fontSize:24
     },
     subtext:{
-        fontSize:16,
+        fontSize:20,
         lineHeight:26
+    },
+    no:{
+        fontSize:18
     }
 })
 
@@ -32,6 +36,9 @@ const MobileSStyles=StyleSheet.create({
     subtext:{
         fontSize:14,
         lineHeight:20
+    },
+    no:{
+        fontSize:14
     }
 })
 
@@ -42,6 +49,9 @@ const MobileMStyles=StyleSheet.create({
     subtext:{
         fontSize:16,
         lineHeight:22
+    },
+    no:{
+        fontSize:16
     }
 })
 
@@ -52,6 +62,9 @@ const MobileLStyles=StyleSheet.create({
     subtext:{
         fontSize:16,
         lineHeight:24
+    },
+    no:{
+        fontSize:16
     }
     
 })
@@ -83,7 +96,7 @@ const Warning=()=>{
             <View style={{flexDirection:"row",gap:10}}>
                 <View style={[{flex:1}]}><Asynchronousbutton successText="Success" idleText={info.yesLabel?info.yesLabel:"Proceed"} failureText="Something went wront" callback={info.proceedCallback}/></View>
                 <Pressable onPress={close} style={{flex:1,alignItems:'center',justifyContent:"center",borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}>
-                    <Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{info.noLabel?info.noLabel:"No"}</Text></Pressable>
+                    <Text style={[styles[Device].no,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{info.noLabel?info.noLabel:"No"}</Text></Pressable>
             </View>
         </View>
     )

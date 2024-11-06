@@ -12,6 +12,7 @@ import { Fonts, Themes } from "../../constants"
 import emptylist from '../../assets/images/illustrations/angry.png'
 import { addToBasket } from "../../constants/basket"
 import Familydetailscard from "../cards/Familydetailscard"
+import Transitionview from "../resources/Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     add_wrapper:{
@@ -46,8 +47,8 @@ const TabStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:160,
-        height:160,
+        width:200,
+        height:200,
         resizeMode:"contain"
     },
     card:{
@@ -55,7 +56,7 @@ const TabStyles=StyleSheet.create({
         height:75
     },
     add_text:{
-        fontSize:16
+        fontSize:18
     }
 })
 
@@ -178,7 +179,7 @@ const Familydetails=(props:any)=>{
                     familyDetails.data.length==0
                     ?
                     <View style={{flex:1,gap:10,justifyContent:"center",alignItems:"center"}}>
-                        <Image source={emptylist} style={[styles[Device].emptylist_image]}/>
+                        <Transitionview effect="pan" delay={200}><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
                         <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>It's awfully quiet in here...!</Text>
                         <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button below to start adding your family details</Text>
                     </View>

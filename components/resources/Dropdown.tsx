@@ -56,7 +56,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     select:{
-        fontSize:18
+        fontSize:20
     }
 })
 

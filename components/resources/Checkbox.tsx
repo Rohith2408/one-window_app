@@ -16,7 +16,20 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-
+    check:{
+        width:16,
+        height:16,
+        borderRadius:100,
+        backgroundColor:"white"
+    },
+    highlighter:{
+        width:12,
+        height:12,
+        borderRadius:100
+    },
+    label:{
+        fontSize:20
+    }
 })
 
 const MobileSStyles=StyleSheet.create({

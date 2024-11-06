@@ -81,13 +81,13 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     edit_icon:{
-        width:18,
-        height:18,
+        width:20,
+        height:20,
         resizeMode:'contain'
     },
     delete_icon:{
-        width:18,
-        height:18,
+        width:20,
+        height:20,
         resizeMode:'contain'
     },
     location_icon:{
@@ -101,21 +101,21 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:16,
+        fontSize:18,
         lineHeight:20
     },
     text2:{
-        fontSize:14
+        fontSize:16
     },
     text3:{
-        fontSize:14
+        fontSize:16
     },
     title:{
-        fontSize:11
+        fontSize:14
     },
     nodetails_icon:{
-        width:15,
-        height:15,
+        width:20,
+        height:20,
         resizeMode:'contain'
     },
     nodetails:{

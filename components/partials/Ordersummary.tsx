@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
-import { Package, Product } from "../../types"
+import { Package, Paymentsummary, Product, Request } from "../../types"
 import { addToBasket, getBasket } from "../../constants/basket"
 import { compareProducts, formatDate, getDevice, getServerRequestURL, serverRequest } from "../../utils"
 import { requests } from "../../constants/requests"
@@ -13,6 +13,7 @@ import { Fonts, Themes } from "../../constants"
 import { useEffect, useRef, useState } from "react"
 import loader from '../../assets/images/misc/loader.gif'
 import { store } from "../../store"
+import Transitionview from "../resources/Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -20,13 +21,29 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     title:{
-        fontSize:12
+        fontSize:18
+    },
+    icon:{
+        width:12,
+        height:12,
+        resizeMode:"contain"
+    },
+    continue:{
+        fontSize:18
+    },
+    products_wrapper:{
+        gap:45
+    },
+    loader:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
     }
 })
 
 const MobileSStyles=StyleSheet.create({
     title:{
-        fontSize:12
+        fontSize:14
     },
     icon:{
         width:10,
@@ -48,7 +65,7 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     title:{
-        fontSize:14
+        fontSize:16
     },
     icon:{
         width:12,
@@ -56,7 +73,7 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     continue:{
-        fontSize:15
+        fontSize:16
     },
     products_wrapper:{
         gap:45
@@ -70,7 +87,7 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     title:{
-        fontSize:12
+        fontSize:16
     },
     icon:{
         width:10,
@@ -78,7 +95,7 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     continue:{
-        fontSize:14
+        fontSize:16
     },
     products_wrapper:{
         gap:25
@@ -104,6 +121,13 @@ const Ordersummary=()=>{
     const [path,navigate]=useNavigation()
     const dispatch=useAppDispatch()
     const [isLoading,setIsloading]=useState(false);
+    const [paymentData,setPaymentData]=useState<Request<Paymentsummary|undefined>>({
+        requestStatus:"initiated",
+        responseStatus:"not_recieved",
+        haveAnIssue:false,
+        issue:"",
+        data:undefined
+    });
 
     const placeOrder=async ()=>{
         setIsloading(true);
@@ -161,6 +185,13 @@ const Ordersummary=()=>{
             reqType:"POST",
             body:details
         })
+        setPaymentData({
+            requestStatus:"initiated",
+            responseStatus:"recieved",
+            data:res.data,
+            haveAnIssue:!res.success,
+            issue:res.message
+        })
         console.log("response",JSON.stringify(res,null,2));
     }
 
@@ -171,30 +202,51 @@ const Ordersummary=()=>{
     return(
         <View style={{flex:1,gap:30}}>
             <View style={{padding:10,gap:15}}>
-                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Selected Package</Text>
+                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Selected Package</Text>
                 {
                     orderInfo.package
                     ?
                     <Packagecard {...orderInfo.package} index={0}/>
                     :
-                    <Text style={[{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>No package selected</Text>
+                    <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>No package selected</Text>
                 }
             </View>
             <View style={{flex:1,gap:15,padding:10}}>
-            <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
+                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
                 <ScrollView contentContainerStyle={[styles[Device].products_wrapper,{padding:5,paddingTop:0,paddingBottom:20}]}>
                 {
                     orderInfo.products.map((product,i)=>
-                    <Unpurchasedproductscard hideDelete={true} data={product} index={i}/>
+                    <View style={{alignSelf:"stretch",flexDirection:"row",alignItems:'center'}}>
+                        <View style={{flex:1}}><Unpurchasedproductscard hideDelete={true} data={product} index={i}/></View>
+                        {
+                            paymentData.responseStatus=="recieved"
+                            ?
+                            <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{paymentData.data?.items.find((item)=>compareProducts({intake:item.details.intake,course:{_id:item.details.courseId},category:item.details.category},product))?.currency.symbol+paymentData.data?.items.find((item)=>compareProducts({intake:item.details.intake,course:{_id:item.details.courseId},category:item.details.category},product))?.finalPrice}</Text>
+                            :
+                            <Image style={[styles[Device].loader]} source={loader}/>
+                        }
+                    </View>
                     )
                 }
                 </ScrollView>
+                {
+                    paymentData.responseStatus=="recieved" && !paymentData.haveAnIssue
+                    ?
+                    <Transitionview effect="zoom" style={[{alignSelf:"flex-end"}]}>
+                        <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
+                            <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Total:</Text>
+                            <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{paymentData.data?.items[0]?.currency.symbol+paymentData.data?.totalPrice}</Text>
+                        </View>
+                    </Transitionview>
+                    :
+                    <Text>{paymentData.issue}</Text>
+                }
             </View>
             <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={!isLoading?placeOrder:null}>
             {
                 !isLoading
                 ?
-                <Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Place Order</Text>
+                <Text style={[styles[Device].continue,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:7.5}]}>Place Order</Text>
                 :
                 <Image style={[styles[Device].loader]} source={loader}/>
             }

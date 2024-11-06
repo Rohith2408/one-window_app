@@ -23,7 +23,7 @@ const TabStyles=StyleSheet.create({
         height:10
     },
     title:{
-        fontSize:16
+        fontSize:20
     }
 })
 

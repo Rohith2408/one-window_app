@@ -70,7 +70,6 @@ const GeneralStyles=StyleSheet.create({
         display:'flex',
         flexDirection: 'row',
         gap:20,
-        
         flexWrap: 'wrap',
         justifyContent: 'space-between',
     },
@@ -92,30 +91,30 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     name:{
-        fontSize:28,
+        fontSize:34,
     },
     email:{
-        fontSize:16
+        fontSize:18
     },
     dp:{
-        width:85,
-        height:85,
+        width:125,
+        height:125,
         objectFit:"contain"
     },
     dpBg:{
-        width:75,
-        height:75,
+        width:115,
+        height:115,
         objectFit:"contain",
         bottom:5,
         right:35
     },
     option_icon:{
-        width:50,
-        height:50,
+        width:55,
+        height:55,
         objectFit:'contain'
     },
     options_text:{
-        fontSize:16
+        fontSize:20
     },
     user_wrapper:{
         flex:1
@@ -124,22 +123,22 @@ const TabStyles=StyleSheet.create({
         flex:6,
     },
     logout:{
-        fontSize:18,
+        fontSize:22,
         paddingTop:10,
         paddingBottom:10,
-        paddingLeft:15,
-        paddingRight:15,
+        paddingLeft:25,
+        paddingRight:25,
     },
     delete_account:{
         fontSize:14,
         paddingTop:10
     },
     loadingview_name:{
-        width:175,
+        width:200,
         height:26
     },
     loadingview_email:{
-        width:120,
+        width:150,
         height:22
     },
     loadingview_dp:{
@@ -416,8 +415,8 @@ const Profile=(props:any)=>{
             </View>
             <View style={[GeneralStyles.options_wrapper,styles[Device].options_wrapper]}>
             {
-                options.map((option)=>
-                <Pressable key={option.title} onPress={()=>openScreen(option.screen)} style={{width:"45%",height:"20%",display:"flex",alignItems:'center',justifyContent:'center'}}><Option key={option.title} {...option} Device={Device}></Option></Pressable>
+                options.map((option,i)=>
+                <Transitionview style={[{width:"45%",height:"20%",display:"flex",alignItems:'center',justifyContent:'center'}]} effect="pan" delay={30*i}><Pressable key={option.title} onPress={()=>openScreen(option.screen)}><Option key={option.title} {...option} Device={Device}></Option></Pressable></Transitionview>
                 )
             }
             </View>

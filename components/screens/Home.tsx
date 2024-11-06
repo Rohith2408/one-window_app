@@ -77,7 +77,6 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
     prop:{
         top:10,
         left:-10,
@@ -90,42 +89,42 @@ const TabStyles=StyleSheet.create({
         gap:38
     },
     welcome_message:{
-        fontSize:30,
+        fontSize:36,
         fontWeight:"700"
     },
     search_text:{
-        fontSize:18
+        fontSize:22
     },
     explore_icon:{
         width:40,
         height:40
     },
     explore_text:{
-        fontSize:16
+        fontSize:20
     },
     products_wrapper:{
         gap:10
     },
     products_title:{
-        fontSize:22
+        fontSize:24
     },
     card:{
-        width:285,
-        height:235
+        width:385,
+        height:250
     },
     loader_card:{
-        width:285,
-        height:235
+        width:325,
+        height:250
     },
     no_products_title:{
-        fontSize:18
+        fontSize:22
     },
     no_products:{
-        fontSize:16
+        fontSize:18
     },
     no_products_image:{
-        width:130,
-        height:130,
+        width:160,
+        height:160,
         resizeMode:"contain"
     }
 })
@@ -349,7 +348,7 @@ const Home=(props:undefined|{name:string})=>{
                         <Text style={{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.5)}}>Malla Reddy University</Text>
                     </View> */}
                 </View>
-                <Transitionview effect="zoom">
+                <Transitionview effect="pan">
                     <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
                         <Dynamicplaceholder/>                     
                     </Pressable>

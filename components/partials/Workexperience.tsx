@@ -46,8 +46,8 @@ const TabStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:160,
-        height:160,
+        width:200,
+        height:200,
         resizeMode:"contain"
     },
     card:{
@@ -55,7 +55,7 @@ const TabStyles=StyleSheet.create({
         height:75
     },
     add_text:{
-        fontSize:16
+        fontSize:18
     }
 })
 
@@ -164,7 +164,7 @@ const Workexperience=(props:any)=>{
 
     const openCurrentlyWorkingFlyer=()=>{
         addToBasket("currentlyworking",{callback:addWork})
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Currentlyworking",flyerdata:{currentlyWorkingBasketid:"currentlyworking"}}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Currentlyworking",params:{currentlyWorkingBasketid:"currentlyworking"}}}):null
     }   
 
     return(

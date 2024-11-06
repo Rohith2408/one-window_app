@@ -52,27 +52,27 @@ const GeneralStyles=StyleSheet.create({
 const TabStyles=StyleSheet.create({
     name:{
         lineHeight:20,
-        fontSize:13
+        fontSize:20
     },
     category:{
-        fontSize:12
+        fontSize:16
     },
     intake:{
-        fontSize:11
+        fontSize:15
     },
     icon:{
-        width:16,
-        height:16,
+        width:26,
+        height:26,
         resizeMode:"contain",
     },
     clock_icon:{
-        width:10,
-        height:10,
+        width:14,
+        height:14,
         resizeMode:"contain",
     },
     go_icon:{
-        width:12,
-        height:12,
+        width:10,
+        height:10,
         resizeMode:"contain",
     }
 })

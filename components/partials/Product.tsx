@@ -94,17 +94,17 @@ const TabStyles=StyleSheet.create({
         top:7
     },
     uni_location:{
-        fontSize:15,
+        fontSize:16,
         lineHeight:18
     },
     program_name:{
-        fontSize:18
+        fontSize:20
     },
     advisor_card:{
         height:175
     },
     advisor_heading:{
-        fontSize:16
+        fontSize:18
     },
     show_order_details:{
         fontSize:18
@@ -132,7 +132,7 @@ const TabStyles=StyleSheet.create({
         fontSize:12
     },
     status:{
-        fontSize:16
+        fontSize:18
     }
 })
 
@@ -386,7 +386,7 @@ const Product=(props:{productId:string})=>{
                     </View>
                 </View>
                 <View style={[{alignSelf:'center',borderRadius:100,backgroundColor:Themes.Light.OnewindowLightBlue}]}>
-                    <Text style={[{padding:10},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].status]}>{Word2Sentence([product.status,product.stage],"","-",true)}</Text>
+                    <Text style={[{padding:10},{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].status]}>{Word2Sentence([product.status,product.stage],"","-",true)}</Text>
                 </View>
                 <View style={{gap:15}}>
                     <Styledtext styles={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Experts Assigned" focusWord="Assigned"/>

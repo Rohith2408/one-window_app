@@ -30,10 +30,10 @@ const TabStyles=StyleSheet.create({
         fontSize:20
     },
     book:{
-        fontSize:18
+        fontSize:20
     },
     datetime:{
-        fontSize:18
+        fontSize:20
     },
     loading:{
         width:20,

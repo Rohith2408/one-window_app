@@ -35,15 +35,15 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:16
+        fontSize:20
     },
     verified_icon:{
-        width:16,
-        height:16,
+        width:20,
+        height:20,
         resizeMode:'contain'
     },
     verify:{
-        fontSize:12
+        fontSize:16
     }
 })
 

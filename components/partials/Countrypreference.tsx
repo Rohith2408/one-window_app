@@ -7,7 +7,7 @@ import tick_icon from '../../assets/images/misc/tick.png'
 import loading_gif from '../../assets/images/misc/loader.gif'
 import { getDevice } from "../../utils";
 import { useEffect, useRef, useState } from "react";
-import { Countries, Themes, disciplines} from "../../constants";
+import { Countries, Fonts, Themes, disciplines} from "../../constants";
 import { preferences } from "../../constants/preferences";
 import { getBasket } from "../../constants/basket";
 
@@ -22,7 +22,19 @@ const GeneralStyles=StyleSheet.create({
 })  
 
 const TabStyles=StyleSheet.create({
-    
+    icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    delete_icon:{
+        width:18,
+        height:18,
+        resizeMode:"contain"
+    },
+    preference:{
+        fontSize:18
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -35,6 +47,9 @@ const MobileSStyles=StyleSheet.create({
         width:12,
         height:12,
         resizeMode:"contain"
+    },
+    preference:{
+        fontSize:14
     }
 })
 
@@ -48,6 +63,9 @@ const MobileMStyles=StyleSheet.create({
         width:14,
         height:14,
         resizeMode:"contain"
+    },
+    preference:{
+        fontSize:16
     }
 })
 
@@ -61,6 +79,9 @@ const MobileLStyles=StyleSheet.create({
         width:14,
         height:14,
         resizeMode:"contain"
+    },
+    preference:{
+        fontSize:16
     }
 })
 
@@ -103,12 +124,12 @@ const Countrypreference=(props)=>{
     return(
         <View style={{paddingTop:info?.eventHandler?0:25,gap:20}}>
             {/* <TextInput placeholder="Search..." onChangeText={(txt)=>setSearch(txt)} value={search.trim()} style={{padding:10,borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}/> */}
-            <ScrollView contentContainerStyle={{gap:30,paddingBottom:10}}>
+            <ScrollView persistentScrollbar contentContainerStyle={{gap:30,paddingBottom:10}}>
             {
                 selectedPreferences?.map((item)=>
                 <Pressable key={item} onPress={()=>onselect(item)} style={[GeneralStyles.card_wrapper]}>
                     <Image style={[styles[Device].icon]} source={countrypreference_icon} />
-                    <View style={{flex:1}}><Text>{item}</Text></View>
+                    <View style={{flex:1}}><Text style={[styles[Device].preference,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item}</Text></View>
                     {
                         isloading && item==selected.current
                         ?
@@ -123,7 +144,7 @@ const Countrypreference=(props)=>{
                 allPreferences.filter((item)=>!selectedPreferences?.find((item2)=>item2==item)).map((item)=>
                 <Pressable key={item} onPress={()=>onselect(item)} style={[GeneralStyles.card_wrapper]}>
                     <Image style={[styles[Device].icon]} source={countrypreference_icon} />
-                    <View style={{flex:1}}><Text>{item}</Text></View>
+                    <View style={{flex:1}}><Text  style={[styles[Device].preference,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item}</Text></View>
                     {
                         isloading && item==selected.current
                         ?

@@ -69,16 +69,16 @@ const TabStyles=StyleSheet.create({
         lineHeight:26
     },
     icon:{
-        width:20,
-        height:20,
+        width:24,
+        height:24,
         borderRadius:100,
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:14
+        fontSize:16
     },
     misc:{
-        fontSize:15
+        fontSize:16
     },
     important:{
         fontSize:12

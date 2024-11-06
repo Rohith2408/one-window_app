@@ -59,13 +59,13 @@ const GeneralStyles=StyleSheet.create({
 const TabStyles=StyleSheet.create({
     name:{
         lineHeight:20,
-        fontSize:14
+        fontSize:18
     },
     category:{
-        fontSize:12
+        fontSize:16
     },
     intake:{
-        fontSize:11
+        fontSize:16
     },
     icon:{
         width:24,
@@ -238,7 +238,7 @@ const Unpurchasedproductscard=(props:{data:Product,index:number,hideDelete?:bool
                     <Image source={props.data.course.university.logoSrc} style={[styles[Device].icon]}/>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
-                    <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.data.course.name}</Text>
+                    <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.data.course.name}</Text>
                     <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5}}>
                         <Image style={[styles[Device].clock_icon]} source={products_icon} />
                         <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{setWordCase(props.data.category)}</Text>

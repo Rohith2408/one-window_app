@@ -41,10 +41,10 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     no_workexperience:{
-        fontSize:20
+        fontSize:22
     },
     click_message:{
-        fontSize:16
+        fontSize:18
     },
     emptylist_image:{
         width:180,
@@ -52,7 +52,7 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     search:{
-        fontSize:18
+        fontSize:20
     }
 })
 
@@ -187,7 +187,7 @@ const Chats=()=>{
                 <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
                 :
                 <View style={{flex:1,gap:25}}>
-                    <Pressable style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100}} onPress={openSearch}><Text style={[styles[Device].search,{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}]}>{"Search..."}</Text></Pressable>
+                    <Transitionview effect="pan"><Pressable style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100}} onPress={openSearch}><Text style={[styles[Device].search,{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}]}>{"Search..."}</Text></Pressable></Transitionview>
                     <Listselection
                         direction="horizontal"
                         selectionStyle="background"
@@ -213,7 +213,7 @@ const Chats=()=>{
                                     <Pressable ><Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>No experts assigned , request for an expert?</Text></Pressable>
                                 </View>
                                 :
-                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:15,paddingTop:0,paddingBottom:30}}>
+                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:15,paddingTop:10,paddingBottom:30}}>
                                 {
                                     experts.map((item,i)=>
                                     <Transitionview effect="pan" delay={100*i}>
@@ -234,7 +234,7 @@ const Chats=()=>{
                                     <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Seems like you have no friends!</Text>
                                 </View>
                                 :
-                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:15,paddingTop:0,paddingBottom:30}}>
+                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:15,paddingTop:10,paddingBottom:30}}>
                                 {
                                     community.map((item,i)=>
                                     (item.participants.length==1)

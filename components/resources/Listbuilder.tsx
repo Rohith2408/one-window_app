@@ -52,10 +52,10 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     input:{
-        fontSize:18
+        fontSize:20
     },
     selected:{
-        fontSize:18
+        fontSize:20
     }
 })
 

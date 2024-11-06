@@ -67,13 +67,13 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     title:{
-        fontSize:14
+        fontSize:18
     },
     datetime:{
-        fontSize:12
+        fontSize:16
     },
     attendees:{
-        fontSize:12,
+        fontSize:16,
         lineHeight:16
     },
     edit:{

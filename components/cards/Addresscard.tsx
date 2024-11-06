@@ -60,36 +60,36 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     edit_icon:{
-        width:18,
-        height:18,
+        width:22,
+        height:22,
         resizeMode:'contain'
     },
     delete_icon:{
+        width:22,
+        height:22,
+        resizeMode:'contain'
+    },
+    location_icon:{
         width:18,
         height:18,
         resizeMode:'contain'
     },
-    location_icon:{
-        width:14,
-        height:14,
-        resizeMode:'contain'
-    },
     info_icon:{
-        width:14,
-        height:14,
+        width:18,
+        height:18,
         resizeMode:'contain'
     },
     text1:{
-        fontSize:18
+        fontSize:20
     },
     text2:{
-        fontSize:14
+        fontSize:16
     },
     text3:{
-        fontSize:14
+        fontSize:16
     },
     title:{
-        fontSize:13
+        fontSize:15
     }
 })
 

@@ -85,16 +85,16 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:18
+        fontSize:20
     },
     text2:{
-        fontSize:14
+        fontSize:16
     },
     text3:{
-        fontSize:14
+        fontSize:16
     },
     title:{
-        fontSize:13
+        fontSize:14
     }
 })
 

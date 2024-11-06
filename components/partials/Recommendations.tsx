@@ -38,14 +38,14 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     no_workexperience:{
-        fontSize:18
+        fontSize:20
     },
     click_message:{
-        fontSize:14
+        fontSize:16
     },
     emptylist_image:{
-        width:120,
-        height:120,
+        width:200,
+        height:200,
         resizeMode:"contain"
     },
 })

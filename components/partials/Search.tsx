@@ -64,10 +64,10 @@ const TabStyles=StyleSheet.create({
         top:10
     },
     uni_text1:{
-        fontSize:14
+        fontSize:18
     },
     uni_text2:{
-        fontSize:12
+        fontSize:16
     },
     location_icon:{
         width:12,
@@ -85,10 +85,10 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     discipline:{
-        fontSize:16
+        fontSize:18
     },
     subdiscipline:{
-        fontSize:16
+        fontSize:18
     },
     loader:{
         width:22,
@@ -96,15 +96,14 @@ const TabStyles=StyleSheet.create({
         objectFit:"contain"
     },
     not_found:{
-        fontSize:18
+        fontSize:20
     },
     not_found_sub:{
-        fontSize:14 
+        fontSize:16
     },
     illustration:{
         width:210,
         height:210,
-        // aspectRatio:2,
         resizeMode:"contain"
     },
     search:{

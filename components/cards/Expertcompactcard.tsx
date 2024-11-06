@@ -23,7 +23,7 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     name:{
-        fontSize:18
+        fontSize:20
     },
     role:{
         fontSize:16

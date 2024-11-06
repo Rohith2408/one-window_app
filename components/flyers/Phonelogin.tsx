@@ -46,19 +46,19 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     phone_number:{
-        fontSize:18
+        fontSize:22
     },
     enter_text:{
-        fontSize:20
+        fontSize:24
     },
     already_text:{
-        fontSize:14
+        fontSize:18
     },
     error:{
-        fontSize:14
+        fontSize:18
     },
     no_code:{
-        fontSize:14
+        fontSize:18
     },
     back_icon:{
         width:12,
@@ -69,6 +69,9 @@ const TabStyles=StyleSheet.create({
         width:25,
         height:25,
         resizeMode:"contain"
+    },
+    main_wrapper:{
+        paddingTop:45
     }
 })
 
@@ -97,6 +100,9 @@ const MobileSStyles=StyleSheet.create({
         width:16,
         height:16,
         resizeMode:"contain"
+    },
+    main_wrapper:{
+        paddingTop:25
     }
 })
 
@@ -125,6 +131,9 @@ const MobileMStyles=StyleSheet.create({
         width:20,
         height:20,
         resizeMode:"contain"
+    },
+    main_wrapper:{
+        paddingTop:25
     }
 })
 
@@ -153,6 +162,9 @@ const MobileLStyles=StyleSheet.create({
         width:20,
         height:20,
         resizeMode:"contain"
+    },
+    main_wrapper:{
+        paddingTop:25
     }
 })
 
@@ -266,7 +278,7 @@ const Phonelogin=()=>{
     console.log("number",phone)
 
     return(
-        <View style={{flex:1,paddingTop:20}} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
+        <View style={[{flex:1},styles[Device].main_wrapper]} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
         {
             dimensions && userLocation.responseStatus=="recieved"
             ?

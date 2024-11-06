@@ -42,7 +42,7 @@ const GeneralStyles=StyleSheet.create({
         shadowOpacity:0.1,
         shadowRadius:5,
         elevation:2,
-        padding:7
+        padding:10
     }
 })
 
@@ -53,6 +53,19 @@ const TabStyles=StyleSheet.create({
         borderRadius:25
     },
     briefing:{
+        fontSize:18
+    },
+    next_icon:{
+        width:34,
+        height:34,
+        resizeMode:"contain"
+    },
+    stars_icon:{
+        width:28,
+        height:28,
+        resizeMode:"contain"
+    },
+    add_text:{
         fontSize:18
     }
 })
@@ -65,6 +78,19 @@ const MobileSStyles=StyleSheet.create({
     },
     briefing:{
         fontSize:12
+    },
+    next_icon:{
+        width:26,
+        height:26,
+        resizeMode:"contain"
+    },
+    stars_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    add_text:{
+        fontSize:14
     }
 })
 
@@ -86,6 +112,9 @@ const MobileMStyles=StyleSheet.create({
         width:24,
         height:24,
         resizeMode:"contain"
+    },
+    add_text:{
+        fontSize:16
     }
 })
 
@@ -102,6 +131,14 @@ const MobileLStyles=StyleSheet.create({
         width:30,
         height:30,
         resizeMode:"contain"
+    },
+    stars_icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    add_text:{
+        fontSize:16
     }
 })
 

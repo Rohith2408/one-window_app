@@ -69,7 +69,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     superset_text:{
-        fontSize:14
+        fontSize:16
     },
     sub_wrapper:{
         gap:25,
@@ -81,18 +81,23 @@ const TabStyles=StyleSheet.create({
         top:10,
     },
     icon:{
-        width:18,
-        height:18,
+        width:22,
+        height:22,
         resizeMode:"contain"
     },
     course_name:{
-        fontSize:16
+        fontSize:18
     },
     uni_name:{
-        fontSize:14
+        fontSize:16
     },
     footer:{
-        fontSize:14
+        fontSize:16
+    },
+    delete:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
     }
 })
 
@@ -130,6 +135,11 @@ const MobileSStyles=StyleSheet.create({
         width:10,
         height:10,
         resizeMode:"contain"
+    },
+    delete:{
+        width:14,
+        height:14,
+        resizeMode:"contain"
     }
 })
 
@@ -159,6 +169,11 @@ const MobileMStyles=StyleSheet.create({
     },
     footer:{
         fontSize:14
+    },
+    delete:{
+        width:16,
+        height:16,
+        resizeMode:"contain"
     }
 })
 
@@ -188,6 +203,11 @@ const MobileLStyles=StyleSheet.create({
     },
     footer:{
         fontSize:13
+    },
+    delete:{
+        width:16,
+        height:16,
+        resizeMode:"contain"
     }
 })
 
@@ -282,7 +302,7 @@ const Cartcard=(props:CartItem & {index:number})=>{
                         <Text style={[GeneralStyles.superset_text,styles[Device].superset_text,{color:"white",fontFamily:Fonts.NeutrifStudio.Regular,padding:5}]}>{setWordCase(props.category)}</Text>
                     </View>
                     <Pressable onPress={!isLoading?deleteItem:null}>
-                        <Image style={{width:14,height:14,resizeMode:'contain'}} source={isLoading?loader:delete_icon}/>
+                        <Image style={[styles[Device].delete]} source={isLoading?loader:delete_icon}/>
                     </Pressable>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>

@@ -21,7 +21,9 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    option:{
+        fontSize:20
+    }
 })
 
 const MobileSStyles=StyleSheet.create({

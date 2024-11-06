@@ -19,7 +19,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     role:{
-        fontSize:18
+        fontSize:20
     },
     description:{
         fontSize:16,

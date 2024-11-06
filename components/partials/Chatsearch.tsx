@@ -11,6 +11,7 @@ import add_icon from '../../assets/images/misc/add-friend.png'
 import loader from '../../assets/images/misc/loader.gif'
 import { useAppSelector } from "../../hooks/useAppSelector"
 import Chatsearchcard from "../cards/Chatsearchcard"
+import Transitionview from "../resources/Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     card:{
@@ -28,14 +29,14 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     no_workexperience:{
-        fontSize:18
+        fontSize:20
     },
     click_message:{
-        fontSize:14
+        fontSize:18
     },
     emptylist_image:{
-        width:100,
-        height:100,
+        width:200,
+        height:200,
         resizeMode:"contain"
     },
     card:{
@@ -47,10 +48,10 @@ const TabStyles=StyleSheet.create({
         height:30
     },
     name:{
-        fontSize:16
+        fontSize:18
     },
     search:{
-        fontSize:18
+        fontSize:20
     }
 })
 
@@ -201,7 +202,7 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
                 users.length==0
                 ?
                 <View style={{flex:1,gap:10,justifyContent:"center",alignItems:"center"}}>
-                    <Image source={emptylist} style={[styles[Device].emptylist_image]}/>
+                    <Transitionview effect="zoom"><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
                     <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>It's awfully quiet in here...!</Text>
                     <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button below to start adding your work experience</Text>
                 </View>

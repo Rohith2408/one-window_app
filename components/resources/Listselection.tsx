@@ -4,6 +4,7 @@ import { Animated, LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, Vie
 import tick_icon from '../../assets/images/misc/tick.png'
 import { Fonts, Themes } from "../../constants"
 import { getDevice } from "../../utils"
+import Transitionview from "./Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -11,7 +12,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:18
+        fontSize:20
     }
 })
 
@@ -72,7 +73,7 @@ const Listselection=(props:{direction:"horizontal"|"vertical",update?:any,blurUn
             <ScrollView horizontal={props.direction=="horizontal"?true:false} contentContainerStyle={[props.styles?.contentcontainer?props.styles.contentcontainer:{}]}>
             {
                 props.options.list.map((item,i)=>
-                <Pressable onPress={()=>selection(item)}><Listitem data={{selected:selected,blurUnSelected:props.blurUnSelected,selectionStyle:props.selectionStyle,index:i,card:props.options.card,idExtractor:props.options.idExtractor,labelExtractor:props.options.labelExtractor,item:item}}/></Pressable>
+                <Transitionview effect="zoom" delay={50*i}><Pressable onPress={()=>selection(item)}><Listitem data={{selected:selected,blurUnSelected:props.blurUnSelected,selectionStyle:props.selectionStyle,index:i,card:props.options.card,idExtractor:props.options.idExtractor,labelExtractor:props.options.labelExtractor,item:item}}/></Pressable></Transitionview>
                 )
             }
             </ScrollView>

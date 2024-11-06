@@ -21,11 +21,11 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     dp:{
-        width:26,
-        height:26
+        width:36,
+        height:36
     },
     name:{
-        fontSize:16
+        fontSize:20
     },
     add_icon:{
         width:22,
@@ -36,8 +36,8 @@ const TabStyles=StyleSheet.create({
 
 const MobileSStyles=StyleSheet.create({
     dp:{
-        width:20,
-        height:20
+        width:24,
+        height:24
     },
     name:{
         fontSize:14
@@ -51,11 +51,11 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     dp:{
-        width:20,
-        height:20
+        width:26,
+        height:26
     },
     name:{
-        fontSize:14
+        fontSize:16
     },
     add_icon:{
         width:18,
@@ -66,11 +66,11 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     dp:{
-        width:20,
-        height:20
+        width:26,
+        height:26
     },
     name:{
-        fontSize:14
+        fontSize:16
     },
     add_icon:{
         width:18,

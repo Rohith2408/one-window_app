@@ -45,8 +45,8 @@ const TabStyles=StyleSheet.create({
         fontSize:14
     },
     filter_icon:{
-        width:18,
-        height:18,
+        width:22,
+        height:22,
         resizeMode:"contain"
     },
     not_found:{
@@ -103,8 +103,8 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     filter_icon:{
-        width:18,
-        height:18,
+        width:20,
+        height:20,
         resizeMode:"contain"
     },
     not_found:{
@@ -132,8 +132,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     filter_icon:{
-        width:20,
-        height:20,
+        width:22,
+        height:22,
         resizeMode:"contain"
     },
     not_found:{

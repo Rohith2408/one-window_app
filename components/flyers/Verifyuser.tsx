@@ -31,14 +31,14 @@ type idData =
 
 const TabStyles=StyleSheet.create({
     heading:{
-        fontSize:20,
+        fontSize:24,
         lineHeight:28
     },
     otp:{
-        fontSize:18
+        fontSize:22
     },
     error:{
-        fontSize:11
+        fontSize:16
     }
 })
 

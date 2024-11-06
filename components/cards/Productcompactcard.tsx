@@ -103,24 +103,24 @@ const TabStyles=StyleSheet.create({
         top:6,
     },
     category_text:{
-        fontSize:14
+        fontSize:18
     },
     product_name:{
-        fontSize:16,
+        fontSize:20,
         lineHeight:24
     },
     uni_name:{
-        fontSize:14,
+        fontSize:18,
     },
     intake:{
-        fontSize:14
+        fontSize:18
     },
     status_text:{
-        fontSize:12
+        fontSize:16
     },
     uni_icon:{
-        width:13,
-        height:13,
+        width:20,
+        height:20,
         objectFit:"contain",
         alignSelf:"flex-start"
     },
@@ -130,8 +130,8 @@ const TabStyles=StyleSheet.create({
         objectFit:"contain"
     },
     status_icon:{
-        width:10,
-        height:10,
+        width:16,
+        height:16,
         objectFit:"contain"
     },
     seperator:{

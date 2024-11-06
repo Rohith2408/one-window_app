@@ -19,10 +19,10 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:24
+        fontSize:30
     },
     subtext:{
-        fontSize:16
+        fontSize:18
     }
 })
 
@@ -46,7 +46,7 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     text:{
-        fontSize:24
+        fontSize:28
     },
     subtext:{
         fontSize:16

@@ -19,7 +19,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     title:{
-        fontSize:12
+        fontSize:18
     },
     icon:{
         width:10,
@@ -27,10 +27,10 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     continue:{
-        fontSize:14
+        fontSize:18
     },
     error:{
-        fontSize:14
+        fontSize:16
     }
 })
 
@@ -53,7 +53,7 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     title:{
-        fontSize:14
+        fontSize:16
     },
     icon:{
         width:12,
@@ -70,7 +70,7 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     title:{
-        fontSize:12
+        fontSize:16
     },
     icon:{
         width:10,
@@ -167,7 +167,7 @@ const Order=(props:{orderinfoid:string})=>{
             {
                 (errors.current.category!=undefined && errors.current.products!=undefined && errors.current.category.length==0 && errors.current.products.length==0 && errors.current.general!=undefined && errors.current.general.length==0)
                 ?
-                <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={showOrderSummary}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:5}]}>Continue</Text></Pressable>
+                <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={showOrderSummary}><Text style={[styles[Device].continue,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:5}]}>Continue</Text></Pressable>
                 :
                 null
             }

@@ -44,7 +44,7 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     intakemonth:{
-        fontSize:18
+        fontSize:20
     },
     deadline:{
         fontSize:16
