@@ -983,6 +983,13 @@ const forms:FormInfo[]=[
                     event:"onTextInput",
                     handler:undefined
                 },
+                validator:(data:string)=>{
+                    let dateObj=new Date(data)
+                    return {
+                    success:dateObj.getFullYear()<=((new Date().getFullYear())-15),
+                    data:undefined,
+                    message:"You need to be atleast 15 years old"
+                }},
                 onFocus:{
                     event:"onFocus"
                 }
