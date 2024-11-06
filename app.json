@@ -24,6 +24,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.onewindow.app",
       "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We use your location to automatically set your country code and connect you with users in your area.",
         "CFBundleURLTypes": [
           {
             "CFBundleURLSchemes": [
