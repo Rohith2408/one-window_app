@@ -466,15 +466,22 @@ export const pickDocument=async (sizeLimit:number)=>{
   };
   //console.log("Doc res",res)
   if(!res.canceled){
-      if(res.assets[0].size && res.assets[0].mimeType && (res.assets[0].size/1000000)<=sizeLimit)
+      if(res.assets[0].size && res.assets[0].mimeType )
       {
+        if((res.assets[0].size/1000000)<=sizeLimit)
+        {
           let uploadedFile={
-              uri : res.assets[0].uri,
-              type: res.assets[0].mimeType,
-              name: res.assets[0].name
+            uri : res.assets[0].uri,
+            type: res.assets[0].mimeType,
+            name: res.assets[0].name
           };
           response.success=true;
           response.data=uploadedFile;
+        }
+        else
+        {
+          response.message="Size limit exceeded";
+        }
       }
       else
       {

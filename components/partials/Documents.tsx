@@ -257,9 +257,13 @@ const Work=(props:Request<DocumentsType>)=>{
     let documents=props.data.workExperiences
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [isLoading,setIsLoading]=useState<boolean>(false)
+    const [path,navigate]=useNavigation()
+    const docMaxSize=useRef(40).current
+
     const upload=async ()=>{
         setIsLoading(true);
-        let res=await uploadDoc("workExperiences","Work Experience Document "+documents.length,updateStore);
+        let res=await uploadDoc("workExperiences","Work Experience Document "+documents.length,docMaxSize,updateStore);
+        (!res.success && res.message=="Size limit exceeded")?navigate?navigate({type:"AddScreen",payload:{screen:"Error",params:{error:"Doc size should be less than "+docMaxSize+"mb",preventAutoHide:true}}}):null:null;
         setIsLoading(false)
     }
 
@@ -282,10 +286,13 @@ const Test=(props:Request<DocumentsType>)=>{
     let documents=props.data.test
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [isLoading,setIsLoading]=useState<undefined|"language"|"general">(undefined)
+    const [path,navigate]=useNavigation()
+    const docMaxSize=useRef(40).current
     
     const upload=async (fieldPath:string,type:undefined|"language"|"general")=>{
         setIsLoading(type);
-        let res=await uploadDoc(fieldPath,setWordCase(type)+" Test Document"+(type=="language"?documents?.languageProf.length:documents?.general?.length),updateStore);
+        let res=await uploadDoc(fieldPath,setWordCase(type)+" Test Document"+(type=="language"?documents?.languageProf.length:documents?.general?.length),docMaxSize,updateStore);
+        (!res.success && res.message=="Size limit exceeded")?navigate?navigate({type:"AddScreen",payload:{screen:"Error",params:{error:"Doc size should be less than "+docMaxSize+"mb",preventAutoHide:true}}}):null:null;
         setIsLoading(undefined)
     }
 
@@ -324,10 +331,14 @@ const Document=(props:{title:string,docIdentifier:string,fieldPath:string,doc:Do
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [isLoading,setIsLoading]=useState(false);
     const dispatch=useAppDispatch()
+    const [path,navigate]=useNavigation()
+    const docMaxSize=useRef(40).current
 
     const upload=async ()=>{
         setIsLoading(true);
-        let res=await uploadDoc(props.fieldPath,props.docIdentifier,updateStore);
+        let res=await uploadDoc(props.fieldPath,props.docIdentifier,docMaxSize,updateStore);
+        console.log("res",res);
+        (!res.success && res.message=="Size limit exceeded")?navigate?navigate({type:"AddScreen",payload:{screen:"Error",params:{error:"Doc size should be less than "+docMaxSize+"mb",preventAutoHide:true}}}):null:null;
         return res;
         setIsLoading(false)
     }
@@ -404,9 +415,8 @@ const Document=(props:{title:string,docIdentifier:string,fieldPath:string,doc:Do
 
 }
 
-const uploadDoc=async (fieldPath:string,docIdentifier:string,callback?:(res:ServerResponse)=>void)=>{
-    let docRes=await pickDocument(40);
-    console.log("Picked",docRes)
+const uploadDoc=async (fieldPath:string,docIdentifier:string,docMaxSize:number,callback?:(res:ServerResponse)=>void)=>{
+    let docRes=await pickDocument(docMaxSize);
     if(docRes.success)
     {
         const data = new FormData()
