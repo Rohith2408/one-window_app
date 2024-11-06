@@ -834,7 +834,7 @@ const forms:FormInfo[]=[
                 {id:"gender",value:personalData?.Gender?[{label:setWordCase(personalData.Gender),value:personalData.Gender.toLowerCase()}]:[]},
                 {id:"countryofbirth",value:personalData?.countyOfBirth?[{label:personalData.countyOfBirth,value:personalData.countyOfBirth}]:[]},
                 {id:"nationality",value:personalData?.nationality?[{label:personalData.nationality,value:personalData.nationality}]:[]},
-                {id:"maritalstatus",value:personalData?.maritalStatus?[{label:personalData.maritalStatus,value:personalData.maritalStatus}]:[]},
+                {id:"maritalstatus",value:personalData?.maritalStatus?[{label:setWordCase(personalData.maritalStatus),value:personalData.maritalStatus}]:[]},
                 // {id:"planningtotakeacademictest",value:data?data.isPlanningToTakeAcademicTest:undefined},
                 // {id:"planningtotakelanguagetest",value:data?data.isPlanningToTakeLanguageTest:undefined}
             ]
