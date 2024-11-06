@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from "react"
 import { Animated, LayoutRectangle, NativeScrollEvent, NativeSyntheticEvent, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { ListReducer } from "../../reducers/ListReducer"
-import {Fonts, Themes, lists} from "../../constants"
+import {Fonts, Themes, lists, setComponentInfo} from "../../constants"
 import { AppliedFilter, AppliedQuickFilter, Event, ListItem, QuickFilterInfo, ServerResponse } from "../../types"
 import useNavigation from "../../hooks/useNavigation"
 import { addToBasket, getBasket, removeFromBasket } from "../../constants/basket"
@@ -203,6 +203,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
             callback:applyAdditionalFilters
         })
         console.log("iddd",ListInfo?.formid);
+        setComponentInfo("Form","title","Filters")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:ListInfo?.formid,forminitialdataid:props.listid+"filter",formbasket:props.listid+"filter"}}}):null
     }
 

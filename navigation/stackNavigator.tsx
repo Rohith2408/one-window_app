@@ -205,7 +205,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
         {
           props.index!=0 && screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY"
           ?
-          <View {...panResponder.panHandlers} style={[styles.swipeStripL,{backgroundColor:'red'}]}></View>
+          <View {...panResponder.panHandlers} style={[styles.swipeStripL]}></View>
           :
           null
         }

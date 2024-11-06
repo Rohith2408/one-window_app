@@ -6,7 +6,7 @@ import { useRef, useState } from "react"
 import { Word2Sentence, formatDate, formatTime, getDevice, getServerRequestURL, serverRequest, setWordCase } from "../../utils"
 import delete_icon from '../../assets/images/misc/delete.png'
 import edit_icon from '../../assets/images/misc/edit.png'
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, setComponentInfo } from "../../constants"
 import clock_icon from '../../assets/images/misc/date.png'
 import useNavigation from "../../hooks/useNavigation"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
@@ -224,6 +224,7 @@ const Meetingcard=(props:{data:Meeting,index:number})=>{
     }
 
     const reschedule=()=>{
+        setComponentInfo("Form","title","Meeting")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"UpdateMeeting",forminitialdataid:props.data._id}}}):null
     }
 

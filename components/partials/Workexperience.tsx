@@ -8,7 +8,7 @@ import Loadinglistscreen from "../resources/Loadinglistscreen"
 import add_icon from '../../assets/images/misc/add.png'
 import { Image } from "expo-image"
 import { getDevice } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, setComponentInfo } from "../../constants"
 import emptylist from '../../assets/images/illustrations/thinking.png'
 import { addToBasket } from "../../constants/basket"
 import { store } from "../../store"
@@ -158,7 +158,8 @@ const Workexperience=(props:any)=>{
     },[])
 
     const addWork=(currentlyworking:boolean)=>{
-        console.log("currently",currentlyworking)
+        console.log("currently",currentlyworking);
+        setComponentInfo("Form","title","Workexperience")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:currentlyworking?"Workexperience_working":"Workexperience_completed"}}}):null
     }
 

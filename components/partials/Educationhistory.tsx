@@ -21,7 +21,7 @@ import { Word2Sentence, formatDate, getDevice, profileUpdator } from "../../util
 import { store } from "../../store"
 import { setEducationHistory } from "../../store/slices/educationHistorySlice"
 import { useRef, useState } from "react"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, setComponentInfo } from "../../constants"
 import { addToBasket } from "../../constants/basket"
 
 const GeneralStyles=StyleSheet.create({
@@ -340,6 +340,7 @@ const School=(props:{data:EducationHistory_School|undefined})=>{
     }
 
     const add=()=>{
+        setComponentInfo("Form","title","School")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"School"}}}):null
     }
 
@@ -351,6 +352,7 @@ const School=(props:{data:EducationHistory_School|undefined})=>{
     }
 
     const edit=()=>{
+        setComponentInfo("Form","title","School")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"School"}}}):null
     }
 
@@ -424,6 +426,7 @@ const Intermediate=(props:{data:EducationHistory_Plus2|undefined})=>{
     }
 
     const openForm=(data:boolean)=>{
+        setComponentInfo("Form","title","Intermediate")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:data?"Intermediate_completed":"Intermediate_not-completed"}}}):null
     }
 
@@ -515,6 +518,7 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
     // }
 
     const openForm=(data:boolean)=>{
+        setComponentInfo("Form","title","Undergraduation")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:data?"Undergraduation_completed":"Undergraduation_not-completed"}}}):null
     }
 
@@ -605,6 +609,7 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
     // }
 
     const openForm=(data:boolean)=>{
+        setComponentInfo("Form","title","Postgraduation")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:data?"Postgraduation_completed":"Postgraduation_not-completed"}}}):null
     }
 

@@ -13,7 +13,7 @@ import add_icon from '../../assets/images/misc/add.png'
 import delete_icon from '../../assets/images/misc/delete.png'
 import edit_icon from '../../assets/images/misc/edit.png'
 import test_icon from '../../assets/images/misc/test.png'
-import { Fonts, Tests, Themes } from "../../constants"
+import { Fonts, Tests, Themes, setComponentInfo } from "../../constants"
 import emptylist from '../../assets/images/illustrations/thinking.png'
 
 const GeneralStyles=StyleSheet.create({
@@ -427,6 +427,7 @@ const Test=(props:TestType & {index:number})=>{
     }
     
     const edit=()=>{
+        setComponentInfo("Form","title","Test")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:props.name,forminitialdata:props.name}}}):null
     }
 

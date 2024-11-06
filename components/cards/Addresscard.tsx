@@ -6,7 +6,7 @@ import clock_icon from '../../assets/images/misc/clock.png'
 import location_icon from '../../assets/images/misc/location.png'
 import { Image } from "expo-image"
 import { Word2Sentence, formatDate, getDevice, profileUpdator } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, setComponentInfo } from "../../constants"
 import delete_icon from '../../assets/images/misc/delete-black.png'
 import edit_icon from '../../assets/images/misc/edit-black.png'
 import add_icon from '../../assets/images/misc/add.png'
@@ -252,6 +252,7 @@ const Addresscard=(props:{data:Address|undefined,type:"permanent"|"temporary"})=
     }
 
     const openForm=()=>{
+        setComponentInfo("Form","title",props.type=="permanent"?"Permanent Address":"Temporary Address")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:props.type=="permanent"?"Permanentaddress":"Temporaryaddress"}}}):null
     }
 

@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from "react"
 import { Animated, LayoutRectangle, NativeScrollEvent, NativeSyntheticEvent, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { ListReducer } from "../../reducers/ListReducer"
-import {Fonts, Themes, lists} from "../../constants"
+import {Fonts, Themes, lists, setComponentInfo} from "../../constants"
 import { AppliedFilter, AppliedQuickFilter, ListItem, QuickFilterInfo, ServerResponse } from "../../types"
 import useNavigation from "../../hooks/useNavigation"
 import { addToBasket, getBasket } from "../../constants/basket"
@@ -212,6 +212,7 @@ const Courselisting=(props:{courselistid:string,courseadditionalFilters:AppliedF
         })
         console.log("dyataaa",props.courselistid,getBasket(props.courselistid+"filters"));
         //console.log(props.listid)
+        setComponentInfo("Form","title","Filters")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:ListInfo?.formid,forminitialdataid:props.courselistid+"filters",formbasket:props.courselistid+"filters"}}}):null
     }
 

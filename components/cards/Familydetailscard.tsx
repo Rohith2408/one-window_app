@@ -6,7 +6,7 @@ import clock_icon from '../../assets/images/misc/clock.png'
 import suitcase_icon from '../../assets/images/misc/workexperience.png'
 import { Image } from "expo-image"
 import { Word2Sentence, formatDate, getDevice, profileUpdator } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, setComponentInfo } from "../../constants"
 import delete_icon from '../../assets/images/misc/delete-black.png'
 import edit_icon from '../../assets/images/misc/edit-black.png'
 import loading_gif from '../../assets/images/misc/loader.gif'
@@ -264,6 +264,7 @@ const Familydetailscard=(props:{data:FamilyInfo,index:number})=>{
 
     const edit=()=>{
         //console.log(props.data.RelationshipWithStudent)
+        setComponentInfo("Form","title","Family Details")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Familydetails",forminitialdataid:props.data.RelationshipWithStudent}}}):null
     }
 

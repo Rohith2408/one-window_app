@@ -8,7 +8,7 @@ import Loadinglistscreen from "../resources/Loadinglistscreen"
 import add_icon from '../../assets/images/misc/add.png'
 import { Image } from "expo-image"
 import { getDevice } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, setComponentInfo } from "../../constants"
 import emptylist from '../../assets/images/illustrations/angry.png'
 import { addToBasket } from "../../constants/basket"
 import Familydetailscard from "../cards/Familydetailscard"
@@ -66,10 +66,6 @@ const Expertsintro=(props:any)=>{
     useEffect(()=>{
 
     },[])
-
-    const add=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Familydetails"}}}):null
-    }
 
     return(
         <View style={{flex:1,padding:10}}>

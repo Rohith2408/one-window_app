@@ -11,7 +11,7 @@ import go_icon from '../../assets/images/misc/back.png'
 import expert_icon from '../../assets/images/profile/expert.png'
 import preferences_icon from '../../assets/images/profile/preferences.png'
 import { getDevice, getServerRequestURL, resetStore, serverRequest } from "../../utils"
-import { Fonts, Themes, secureStoreKeys } from "../../constants"
+import { Fonts, Themes, secureStoreKeys, setComponentInfo } from "../../constants"
 import useNavigation from "../../hooks/useNavigation"
 import * as SecureStore from 'expo-secure-store'
 import { addToBasket } from "../../constants/basket"
@@ -150,7 +150,7 @@ const Personalinfo=()=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const options=useRef([
-        {title:"My Details",icon:personal_icon,screen:{id:"Form",params:{formid:"Mydetails"}}},
+        {title:"My Details",icon:personal_icon,screen:{id:"Form",title:"My Details",params:{formid:"Mydetails"}}},
         {title:"Family Details",icon:documents_icon,screen:{id:"Familydetails"}},
         {title:"Address",icon:address_icon,screen:{id:"Address"}},
         {title:"Education History",icon:education_icon,screen:{id:"Educationhistory",params:undefined}},
@@ -160,7 +160,8 @@ const Personalinfo=()=>{
     ]).current
     const [path,navigate]=useNavigation()
 
-    const openScreen=(screen:{id:string,params:any})=>{
+    const openScreen=(screen:{id:string,params:any,title?:string})=>{
+        screen.id=="Form"?setComponentInfo("Form","title",screen.title):null
         navigate?navigate({type:"AddScreen",payload:{screen:screen.id,params:screen.params}}):null
     }
 

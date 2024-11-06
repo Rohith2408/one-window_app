@@ -1,5 +1,5 @@
 
-import { Fonts, Tests, Themes } from "../../constants"
+import { Fonts, Tests, Themes, setComponentInfo } from "../../constants"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { useRef } from "react"
@@ -72,6 +72,7 @@ const Testoptions=()=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     const openForm=(test:string)=>{
+        setComponentInfo("Form","title","Test")
         navigate?navigate({type:"RemoveScreen"}):null
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:test,forminitialdataid:test}}}):null
     }
