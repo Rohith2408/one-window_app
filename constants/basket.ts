@@ -12,8 +12,8 @@ const setBasket=(id:string,data:any)=>{
 }
 
 const addToBasket=(id:string,data:any)=>{
-    let res=getBasket(id)
-    //console.log("add2",id,data,res)
+    let res=basket.find((item)=>item.id==id)
+    console.log("add2",id,data,res)
     if(res!=undefined)
     {
         setBasket(id,data)

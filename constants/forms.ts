@@ -1901,6 +1901,23 @@ const forms:FormInfo[]=[
                     event:"onTextInput",
                     handler:undefined
                 },
+                validator:(data:string)=>{
+                    let startDate=getBasket("startdate");
+                    let res:ServerResponse={
+                        success:true,
+                        message:"",
+                        data:undefined
+                    }
+                    console.log("sttttaaaarrrttt",startDate);
+                    if(startDate)
+                    {
+                        let endDateObj=new Date(data);
+                        let startDateObj=new Date(startDate)
+                        res.success=endDateObj.getTime()>startDateObj.getTime()
+                        res.message="End date cannot be before Start date"
+                    }
+                    return res
+                },
                 onFocus:{
                     event:"onFocus"
                 }
