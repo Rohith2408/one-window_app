@@ -185,7 +185,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
             isEmpty=(info?.emptyChecker)?(info.emptyChecker(field.value).success):(field.value==undefined || field.value?.length==0)
             //console.log("bhai",field.id,isEmpty,field.value,info?.emptyChecker?info.emptyChecker(field.value):"ledu");
             !isEmpty ? validation=(info?.validator)?info.validator(field.value):{success:true,message:"",data:undefined} :null
-            error=(isEmpty && !info?.isOptional)?"Field cannot be empty":(!validation.success?validation.message:undefined)
+            error=(isEmpty && !info?.isOptional)?info?.title+" cannot be empty":(!validation.success?validation.message:undefined)
             error?errors.push({id:field.id,error:error}):null
         })
         return errors;
