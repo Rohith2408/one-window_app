@@ -1063,6 +1063,16 @@ export interface Advisor{
     _id: string
 }
 
+export interface Advisor_compact{
+    _id:string,
+    firstName: string,
+    lastName: string,
+    displayPicSrc: string,
+    email: string,
+    userType:string,
+    role: string
+}
+
 export interface Meeting_Server{
     _id:string,
     user: User,
@@ -1172,15 +1182,7 @@ export interface PurchasedProduct{
     user: string,
     category: string,
     cancellationRequest: boolean,
-    advisors: {
-        _id:string,
-        role: string,
-        displayPicSrc: string,
-        email: string,
-        userType: string,
-        firstName: string,
-        lastName: string,
-    }[],
+    advisors:Advisor_compact[],
     docChecklist:  {
         name: string,
         isChecked: false,

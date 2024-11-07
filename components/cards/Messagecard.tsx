@@ -358,7 +358,7 @@ const Normal=(props:Message)=>{
     }
 
     return(
-        <View style={{gap:5,alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start"}}>
+        <View style={{gap:5,alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start",maxWidth:"50%"}}>
             {
                 props.sender && props.sender._id==undefined
                 ?

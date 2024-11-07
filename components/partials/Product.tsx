@@ -394,7 +394,7 @@ const Product=(props:{productId:string})=>{
                     {
                         product.advisors.map((advisor,i)=>
                         <Pressable onPress={()=>showExpert(advisor._id)}>
-                            <Expertcompactcard index={i} {...advisors?.find((item)=>item.info._id==advisor._id)}/>
+                            <Expertcompactcard index={i} {...advisor}/>
                             {/* <Expertcard index={i} {...advisors?.find((item)=>item.info._id==advisor._id)}/> */}
                         </Pressable>
                         )

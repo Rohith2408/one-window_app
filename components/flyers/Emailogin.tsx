@@ -151,6 +151,7 @@ const Emaillogin=()=>{
             routeType:"public",
             body:{email:email}
         })
+        console.log("login res",res);
         res.success?setScreen("verify-otp"):setError(res.message);
         return res.success;
     }

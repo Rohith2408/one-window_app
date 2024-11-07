@@ -458,7 +458,14 @@ const stringEmptyChecker=(str:string)=>str.length==0?true:false
 const arrayEmptyChecker=(arr:any[])=>arr.length==0?true:false
 
 export const pickDocument=async (sizeLimit:number)=>{
-  let res:DocumentPicker.DocumentPickerResult=await DocumentPicker.getDocumentAsync({type: 'application/pdf'})
+  let res:DocumentPicker.DocumentPickerResult=await DocumentPicker.getDocumentAsync({
+    type: [
+      'image/png',
+      'image/jpeg',
+      'application/pdf'
+    ],
+    copyToCacheDirectory: false,
+  })
   let response:ServerResponse={
       success:false,
       data:null,
@@ -473,7 +480,7 @@ export const pickDocument=async (sizeLimit:number)=>{
           let uploadedFile={
             uri : res.assets[0].uri,
             type: res.assets[0].mimeType,
-            name: res.assets[0].name
+            name: new Date().getTime()+res.assets[0].name
           };
           response.success=true;
           response.data=uploadedFile;

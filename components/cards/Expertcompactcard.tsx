@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native"
-import { Advisor } from "../../types"
+import { Advisor, Advisor_compact } from "../../types"
 import { Word2Sentence, camelCaseToString, getDevice, getLightThemeColor, getThemeColor, setWordCase } from "../../utils"
 import { Image } from "expo-image"
 import { useRef } from "react"
@@ -99,15 +99,15 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Expertcompactcard=(props:Advisor & {index:number})=>{
+const Expertcompactcard=(props:Advisor_compact & {index:number})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     
     return(
         <View style={[GeneralStyles.main_wrapper]}>
-            <View><Image style={[styles[Device].dp]} source={props.info.displayPicSrc?props.info.displayPicSrc:default_icon}/></View>
-            <View style={{flex:1}}><Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(props.info.firstName)}</Text></View>
-            <Text style={[styles[Device].role,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.3)}]}>{camelCaseToString(props.info.role)}</Text>
+            <View><Image style={[styles[Device].dp]} source={props.displayPicSrc?props.displayPicSrc:default_icon}/></View>
+            <View style={{flex:1}}><Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(props.firstName)}</Text></View>
+            <Text style={[styles[Device].role,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.3)}]}>{camelCaseToString(props.role)}</Text>
             <View><Image style={[styles[Device].go,{transform:[{scaleX:-1}]}]} source={go_icon}/></View>
         </View> 
     )
