@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { getDevice } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         width:"100%",
@@ -73,7 +73,7 @@ const Successfull=(props:{message:string,preventAutoHide?:boolean,hideInterval?:
     },[])
 
     return(
-        <View style={[GeneralStyles.main_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginSmall]}>
             <Text style={[styles[Device].text,{color:"green",fontFamily:Fonts.NeutrifStudio.Bold}]}>Success!</Text>
             <Text style={[styles[Device].subtext,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.message}</Text>
         </View>

@@ -162,8 +162,19 @@ const requests:RequestInfo[]=[
     {
         id:"message-send",
         inputValidator:(data:{content:string,chatId:string,repliedTo:string,uploaded_file:any})=>{
-            let allFields=(data && data.content.length!=0 && data.chatId)?true:false
-            return {success:allFields,data:undefined,message:allFields?"":"All fields are not present"}
+            let succ=false;
+            if(data && data.chatId)
+            {
+                if(data.uploaded_file==undefined && data.content.length>0)
+                {
+                    succ=true
+                }
+                if(data.uploaded_file!=undefined)
+                {
+                    succ=true;
+                }
+            }
+            return {success:succ,data:undefined,message:succ?"":"All fields are not present"}
         },
         serverCommunicator:async (data:{content:string,chatId:string,repliedTo:string,uploaded_file:any})=>{
             console.log("send data",data);

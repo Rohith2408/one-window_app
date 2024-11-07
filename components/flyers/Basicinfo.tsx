@@ -313,7 +313,7 @@ const Basicinfo=()=>{
             <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false} ref={scrollRef} horizontal pagingEnabled style={{width:dimensions.width,height:dimensions.height}}>
             {
                 requiredData.map((item,i)=>
-                    <View style={{width:dimensions.width,height:dimensions.height}}><Container setScreen={setScreen} total={requiredData.length} index={i} {...item}/></View>
+                    <View style={{width:dimensions.width,height:dimensions.height,padding:15}}><Container setScreen={setScreen} total={requiredData.length} index={i} {...item}/></View>
                 )
             }
             </ScrollView>

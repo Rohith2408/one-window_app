@@ -139,7 +139,7 @@ const Myorders=()=>{
                     <Pressable onPress={openExplore}><Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Start exploring now</Text></Pressable>
                 </View>
                 :
-                <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,paddingTop:25}}>
+                <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,padding:15}}>
                 {
                     orders.data.map((order,i)=>
                     <Transitionview effect="pan" delay={100*i}>

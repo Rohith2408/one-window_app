@@ -5,7 +5,7 @@ import { PackageProductsValidator, Word2Sentence, compareProducts, formatDate, g
 import { useAppSelector } from "../../hooks/useAppSelector"
 import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import location_icon from '../../assets/images/misc/location.png'
 import { store } from "../../store"
 import Expertcard from "../cards/Expertcard"
@@ -15,8 +15,7 @@ import Styledtext from "../resources/Styledtext"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        width:"100%",
-        height:"100%",
+        flex:1,
         padding:10,
         backgroundColor:'white',
         gap:20
@@ -358,7 +357,7 @@ const Product=(props:{productId:string})=>{
     console.log("products",JSON.stringify(product,null,2));
 
     return(
-        <View style={[GeneralStyles.main_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginMini]}>
         {
             product
             ?

@@ -5,6 +5,7 @@ import Loadinglistscreen from "../resources/Loadinglistscreen";
 import useNavigation from "../../hooks/useNavigation";
 import { useRef } from "react";
 import { getDevice } from "../../utils";
+import { appStandardStyles } from "../../constants";
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -56,7 +57,7 @@ const Address=()=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
-        <View style={[GeneralStyles.wrapper]}>
+        <View style={[GeneralStyles.wrapper,appStandardStyles.screenMarginSmall]}>
         {
             personalData.responseStatus=="not_recieved"
             ?

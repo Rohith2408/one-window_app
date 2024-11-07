@@ -9,7 +9,7 @@ import { addOrders } from "../../store/slices/ordersSlice"
 import { Image } from "expo-image"
 import Packagecard from "../cards/Packagecard"
 import Unpurchasedproductscard from "../cards/Unpurchasedproductcard"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import { useEffect, useRef, useState } from "react"
 import loader from '../../assets/images/misc/loader.gif'
 import { store } from "../../store"
@@ -208,12 +208,12 @@ const Ordersummary=()=>{
                     ?
                     <Packagecard {...orderInfo.package} index={0}/>
                     :
-                    <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>No package selected</Text>
+                    <Text style={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>No package selected</Text>
                 }
             </View>
-            <View style={{flex:1,gap:15,padding:10}}>
+            <View style={{flex:1,gap:5,padding:10}}>
                 <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
-                <ScrollView contentContainerStyle={[styles[Device].products_wrapper,{padding:5,paddingTop:0,paddingBottom:20}]}>
+                <ScrollView contentContainerStyle={[styles[Device].products_wrapper,{padding:10}]}>
                 {
                     orderInfo.products.map((product,i)=>
                     <View style={{alignSelf:"stretch",flexDirection:"row",alignItems:'center'}}>

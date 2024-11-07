@@ -20,7 +20,7 @@ const GeneralStyles=StyleSheet.create({
         flex:1,
         justifyContent:"center",
         alignItems:'center',
-        padding:15
+        padding:5
     },
     sub_wrapper:{
         display:"flex",

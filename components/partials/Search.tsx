@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { Animated, Dimensions, LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
 import { ListItem, ServerResponse, UniversityListObj, UniversitySearchObj } from "../../types"
 import { Word2Sentence, getDevice, getServerRequestURL, getThemeColor, serverRequest, truncateString } from "../../utils"
-import { Fonts, Themes, disciplines, subDisciplines, topUniversities } from "../../constants"
+import { Fonts, Themes, appStandardStyles, disciplines, subDisciplines, topUniversities } from "../../constants"
 import { Image } from "expo-image"
 import go_icon from '../../assets/images/misc/back.png'
 import discipline_icon from '../../assets/images/misc/discipline.png'
@@ -348,7 +348,7 @@ const Search=(props:{initialSearch:string})=>{
     },[search])
 
     return(
-        <View style={[GeneralStyles.main_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginMini]}>
             <View style={{flexDirection:'row',alignItems:'center',borderRadius:100,borderWidth:1.5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
                 <View style={{flex:1}}>
                     <Dynamicsearch initialSearch={props.initialSearch} onSearch={onSearch}/>

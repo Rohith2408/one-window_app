@@ -5,7 +5,7 @@ import { ServerResponse, User } from "../../types"
 import emptylist from '../../assets/images/misc/emptylist.png'
 import useNavigation from "../../hooks/useNavigation"
 import { getDevice, getFriends, getServerRequestURL, serverRequest } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import { store } from "../../store"
 import add_icon from '../../assets/images/misc/add-friend.png'
 import loader from '../../assets/images/misc/loader.gif'
@@ -193,7 +193,7 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
 
     return(
         <View style={{flex:1,paddingTop:30}}>
-        <View style={{borderRadius:100,borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}><TextInput autoFocus onChangeText={(txt)=>setSearch(txt)} placeholder="Search..." value={search} style={[styles[Device].search,{padding:10}]}/></View>
+        <View style={[{borderRadius:100,borderWidth:1.5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)},appStandardStyles.screenMarginSmall]}><TextInput autoFocus onChangeText={(txt)=>setSearch(txt)} placeholder="Search..." value={search} style={[styles[Device].search,{padding:10}]}/></View>
         {
             users!=undefined
             ?
@@ -207,7 +207,7 @@ const Chatsearch=(props:{initialChatSearch:string})=>{
                     <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button below to start adding your work experience</Text>
                 </View>
                 :
-                <ScrollView style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:20}}>
+                <ScrollView style={{flex:1}} contentContainerStyle={{gap:30,padding:20}}>
                 {
                     users.filter((user)=>!friends.find((item)=>item?._id==user._id)).map((user,i)=>
                     <View key={user._id} style={[GeneralStyles.card]}>

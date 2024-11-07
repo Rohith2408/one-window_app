@@ -8,7 +8,7 @@ import Listselection from "../resources/Listselection"
 import useNavigation from "../../hooks/useNavigation"
 import { requests } from "../../constants/requests"
 import Packagecard from "../cards/Packagecard"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import Unpurchasedproductscard from "../cards/Unpurchasedproductcard"
 import tick from "../../assets/images/misc/tick_black.png"
 import { Image } from "expo-image"
@@ -166,9 +166,9 @@ const Addtoorder=(props:{orderinfoid:string})=>{
     console.log("infff",JSON.stringify(errors.current,null,2));
 
     return(
-        <View style={{flex:1,paddingBottom:20}}>
-            <View style={{padding:5,gap:15}}>
-                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Package</Text>
+        <View style={{flex:1,gap:30}}>
+            <View style={[appStandardStyles.screenMarginSmall,{gap:15}]}>
+                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Package</Text>
                 <View>
                     <Packagecard {...orderInfo.package} index={0}/>
                 </View>
@@ -180,9 +180,9 @@ const Addtoorder=(props:{orderinfoid:string})=>{
                 <View>
                 </View>
             </View>
-            <View style={{flex:1,gap:15,padding:5}}>
-                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
-                <ScrollView contentContainerStyle={{gap:30,paddingBottom:20}}>
+            <View style={{flex:1}}>
+                <Text style={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
+                <ScrollView contentContainerStyle={{gap:10,padding:15}}>
                 {
                     Products.map((product,i)=>
                     <View key={product.course._id+product.intake} style={{gap:7.5}}>
@@ -196,7 +196,7 @@ const Addtoorder=(props:{orderinfoid:string})=>{
             {
                 (errors.current.category!=undefined && errors.current.products!=undefined && errors.current.category.length==0 && errors.current.products.length==0 && errors.current.general!=undefined && errors.current.general.length==0)
                 ?
-                <View style={{alignSelf:"stretch"}}><Asynchronousbutton successText="Added Succesfully" idleText="Add Products" failureText="Something went wront" callback={addToOrder}/></View>
+                <View style={[{alignSelf:"stretch"},appStandardStyles.screenMarginLarge]}><Asynchronousbutton successText="Added Succesfully" idleText="Add Products" failureText="Something went wront" callback={addToOrder}/></View>
                 // <Pressable onPress={addToOrder} style={{alignSelf:'center',borderRadius:100,borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}}><Text style={[styles[Device].checkout,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1),padding:5}]}>Add to Order</Text></Pressable>
                 :
                 null

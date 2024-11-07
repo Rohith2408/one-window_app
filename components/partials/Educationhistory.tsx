@@ -21,7 +21,7 @@ import { Word2Sentence, formatDate, getDevice, profileUpdator } from "../../util
 import { store } from "../../store"
 import { setEducationHistory } from "../../store/slices/educationHistorySlice"
 import { useRef, useState } from "react"
-import { Fonts, Themes, setComponentInfo } from "../../constants"
+import { Fonts, Themes, appStandardStyles, setComponentInfo } from "../../constants"
 import { addToBasket } from "../../constants/basket"
 
 const GeneralStyles=StyleSheet.create({
@@ -306,7 +306,7 @@ const Educationhistory=()=>{
     
 
     return(
-        <View style={{flex:1}}>
+        <View style={[{flex:1},appStandardStyles.screenMarginMini]}>
         {
             education.responseStatus=="recieved"
             ?

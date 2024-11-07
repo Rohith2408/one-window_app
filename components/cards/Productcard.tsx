@@ -274,7 +274,7 @@ const Productcard=(props:PurchasedProduct & {index:number})=>{
                     </View>
                     <View style={{flexDirection:"row",gap:5,backgroundColor:Themes.ExtraLight.OnewindowPurple,borderRadius:100}}>
                         {/* <Image style={[styles[Device].location_icon]} source={processing_icon}/> */}
-                        <Text style={[styles[Device].text3,{padding:7.5,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.stage}</Text>
+                        <Text style={[styles[Device].text3,{padding:7.5,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.stage}</Text>
                     </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>

@@ -112,7 +112,7 @@ const MobileSStyles=StyleSheet.create({
 const MobileMStyles=StyleSheet.create({
     name:{
         lineHeight:22,
-        fontSize:14
+        fontSize:16
     },
     category:{
         fontSize:12
@@ -146,7 +146,7 @@ const MobileMStyles=StyleSheet.create({
 const MobileLStyles=StyleSheet.create({
     name:{
         lineHeight:20,
-        fontSize:14
+        fontSize:16
     },
     category:{
         fontSize:12
@@ -217,7 +217,7 @@ const Recommendationcard=React.memo((props:Recommendation & {index:number})=>{
                         <View style={{width:5,height:5,borderRadius:10,backgroundColor:"#69FF6F"}}></View>
                         <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.course.studyLevel)}</Text>
                     </Animated.View>
-                    <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.course.name}</Text>
+                    <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.course.name}</Text>
                     <View style={{alignSelf:"flex-start",borderRadius:10,padding:5,display:"flex",alignItems:"center",flexDirection:"row",gap:5,backgroundColor:props.possibilityOfAdmit=="Safe"?Themes.Light.OnewindowPurple(1):props.possibilityOfAdmit=="Moderate"?Themes.Light.OnewindowYellow(1):Themes.Light.OnewindowRed(1)}}>
                         <Image style={[styles[Device].clock_icon]} source={upload_icon} />
                         <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.course.university.name}</Text>

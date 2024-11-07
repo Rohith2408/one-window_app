@@ -327,7 +327,7 @@ const Wishlistcard=(props:{data:wishlistItem,index:number})=>{
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.data.name}</Text>
                     <View style={{flexDirection:"row",gap:5}}>
                         <Image style={[styles[Device].info_icon]} source={clock_icon}/>
-                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence(props.data.subDiscipline,"",",")}</Text>
+                        <Text style={[styles[Device].text3,{maxWidth:"95%"},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence(props.data.subDiscipline,"",",")}</Text>
                     </View>
                     <View style={{flexDirection:"row",gap:5}}>
                         <Image style={[styles[Device].location_icon]} source={apply_icon}/>

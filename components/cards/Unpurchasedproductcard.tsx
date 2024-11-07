@@ -131,23 +131,23 @@ const MobileSStyles=StyleSheet.create({
 const MobileMStyles=StyleSheet.create({
     name:{
         lineHeight:22,
-        fontSize:14
+        fontSize:16
     },
     category:{
-        fontSize:12
+        fontSize:14
     },
     intake:{
-        fontSize:12
+        fontSize:14
     },
     icon:{
-        width:24,
-        height:24,
+        width:28,
+        height:28,
         resizeMode:"contain",
         borderRadius:100
     },
     icon_bg:{
-        width:24,
-        height:24,
+        width:28,
+        height:28,
         left:-5,
         top:5,
         borderRadius:100
@@ -238,12 +238,12 @@ const Unpurchasedproductscard=(props:{data:Product,index:number,hideDelete?:bool
                     <Image source={props.data.course.university.logoSrc} style={[styles[Device].icon]}/>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
-                    <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.data.course.name}</Text>
-                    <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5}}>
+                    <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.data.course.name}</Text>
+                    <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5,opacity:0.7}}>
                         <Image style={[styles[Device].clock_icon]} source={products_icon} />
                         <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{setWordCase(props.data.category)}</Text>
                     </View>
-                    <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5,opacity:0.6}}>
+                    <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5,opacity:0.7}}>
                         <Image style={[styles[Device].clock_icon]} source={clock_icon} />
                         <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{formatDate(props.data.intake)}</Text>
                     </View>

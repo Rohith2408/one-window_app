@@ -3,7 +3,7 @@ import { AppliedFilter, AppliedQuickFilter, Event, ListItem } from "../../types"
 import Listing from "./Listing"
 import { useEffect, useRef, useState } from "react";
 import Tabbarlite from "../resources/Tabbarlite";
-import { Fonts, Themes } from "../../constants";
+import { Fonts, Themes, appStandardStyles } from "../../constants";
 import useNavigation from "../../hooks/useNavigation";
 import { addToBasket } from "../../constants/basket";
 import Listselection from "../resources/Listselection";
@@ -200,20 +200,22 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
 
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:15}}>
-            <Pressable style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100}} onPress={openSearch}><Text style={[styles[Device].search,{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}]}>{props.programslistquery.search?props.programslistquery.search:"Search..."}</Text></Pressable>
-            <Listselection
-                direction="horizontal"
-                selectionStyle="background"
-                initialSelection={[{label:props.initialexploretab,value:props.initialexploretab}]}
-                styles={{contentcontainer:{gap:10}}}
-                onselection={tabSelected}
-                options={{
-                    list:tabs,
-                    idExtractor:(data:ListItem)=>data.label,
-                    labelExtractor:(data:any)=>data.label,
-                    selectionMode:"single"
-                }}
-            />
+            <Pressable style={[{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100},appStandardStyles.screenMarginSmall]} onPress={openSearch}><Text style={[styles[Device].search,{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}]}>{props.programslistquery.search?props.programslistquery.search:"Search..."}</Text></Pressable>
+            <View style={[appStandardStyles.screenMarginSmall]}>
+                <Listselection
+                    direction="horizontal"
+                    selectionStyle="background"
+                    initialSelection={[{label:props.initialexploretab,value:props.initialexploretab}]}
+                    styles={{contentcontainer:{gap:10}}}
+                    onselection={tabSelected}
+                    options={{
+                        list:tabs,
+                        idExtractor:(data:ListItem)=>data.label,
+                        labelExtractor:(data:any)=>data.label,
+                        selectionMode:"single"
+                    }}
+                />
+            </View>
             <ScrollView 
             scrollEnabled={false}
             ref={ref}

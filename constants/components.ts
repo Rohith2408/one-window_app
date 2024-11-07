@@ -141,7 +141,7 @@ const components:ScreenInfo[]=[
     {id:"Recommendations",component:Recommendations,type:"Partial",title:"Recommendations",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Coursepreference",component:Coursepreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Countrypreference",component:Countrypreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
-    {id:"Degreepreference",component:Degreepreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Degreepreference",component:Degreepreference,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,height:0.3,width:1,opacity:1},final:{x:0,y:0.7,scale:1,opacity:1,height:0.3,width:1}},removalThreshold:5/6},
     {id:"Currentlyworking",component:Currentlyworking,type:"Flyer",props:["currentlyWorkingBasketid"],swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,height:0.3,width:1,opacity:1},final:{x:0,y:0.7,scale:1,opacity:1,height:0.3,width:1}},removalThreshold:5/6},
     {id:"Existingorders",component:Existingorders,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Basicinfo",component:Basicinfo,type:"Flyer",nonClosable:true,swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},

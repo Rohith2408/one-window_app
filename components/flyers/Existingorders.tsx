@@ -15,6 +15,7 @@ import Listselection from "../resources/Listselection"
 import Ordercard from "../cards/Ordercard"
 import { addToBasket, getBasket } from "../../constants/basket"
 import Ordercompactcard from "../cards/Ordercompactcard"
+import Styledtext from "../resources/Styledtext"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -32,7 +33,7 @@ const TabStyles=StyleSheet.create({
         fontSize:14
     },
     checkout:{
-        fontSize:12
+        fontSize:18
     },
 })
 
@@ -41,10 +42,11 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     heading:{
-        fontSize:14
+        fontSize:14,
+        lineHeight:20
     },
     checkout:{
-        fontSize:12
+        fontSize:14
     },
 })
 
@@ -57,7 +59,7 @@ const MobileMStyles=StyleSheet.create({
         lineHeight:24
     },
     checkout:{
-        fontSize:14
+        fontSize:16
     },
 })
 
@@ -66,10 +68,11 @@ const MobileLStyles=StyleSheet.create({
         fontSize:14
     },
     heading:{
-        fontSize:16
+        fontSize:16,
+        lineHeight:24
     },
     checkout:{
-        fontSize:14
+        fontSize:16
     },
 })
 
@@ -112,7 +115,8 @@ const Existingorders=()=>{
 
     return(
         <View style={[GeneralStyles.wrapper,{gap:20}]}>
-            <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Do you want to add the products to an existing purchase?</Text>
+            <Styledtext styles={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Do you want to add the products to an existing purchase?" focusWord="products"/>
+            {/* <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}></Text> */}
             <View style={{flex:1}}>
             <Listselection
                 {...{

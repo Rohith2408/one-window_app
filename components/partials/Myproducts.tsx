@@ -136,7 +136,7 @@ const Myproducts=()=>{
                     <Text style={[styles[Device].no_products,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Not purchased any products yet!</Text>
                 </View>
                 :
-                <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,paddingTop:30,paddingRight:15}}>
+                <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,padding:15}}>
                 {
                     products.data.map((product,i)=>
                     <Transitionview effect="pan" delay={100*i}>

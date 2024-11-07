@@ -205,7 +205,7 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     test_date:{
-        fontSize:12
+        fontSize:10
     },
     no_workexperience:{
         fontSize:16
@@ -270,7 +270,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:14
     },
     test_date:{
-        fontSize:10
+        fontSize:12
     },
     no_workexperience:{
         fontSize:18
@@ -335,7 +335,7 @@ const MobileLStyles=StyleSheet.create({
         fontSize:14
     },
     test_date:{
-        fontSize:10
+        fontSize:12
     },
     no_workexperience:{
         fontSize:18
@@ -393,7 +393,7 @@ const Testscores=()=>{
                         <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Test Scores play a major role in recommending programs for you, click on the above plus icon to start adding your scores now!</Text>
                     </View>
                     :
-                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:60,paddingTop:30}}>
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:60,padding:5,paddingTop:30}}>
                     {
                         tests.data
                         ?

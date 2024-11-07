@@ -2,7 +2,7 @@ import { useEffect, useReducer, useRef, useState } from "react"
 import { FormReducer } from "../../reducers/FormReducer";
 import { Event, FormField as FieldType, FormData, Form as FormType, ServerResponse} from "../../types";
 import { Animated, Keyboard, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import { Fonts, Themes, forms } from "../../constants";
+import { Fonts, Themes, appStandardStyles, forms } from "../../constants";
 import { getDevice } from "../../utils";
 import useNavigation from "../../hooks/useNavigation";
 import Asynchronousbutton from "./Asynchronousbutton";
@@ -261,11 +261,11 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                 {
                     formInfo?.title
                     ?
-                    <Text style={[GeneralStyles.form_title,styles[Device].form_title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{formInfo?.title}</Text>
+                    <Text style={[GeneralStyles.form_title,appStandardStyles.screenMarginSmall,styles[Device].form_title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{formInfo?.title}</Text>
                     :
                     null
                 }
-                <ScrollView style={{flex:1}} contentContainerStyle={[GeneralStyles.fields,{paddingBottom:keyboard.height,paddingRight:15}]}>
+                <ScrollView style={{flex:1}} keyboardShouldPersistTaps="handled" contentContainerStyle={[GeneralStyles.fields,{paddingBottom:keyboard.height,padding:15}]}>
                 {
                     fields.map((field,i)=>
                     <Transitionview style={[GeneralStyles.field]} effect="pan" delay={70*i}>
@@ -275,7 +275,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                 }
                 </ScrollView>
             </View>
-            <Animated.View style={[{transform:[{translateY:offset}]}]}><Asynchronousbutton idleText={formInfo?.submit.idleText} successText={formInfo?.submit.successText} failureText={formInfo?.submit.failureText} callback={onSubmit}/></Animated.View>
+            <Animated.View style={[appStandardStyles.screenMarginLarge,{transform:[{translateY:offset}]}]}><Asynchronousbutton idleText={formInfo?.submit.idleText} successText={formInfo?.submit.successText} failureText={formInfo?.submit.failureText} callback={onSubmit}/></Animated.View>
         </View>
     )
 }
@@ -302,7 +302,7 @@ const Field=(props:{info:FieldType,data:FormData,isFocussed:boolean,index:number
     }
 
     return(
-        <View style={{flex:1,zIndex:props.isFocussed?1:-1}}>
+        <View style={{flex:1,zIndex:props.isFocussed?1:-1,gap:7.5}}>
             <Text style={[GeneralStyles.field_title,styles[Device].field_title,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.info.title}</Text>
             <Container id={props.info.id} {...props.info.componentInfo.props} value={props.data.value} isFocussed={props.isFocussed} eventHandler={(e:Event)=>{props.eventHandler({...e,triggerBy:props.info.id})}}></Container>
             {

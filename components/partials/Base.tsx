@@ -9,6 +9,7 @@ import Invalidpath from "./Invalidpath"
 import Navbar from "../resources/Navbar"
 import Community from "../screens/Community"
 import Chats from "../screens/Chats"
+import { appStandardStyles } from "../../constants"
 
 const Base=(props:{tab:string})=>{
 
@@ -35,7 +36,7 @@ const Base=(props:{tab:string})=>{
     console.log("base props",props)
 
     return(
-        <View style={{width:"100%",height:"100%",gap:10}}>
+        <View style={[{flex:1,alignSelf:"stretch"},appStandardStyles.screenMarginSmall]}>
             <View style={[styles.screenWrapper]}><Tabnavigator screens={Screens} currentTab={{id:props.tab,props:undefined}} invalidPathScreen={Invalidpath}></Tabnavigator></View>
             <View style={[styles.navWrapper]}><Navbar tab={props.tab}></Navbar></View>
         </View>

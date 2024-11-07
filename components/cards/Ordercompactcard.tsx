@@ -129,16 +129,16 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:12
+        fontSize:14
     },
     text2:{
-        fontSize:10
+        fontSize:12
     },
     text3:{
-        fontSize:10
+        fontSize:12
     },
     title:{
-        fontSize:10
+        fontSize:12
     },
 })
 const MobileMStyles=StyleSheet.create({
@@ -171,13 +171,13 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:14
+        fontSize:16
     },
     text2:{
-        fontSize:12
+        fontSize:14
     },
     text3:{
-        fontSize:12
+        fontSize:14
     },
     title:{
         fontSize:12
@@ -213,13 +213,13 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:14
+        fontSize:16
     },
     text2:{
-        fontSize:12
+        fontSize:14
     },
     text3:{
-        fontSize:12
+        fontSize:14
     },
     title:{
         fontSize:12

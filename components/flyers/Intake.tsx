@@ -25,7 +25,7 @@ const TabStyles=StyleSheet.create({
 
 const MobileSStyles=StyleSheet.create({
     apply:{
-        fontSize:12
+        fontSize:14
     },
     heading:{
         fontSize:14

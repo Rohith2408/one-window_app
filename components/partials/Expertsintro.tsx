@@ -8,7 +8,7 @@ import Loadinglistscreen from "../resources/Loadinglistscreen"
 import add_icon from '../../assets/images/misc/add.png'
 import { Image } from "expo-image"
 import { getDevice } from "../../utils"
-import { Fonts, Themes, setComponentInfo } from "../../constants"
+import { Fonts, Themes, appStandardStyles, setComponentInfo } from "../../constants"
 import emptylist from '../../assets/images/illustrations/angry.png'
 import { addToBasket } from "../../constants/basket"
 import Familydetailscard from "../cards/Familydetailscard"
@@ -68,7 +68,7 @@ const Expertsintro=(props:any)=>{
     },[])
 
     return(
-        <View style={{flex:1,padding:10}}>
+        <View style={[{flex:1,paddingTop:10},appStandardStyles.screenMarginMedium]}>
             <ScrollView style={{flex:1}} contentContainerStyle={{gap:24}}>
             {
                 data.map((expert,i)=>

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { getDevice } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         width:"100%",
@@ -77,7 +77,7 @@ const Error=(props:{error:string,preventAutoHide?:boolean,hideInterval?:number})
     },[])
 
     return(
-        <View style={[GeneralStyles.main_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginSmall]}>
             <Text style={[styles[Device].text,{color:"red",fontFamily:Fonts.NeutrifStudio.Bold}]}>Oops!</Text>
             <Text style={[styles[Device].subtext,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.error}</Text>
         </View>

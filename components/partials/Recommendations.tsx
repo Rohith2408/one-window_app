@@ -10,7 +10,7 @@ import useNavigation from "../../hooks/useNavigation"
 import { store } from "../../store"
 import { requests } from "../../constants/requests"
 import Loader from "../resources/Loader"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import Listselection from "../resources/Listselection"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
 import emptylist from '../../assets/images/illustrations/happy.png'
@@ -69,8 +69,8 @@ const MobileSStyles=StyleSheet.create({
         lineHeight:16
     },
     emptylist_image:{
-        width:90,
-        height:90,
+        width:120,
+        height:120,
         resizeMode:"contain"
     },
 })
@@ -87,15 +87,15 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     no_workexperience:{
-        fontSize:16
+        fontSize:18
     },
     click_message:{
-        fontSize:12,
+        fontSize:14,
         lineHeight:20
     },
     emptylist_image:{
-        width:110,
-        height:110,
+        width:140,
+        height:140,
         resizeMode:"contain"
     },
 })
@@ -113,17 +113,17 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     no_workexperience:{
-        fontSize:16
+        fontSize:18
     },
     click_message:{
-        fontSize:12,
+        fontSize:14,
         lineHeight:20
     },
     emptylist_image:{
-        width:110,
-        height:110,
+        width:140,
+        height:140,
         resizeMode:"contain"
-    }
+    },
 })
 
 const styles={
@@ -197,23 +197,25 @@ const Recommendations=()=>{
                                 null
                             }
                             <View style={{flex:1,gap:15}}>
-                                <Listselection
-                                    direction="horizontal"
-                                    selectionStyle="background"
-                                    initialSelection={[{label:"Safe",value:"safe"}]}
-                                    blurUnSelected={true}
-                                    styles={{contentcontainer:{gap:10}}}
-                                    onselection={tabSelected}
-                                    options={{
-                                        list:tabs,
-                                        idExtractor:(data:ListItem)=>data.label,
-                                        labelExtractor:(data:any)=>data.label,
-                                        selectionMode:"single"
-                                    }}
-                                />
-                                <ScrollView horizontal scrollEnabled={false} ref={ref} style={{flex:1}} contentContainerStyle={{paddingTop:0,paddingBottom:30}}>
+                                <View style={[appStandardStyles.screenMarginMini]}>
+                                    <Listselection
+                                        direction="horizontal"
+                                        selectionStyle="background"
+                                        initialSelection={[{label:"Safe",value:"safe"}]}
+                                        blurUnSelected={true}
+                                        styles={{contentcontainer:{gap:10}}}
+                                        onselection={tabSelected}
+                                        options={{
+                                            list:tabs,
+                                            idExtractor:(data:ListItem)=>data.label,
+                                            labelExtractor:(data:any)=>data.label,
+                                            selectionMode:"single"
+                                        }}
+                                    />
+                                </View>
+                                <ScrollView horizontal scrollEnabled={false} ref={ref} style={{flex:1}} contentContainerStyle={{paddingTop:0}}>
                                     <View style={{width:dimensions.width}}>
-                                        <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:60,paddingTop:30,paddingBottom:30}}>
+                                        <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
                                         {
                                             recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Safe").map((item,i)=>
                                             <Recommendationcard {...item} index={i}/>
@@ -222,7 +224,7 @@ const Recommendations=()=>{
                                         </ScrollView>
                                     </View>
                                     <View style={{width:dimensions.width}}>
-                                        <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:60,paddingTop:30,paddingBottom:30}}>
+                                        <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
                                         {
                                             recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Moderate").map((item,i)=>
                                             <Recommendationcard {...item} index={i}/>
@@ -231,7 +233,7 @@ const Recommendations=()=>{
                                         </ScrollView>
                                     </View>
                                     <View style={{width:dimensions.width}}>
-                                        <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:60,paddingTop:30,paddingBottom:30}}>
+                                        <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
                                         {
                                             recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Ambitious").map((item,i)=>
                                             <Recommendationcard {...item} index={i}/>

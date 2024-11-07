@@ -23,7 +23,7 @@ const GeneralStyles=StyleSheet.create({
         position:'absolute',
         gap:7.5,
         bottom:20,
-        right:0,
+        right:10,
         zIndex:1,
         backgroundColor:"white",
         borderRadius:100,
@@ -181,7 +181,7 @@ const Wishlist=(props:any)=>{
                         <Pressable onPress={openExplore}><Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Start Exploreing now!</Text></Pressable>
                     </View>
                     :
-                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,paddingTop:20}}>
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,padding:15}}>
                     {
                         wishlist.data.map((item,i)=>
                         <Transitionview effect="pan" delay={100*i}>

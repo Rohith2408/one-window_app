@@ -15,6 +15,7 @@ export type NavigationActions=
         type:"AddScreen",
         payload:{
             screen:string,
+            cloneId?:string,
             params?:any,
             replaceIfExists?:boolean
         }

@@ -45,23 +45,23 @@ const MobileMStyles=StyleSheet.create({
         fontSize:12
     },
     price:{
-        fontSize:20
+        fontSize:22
     },
     wrapper:{
-        width:120,
+        width:130,
         height:115,
     }
 })
 
 const MobileLStyles=StyleSheet.create({
     name:{
-        fontSize:10
+        fontSize:12
     },
     price:{
-        fontSize:18
+        fontSize:22
     },
     wrapper:{
-        width:110,
+        width:130,
         height:105,
     }
 })

@@ -48,7 +48,7 @@ const MobileSStyles=StyleSheet.create({
         fontSize:20
     },
     book:{
-        fontSize:12
+        fontSize:14
     },
     loading:{
         width:17,
@@ -64,7 +64,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:20
     },
     book:{
-        fontSize:12
+        fontSize:16
     },
     loading:{
         width:17,
@@ -80,7 +80,7 @@ const MobileLStyles=StyleSheet.create({
         fontSize:20
     },
     book:{
-        fontSize:12
+        fontSize:16
     },
     loading:{
         width:17,
@@ -161,7 +161,7 @@ const Datetimeproselector=(props:{id:string})=>{
                     {
                         selected.date && selected.time
                         ?
-                        <Pressable onPress={()=>!isLoading?book():null} style={[{alignSelf:"center",borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),borderRadius:100}]}>
+                        <Pressable onPress={()=>!isLoading?book():null} style={[{alignSelf:"center",borderWidth:1.5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}]}>
                             {
                                 !isLoading
                                 ?

@@ -235,7 +235,7 @@ const Dropdownoptions=(props:{basketid:string})=>{
                             {/* <Pressable onPress={()=>selection({label:custom,value:custom})}><Text>Add</Text></Pressable> */}
                         </View>
                         :
-                        <ScrollView keyboardShouldPersistTaps="handled" onScroll={onScroll} style={[GeneralStyles.options_wrapper]} contentContainerStyle={{gap:15,paddingBottom:10}}>
+                        <ScrollView keyboardShouldPersistTaps="handled" onScroll={onScroll} style={[GeneralStyles.options_wrapper]} contentContainerStyle={{gap:15,paddingBottom:10,paddingRight:10}}>
                         {
                             options.current.map((item:any,i:number)=>
                             <Pressable key={item.label} onPress={()=>selection(item)} style={[GeneralStyles.option_wrapper]}>

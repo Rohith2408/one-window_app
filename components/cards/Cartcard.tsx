@@ -162,7 +162,8 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     course_name:{
-        fontSize:16
+        fontSize:16,
+        lineHeight:22
     },
     uni_name:{
         fontSize:14
@@ -182,7 +183,7 @@ const MobileLStyles=StyleSheet.create({
         fontSize:13
     },
     sub_wrapper:{
-        gap:10,
+        gap:20,
         borderRadius:30
     },
     bg_wrapper:{
@@ -196,13 +197,14 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     course_name:{
-        fontSize:15
+        fontSize:16,
+        lineHeight:22
     },
     uni_name:{
-        fontSize:13
+        fontSize:14
     },
     footer:{
-        fontSize:13
+        fontSize:14
     },
     delete:{
         width:16,

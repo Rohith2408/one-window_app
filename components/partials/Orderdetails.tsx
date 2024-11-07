@@ -5,7 +5,7 @@ import { PackageProductsValidator, Word2Sentence, compareProducts, formatDate, g
 import { useAppSelector } from "../../hooks/useAppSelector"
 import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import location_icon from '../../assets/images/misc/location.png'
 import products_icon from '../../assets/images/misc/order.png'
 import Productcard from "../cards/Productcard"
@@ -15,8 +15,7 @@ import Productcompact2card from "../cards/Productcompactcard2"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        width:"100%",
-        height:"100%",
+        flex:1,
         padding:5,
         backgroundColor:'white',
         gap:20
@@ -235,8 +234,10 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
         
     }
 
+    console.log(order?.paymentDetails);
+
     return(
-        <View style={[GeneralStyles.main_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginSmall]}>
         {
             order
             ?

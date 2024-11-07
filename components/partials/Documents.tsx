@@ -7,7 +7,7 @@ import Tabnavigator from "../../navigation/tabNavigator"
 import Invalidpath from "./Invalidpath"
 import useNavigation from "../../hooks/useNavigation"
 import { useAppSelector } from "../../hooks/useAppSelector"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import upload_icon from '../../assets/images/misc/upload.png'
 import delete_icon from '../../assets/images/misc/delete.png'
 import { Image } from "expo-image"
@@ -60,6 +60,9 @@ const TabStyles=StyleSheet.create({
     add:{
         width:20,
         height:20
+    },
+    no_doc:{
+        fontSize:18
     }
 })
 
@@ -90,6 +93,9 @@ const MobileSStyles=StyleSheet.create({
     add:{
         width:20,
         height:20 
+    },
+    no_doc:{
+        fontSize:14
     }
 })
 
@@ -120,6 +126,9 @@ const MobileMStyles=StyleSheet.create({
     add:{
         width:20,
         height:20 
+    },
+    no_doc:{
+        fontSize:16
     }
 })
 
@@ -150,6 +159,9 @@ const MobileLStyles=StyleSheet.create({
     add:{
         width:20,
         height:20 
+    },
+    no_doc:{
+        fontSize:16
     }
 })
 
@@ -188,21 +200,23 @@ const Documents=(props:{documentstab:string})=>{
             {/* <View style={[styles[Device].tabbar_wrapper]}>
                 <Tabbar fitWidth tabChangeHandler={tabChange} tabs={categories} currentTab={props.documentstab}></Tabbar>
             </View> */}
-            <Listselection
-                direction="horizontal"
-                selectionStyle="background"
-                initialSelection={[{label:setWordCase(props.documentstab),value:props.documentstab}]}
-                blurUnSelected={true}
-                styles={{contentcontainer:{gap:10}}}
-                onselection={tabChange}
-                options={{
-                    list:tabs,
-                    idExtractor:(data:ListItem)=>data.label,
-                    labelExtractor:(data:any)=>data.label,
-                    selectionMode:"single"
-                }}
-            />
-            <View style={{flex:1,padding:10}}><Tabnavigator invalidPathScreen={Invalidpath} screens={Screens} currentTab={{id:props.documentstab,props:documents}}></Tabnavigator></View>
+            <View style={[appStandardStyles.screenMarginMini]}>
+                <Listselection
+                    direction="horizontal"
+                    selectionStyle="background"
+                    initialSelection={[{label:setWordCase(props.documentstab),value:props.documentstab}]}
+                    blurUnSelected={true}
+                    styles={{contentcontainer:{gap:10}}}
+                    onselection={tabChange}
+                    options={{
+                        list:tabs,
+                        idExtractor:(data:ListItem)=>data.label,
+                        labelExtractor:(data:any)=>data.label,
+                        selectionMode:"single"
+                    }}
+                />
+            </View>
+            <View style={[{flex:1,padding:0},appStandardStyles.screenMarginSmall]}><Tabnavigator invalidPathScreen={Invalidpath} screens={Screens} currentTab={{id:props.documentstab,props:documents}}></Tabnavigator></View>
         </View>
     )
 
@@ -270,13 +284,19 @@ const Work=(props:Request<DocumentsType>)=>{
     return(
         <View style={{gap:15,paddingTop:10}}>
             <Pressable onPress={()=>upload()}><Image source={isLoading?loading_gif:add_icon} style={[styles[Device].add,{alignSelf:'center'}]}></Image></Pressable> 
-            <View style={{gap:15}}>
             {
-                documents?.map((doc)=>
-                <Document docIdentifier="Work Document" key={doc._id} title="Work Document" fieldPath="workExperiences" doc={doc}></Document>
-                )
-            } 
-            </View>  
+                documents?.length==0
+                ?
+                <View style={{alignSelf:"center"}}><Text style={[styles[Device].no_doc,{maxWidth:"75%",textAlign:'center',lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Please add your workexperience documents here!</Text></View>
+                :
+                <View style={{gap:15}}>
+                {
+                    documents?.map((doc)=>
+                    <Document docIdentifier="Work Document" key={doc._id} title="Work Document" fieldPath="workExperiences" doc={doc}></Document>
+                    )
+                } 
+            </View>
+            }  
         </View>
     )
 }
@@ -301,25 +321,37 @@ const Test=(props:Request<DocumentsType>)=>{
             <Nestedview title="Language Proficiency" maxHeight={150}>
                 <View style={{gap:15,paddingTop:10}}>
                     <Pressable onPress={()=>upload("test.languageProf","language")}><Image source={isLoading=="language"?loading_gif:add_icon} style={[styles[Device].add,{alignSelf:'center'}]}></Image></Pressable> 
-                    <View style={{gap:15}}>
                     {
-                        documents?.languageProf?.map((doc)=>
-                        <Document docIdentifier="Test Document" key={doc._id} title="Test Document" fieldPath="test.languageProf" doc={doc}></Document>
-                        )
-                    } 
-                </View>  
+                        documents?.languageProf?.length==0
+                        ?
+                        <View style={{flex:1,alignSelf:"center"}}><Text style={[styles[Device].no_doc,{maxWidth:"75%",textAlign:'center',lineHeight:24},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Please add your IELTS,TOEFL,DET,PTE test documents here!</Text></View>
+                        :
+                        <View style={{gap:15}}>
+                        {
+                            documents?.languageProf?.map((doc)=>
+                            <Document docIdentifier="Test Document" key={doc._id} title="Test Document" fieldPath="test.languageProf" doc={doc}></Document>
+                            )
+                        } 
+                        </View>
+                    }  
                 </View>
             </Nestedview>
             <Nestedview title="General" maxHeight={150}>
                 <View style={{gap:15,paddingTop:10}}>
                     <Pressable onPress={()=>upload("test.general","general")}><Image source={isLoading=="general"?loading_gif:add_icon} style={[styles[Device].add,{alignSelf:'center'}]}></Image></Pressable> 
-                    <View style={{gap:15}}>
                     {
-                        documents?.general?.map((doc)=>
-                        <Document docIdentifier="Test Document" key={doc._id} title="Test Document" fieldPath="test.general" doc={doc}></Document>
-                        )
-                    } 
-                </View>  
+                        documents?.general?.length==0
+                        ?
+                        <View style={{flex:1,alignSelf:"center"}}><Text style={[styles[Device].no_doc,{maxWidth:"75%",textAlign:'center',lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Please add your GRE,GMAT,DET test documents here!</Text></View>
+                        :
+                        <View style={{gap:15}}>
+                        {
+                            documents?.general?.map((doc)=>
+                            <Document docIdentifier="Test Document" key={doc._id} title="Test Document" fieldPath="test.general" doc={doc}></Document>
+                            )
+                        } 
+                        </View> 
+                    }   
                 </View>
             </Nestedview>
         </View>

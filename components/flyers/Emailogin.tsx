@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import Verifyuser from "./Verifyuser"
 import { addToBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import Textbox from "../resources/Textbox"
 import Styledtext from "../resources/Styledtext"
 import { validations } from "../../utils/validations"
@@ -166,7 +166,7 @@ const Emaillogin=()=>{
     },[])
 
     return(
-        <View style={{flex:1,paddingTop:15}} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
+        <View style={[{flex:1,paddingTop:25},appStandardStyles.screenMarginSmall]} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
         {
             dimensions
             ?

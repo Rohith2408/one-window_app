@@ -669,7 +669,7 @@ const Message=(props:{chatId:string})=>{
                         <TextInput style={[styles[Device].message,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]} ref={textInputRef} onFocus={()=>typingTrigger("start")} onBlur={()=>typingTrigger("stop")} placeholder="Start Typing..." value={message} onChangeText={(txt)=>setMessage(txt)}/>
                     </View>
                     {
-                        message.length>0
+                        (file!=undefined) || (file==undefined && message.length>0)
                         ?
                         <Transitionview effect="zoom"><Pressable onPress={!sending?send_message:null}><Image source={sending?loading_icon:send_icon} style={[styles[Device].send]}/></Pressable></Transitionview>
                         :

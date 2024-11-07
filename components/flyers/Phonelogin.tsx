@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import Verifyuser from "./Verifyuser"
 import { addToBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
-import { Countrycodes, Fonts, Themes } from "../../constants"
+import { Countrycodes, Fonts, Themes, appStandardStyles } from "../../constants"
 import Styledtext from "../resources/Styledtext"
 import { validations } from "../../utils/validations"
 import Transitionview from "../resources/Transitionview"
@@ -278,7 +278,7 @@ const Phonelogin=()=>{
     console.log("number",phone)
 
     return(
-        <View style={[{flex:1},styles[Device].main_wrapper]} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
+        <View style={[{flex:1},appStandardStyles.screenMarginSmall,styles[Device].main_wrapper]} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
         {
             dimensions && userLocation.responseStatus=="recieved"
             ?

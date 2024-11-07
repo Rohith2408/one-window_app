@@ -8,7 +8,7 @@ import Listselection from "../resources/Listselection"
 import useNavigation from "../../hooks/useNavigation"
 import { requests } from "../../constants/requests"
 import Packagecard from "../cards/Packagecard"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import Unpurchasedproductscard from "../cards/Unpurchasedproductcard"
 import tick from "../../assets/images/misc/tick_black.png"
 import { Image } from "expo-image"
@@ -128,11 +128,11 @@ const Order=(props:{orderinfoid:string})=>{
     errors.current={category:validation.categoryErrors,products:validation.productsErrors,general:validation.generalErrors}
 
     return(
-        <View style={{flex:1}}>
-            <View style={{padding:5,gap:15}}>
-                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Suggested Packages</Text>
+        <View style={{flex:1,gap:30}}>
+            <View>
+                <Text style={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Suggested Packages</Text>
                 <View>
-                    <ScrollView horizontal>
+                    <ScrollView horizontal contentContainerStyle={{padding:15}}>
                     {
                         suggestedPackages.map((item,i)=>
                         <Pressable onPress={()=>setPackage(Package?._id==item._id?undefined:item)} style={{position:"relative"}}>
@@ -151,9 +151,9 @@ const Order=(props:{orderinfoid:string})=>{
                 <View>
                 </View>
             </View>
-            <View style={{flex:1,gap:15,padding:5}}>
-                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
-                <ScrollView contentContainerStyle={{gap:30,paddingBottom:20}}>
+            <View style={{flex:1}}>
+                <Text style={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
+                <ScrollView contentContainerStyle={{gap:15,padding:15}}>
                 {
                     Products.map((product,i)=>
                     <View key={product.course._id+product.intake} style={{gap:7.5}}>

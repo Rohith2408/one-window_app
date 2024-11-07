@@ -21,7 +21,7 @@ const GeneralStyles=StyleSheet.create({
         position:'absolute',
         gap:7.5,
         bottom:20,
-        right:0,
+        right:10,
         zIndex:1,
         backgroundColor:"white",
         borderRadius:100,
@@ -190,7 +190,7 @@ const Workexperience=(props:any)=>{
                         <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button below to start adding your work experience</Text>
                     </View>
                     :
-                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,paddingTop:20}}>
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,padding:15}}>
                     {
                         workExperiences.data.map((item,i)=>
                         <View key={item._id} style={[styles[Device].card]}><Workexperiencecard data={item} index={i}></Workexperiencecard></View>

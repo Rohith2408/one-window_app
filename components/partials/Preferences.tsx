@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import { getDevice } from "../../utils"
 import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import degree_icon from '../../assets/images/preferences/degree.png'
 import course_icon from '../../assets/images/preferences/course.png'
 import country_icon from '../../assets/images/preferences/country.png'
@@ -15,8 +15,7 @@ import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        width:"100%",
-        height:"100%",
+        flex:1,
         backgroundColor:'white',
         paddingTop:10
     },
@@ -141,7 +140,7 @@ const Preferences=()=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const options=useRef([
-        {title:"Degree",icon:degree_icon,screen:{id:"Flyer",params:{flyerid:"Degreepreference"}}},
+        {title:"Degree",icon:degree_icon,screen:{id:"Degreepreference"}},
         {title:"Course",icon:degree_icon,screen:{id:"Flyer",params:{flyerid:"Coursepreference"}}},
         {title:"Country",icon:degree_icon,screen:{id:"Flyer",params:{flyerid:"Countrypreference"}}},
         // {title:"Course",icon:course_icon,screen:{id:"Preference",params:{preferenceid:"courses"}}},
@@ -155,7 +154,7 @@ const Preferences=()=>{
     }
 
     return(
-        <View style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper,appStandardStyles.screenMarginMini]}>
         {
             options.map((option)=>
             <Pressable key={option.title} onPress={()=>openScreen(option.screen)}><Option {...option} Device={Device}></Option></Pressable>

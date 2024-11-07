@@ -42,7 +42,7 @@ const MobileMStyles=StyleSheet.create({
         height:10
     },
     title:{
-        fontSize:14
+        fontSize:16
     }
 })
 const MobileLStyles=StyleSheet.create({
@@ -51,7 +51,7 @@ const MobileLStyles=StyleSheet.create({
         height:10
     },
     title:{
-        fontSize:14
+        fontSize:16
     }
 })
 
@@ -67,6 +67,7 @@ const Nestedview=(props:{title:string,maxHeight:number,children:React.ReactNode}
     const height=useRef(new Animated.Value(0)).current
     const [isFocussed,setIsFocussed]=useState(false)
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const [padding,setPadding]=useState(0);
 
     // console.log(props)
 
@@ -76,16 +77,17 @@ const Nestedview=(props:{title:string,maxHeight:number,children:React.ReactNode}
             useNativeDriver:false,
             duration:200
         }).start()
+        setPadding(isFocussed?10:0)
     },[isFocussed])
 
     return(
         <View style={[GeneralStyles.wrapper]}>
             <Pressable hitSlop={{left:10,right:10,top:10,bottom:10}} style={{flexDirection:"row"}} onPress={()=>setIsFocussed(!isFocussed)}>
-                <View style={{flex:1}}><Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.title}</Text></View>
+                <View style={{flex:1}}><Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.title}</Text></View>
                 <Animated.Image source={arrow_icon} style={[styles[Device].arrow,{transform:[{rotate:height.interpolate({inputRange:[0,1],outputRange:["90deg","-90deg"]})}]}]}></Animated.Image>
             </Pressable>
             <Animated.View style={[{width:"100%",height:height.interpolate({inputRange:[0,1],outputRange:[0,props.maxHeight]})}]}>
-                <ScrollView showsVerticalScrollIndicator persistentScrollbar style={{flex:1}}>{props.children}</ScrollView>
+                <Animated.ScrollView showsVerticalScrollIndicator persistentScrollbar style={{flex:1,paddingRight:height.interpolate({inputRange:[0,1],outputRange:[0,10]})}}>{props.children}</Animated.ScrollView>
             </Animated.View>
         </View>
     )

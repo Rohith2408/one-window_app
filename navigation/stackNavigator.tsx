@@ -66,7 +66,6 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
   const [screenDimensions,setScreenDimensions]=useState<LayoutRectangle>()
   const [path,navigate]=useNavigation();
 
-
   const getCurrentPosition=()=>(currentState.current)
   const setCurrentPosition=(val:{x:number,y:number,opacity:number,scale:number})=>{currentState.current=val}
 
@@ -201,7 +200,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
   //console.log(screenInfo)
 
   return(
-      <Animated.View onLayout={(e)=>setScreenDimensions(e.nativeEvent.layout)} key={props.id} style={[styles.screenWrapper,screenInfo?.type=="Flyer"?{shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{},!screenInfo?.occupyFullScreen?{paddingLeft:0.06*Dimensions.get("screen").width,paddingRight:0.06*Dimensions.get("screen").width,}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,screenInfo?.type=="Flyer"?{borderRadius:20,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{},{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
+      <Animated.View onLayout={(e)=>setScreenDimensions(e.nativeEvent.layout)} key={props.id} style={[styles.screenWrapper,screenInfo?.type=="Flyer"?{shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
         {
           props.index!=0 && screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY"
           ?
@@ -233,7 +232,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
         {
           screenInfo?.type=="Flyer" || screenInfo?.type=="Popup"
           ?
-          <Pressable onPress={()=>!screenInfo?.nonClosable?back(200):null} style={{position:"absolute",zIndex:-1,top:"-125%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}}></Pressable>
+          <Pressable onPress={()=>!screenInfo?.nonClosable?back(200):null} style={{position:"absolute",backgroundColor:'rgba(0,0,0,0.075)',zIndex:-2,bottom:"90%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}}></Pressable>
           :
           null
         }
@@ -244,7 +243,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           :
           null
         }
-        <View style={[styles.screen]}> 
+        <View style={[styles.screen,screenInfo?.type=="Flyer"?{borderRadius:30,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{}]}> 
           {
             screenInfo?.title
             ?
@@ -420,7 +419,7 @@ const styles=StyleSheet.create({
     screen:{
       width:"100%",
       height:"100%",
-      position:"relative",
+      // position:"relative",
       zIndex:1,
     },
     back:{

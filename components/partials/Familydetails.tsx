@@ -8,7 +8,7 @@ import Loadinglistscreen from "../resources/Loadinglistscreen"
 import add_icon from '../../assets/images/misc/add.png'
 import { Image } from "expo-image"
 import { getDevice } from "../../utils"
-import { Fonts, Themes, setComponentInfo } from "../../constants"
+import { Fonts, Themes, appStandardStyles, setComponentInfo } from "../../constants"
 import emptylist from '../../assets/images/illustrations/angry.png'
 import { addToBasket } from "../../constants/basket"
 import Familydetailscard from "../cards/Familydetailscard"
@@ -22,7 +22,7 @@ const GeneralStyles=StyleSheet.create({
         position:'absolute',
         gap:7.5,
         bottom:20,
-        right:0,
+        right:10,
         zIndex:1,
         backgroundColor:"white",
         borderRadius:100,
@@ -164,11 +164,11 @@ const Familydetails=(props:any)=>{
     }
 
     return(
-        <View style={{flex:1,paddingTop:30}}>
+        <View style={{flex:1,paddingTop:10}}>
         {
             familyDetails.responseStatus=="not_recieved"
             ?
-            <Loadinglistscreen cardStyles={styles[Device].card} cardGap={30} count={3} direction="vertical"/>
+            <View style={[appStandardStyles.screenMarginSmall]}><Loadinglistscreen cardStyles={styles[Device].card} cardGap={30} count={3} direction="vertical"/></View>
             :
             <View style={{flex:1,gap:30}}>
                 <Pressable onPress={add} style={[GeneralStyles.add_wrapper]}>
@@ -185,7 +185,7 @@ const Familydetails=(props:any)=>{
                         <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button below to start adding your family details</Text>
                     </View>
                     :
-                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,paddingTop:20}}>
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,padding:10}}>
                     {
                         familyDetails.data.map((item,i)=>
                         <View key={item._id} style={[styles[Device].card]}>

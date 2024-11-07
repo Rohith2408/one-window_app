@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { getDevice } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
 import { getBasket } from "../../constants/basket"
 
@@ -91,7 +91,7 @@ const Warning=()=>{
     }
 
     return(
-        <View style={[GeneralStyles.main_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginSmall]}>
             <View><Text style={[styles[Device].subtext,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>{info.warningMessage}</Text></View>
             <View style={{flexDirection:"row",gap:10}}>
                 <View style={[{flex:1}]}><Asynchronousbutton successText="Success" idleText={info.yesLabel?info.yesLabel:"Proceed"} failureText="Something went wront" callback={info.proceedCallback}/></View>

@@ -1,5 +1,5 @@
 
-import { Fonts, Tests, Themes, setComponentInfo } from "../../constants"
+import { Fonts, Tests, Themes, appStandardStyles, setComponentInfo } from "../../constants"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { useRef } from "react"
@@ -79,8 +79,8 @@ const Testoptions=()=>{
 
     return(
         <View style={{paddingTop:10}}>
-            <Styledtext styles={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="test" text="Select the test"/>
-            <ScrollView contentContainerStyle={{gap:30,paddingTop:20,paddingBottom:20}}>
+            <Styledtext styles={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="test" text="Select the test"/>
+            <ScrollView contentContainerStyle={{gap:30,padding:15}}>
             {
                 Tests.filter((test)=>!store.getState().testscores.data?.find((item)=>item.name==test.name)).map((test)=>
                 <Pressable style={{flexDirection:"column",gap:5}} onPress={()=>openForm(test.name)}>

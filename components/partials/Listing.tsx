@@ -14,8 +14,8 @@ import { useAppSelector } from "../../hooks/useAppSelector"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        width:"100%",
-        height:"100%"
+       flex:1,
+       alignSelf:'stretch'
     },
     sub_wrapper:{
         flex:1
@@ -259,7 +259,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
                         blurUnSelected={true}
                         selectionStyle="border"
                         initialSelection={props.quickFilters.map((item)=>ListInfo?.filters.quick.find((item2)=>item.type==item2.type))}
-                        styles={{contentcontainer:{gap:10}}}
+                        styles={{contentcontainer:{gap:10,paddingTop:10,paddingBottom:10}}}
                         onselection={applyQuickFilter}
                         options={{
                             list:ListInfo?.filters?.quick,
@@ -289,7 +289,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
             ?
                 list.length>0
                 ?
-                <ScrollView scrollEventThrottle={100} onScroll={(e)=>onScroll(e)} style={[GeneralStyles.sub_wrapper]}>
+                <ScrollView scrollEventThrottle={100} onScroll={(e)=>onScroll(e)} style={[GeneralStyles.sub_wrapper]} contentContainerStyle={{padding:10}}>
                 {
                     list.map((item:any,i:number)=>
                         <View><Component {...item} index={i}/></View>

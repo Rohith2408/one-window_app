@@ -59,8 +59,8 @@ const GeneralStyles=StyleSheet.create({
     },
     meetings_wrapper:{
         flex:1,
-        padding:20,
-        gap:15,
+        padding:5,
+        gap:5,
         backgroundColor:'white',
         borderRadius:30
     },
@@ -348,7 +348,7 @@ const Expert=(props:{expertid:string})=>{
                         <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button below to schedule a meet with the expert</Text>
                     </View>
                     :
-                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:10,paddingTop:5}}>
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:10,padding:15}}>
                     {
                         meetings.map((meeting,i)=>
                         <Transitionview effect="pan"><View key={meeting._id}><Meetingcard data={meeting} index={i}/></View></Transitionview>

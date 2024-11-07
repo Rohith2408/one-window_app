@@ -62,8 +62,8 @@ const TabStyles=StyleSheet.create({
         fontSize:16
     },
     icon:{
-        width:20,
-        height:20,
+        width:24,
+        height:24,
         resizeMode:"contain",
         borderRadius:100
     },
@@ -91,8 +91,8 @@ const MobileSStyles=StyleSheet.create({
         fontSize:11
     },
     icon:{
-        width:16,
-        height:16,
+        width:18,
+        height:18,
         resizeMode:"contain",
         borderRadius:100
     },
@@ -111,7 +111,7 @@ const MobileSStyles=StyleSheet.create({
 const MobileMStyles=StyleSheet.create({
     name:{
         lineHeight:22,
-        fontSize:14
+        fontSize:16
     },
     category:{
         fontSize:14
@@ -120,8 +120,8 @@ const MobileMStyles=StyleSheet.create({
         fontSize:13
     },
     icon:{
-        width:18,
-        height:18,
+        width:20,
+        height:20,
         resizeMode:"contain",
         borderRadius:100
     },
@@ -140,7 +140,7 @@ const MobileMStyles=StyleSheet.create({
 const MobileLStyles=StyleSheet.create({
     name:{
         lineHeight:20,
-        fontSize:14
+        fontSize:16
     },
     category:{
         fontSize:14
@@ -149,8 +149,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:11
     },
     icon:{
-        width:16,
-        height:16,
+        width:20,
+        height:20,
         resizeMode:"contain",
         borderRadius:100
     },
@@ -248,7 +248,7 @@ const Docviewer=(props:{value:Document|undefined,title:string,id:string,eventHan
                 props.value==undefined
                 ?
                 <View style={{flex:1,flexDirection:'row',alignItems:'center'}}>
-                    <View style={{flex:1}}><Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text></View>
+                    <View style={{flex:1}}><Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text></View>
                     <Pressable onPress={!isLoading?upload:null}>
                         <Image style={[styles[Device].upload_icon]} source={isLoading?loader:upload_icon}/>
                     </Pressable>

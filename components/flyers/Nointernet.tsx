@@ -2,12 +2,11 @@ import { StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { useRef } from "react"
 import { getDevice } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        width:"100%",
-        height:"100%",
+        flex:1,
         paddingTop:20,
         display:"flex",
         flexDirection:"column",
@@ -67,7 +66,7 @@ const Nointernet=()=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
-        <View style={[GeneralStyles.main_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginSmall]}>
             <Text style={[styles[Device].text,{color:"red",fontFamily:Fonts.NeutrifStudio.Bold}]}>No Internet Connection</Text>
             <Text style={[styles[Device].subtext,{textAlign:'center',lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>Please check your internet connection and try again</Text>
         </View>

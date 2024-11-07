@@ -1,7 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { Image } from "expo-image";
-import countrypreference_icon from "../../assets/images/misc/countrypreference.png"
+import countrypreference_icon from "../../assets/images/misc/location.png"
 import delete_icon from '../../assets/images/misc/delete-black.png'
 import tick_icon from '../../assets/images/misc/tick.png'
 import loading_gif from '../../assets/images/misc/loader.gif'
@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { Countries, Fonts, Themes, disciplines} from "../../constants";
 import { preferences } from "../../constants/preferences";
 import { getBasket } from "../../constants/basket";
+import Styledtext from "../resources/Styledtext";
 
 const GeneralStyles=StyleSheet.create({
     card_wrapper:{
@@ -23,8 +24,8 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     icon:{
-        width:24,
-        height:24,
+        width:22,
+        height:22,
         resizeMode:"contain"
     },
     delete_icon:{
@@ -34,45 +35,54 @@ const TabStyles=StyleSheet.create({
     },
     preference:{
         fontSize:18
+    },
+    title:{
+        fontSize:20
     }
 })
 
 const MobileSStyles=StyleSheet.create({
+    icon:{
+        width:14,
+        height:14,
+        resizeMode:"contain"
+    },
+    delete_icon:{
+        width:10,
+        height:10,
+        resizeMode:"contain"
+    },
+    preference:{
+        fontSize:14
+    },
+    title:{
+        fontSize:16
+    }
+})
+
+const MobileMStyles=StyleSheet.create({
     icon:{
         width:18,
         height:18,
         resizeMode:"contain"
     },
     delete_icon:{
-        width:12,
-        height:12,
-        resizeMode:"contain"
-    },
-    preference:{
-        fontSize:14
-    }
-})
-
-const MobileMStyles=StyleSheet.create({
-    icon:{
-        width:20,
-        height:20,
-        resizeMode:"contain"
-    },
-    delete_icon:{
         width:14,
         height:14,
         resizeMode:"contain"
     },
     preference:{
         fontSize:16
+    },
+    title:{
+        fontSize:18
     }
 })
 
 const MobileLStyles=StyleSheet.create({
     icon:{
-        width:20,
-        height:20,
+        width:18,
+        height:18,
         resizeMode:"contain"
     },
     delete_icon:{
@@ -82,6 +92,9 @@ const MobileLStyles=StyleSheet.create({
     },
     preference:{
         fontSize:16
+    },
+    title:{
+        fontSize:18
     }
 })
 
@@ -122,9 +135,9 @@ const Countrypreference=(props)=>{
     }
 
     return(
-        <View style={{paddingTop:info?.eventHandler?0:25,gap:20}}>
-            {/* <TextInput placeholder="Search..." onChangeText={(txt)=>setSearch(txt)} value={search.trim()} style={{padding:10,borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}/> */}
-            <ScrollView persistentScrollbar contentContainerStyle={{gap:30,paddingBottom:10}}>
+        <View style={{paddingTop:info?.eventHandler?0:25,gap:30}}>
+            <Styledtext styles={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Select your preferred country" focusWord="preferred"/>
+            <ScrollView persistentScrollbar contentContainerStyle={{gap:30,paddingBottom:10,paddingRight:15}}>
             {
                 selectedPreferences?.map((item)=>
                 <Pressable key={item} onPress={()=>onselect(item)} style={[GeneralStyles.card_wrapper]}>

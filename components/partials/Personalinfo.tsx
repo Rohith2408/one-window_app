@@ -11,7 +11,7 @@ import go_icon from '../../assets/images/misc/back.png'
 import expert_icon from '../../assets/images/profile/expert.png'
 import preferences_icon from '../../assets/images/profile/preferences.png'
 import { getDevice, getServerRequestURL, resetStore, serverRequest } from "../../utils"
-import { Fonts, Themes, secureStoreKeys, setComponentInfo } from "../../constants"
+import { Fonts, Themes, appStandardStyles, secureStoreKeys, setComponentInfo } from "../../constants"
 import useNavigation from "../../hooks/useNavigation"
 import * as SecureStore from 'expo-secure-store'
 import { addToBasket } from "../../constants/basket"
@@ -197,7 +197,7 @@ const Personalinfo=()=>{
     },[])
 
     return(
-        <View style={{flex:1,flexDirection:"column"}}>
+        <View style={[{flex:1,flexDirection:"column"},appStandardStyles.screenMarginMini]}>
             <View style={[GeneralStyles.main_wrapper,styles[Device].main_wrapper]}>
             {
                 options.map((option)=>

@@ -4,7 +4,7 @@ import Loadinglistscreen from "../resources/Loadinglistscreen"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { getChatType, getDevice } from "../../utils"
 import Expertcard from "../cards/Expertcard"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import { Advisor } from "../../types"
 import useNavigation from "../../hooks/useNavigation"
 import { store } from "../../store"
@@ -35,13 +35,21 @@ const GeneralStyles=StyleSheet.create({
         position:'absolute',
         gap:7.5,
         bottom:20,
-        right:0,
+        right:15,
         zIndex:1,
         backgroundColor:"white",
         borderRadius:100,
         shadowOpacity:0.1,
         shadowRadius:5,
         elevation:2,
+        padding:10
+    },
+    text_wrapper:{
+        flexDirection:"row",
+        alignItems:'center',
+        borderRadius:100,
+        borderWidth:2,
+        gap:5,
         padding:10
     }
 })
@@ -85,12 +93,12 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     stars_icon:{
-        width:20,
-        height:20,
+        width:22,
+        height:22,
         resizeMode:"contain"
     },
     add_text:{
-        fontSize:14
+        fontSize:12
     }
 })
 
@@ -104,8 +112,8 @@ const MobileMStyles=StyleSheet.create({
         fontSize:14
     },
     next_icon:{
-        width:30,
-        height:30,
+        width:26,
+        height:26,
         resizeMode:"contain"
     },
     stars_icon:{
@@ -114,7 +122,7 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     add_text:{
-        fontSize:16
+        fontSize:14
     }
 })
 
@@ -128,8 +136,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:14
     },
     next_icon:{
-        width:30,
-        height:30,
+        width:26,
+        height:26,
         resizeMode:"contain"
     },
     stars_icon:{
@@ -138,7 +146,7 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     add_text:{
-        fontSize:16
+        fontSize:14
     }
 })
 
@@ -171,12 +179,12 @@ const Experts=()=>{
             ?
             <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
             :
-            <View style={{flex:1,gap:20}}>
+            <View style={{flex:1,gap:0}}>
                 <Pressable onPress={showExperts} style={[GeneralStyles.add_wrapper]}>
                     <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].add_text]}>Who’s Here to Help?</Text>
                     <Image style={[styles[Device].next_icon]} source={next_icon}></Image>
                 </Pressable>
-                <View style={[{flexDirection:"row",alignItems:'center',borderRadius:100,borderWidth:2,borderColor:Themes.Light.OnewindowLightBlue,gap:5,padding:10}]}>
+                <View style={[GeneralStyles.text_wrapper,appStandardStyles.screenMarginMini,{borderColor:Themes.Light.OnewindowLightBlue}]}>
                     <Image style={[styles[Device].stars_icon]} source={stars_icon}></Image>
                     <Styledtext styles={[{lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].briefing]} text="Your Study Abroad Success Starts with Our Expert Guidance" focusWord="Study Abroad"/>
                 </View>
@@ -185,7 +193,7 @@ const Experts=()=>{
                     <Styledtext styles={[{padding:10,textAlign:"center",lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].briefing]} text="Wondering Who’s Here to Help? Discover Our Dedicated Team" focusWord="Discover Our Dedicated Team"/>
                 </Pressable> 
                 */}
-                <ScrollView style={{flex:1}} contentContainerStyle={{gap:15,paddingBottom:20}}>
+                <ScrollView style={{flex:1}} contentContainerStyle={{gap:15,padding:15}}>
                 {
                     store.getState().preferences.data?.country?.map((country)=>
                     !alreadyAssigned(experts.data,country)

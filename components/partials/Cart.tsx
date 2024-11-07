@@ -8,7 +8,7 @@ import { store } from "../../store";
 import { ISOtoIntakeformat, formatDate, getDevice } from "../../utils";
 import { addToBasket } from "../../constants/basket";
 import Cartcard from "../cards/Cartcard";
-import { Fonts, Themes } from "../../constants";
+import { Fonts, Themes, appStandardStyles } from "../../constants";
 import empty_image from "../../assets/images/illustrations/sad.png"
 import { Image } from "expo-image";
 import Asynchronousbutton from "../resources/Asynchronousbutton";
@@ -242,7 +242,7 @@ const Cart=()=>{
             <Text>Loading</Text>
             :
             <View style={{flex:1,gap:20}}>
-                <View style={{flexDirection:"row",alignItems:"center",padding:5}}>
+                <View style={[{flexDirection:"row",alignItems:"center",padding:5},appStandardStyles.screenMarginSmall]}>
                     <View style={{flex:2,flexDirection:"row",alignItems:'center',gap:5}}>
                         <Image source={products_icon} style={[styles[Device].products_icon]}/>
                         <View style={{flexDirection:"row",alignItems:'center'}}>
@@ -253,7 +253,7 @@ const Cart=()=>{
                     <View style={{flex:1,alignSelf:"stretch"}}>
                         {/* <Image source={delete_icon}  style={[styles[Device].delete_icon]}/> */}
                         <Asynchronousbutton idleText="Clear" successText="Cleared" failureText="Failed" callback={clearCart}/>
-                    </View>
+                    </View>   
                 </View>
                 <View style={{flex:1}}>
                 {
@@ -267,11 +267,11 @@ const Cart=()=>{
                     </View>
                     :
                     <View style={{flex:1,gap:15}}>
-                        <View style={[GeneralStyles.addmore_wrapper,styles[Device].addmore_wrapper,{backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.05)}]}>
+                        <View style={[GeneralStyles.addmore_wrapper,styles[Device].addmore_wrapper,appStandardStyles.screenMarginSmall,{backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.05)}]}>
                             <Text style={[styles[Device].addmore,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Something is missing?</Text>
                             <Pressable onPress={openExplore}><Text style={[styles[Device].addmore,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Add more</Text></Pressable>
                         </View>
-                        <ScrollView style={{flex:1}} contentContainerStyle={{gap:20,padding:5}}>
+                        <ScrollView style={{flex:1}} contentContainerStyle={{gap:20,padding:15}}>
                         {
                             cart.data.map((item,i)=>
                             <Transitionview effect="pan" delay={100*i}>

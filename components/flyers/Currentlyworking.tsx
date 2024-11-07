@@ -2,7 +2,7 @@ import { Animated, Pressable, StyleSheet, Text, View } from "react-native"
 import Checkbox from "../resources/Checkbox"
 import { useEffect, useRef, useState } from "react"
 import { getDevice } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import { getBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
 import Styledtext from "../resources/Styledtext"
@@ -110,7 +110,7 @@ const Currentlyworking=(props:{currentlyWorkingBasketid:string})=>{
     console.log("current",isCompleted,info.initialStatus);
 
     return(
-        <View style={{paddingTop:20,gap:15}}>
+        <View style={[{paddingTop:20,gap:15},appStandardStyles.screenMarginSmall]}>
             <Styledtext styles={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="current employment status" text="Please let us know your current employment status at this company?"/>
             <View style={{gap:20}}>
                 <View>

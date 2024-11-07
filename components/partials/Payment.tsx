@@ -9,7 +9,7 @@ import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { updateOrder } from "../../store/slices/ordersSlice";
 import { setCart } from "../../store/slices/cartSlice";
 import useNavigation from "../../hooks/useNavigation";
-import { Fonts, Themes } from "../../constants";
+import { Fonts, Themes, appStandardStyles } from "../../constants";
 import { addProduct, addProducts, replaceProducts } from "../../store/slices/productsSlice";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import Transitionview from "../resources/Transitionview";
@@ -78,7 +78,7 @@ const Payment = (props:{paymentOrderId:string}) => {
   };
 
   return (
-    <View style={{ flex: 1}}>
+    <View style={[{ flex: 1},appStandardStyles.screenMarginSmall]}>
       {showRazorpayPage ? (
         <WebView
           style={{ flex: 1 }}

@@ -1,3 +1,5 @@
+import { Dimensions, StyleSheet } from "react-native";
+
 const baseAppUrl="onewindow://"
 const andReplacer="__AND__";
 const slashReplacer="__SLASH__";
@@ -26,5 +28,24 @@ const Fonts={
         Regular:"NeutrifStudio-Regular"
     }
 }
+export const screenMargin=Dimensions.get("screen").width*0.05
+export const appStandardStyles=StyleSheet.create({
+    screenMarginMini:{
+        marginLeft:Dimensions.get("screen").width*0.03,
+        marginRight:Dimensions.get("screen").width*0.03
+    },
+    screenMarginSmall:{
+        marginLeft:Dimensions.get("screen").width*0.04,
+        marginRight:Dimensions.get("screen").width*0.04
+    },
+    screenMarginMedium:{
+        marginLeft:Dimensions.get("screen").width*0.05,
+        marginRight:Dimensions.get("screen").width*0.05
+    },
+    screenMarginLarge:{
+        marginLeft:Dimensions.get("screen").width*0.06,
+        marginRight:Dimensions.get("screen").width*0.06
+    }
+})
 
 export {baseAppUrl,Themes,Fonts,andReplacer,slashReplacer}
