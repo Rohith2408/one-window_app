@@ -27,7 +27,6 @@ import Styledtext from "../resources/Styledtext";
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         flex:1,
-        padding:20,
         backgroundColor:'white',
         gap:20
     },
@@ -674,7 +673,7 @@ const Program=(props:{programid:string})=>{
         {
             programInfo
             ?
-            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} contentContainerStyle={{gap:38}}>
+            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} contentContainerStyle={{gap:38,padding:20}}>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
                         <Image source={programInfo.university?.logoSrc} style={[styles[Device].uni_icon]}/>

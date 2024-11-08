@@ -18,9 +18,7 @@ import { Fonts, Themes } from "../../constants";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        width:"100%",
-        height:"100%",
-        padding:20,
+        flex:1,
         backgroundColor:'white',
         gap:20
     },
@@ -453,7 +451,7 @@ const University=(props:{universityid:string})=>{
         {
             universityInfo
             ?
-            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:34,paddingBottom:40}}>
+            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:34,padding:20}}>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
                         <Image source={universityInfo.logoSrc} style={[styles[Device].uni_icon]}/>
