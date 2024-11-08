@@ -5,8 +5,7 @@ import { getDevice } from "../../utils"
 import { Fonts, Themes, appStandardStyles } from "../../constants"
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
-        width:"100%",
-        height:"100%",
+       flex:1,
         paddingTop:20,
         justifyContent:"center",
         alignItems:'center',
@@ -16,7 +15,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:24
+        fontSize:30
     },
     subtext:{
         fontSize:16,
