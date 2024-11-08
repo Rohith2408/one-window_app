@@ -5,7 +5,7 @@ import { ListItem, Paymentsummary, ProgramIntake, Request, ServerResponse } from
 import Intakecard from "../cards/Intakecard";
 import { useRef, useState } from "react";
 import useNavigation from "../../hooks/useNavigation";
-import { Fonts, Themes } from "../../constants";
+import { Fonts, Themes, appStandardStyles } from "../../constants";
 import { compareProducts, getDevice } from "../../utils";
 import Asynchronousbutton from "../resources/Asynchronousbutton";
 import { store } from "../../store";
@@ -104,7 +104,7 @@ const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
     }
 
     return(
-        <View style={{flexDirection:'column',justifyContent:"center",alignItems:'center',gap:25,padding:5,paddingTop:20,paddingBottom:0}}>
+        <View style={[{flexDirection:'column',justifyContent:"center",alignItems:'center',gap:25,paddingTop:20,paddingBottom:0},appStandardStyles.screenMarginMini]}>
             <View style={{alignSelf:'stretch',gap:7}}>
                 <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Select the year</Text>
                 <View>
