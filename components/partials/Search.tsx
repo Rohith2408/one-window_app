@@ -329,7 +329,7 @@ const Search=(props:{initialSearch:string})=>{
         navigate({type:"RemoveSpecificScreen",payload:{id:"Explore"}})
         setTimeout(()=>{
             let programslistquery={search:search,additionalFilters:[{type:type,data:[item]}],quickFilters:[],page:1}
-            let universitieslistquery={search:"",additionalFilters:[],quickFilters:[],page:1}
+            let universitieslistquery={search:"",additionalFilters:[{type:"search",data:[{label:search,value:search}]}],quickFilters:[],page:1}
             navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",programslistquery:programslistquery,universitieslistquery:universitieslistquery}}})
         },200)
     }
