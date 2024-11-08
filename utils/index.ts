@@ -315,7 +315,7 @@ export const getFriends=(chats:Chat[],currentUserId:string)=>{
   return Array.from(new Set(allusers.map(a => a._id)))
   .map(_id => {
     return allusers.find(a => a._id === _id)
-  }).filter((user)=>user?._id!=currentUserId)
+  }).filter((user)=>user?._id!=currentUserId  && store.getState().blockedusers.data?.find((blockeduser)=>blockeduser._id==user?._id)==undefined)
 }
 
 export const getParticipantsLastSeenMessage=(chat:Chat,currentUser:Sharedinfo,messages:Message[])=>{

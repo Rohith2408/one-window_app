@@ -205,8 +205,8 @@ const MobileSStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:90,
-        height:90,
+        width:120,
+        height:120,
         resizeMode:"contain"
     },
     loadingview_name:{
@@ -284,8 +284,8 @@ const MobileMStyles=StyleSheet.create({
         lineHeight:20
     },
     emptylist_image:{
-        width:110,
-        height:110,
+        width:160,
+        height:160,
         resizeMode:"contain"
     },
     loadingview_name:{
@@ -362,8 +362,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:12
     },
     emptylist_image:{
-        width:110,
-        height:110,
+        width:160,
+        height:160,
         resizeMode:"contain"
     },
     loadingview_name:{
@@ -422,6 +422,7 @@ const Message=(props:{chatId:string})=>{
     let bakedMessages=(chat && messages.data && profile.data)?bakeMessages(chat,profile.data._id,messages.data):[];
     const called=useRef(false);
     const textInputRef=useRef();
+    const blockedUsers=useAppSelector((state)=>state.blockedusers).data
 
     const fetchMessages=async ()=>{
         let res:ServerResponse=await serverRequest({
@@ -553,7 +554,7 @@ const Message=(props:{chatId:string})=>{
         let triggerObj:TriggerObject={
             action:"typing",
             sender:{...profile.data,userType:"student",role:"student"},
-            recievers:chat?.participants.filter((item)=>item._id!=profile.data?._id),
+            recievers:chat?.participants.filter((item)=>item._id!=profile.data?._id && blockedUsers?.find((user)=>user._id==item._id)==undefined),
             data:action
         }
         getSocket().emit("trigger",triggerObj);
@@ -563,7 +564,7 @@ const Message=(props:{chatId:string})=>{
         let triggerObj:TriggerObject={
             action:"send",
             sender:{...profile.data,userType:"student",role:"student"},
-            recievers:chat?.participants.filter((item)=>item._id!=profile.data?._id),
+            recievers:chat?.participants.filter((item)=>item._id!=profile.data?._id && blockedUsers?.find((user)=>user._id==item._id)==undefined),
             data:{message,chat}
         }
         getSocket().emit("trigger",triggerObj);
@@ -573,7 +574,7 @@ const Message=(props:{chatId:string})=>{
         let triggerObj:TriggerObject={
             action:"seen",
             sender:{...profile.data,userType:"student",role:"student"},
-            recievers:chat?.participants.filter((item)=>item._id!=profile.data?._id),
+            recievers:chat?.participants.filter((item)=>item._id!=profile.data?._id && blockedUsers?.find((user)=>user._id==item._id)==undefined),
             data:chat
         }
         getSocket().emit("trigger",triggerObj);
@@ -586,9 +587,6 @@ const Message=(props:{chatId:string})=>{
             textInputRef.current?.focus();
         }
     }
-
-    //console.log("trigger message",socket.listeners("trigger"))
-    //console.log("Message",JSON.stringify(bakedMessages,null,2));
 
     return(
         <View style={[GeneralStyles.wrapper]}>

@@ -33,6 +33,7 @@ import { initProducts } from "../../store/slices/productsSlice"
 import { store } from "../../store"
 import { initChats, updateChat, updateParticipantActivity, updateParticipantsActivity } from "../../store/slices/chatsSlice"
 import { getSocket, initiateSocketConnection } from "../../socket"
+import { initBlockedUsers } from "../../store/slices/blockedUsersSlice"
 
 const Student=(props:{screens:string[],params:any})=>{
 
@@ -144,6 +145,13 @@ const Student=(props:{screens:string[],params:any})=>{
                     {type:"email",status:res.data.otp.emailLoginOtp.verified},
                     {type:"phone",status:res.data.otp.phoneLoginOtp.verified}
                 ]
+            }))
+            dispatch(initBlockedUsers({
+                requestStatus: "initiated",
+                responseStatus: "recieved",
+                haveAnIssue: false,
+                issue: "",
+                data: [{"_id": "67179397d1b86b6462a23b16", "displayPicSrc": "https://res.cloudinary.com/dffdp7skh/image/upload/v1729600798/olbzoqrfvbbvhff5txon.jpg", "firstName": "Bhavya", "lastName": "V", "userType": "student"}]
             }))
         }
         return res
@@ -287,6 +295,7 @@ const Student=(props:{screens:string[],params:any})=>{
                         if(res2.success)
                         {
                             let friends:any=getFriends(res2.data,user._id);
+                            //console.log("friends",friends);
                             //console.log("user",user.firstName,user._id,"Friends",friends.map((item)=>({name:item.firstName,id:item._id})))
                             let triggerObj:TriggerObject={
                                 action:"ping",

@@ -289,25 +289,42 @@ const Messagecard=(props:Message & {index:number})=>{
     const dispatch=useAppDispatch()
     const [isLoading,setIsloading]=useState(false)
     const profile=useAppSelector((state)=>state.sharedinfo).data
+    const blockedUsers=useAppSelector((state)=>state.blockedusers).data
 
     //console.log("msgs",props.content)
 
     return(
         <View style={[GeneralStyles.wrapper]}>
         {
-            props.type=="normal"
+            blockedUsers?.find((user)=>user._id==props.sender?._id && props.sender._id!=profile?._id)
             ?
-            <Normal {...props}/>
+            <Blocked/>
             :
-            props.type=="typing"
-            ?
-            <Typing {...props}/>
-            :
-            <Seen {...props}/>
+                props.type=="normal"
+                ?
+                <Normal {...props}/>
+                :
+                props.type=="typing"
+                ?
+                <Typing {...props}/>
+                :
+                <Seen {...props}/>
         }
         </View>
     )
 
+}
+
+const Blocked=()=>{
+
+    const Device=useRef<keyof typeof styles>(getDevice()).current
+
+    return(
+        <View style={{flexDirection:"column",alignSelf:"flex-start",maxWidth:"50%",backgroundColor:"#F6F6F6",borderRadius:10}}>
+            <Text style={[styles[Device].normal_msg,{fontFamily:Fonts.NeutrifStudio.Regular,padding:10}]}>Message sent from a user you have blocked</Text>
+            {/* <Text style={[styles[Device].normal_msg,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Unblock the user to see the message</Text> */}
+        </View>
+    )
 }
 
 const Seen=(props:Message)=>{
