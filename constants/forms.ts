@@ -5003,7 +5003,7 @@ const forms:FormInfo[]=[
                 {
                     let meetingData={
                         _id:res.data._id,
-                        description:res.data.data.summary,
+                        description:res.data.data.description,
                         attendees:res.data.data.attendees.map((item:any)=>item.email),
                         link:res.data.data.hangoutLink,
                         startDate:res.data.data.start,
@@ -5057,6 +5057,14 @@ const forms:FormInfo[]=[
                     props:{
                         placeholder:"Enter the Mail-id of the Attendee",
                         addHandler:(items:string[],current:string)=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"attendees",newvalue:[...items,current]}}})
+                    }
+                },
+                validator:(data:string[])=>{
+                    let incorrectdata=data.filter((item)=>!validations.EMAIL.regex.test(item))
+                    return {
+                        success:incorrectdata.length==0,
+                        message:"Check the emails",
+                        data:incorrectdata
                     }
                 },
                 title:"Attendees",
@@ -5310,6 +5318,67 @@ const forms:FormInfo[]=[
                 },
                 onFocus:{
                     event:"onFocus"
+                }
+            },
+            {
+                id:"state",
+                componentInfo:{
+                    component:Statedropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
+                                let states=countryMapped?await fetchStates(countryMapped):undefined
+                                return {success:(countryMapped!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"state",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"state-dropdown",
+                        cityFieldId:"city"
+                    }
+                },
+                title:"State",
+                onUpdate:{
+                    event:"onSelect",
+                },
+                onFocus:{
+                    event:"onToggle"
+                }
+            },
+            {
+                id:"city",
+                componentInfo:{
+                    component:Dropdown,
+                    props:{
+                        options:{
+                            fetcher:async ()=>{
+                                let selectedCountry=getBasket("country")[0]?.label
+                                let countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
+                                let selectedState=getBasket("state")[0]?.label
+                                let cities=(countryMapped && selectedState)?await fetchCities(countryMapped,selectedState):undefined
+                                return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
+                            },
+                            labelExtractor:(item:ListItem)=>item.label,
+                            idExtractor:(item:ListItem)=>item.label,
+                            searchEvaluator:(item:ListItem,search:string)=>item.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                        },
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"city",newvalue:data}}}),
+                        selectionMode:"single",
+                        basketid:"city-dropdown"
+                        }
+                },
+                title:"City",
+                onUpdate:{
+                    event:"onSelect",
+                    handler:undefined
+                },
+                onFocus:{
+                    event:"onToggle"
                 }
             },
             {
@@ -5680,7 +5749,7 @@ const forms:FormInfo[]=[
             },
             {
                 id:"Type",
-                title:"Universaity Type",
+                title:"University Type",
                 componentInfo:{
                     component:Dropdown,
                     props:{

@@ -185,7 +185,7 @@ const Dropdownoptionsasync=(props:{basketid:string,eventHandler:any})=>{
                 :
                 <View style={{flex:1,gap:20,padding:10}}>
                     <TextInput placeholder="Search..." style={[GeneralStyles.search,{borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)}]} value={search} onChangeText={(text)=>setSearch(text)}></TextInput>
-                    <ScrollView keyboardShouldPersistTaps="handled" onScroll={onScroll} style={[GeneralStyles.options_wrapper]} contentContainerStyle={{gap:15,paddingBottom:10}}>
+                    <ScrollView keyboardShouldPersistTaps="handled" onScroll={onScroll} style={[GeneralStyles.options_wrapper]} contentContainerStyle={{gap:15,paddingBottom:10,paddingRight:10}}>
                     {
                         options.slice(0,(page+1)*itemsPerPage).map((item:any,i:number)=>
                         <Pressable key={item.label} onPress={()=>selection(item)} style={[GeneralStyles.option_wrapper]}>

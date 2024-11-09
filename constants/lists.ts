@@ -40,6 +40,16 @@ const lists:ListInfo[]=[
                     title:"Country",
                     icon:sample_icon
                 },
+                {
+                    type:"state",
+                    title:"State",
+                    icon:sample_icon
+                },
+                {
+                    type:"city",
+                    title:"City",
+                    icon:sample_icon
+                },
                 // {
                 //     type:"LanguageTestName",
                 //     title:"Language Test",
