@@ -5,6 +5,8 @@ import { useRef, useState } from "react"
 import { getDevice } from "../../utils"
 import useNavigation from "../../hooks/useNavigation"
 import { Fonts, Themes } from "../../constants"
+import Transitionview from "./Transitionview"
+import { validations } from "../../utils/validations"
 
 
 const GeneralStyles=StyleSheet.create({
@@ -122,10 +124,20 @@ const Listbuilder=(props:{placeholder:string,addHandler:(list:string[],current:s
     const [item,setItem]=useState("")
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [path,navigate]=useNavigation()
+    const [error,setError]=useState<string|undefined>(undefined)
 
     const add=()=>{
-        item?navigate?navigate(props.addHandler(props.value,item)):null:null
-        setItem("")
+        console.log("iiteemm",item,validations.EMAIL.regex.test(item));
+        if(!validations.EMAIL.regex.test(item))
+        {
+            setError(validations.EMAIL.errorMessage)
+        }
+        else
+        {
+            setError(undefined)
+            item?navigate?navigate(props.addHandler(props.value,item)):null:null
+            setItem("")
+        }
     }
 
     return(
@@ -134,6 +146,13 @@ const Listbuilder=(props:{placeholder:string,addHandler:(list:string[],current:s
                <View style={{flex:1}}><TextInput placeholder={props.placeholder} value={item} onChangeText={(txt)=>setItem(txt)} style={[GeneralStyles.input,styles[Device].input,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1),fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}></TextInput></View>
                <Pressable onPress={add}><Image source={add_icon} style={[styles[Device].add]}/></Pressable>
             </View>
+            {
+                error
+                ?
+                <Transitionview effect="pan"><Text style={[styles[Device].selected,{padding:10,fontFamily:Fonts.NeutrifStudio.Regular,color:"red"}]}>{error}</Text></Transitionview>
+                :
+                null
+            }
             <View style={[styles[Device].list_wrapper]}>
                <ScrollView style={[styles[Device].list_subwrapper]}>
                 {
