@@ -5373,6 +5373,7 @@ const forms:FormInfo[]=[
                         }
                 },
                 title:"City",
+                isOptional:true,
                 onUpdate:{
                     event:"onSelect",
                     handler:undefined
@@ -5738,6 +5739,7 @@ const forms:FormInfo[]=[
                         basketid:"city-dropdown"
                         }
                 },
+                isOptional:true,
                 title:"City",
                 onUpdate:{
                     event:"onSelect",
