@@ -244,7 +244,7 @@ const Meetingcard=(props:{data:Meeting,index:number})=>{
         {
             dispatch(updateMeeting({
                 _id:res.data._id,
-                description:res.data.data.summary,
+                description:res.data.data.description,
                 attendees:res.data.data.attendees.map((item:any)=>item.email),
                 link:res.data.data.hangoutLink,
                 startDate:res.data.data.start,
@@ -265,7 +265,7 @@ const Meetingcard=(props:{data:Meeting,index:number})=>{
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
-                        <View style={{width:5,height:5,borderRadius:10,backgroundColor:"lightgreen"}}></View>
+                        <View style={{width:5,height:5,borderRadius:10,backgroundColor:props.data.status=="cancelled"?"red":props.data.status=="rescheduled"?"orange":"lightblue"}}></View>
                         <Text style={[styles[Device].status,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.data.status)}</Text>
                     </Animated.View>
                     <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.data.description}</Text>
