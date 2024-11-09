@@ -348,7 +348,7 @@ const Expert=(props:{expertid:string})=>{
                         <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button below to schedule a meet with the expert</Text>
                     </View>
                     :
-                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:10,padding:15}}>
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:35,padding:10}}>
                     {
                         meetings.map((meeting,i)=>
                         <Transitionview effect="pan"><View key={meeting._id}><Meetingcard data={meeting} index={i}/></View></Transitionview>
