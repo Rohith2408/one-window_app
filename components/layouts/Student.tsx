@@ -214,7 +214,7 @@ const Student=(props:{screens:string[],params:any})=>{
                 issue: "",
                 data:res.data.activity.meetings.map((meeting:Meeting_Server)=>({
                     _id:meeting._id,
-                    description:meeting.data.summary,
+                    description:meeting.data.description,
                     attendees:meeting.data.attendees.map((item)=>item.email),
                     link:meeting.data.hangoutLink,
                     //calenderLink:meeting.data.,
