@@ -588,6 +588,8 @@ const Message=(props:{chatId:string})=>{
         }
     }
 
+    //console.log("messages",chat?.participants.length==2 && chat.participants.filter((item)=>item._id!=profile.data?._id && blockedUsers?.find((user)=>user._id==item._id)==undefined).length!=0);
+
     return(
         <View style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
@@ -597,7 +599,7 @@ const Message=(props:{chatId:string})=>{
                         <Loadingview style={[styles[Device].loadingview_name]} isLoading={profile.responseStatus!="recieved"}><Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold}]}>{Word2Sentence([],"")}</Text></Loadingview>
                         <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{chat?.participants.length==2?chat.participants.find((participant)=>participant._id!=profile.data?._id)?.firstName:"Group Name"}</Text>
                         {
-                            chat?.participants.length==2
+                            chat?.participants.length==2 && chat.participants.filter((item)=>item._id!=profile.data?._id && blockedUsers?.find((user)=>user._id==item._id)==undefined).length!=0
                             ?
                             <View style={{flexDirection:'row',alignItems:"center",gap:5}}>
                                 <View style={{width:5,height:5,borderRadius:10,backgroundColor:chat.participants.find((participant)=>participant._id!=profile.data?._id)?.activity=="offline"?"red":"green"}}></View>
@@ -639,41 +641,47 @@ const Message=(props:{chatId:string})=>{
                     </ScrollView>
                 }
                 </View>
-                <Animated.View style={[GeneralStyles.messagebar_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)},{transform:[{translateY:messageBarOffset}]}]}>
-                    <View style={{position:"absolute",bottom:"200%",flexDirection:"row",alignItems:"center",paddingLeft:10,gap:10}}>
-                        <Activitybar participants={chat?.participants}/>
+                {
+                    chat?.participants.filter((item)=>item._id!=profile.data?._id && blockedUsers?.find((user)=>user._id==item._id)==undefined).length!=0
+                    ?
+                    <Animated.View style={[GeneralStyles.messagebar_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)},{transform:[{translateY:messageBarOffset}]}]}>
+                        <View style={{position:"absolute",bottom:"200%",flexDirection:"row",alignItems:"center",paddingLeft:10,gap:10}}>
+                            <Activitybar participants={chat?.participants}/>
+                            {
+                                file
+                                ?
+                                <Transitionview effect="pan" style={[{flexDirection:"row",alignItems:"center",justifyContent:'flex-end'}]}>
+                                    <Text  style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}}>{file.name}</Text>
+                                </Transitionview>
+                                :
+                                null
+                            }
+                        </View>
+                        <Pressable onPress={showPicker}><Image source={add_icon} style={[styles[Device].add]}/></Pressable>
+                        <View style={{flex:1,gap:5}}>
+                            {
+                                replyTo
+                                ?
+                                <Transitionview effect="pan" style={[{flexDirection:"row",alignItems:"center",gap:5}]}>
+                                    <Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.75)}}>{"Replying to "+replyTo.sender?.firstName+"-"+replyTo.content}</Text>
+                                    <Pressable hitSlop={{left:15,right:15,top:15,bottom:15}} onPress={()=>setRepliedTo(undefined)}><Image style={[styles[Device].close_icon]} source={close_icon}/></Pressable>
+                                </Transitionview>
+                                :
+                                null
+                            }
+                            <TextInput style={[styles[Device].message,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]} ref={textInputRef} onFocus={()=>typingTrigger("start")} onBlur={()=>typingTrigger("stop")} placeholder="Start Typing..." value={message} onChangeText={(txt)=>setMessage(txt)}/>
+                        </View>
                         {
-                            file
+                            (file!=undefined) || (file==undefined && message.length>0)
                             ?
-                            <Transitionview effect="pan" style={[{flexDirection:"row",alignItems:"center",justifyContent:'flex-end'}]}>
-                                <Text  style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}}>{file.name}</Text>
-                            </Transitionview>
+                            <Transitionview effect="zoom"><Pressable onPress={!sending?send_message:null}><Image source={sending?loading_icon:send_icon} style={[styles[Device].send]}/></Pressable></Transitionview>
                             :
                             null
                         }
-                    </View>
-                    <Pressable onPress={showPicker}><Image source={add_icon} style={[styles[Device].add]}/></Pressable>
-                    <View style={{flex:1,gap:5}}>
-                    {
-                        replyTo
-                        ?
-                        <Transitionview effect="pan" style={[{flexDirection:"row",alignItems:"center",gap:5}]}>
-                            <Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.75)}}>{"Replying to "+replyTo.sender?.firstName+"-"+replyTo.content}</Text>
-                            <Pressable hitSlop={{left:15,right:15,top:15,bottom:15}} onPress={()=>setRepliedTo(undefined)}><Image style={[styles[Device].close_icon]} source={close_icon}/></Pressable>
-                        </Transitionview>
-                        :
-                        null
-                    }
-                        <TextInput style={[styles[Device].message,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]} ref={textInputRef} onFocus={()=>typingTrigger("start")} onBlur={()=>typingTrigger("stop")} placeholder="Start Typing..." value={message} onChangeText={(txt)=>setMessage(txt)}/>
-                    </View>
-                    {
-                        (file!=undefined) || (file==undefined && message.length>0)
-                        ?
-                        <Transitionview effect="zoom"><Pressable onPress={!sending?send_message:null}><Image source={sending?loading_icon:send_icon} style={[styles[Device].send]}/></Pressable></Transitionview>
-                        :
-                        null
-                    }
-                </Animated.View>
+                    </Animated.View>
+                    :
+                    <View style={{borderWidth:1.5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}><Text style={[styles[Device].message,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5),padding:10}]}>{(chat.participants.length==2?"Reciever":"Recievers")+" has been blocked, unblock to start conversation"}</Text></View>
+                }
             </View>
         </View>
     )

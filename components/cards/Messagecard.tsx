@@ -321,7 +321,7 @@ const Blocked=()=>{
 
     return(
         <View style={{flexDirection:"column",alignSelf:"flex-start",maxWidth:"50%",backgroundColor:"#F6F6F6",borderRadius:10}}>
-            <Text style={[styles[Device].normal_msg,{fontFamily:Fonts.NeutrifStudio.Regular,padding:10}]}>Message sent from a user you have blocked</Text>
+            <Text style={[styles[Device].normal_msg,{fontFamily:Fonts.NeutrifStudio.Regular,padding:10}]}>Message sent from a blocked user</Text>
             {/* <Text style={[styles[Device].normal_msg,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Unblock the user to see the message</Text> */}
         </View>
     )

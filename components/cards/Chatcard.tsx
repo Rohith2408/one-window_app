@@ -241,6 +241,7 @@ const Chatcard=(props:Chat & {index:number})=>{
     let chatInfo=BakeChatInfo(props,profile);
     let lastMessageInfo=BakeLastmessage(props,profile);
     let activeParticipants=getOnlineUsers(props,profile);
+    const blockedUsers=useAppSelector((state)=>state.blockedusers).data
 
     const animate=(y:number)=>{
         Animated.spring(translate,{
@@ -250,10 +251,10 @@ const Chatcard=(props:Chat & {index:number})=>{
     }
 
     const openChat=()=>{
-        navigate({type:"AddScreen",payload:{screen:"Message",params:{chatId:props._id}}});
+        navigate?navigate({type:"AddScreen",payload:{screen:"Message",params:{chatId:props._id}}}):null;
     }
 
-    console.log("ac",props.lastMessage?._id,lastMessageInfo);
+    //console.log("ac",props.lastMessage?._id,lastMessageInfo);
 
     return(
         <Pressable onPress={openChat} style={[GeneralStyles.wrapper]}>
@@ -275,8 +276,13 @@ const Chatcard=(props:Chat & {index:number})=>{
                     </Animated.View>
                     <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{chatInfo.name}</Text>
                     <View style={{display:"flex",alignItems:'center',flexDirection:'row',gap:5}}>
-                        {/* <Image style={[styles[Device].clock]} source={clock_icon} /> */}
-                        <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:(props.lastMessage!=undefined && lastMessageInfo.sender=="other" && lastMessageInfo.status=="unseen")?Fonts.NeutrifStudio.Bold:Fonts.NeutrifStudio.Regular}]}>{props.lastMessage==undefined?"Tap to chat":props.lastMessage?.content}</Text>
+                        {
+                            blockedUsers?.find((user)=>user._id==props.lastMessage?.sender)==undefined
+                            ?
+                            <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:(props.lastMessage!=undefined && lastMessageInfo.sender=="other" && lastMessageInfo.status=="unseen")?Fonts.NeutrifStudio.Bold:Fonts.NeutrifStudio.Regular}]}>{props.lastMessage==undefined?"Tap to chat":props.lastMessage?.content}</Text>
+                            :
+                            <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.participants.length==2?"User blocked":"Sent from a blocked user"}</Text>
+                        }
                         {
                             props.lastMessage!=undefined && lastMessageInfo.sender=="current"
                             ?    
