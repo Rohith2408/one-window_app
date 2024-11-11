@@ -101,7 +101,7 @@ const Existingorders=()=>{
         console.log("add to ",selected?.Package,orderinfo.products)
         addToBasket("orderinfo",{
             orderId:selected?._id,
-            package:selected?.Package,
+            //package:selected?.Package,
             products:orderinfo.products
         }) 
         navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
