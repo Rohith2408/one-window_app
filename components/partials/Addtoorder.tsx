@@ -14,6 +14,7 @@ import tick from "../../assets/images/misc/tick_black.png"
 import { Image } from "expo-image"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
 import { store } from "../../store"
+import Productcard from "../cards/Productcard"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -103,7 +104,8 @@ type error={
 const Addtoorder=(props:{orderinfoid:string})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
-    let orderInfo:{orderId:string,package:Package,products:Product[]}=getBasket(props.orderinfoid)
+    let orderInfo:{orderId:string,products:Product[]}=getBasket(props.orderinfoid)
+    const order=useAppSelector((state)=>state.orders).data.find((item)=>item._id==orderInfo.orderId);
     const [path,navigate]=useNavigation()
     const [Products,setProducts]=useState<Product[]>(orderInfo.products)
     const errors=useRef<error>({category:undefined,products:undefined,general:undefined});
@@ -161,24 +163,30 @@ const Addtoorder=(props:{orderinfoid:string})=>{
         setProducts(Products.filter((product)=>!compareProducts(item,product)))
     }
     
-    let validation=PackageProductsValidator(orderInfo.package,Products)
+    console.log("infff",order)
+    let validation=PackageProductsValidator(order?.Package,Products,order?.products)
     errors.current={category:validation.categoryErrors,products:validation.productsErrors,general:validation.generalErrors}
-    console.log("infff",JSON.stringify(errors.current,null,2));
+    console.log("infff",orderInfo.products.length,JSON.stringify(errors.current,null,2));
 
     return(
         <View style={{flex:1,gap:30}}>
             <View style={[appStandardStyles.screenMarginSmall,{gap:15}]}>
                 <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Package</Text>
                 <View>
-                    <Packagecard {...orderInfo.package} index={0}/>
+                    <Packagecard {...order?.Package} index={0}/>
                 </View>
-                    <View>{
-                        errors.current.category?.map((error)=>
-                        <Text style={[styles[Device].error]}>{error.error}</Text>
-                        )    
-                    }</View>
-                <View>
-                </View>
+            </View>
+            <View style={{flex:1}}>
+                <Text style={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Existing Products</Text>
+                <ScrollView contentContainerStyle={{gap:30,padding:15}}>
+                {
+                    order?.products.map((product,i)=>
+                    <View key={product.course._id+product.intake} style={{gap:7.5}}>
+                        <Productcard {...product} index={i}/>
+                    </View>
+                    )
+                }
+                </ScrollView>
             </View>
             <View style={{flex:1}}>
                 <Text style={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
@@ -192,6 +200,11 @@ const Addtoorder=(props:{orderinfoid:string})=>{
                     )
                 }
                 </ScrollView>
+                {
+                    errors.current.category?.map((error)=>
+                    <Text style={[{alignSelf:"flex-end",fontFamily:Fonts.NeutrifStudio.Regular,color:"red"},styles[Device].error]}>{error.error}</Text>
+                    )    
+                }
             </View>
             {
                 (errors.current.category!=undefined && errors.current.products!=undefined && errors.current.category.length==0 && errors.current.products.length==0 && errors.current.general!=undefined && errors.current.general.length==0)
