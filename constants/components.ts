@@ -74,6 +74,7 @@ import Expertsintro from "../components/partials/Expertsintro"
 import Emaillogin from "../components/flyers/Emailogin"
 import Phonelogin from "../components/flyers/Phonelogin"
 import Chatoptions from "../components/flyers/Chatoptions"
+import Exploreguest from "../components/flyers/Exploreguest"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -90,6 +91,7 @@ const components:ScreenInfo[]=[
     {id:"Loginbase",component:Loginbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
     {id:"Registerbase",component:Registerbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
     {id:"Userdoesntexist",component:Userdoesntexist,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Exploreguest",component:Exploreguest,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,opacity:1,height:0.3,width:1},final:{x:0,y:0.7,scale:1,opacity:1,height:0.3,width:1}},removalThreshold:5/6},
     {id:"Guestbase",component:Guestbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
     {id:"Gettoken",component:Gettoken,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Forgotpassword",component:Forgotpassword,title:"Forgot Password",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",type:"Partial"},
