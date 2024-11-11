@@ -29,9 +29,23 @@ export default function App() {
   const responseListener = useRef<Notifications.Subscription>();
 
   useEffect(() => {
+    
+    Linking.addEventListener('url', (event: { url: string })=>{
+    });
+  
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if(!state.isConnected)
+      {
+        navigate({type:"RemoveSpecificScreen",payload:{id:"Nointernet"}})
+        navigate({type:"AddScreen",payload:{screen:"Nointernet"}})
+      }
+      else
+      {
+        navigate({type:"RemoveSpecificScreen",payload:{id:"Nointernet"}})
+      }
+    });
 
-    registerForPushNotificationsAsync()
-    .then(token =>{
+    registerForPushNotificationsAsync().then(token =>{
       console.log("token",token)
       SecureStore.setItemAsync(secureStoreKeys.DEVICE_TOKEN,token?token:"");
     }).catch((error: any) => setExpoPushToken(`${error}`));
@@ -54,34 +68,16 @@ export default function App() {
       setFontsLoaded(true);
     }
     loadFonts();
+
+    return () => {
+      unsubscribe();
+      Linking.removeAllListeners("url")
+      notificationListener.current &&
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      responseListener.current &&
+      Notifications.removeNotificationSubscription(responseListener.current);
+    }
   }, []);
-
-  useEffect(()=>{
-    Linking.addEventListener('url', (event: { url: string })=>{
-  });
-
-  const unsubscribe = NetInfo.addEventListener(state => {
-    if(!state.isConnected)
-    {
-      navigate({type:"RemoveSpecificScreen",payload:{id:"Nointernet"}})
-      navigate({type:"AddScreen",payload:{screen:"Nointernet"}})
-    }
-    else
-    {
-      navigate({type:"RemoveSpecificScreen",payload:{id:"Nointernet"}})
-    }
-  });
-
-  return () => {
-    unsubscribe();
-    Linking.removeAllListeners("url")
-    notificationListener.current &&
-    Notifications.removeNotificationSubscription(notificationListener.current);
-    responseListener.current &&
-    Notifications.removeNotificationSubscription(responseListener.current);
-  }
-
-  },[])
 
   const encodedData:{screens:string[],props:any}=encodePath(path)
 
@@ -102,8 +98,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft:30,
-    paddingRight:30
+    // paddingLeft:30,
+    // paddingRight:30
   },
 });
 
