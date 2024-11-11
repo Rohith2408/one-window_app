@@ -24,6 +24,18 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"block-user",
+        category:"student",
+        tail:"block",
+        type:"POST",
+    },
+    {
+        id:"unblock-user",
+        category:"student",
+        tail:"unblock",
+        type:"POST",
+    },
+    {
         id:"delete-account",
         category:"student",
         tail:"delete-account",
@@ -136,15 +148,6 @@ const endPoints=[
         type:"PUT",
     },
     {
-        ENUM:"email",
-        TYPE:"student"
-    },
-    {
-        ENUM:"profile",
-        TYPE:"student",
-        
-    },
-    {
         id:"phone",
         category:"student",
         tail:"phone",
@@ -171,30 +174,10 @@ const endPoints=[
         
     },
     {
-        ENUM:"booked-slots",
-        TYPE:"student",
-        
-    },
-    {
         id:"request-counsellor",
         category:"student",
         tail:"request-counsellor",
         type:"POST"
-        
-    },
-    {
-        ENUM:"generate-recommendations",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"add-to-short-list",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"edit-short-list",
-        TYPE:"student",
         
     },
     {
@@ -223,56 +206,6 @@ const endPoints=[
         type:"POST",
     },
     {
-        ENUM:"download",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"apply",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"apply-force",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"apply-omit-force",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"upload-application",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"delete-uploaded-application",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"request-cancellation",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"all-students",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"single-student",
-        TYPE:"student",
-        
-    },
-    {
-        ENUM:"events",
-        TYPE:"student",
-        
-    },
-    {
         id:"universities",
         category:"public",
         tail:"listings/universities",
@@ -283,11 +216,6 @@ const endPoints=[
         category:"public",
         tail:"listings/courses",
         type:"POST",
-        
-    },
-    {
-        ENUM:"single_university",
-        TYPE:"public",
         
     },
     {
@@ -321,56 +249,6 @@ const endPoints=[
         type:"POST",
     },
     {
-        ENUM:"profile",
-        TYPE:"public",
-        
-    },
-    {
-        ENUM:"profiles",
-        TYPE:"public",
-        
-    },
-    {
-        ENUM:"counsellors",
-        TYPE:"public",
-        
-    },
-    {
-        ENUM:"university",
-        TYPE:"public",
-        
-    },
-    {
-        ENUM:"verify",
-        TYPE:"auth",
-        
-    },
-    {
-        ENUM:"logout",
-        TYPE:"auth",
-        
-    },
-    {
-        ENUM:"team-register",
-        TYPE:"auth",
-        
-    },
-    {
-        ENUM:"forgot-password",
-        TYPE:"auth",
-        
-    },
-    {
-        ENUM:"verify-otp",
-        TYPE:"auth",
-        
-    },
-    {
-        ENUM:"google/login",
-        TYPE:"auth",
-        
-    },
-    {
         id:"chats",
         category:"communication",
         tail:"chats",
@@ -387,10 +265,6 @@ const endPoints=[
         category:"communication",
         tail:"message",
         type:"POST",
-    },
-    {
-        ENUM:"seen",
-        TYPE:"communication",
     },
     {
         id:"users-search",

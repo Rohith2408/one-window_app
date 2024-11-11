@@ -73,6 +73,7 @@ import Wishlist from "../components/partials/Wishlist"
 import Expertsintro from "../components/partials/Expertsintro"
 import Emaillogin from "../components/flyers/Emailogin"
 import Phonelogin from "../components/flyers/Phonelogin"
+import Chatoptions from "../components/flyers/Chatoptions"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -103,6 +104,7 @@ const components:ScreenInfo[]=[
     {id:"Institutes",component:Institutes,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Personalinfo",component:Personalinfo,type:"Partial",title:"Personal Info",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3,swipeDirection:"X"},
     {id:"DPoptions",component:DPoptions,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,opacity:1,height:0.3,width:1},final:{x:0,y:0.7,scale:1,opacity:1,height:0.3,width:1}},removalThreshold:5/6},
+    {id:"Chatoptions",component:Chatoptions,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,opacity:1,height:0.3,width:1},final:{x:0,y:0.7,scale:1,opacity:1,height:0.3,width:1}},removalThreshold:5/6},
     {id:"Dp",component:Dp,type:"Popup",props:["image"],swipeDirection:"XY",isTransparent:true,occupyFullScreen:true,animationStyle:"FadeIn",removalThreshold:0.5},
     {id:"Wishlist",component:Wishlist,type:"Partial",title:"Wishlist",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Documents",component:Documents,type:"Partial",title:"Documents",props:["documentstab"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},

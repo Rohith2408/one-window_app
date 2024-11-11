@@ -296,10 +296,10 @@ const Messagecard=(props:Message & {index:number})=>{
     return(
         <View style={[GeneralStyles.wrapper]}>
         {
-            blockedUsers?.find((user)=>user._id==props.sender?._id && props.sender._id!=profile?._id)
-            ?
-            <Blocked/>
-            :
+            //blockedUsers?.find((user)=>user._id==props.sender?._id && props.sender._id!=profile?._id)
+            //?
+            //<Blocked/>
+            //:
                 props.type=="normal"
                 ?
                 <Normal {...props}/>

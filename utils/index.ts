@@ -315,7 +315,7 @@ export const getFriends=(chats:Chat[],currentUserId:string)=>{
   return Array.from(new Set(allusers.map(a => a._id)))
   .map(_id => {
     return allusers.find(a => a._id === _id)
-  }).filter((user)=>user?._id!=currentUserId  && store.getState().blockedusers.data?.find((blockeduser)=>blockeduser._id==user?._id)==undefined)
+  }).filter((user)=>user?._id!=currentUserId  && store.getState().blockedusers.data?.find((blockeduser)=>blockeduser._id==user?._id)==undefined && store.getState().blockedbyusers.data?.find((blockedbyuser)=>blockedbyuser._id==user?._id)==undefined)
 }
 
 export const getParticipantsLastSeenMessage=(chat:Chat,currentUser:Sharedinfo,messages:Message[])=>{
@@ -641,8 +641,7 @@ export const ISOtoIntakeformat=(iso:string)=>{
 //   return errors;
 // }
 
-export const PackageProductsValidator=(Package:Package|undefined,Products:Product[])=>{
-  console.log("validating",JSON.stringify(Products[0].course));
+export const PackageProductsValidator=(Package:Package|undefined,Products:Product[],existingProducts?:Product[])=>{
   let orders=store.getState().orders.data
   let categories=getCategoriesFromProducts(Products);
   let categoryErrors:{category:string,error:string}[]=[];
@@ -660,18 +659,19 @@ export const PackageProductsValidator=(Package:Package|undefined,Products:Produc
     {
       categories.forEach((category)=>{
         let categoryproducts=unpurchasedproducts.filter((item)=>item.category==category)
+        let existingcategoryproducts=existingProducts?existingProducts.filter((item)=>item.category==category):[]
         let categoryInPackage=Package?.products.find((item)=>item.category==category)
-        //console.log("products",Products)
-          if(Package!=undefined)
-          {
-            if(categoryInPackage==undefined)
+        console.log("existing",categoryproducts.length,existingcategoryproducts.length,categoryInPackage?.quantity)
+        if(Package!=undefined)
+        {
+          if(categoryInPackage==undefined)
           {
             productsErrors=[...productsErrors,...categoryproducts.map((item)=>({product:item,error:"Not allowed in the current package"}))]
           }
           else
           {
-            console.log("category error",categoryproducts.length,categoryInPackage.quantity)
-            if(categoryproducts.length>categoryInPackage.quantity)
+            //console.log("category error",categoryproducts.length,categoryInPackage.quantity)
+            if((categoryproducts.length+existingcategoryproducts.length)>categoryInPackage.quantity)
             {
               categoryErrors.push({category:category,error:"Only "+categoryInPackage.quantity+" "+category+" allowed "})
             }
@@ -680,7 +680,7 @@ export const PackageProductsValidator=(Package:Package|undefined,Products:Produc
               console.log(category+" is perfect")
             }
           }
-          }
+        }
       });
       if(Package!=undefined)
       {

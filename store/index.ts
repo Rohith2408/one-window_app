@@ -32,6 +32,7 @@ import suggestedpackageSlice from "./slices/suggestedpackageSlice";
 import ordersSlice from "./slices/ordersSlice";
 import locationSlice from "./slices/locationSlice";
 import blockedUsersSlice from "./slices/blockedUsersSlice";
+import blockedByUsersSlice from "./slices/blockedByUsersSlice";
 
 const store = configureStore({
         reducer:{
@@ -67,7 +68,8 @@ const store = configureStore({
             suggestedpackages:suggestedpackageSlice,
             orders:ordersSlice,
             location:locationSlice,
-            blockedusers:blockedUsersSlice
+            blockedusers:blockedUsersSlice,
+            blockedbyusers:blockedByUsersSlice
         }
     });
 

@@ -242,6 +242,7 @@ const Chatcard=(props:Chat & {index:number})=>{
     let lastMessageInfo=BakeLastmessage(props,profile);
     let activeParticipants=getOnlineUsers(props,profile);
     const blockedUsers=useAppSelector((state)=>state.blockedusers).data
+    const blockedByUsers=useAppSelector((state)=>state.blockedbyusers).data
 
     const animate=(y:number)=>{
         Animated.spring(translate,{
@@ -263,28 +264,35 @@ const Chatcard=(props:Chat & {index:number})=>{
                     <Image source={chatInfo.dp.length==0?default_icon:chatInfo.dp} style={[{borderRadius:100},styles[Device].icon]}/>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
-                    <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
-                        <View style={{width:5,height:5,borderRadius:10,backgroundColor:activeParticipants.length>=1?"#69FF6F":"lightgrey"}}></View>
-                        <Text style={[styles[Device].status,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.participants.length==2?(activeParticipants.length==1?"Online":"Offline"):(activeParticipants.length+" Online")}</Text>
-                        {
-                            props.participants.filter((item)=>item.activity=="typing").length!=0
-                            ?
-                            <Text style={[styles[Device].status,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Typing</Text>
-                            :
-                            null
-                        }
-                    </Animated.View>
+                    {
+                        props?.participants.length==2 && props?.participants.filter((item)=>item._id!=profile?._id && (blockedByUsers?.find((user)=>user._id==item._id)!=undefined || blockedUsers?.find((user)=>user._id==item._id)!=undefined)).length==1
+                        ?
+                        null
+                        :
+                        <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
+                            <View style={{width:5,height:5,borderRadius:10,backgroundColor:activeParticipants.length>=1?"#69FF6F":"lightgrey"}}></View>
+                            <Text style={[styles[Device].status,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.participants.length==2?(activeParticipants.length==1?"Online":"Offline"):(activeParticipants.length+" Online")}</Text>
+                            {
+                                props.participants.filter((item)=>item.activity=="typing").length!=0
+                                ?
+                                <Text style={[styles[Device].status,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Typing</Text>
+                                :
+                                null
+                            }
+                        </Animated.View>
+                    }
                     <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{chatInfo.name}</Text>
                     <View style={{display:"flex",alignItems:'center',flexDirection:'row',gap:5}}>
                         {
-                            blockedUsers?.find((user)=>user._id==props.lastMessage?.sender)==undefined
+                            props?.participants.length==2 && props?.participants.filter((item)=>item._id!=profile?._id && (blockedByUsers?.find((user)=>user._id==item._id)!=undefined || blockedUsers?.find((user)=>user._id==item._id)!=undefined)).length==1
                             ?
-                            <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:(props.lastMessage!=undefined && lastMessageInfo.sender=="other" && lastMessageInfo.status=="unseen")?Fonts.NeutrifStudio.Bold:Fonts.NeutrifStudio.Regular}]}>{props.lastMessage==undefined?"Tap to chat":props.lastMessage?.content}</Text>
-                            :
                             <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.participants.length==2?"User blocked":"Sent from a blocked user"}</Text>
+                            :
+                            <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:(props.lastMessage!=undefined && lastMessageInfo.sender=="other" && lastMessageInfo.status=="unseen")?Fonts.NeutrifStudio.Bold:Fonts.NeutrifStudio.Regular}]}>{props.lastMessage==undefined?"Tap to chat":props.lastMessage?.content}</Text>
+                            
                         }
                         {
-                            props.lastMessage!=undefined && lastMessageInfo.sender=="current"
+                            props.lastMessage!=undefined && lastMessageInfo.sender=="current" && !(props?.participants.length==2 && props?.participants.filter((item)=>item._id!=profile?._id && (blockedByUsers?.find((user)=>user._id==item._id)!=undefined || blockedUsers?.find((user)=>user._id==item._id)!=undefined)).length==1)
                             ?    
                             <View style={{flexDirection:"row",gap:0}}>
                                 <Image style={[styles[Device].indicators]} source={(lastMessageInfo.status=="unseen"?delivered_icon:seen_icon)} />
@@ -298,7 +306,7 @@ const Chatcard=(props:Chat & {index:number})=>{
                 <View style={[GeneralStyles.actions_wrapper]}>
                     <View style={{alignSelf:"center"}}><Image style={[styles[Device].edit,{transform:[{scaleX:-1}]}]} source={go_icon}/></View>
                     {
-                        unseenMessages.length!=0
+                        unseenMessages.length!=0 && !(props?.participants.length==2 && props?.participants.filter((item)=>item._id!=profile?._id && (blockedByUsers?.find((user)=>user._id==item._id)!=undefined || blockedUsers?.find((user)=>user._id==item._id)!=undefined)).length==1)
                         ?
                         <View style={{flex:1,flexDirection:"row",alignItems:"center",justifyContent:'flex-end',backgroundColor:Themes.Light.OnewindowLightBlue,borderRadius:100}}>
                             <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular,padding:5}]}>{unseenMessages.length}</Text>

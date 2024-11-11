@@ -1,4 +1,5 @@
 import { store } from "../store";
+import { addBlockedUser, removeBlockedUser } from "../store/slices/blockedUsersSlice";
 import { setCart } from "../store/slices/cartSlice";
 import { updateChat } from "../store/slices/chatsSlice";
 import { addMessage } from "../store/slices/messagesSlice";
@@ -240,6 +241,27 @@ const requests:RequestInfo[]=[
             if(res.success)
             {
                 store.dispatch(setWishlist(res.data));
+            }
+        }
+    },
+    {
+        id:"block/unblock-user",
+        inputValidator:(data:{action:"block"|"unblock",studentId:string})=>{
+            return {success:((data.action=="block" || data.action=="unblock") && data.studentId!=undefined),data:undefined,message:""};
+        },
+        serverCommunicator:async (data:{action:"block"|"unblock",studentId:string})=>{
+            console.log("block res",data,getServerRequestURL(data.action=="block"?"block-user":"unblock-user","PUT")+"/"+data.studentId);
+            let res=await serverRequest({
+                url:getServerRequestURL(data.action=="block"?"block-user":"unblock-user","PUT")+"/"+data.studentId,
+                reqType:"PUT"
+            })
+            console.log("block res",res);
+            return res;
+        },
+        responseHandler:(res:ServerResponse)=>{
+            if(res.success)
+            {
+                store.getState().blockedusers.data?.find((user)=>user._id==res.data.blocked._id)!=undefined?store.dispatch(removeBlockedUser(res.data.blocked._id)):store.dispatch(addBlockedUser(res.data.blocked))
             }
         }
     },
