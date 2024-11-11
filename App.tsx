@@ -35,7 +35,6 @@ export default function App() {
       console.log("token",token)
       SecureStore.setItemAsync(secureStoreKeys.DEVICE_TOKEN,token?token:"");
     }).catch((error: any) => setExpoPushToken(`${error}`));
-
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       alert(notification.request.content.body+" "+notification.request.content.data.someData)
     })

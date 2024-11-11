@@ -2168,6 +2168,7 @@ export const topUniversities=[
           "Perioperative Nursing"
       ]
   }
+  
   export let pgCourses = {
       "Master of Arts (MA)": [
           "Advertising",
