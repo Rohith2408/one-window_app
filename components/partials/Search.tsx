@@ -318,6 +318,7 @@ const Search=(props:{initialSearch:string})=>{
         setIsLoading(true);
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("regex","GET",{search:search.trim(),institutions:0,universities:1,disciplines:1,subDisciplines:1}),
+            routeType:"public",
             reqType:"GET"
         })
         setIsLoading(false);

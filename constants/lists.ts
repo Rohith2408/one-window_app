@@ -128,10 +128,11 @@ const lists:ListInfo[]=[
         },
         pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"programspage",newValue:page+1}}),
         listFetcher:async (query:{search:string,filters:any[],page:number})=>{
-            console.log("query recieved pro",JSON.stringify(query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),null,2));
+            console.log("query recieved pro",query.page,JSON.stringify(query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),null,2));
             let res:ServerResponse=await serverRequest({
                     url: getServerRequestURL("programs","POST"),
                     reqType: "POST",
+                    routeType:query.page<=2?"public":"private",
                     body:{
                         filterData:query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),
                         page:query.page,
@@ -205,10 +206,11 @@ const lists:ListInfo[]=[
         },
         pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"programspage",newValue:page+1}}),
         listFetcher:async (query:{search:string,filters:any[],page:number})=>{
-            console.log("query recieved uni",JSON.stringify(query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),null,2));
+            console.log("query recieved uni",query,JSON.stringify(query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),null,2));
             let res:ServerResponse=await serverRequest({
                     url: getServerRequestURL("universities","POST"),
                     reqType: "POST",
+                    routeType:query.page<=2?"public":"private",
                     body:{
                         filterData:query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),
                         page:query.page,
