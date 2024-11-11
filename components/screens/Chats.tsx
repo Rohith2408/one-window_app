@@ -177,8 +177,6 @@ const Chats=()=>{
         },200)
     }
 
-    //console.log("chats",JSON.stringify(chats,null,2));
-
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,paddingTop:20}}>
             {

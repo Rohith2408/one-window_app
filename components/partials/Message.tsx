@@ -422,6 +422,7 @@ const Message=(props:{chatId:string})=>{
     let bakedMessages=(chat && messages.data && profile.data)?bakeMessages(chat,profile.data._id,messages.data):[];
     const called=useRef(false);
     const textInputRef=useRef();
+    const blockedByUsers=useAppSelector((state)=>state.blockedbyusers).data
     const blockedUsers=useAppSelector((state)=>state.blockedusers).data
 
     const fetchMessages=async ()=>{
@@ -588,7 +589,11 @@ const Message=(props:{chatId:string})=>{
         }
     }
 
-    //console.log("messages",chat?.participants.length==2 && chat.participants.filter((item)=>item._id!=profile.data?._id && blockedUsers?.find((user)=>user._id==item._id)==undefined).length!=0);
+    const showChatOptions=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Chatoptions",params:{chatId:props.chatId}}}):null
+    }
+
+    console.log("messages",blockedUsers)
 
     return(
         <View style={[GeneralStyles.wrapper]}>
@@ -599,20 +604,20 @@ const Message=(props:{chatId:string})=>{
                         <Loadingview style={[styles[Device].loadingview_name]} isLoading={profile.responseStatus!="recieved"}><Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold}]}>{Word2Sentence([],"")}</Text></Loadingview>
                         <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{chat?.participants.length==2?chat.participants.find((participant)=>participant._id!=profile.data?._id)?.firstName:"Group Name"}</Text>
                         {
-                            chat?.participants.length==2 && chat.participants.filter((item)=>item._id!=profile.data?._id && blockedUsers?.find((user)=>user._id==item._id)==undefined).length!=0
+                            chat?.participants.length==2 && chat?.participants.filter((item)=>item._id!=profile.data?._id && (blockedByUsers?.find((user)=>user._id==item._id)!=undefined || blockedUsers?.find((user)=>user._id==item._id)!=undefined)).length==1
                             ?
+                            null
+                            :
                             <View style={{flexDirection:'row',alignItems:"center",gap:5}}>
                                 <View style={{width:5,height:5,borderRadius:10,backgroundColor:chat.participants.find((participant)=>participant._id!=profile.data?._id)?.activity=="offline"?"red":"green"}}></View>
                                 <Text style={[styles[Device].activity,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{chat.participants.find((participant)=>participant._id!=profile.data?._id)?.activity}</Text>
                             </View>
-                            :
-                            null
                         }
                     </View>
-                    <View style={[GeneralStyles.dp_wrapper]}>
+                    <Pressable onPress={showChatOptions} style={[GeneralStyles.dp_wrapper]}>
                         <View style={[GeneralStyles.dp_bg,styles[Device].dp_bg,{backgroundColor:Themes.Light.OnewindowPurple(1)}]} />
                         <Image style={[styles[Device].dp,{borderRadius:100}]} source={chat?.participants.length==2?chat.participants.find((participant)=>participant._id!=profile.data?._id)?.displayPicSrc:default_icon} />
-                    </View>
+                    </Pressable>
                 </View>
             </View>
             <View style={[GeneralStyles.meetings_wrapper]}>
@@ -642,8 +647,14 @@ const Message=(props:{chatId:string})=>{
                 }
                 </View>
                 {
-                    chat?.participants.filter((item)=>item._id!=profile.data?._id && blockedUsers?.find((user)=>user._id==item._id)==undefined).length!=0
+                    chat?.participants.length==2 && chat?.participants.filter((item)=>item._id!=profile.data?._id && (blockedUsers?.find((user)=>user._id==item._id)!=undefined || blockedByUsers?.find((user)=>user._id==item._id)!=undefined)).length==1
                     ?
+                    chat?.participants.filter((item)=>item._id!=profile.data?._id && (blockedUsers?.find((user)=>user._id==item._id)!=undefined)).length==1
+                    ?
+                    <View style={{borderWidth:1.5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}><Text style={[styles[Device].message,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5),padding:10}]}>{"Reciever has been blocked, unblock to start conversation"}</Text></View>
+                    :
+                    <View style={{borderWidth:1.5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}><Text style={[styles[Device].message,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5),padding:10}]}>{"You have been blocked by the reciever"}</Text></View>
+                    :
                     <Animated.View style={[GeneralStyles.messagebar_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.25)},{transform:[{translateY:messageBarOffset}]}]}>
                         <View style={{position:"absolute",bottom:"200%",flexDirection:"row",alignItems:"center",paddingLeft:10,gap:10}}>
                             <Activitybar participants={chat?.participants}/>
@@ -679,8 +690,6 @@ const Message=(props:{chatId:string})=>{
                             null
                         }
                     </Animated.View>
-                    :
-                    <View style={{borderWidth:1.5,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}><Text style={[styles[Device].message,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5),padding:10}]}>{(chat.participants.length==2?"Reciever":"Recievers")+" has been blocked, unblock to start conversation"}</Text></View>
                 }
             </View>
         </View>

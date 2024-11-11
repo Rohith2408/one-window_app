@@ -34,6 +34,7 @@ import { store } from "../../store"
 import { initChats, updateChat, updateParticipantActivity, updateParticipantsActivity } from "../../store/slices/chatsSlice"
 import { getSocket, initiateSocketConnection } from "../../socket"
 import { initBlockedUsers } from "../../store/slices/blockedUsersSlice"
+import { initBlockedByUsers } from "../../store/slices/blockedByUsersSlice"
 
 const Student=(props:{screens:string[],params:any})=>{
 
@@ -151,7 +152,14 @@ const Student=(props:{screens:string[],params:any})=>{
                 responseStatus: "recieved",
                 haveAnIssue: false,
                 issue: "",
-                data: [{"_id": "67179397d1b86b6462a23b16", "displayPicSrc": "https://res.cloudinary.com/dffdp7skh/image/upload/v1729600798/olbzoqrfvbbvhff5txon.jpg", "firstName": "Bhavya", "lastName": "V", "userType": "student"}]
+                data: res.data.blockList
+            }))
+            dispatch(initBlockedByUsers({
+                requestStatus: "initiated",
+                responseStatus: "recieved",
+                haveAnIssue: false,
+                issue: "",
+                data:res.data.blockedBy
             }))
         }
         return res
