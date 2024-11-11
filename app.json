@@ -24,7 +24,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.onewindow.app",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "We use your location to automatically set your country code and connect you with users in your area.",
+        "NSLocationWhenInUseUsageDescription": "Your location helps us personalize your experience by automatically setting your country code, currency, and other relevant preferences. ",
         "CFBundleURLTypes": [
           {
             "CFBundleURLSchemes": [
@@ -66,6 +66,12 @@
         "expo-secure-store",
         {
           "faceIDPermission": "Allow One Window to access your Face ID biometric data."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Your location helps us personalize your experience by automatically setting your country code, currency, and other relevant preferences. "
         }
       ],
       "expo-font"
