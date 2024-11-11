@@ -183,7 +183,7 @@ export const serverRequest=async (requestData:ServerRequest)=>{
     message:"",
     data:undefined
   };
-  let accessToken=await SecureStore.getItemAsync(secureStoreKeys.ACCESS_TOKEN)
+  let accessToken=await getAccessTokenFromStore()
   if(accessToken?.length==0 && (!requestData.routeType || requestData.routeType=="private"))
   {
     res.success=false
@@ -213,6 +213,8 @@ export const serverRequest=async (requestData:ServerRequest)=>{
   }
   return res
 }
+
+export const getAccessTokenFromStore=async ()=>await SecureStore.getItemAsync(secureStoreKeys.ACCESS_TOKEN)
 
 export const getChatType=(chat:Chat)=>{
   return chat.participants.find((participant)=>participant.userType=="member")?"advisors":"community"
