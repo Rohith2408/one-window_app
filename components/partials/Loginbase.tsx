@@ -513,6 +513,10 @@ const Loginbase=(props:{auth:string})=>{
         navigate({type:"AddScreen",payload:{screen:"Phonelogin"}})
     }
 
+    const openExplore=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null
+    }
+
     return(
         <View style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.header_wrapper,styles[Device].header_wrapper,{position:"relative"}]}>
@@ -537,6 +541,10 @@ const Loginbase=(props:{auth:string})=>{
                     </View>
                 </View>
                 <View style={{flexDirection:"column",gap:25,alignItems:'center',padding:10}}>
+                    <Pressable onPress={openExplore} style={[GeneralStyles.login_button_wrapper,{borderWidth:0}]}>
+                        <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Start Exploring" focusWord="Exploring"/>
+                        {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
+                    </Pressable>
                     <Pressable onPress={emailLogin} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
                         <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Login with Email" focusWord="Email"/>
                         {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
@@ -547,35 +555,7 @@ const Loginbase=(props:{auth:string})=>{
                         {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
                     </Pressable>
                 </View>
-                {/* <Listselection
-                    direction="horizontal"
-                    selectionStyle="background"
-                    initialSelection={[tabs[0]]}
-                    blurUnSelected={true}
-                    styles={{contentcontainer:{gap:10}}}
-                    onselection={tabSelected}
-                    options={{
-                        list:tabs,
-                        idExtractor:(data:ListItem)=>data.label,
-                        labelExtractor:(data:any)=>data.label,
-                        selectionMode:"single"
-                    }}
-                />
-                {
-                    loginType=="email"
-                    ?
-                    <Form key="email" formid="Login_email" formbasket="login_email"/>
-                    :
-                    <Form key="phone" formid="Login_phone" formbasket="login_phone"/>
-                } */}
-                {/* <View style={[GeneralStyles.actions_wrapper]}>
-                    <View>
-                        <Pressable onPress={openSignup}><Text style={[styles[Device].noaccount,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Don't have an account?</Text></Pressable>
-                    </View>
-                    <View>
-                        <Pressable onPress={openForgotPassword}><Text style={[styles[Device].forgot,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Forgot Password?</Text></Pressable>
-                    </View>
-                </View> */}
+                
             </View>
         </View>
     )

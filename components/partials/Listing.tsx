@@ -5,7 +5,7 @@ import {Fonts, Themes, lists, setComponentInfo} from "../../constants"
 import { AppliedFilter, AppliedQuickFilter, Event, ListItem, QuickFilterInfo, ServerResponse } from "../../types"
 import useNavigation from "../../hooks/useNavigation"
 import { addToBasket, getBasket, removeFromBasket } from "../../constants/basket"
-import { bakeFilters, chopOff, getAdditionalFilters, getDevice, getMergedFilters, mergeQuickFilters } from "../../utils"
+import { bakeFilters, chopOff, getAccessTokenFromStore, getAdditionalFilters, getDevice, getMergedFilters, mergeQuickFilters } from "../../utils"
 import { Image } from "expo-image"
 import Listselection from "../resources/Listselection"
 import Quickfiltercard from "../cards/Quickfiltercard"
@@ -164,10 +164,10 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     const maxPages=useRef(1)
     const phonenumber=useAppSelector((state)=>state.sharedinfo.data)?.phone;
     const verificationStatus=useAppSelector((state)=>state.verification.data)?.find((item)=>item.type=="phone")?.status;
+    const basicProfileCompleted=useRef(false);        
     //const lisbasket=getBasket(props.basketid);
 
     useEffect(()=>{
-        //if()
 
         getList().then((res:ServerResponse|undefined)=>{
             console.log("server res",res);
@@ -177,14 +177,27 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     },[JSON.stringify(props.additionalFilters),JSON.stringify(props.quickFilters),props.search,props.page])
 
     const getList=async ()=>{
-        setIsLoading(true);
-        let appliedFilters=bakeFilters(props.additionalFilters,props.quickFilters);
-        console.log("Applied",props.listid,JSON.stringify(appliedFilters,null,2));
-        let res=await ListInfo?.listFetcher({search:props.search,filters:appliedFilters,page:props.page})
-        setTimeout(()=>{
-            setIsLoading(false)
-        },750)
-        return res
+        console.log("hitting",props.page);
+        let AT=await getAccessTokenFromStore()
+        if(!AT && props.page>2)
+        {
+            navigate?navigate({type:"AddScreen",payload:{screen:"Exploreguest"}}):null;
+        }
+        else if(!basicProfileCompleted.current && props.page>2)
+        {
+            navigate?navigate({type:"AddScreen",payload:{screen:"Basicinfo"}}):null;
+            basicProfileCompleted.current=true
+        }
+        if(props.page<=2 || (props.page>2 && AT && basicProfileCompleted.current))
+        {
+            setIsLoading(true);
+            let appliedFilters=bakeFilters(props.additionalFilters,props.quickFilters);
+            let res=await ListInfo?.listFetcher({search:props.search,filters:appliedFilters,page:props.page})
+            setTimeout(()=>{
+                setIsLoading(false)
+            },750)
+            return res
+        }
     }
 
     const applyQuickFilter=(data:QuickFilterInfo[])=>{

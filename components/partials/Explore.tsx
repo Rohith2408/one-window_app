@@ -107,7 +107,6 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
         let programslistquery,universitieslistquery;
         switch(event.name){
             case "applyAdditionalFilters":
-
                 let universityFilter=props.programslistquery.additionalFilters.find((item)=>item.type=="universityId")
                 programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,page:1,additionalFilters:universityFilter?[...event.data,universityFilter]:event.data}:props.programslistquery
                 console.log("applyinggg",event.data,programslistquery)
@@ -197,6 +196,8 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
         },100)
     },[dimensions])
     //[{label:props.initialexploretab,value:props.initialexploretab}]
+
+    //console.log("ppaarraammss",props.programslistquery,props.universitieslistquery)
 
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:15}}>
