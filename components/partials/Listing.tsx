@@ -193,6 +193,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
             setIsLoading(true);
             let appliedFilters=bakeFilters(props.additionalFilters,props.quickFilters);
             let res=await ListInfo?.listFetcher({search:props.search,filters:appliedFilters,page:props.page})
+            //console.log("Listing response",props.listid,props.page,JSON.stringify(res?.data.map((item)=>item.name),null,2));
             setTimeout(()=>{
                 setIsLoading(false)
             },750)
@@ -305,7 +306,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
                 <ScrollView scrollEventThrottle={100} onScroll={(e)=>onScroll(e)} style={[GeneralStyles.sub_wrapper]} contentContainerStyle={{padding:10}}>
                 {
                     list.map((item:any,i:number)=>
-                        <View><Component {...item} index={i}/></View>
+                        <View key={item._id}><Component {...item} index={i}/></View>
                     )
                 }
                 </ScrollView>

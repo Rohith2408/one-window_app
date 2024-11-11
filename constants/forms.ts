@@ -5327,10 +5327,14 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
+                                let countryMapped,states;
                                 let selectedCountry=getBasket("country")[0]?.label
-                                let countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
-                                let states=countryMapped?await fetchStates(countryMapped):undefined
-                                return {success:(countryMapped!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
+                                if(selectedCountry)
+                                {
+                                    countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
+                                    states=countryMapped?await fetchStates(countryMapped):undefined
+                                }
+                                return {success:(selectedCountry!=undefined && countryMapped!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
@@ -5342,6 +5346,7 @@ const forms:FormInfo[]=[
                         cityFieldId:"city"
                     }
                 },
+                isOptional:true,
                 title:"State",
                 onUpdate:{
                     event:"onSelect",
@@ -5357,10 +5362,18 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
-                                let selectedCountry=getBasket("country")[0]?.label
-                                let countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
-                                let selectedState=getBasket("state")[0]?.label
-                                let cities=(countryMapped && selectedState)?await fetchCities(countryMapped,selectedState):undefined
+                                let selectedCountry,countryMapped,selectedState,cities;
+                                selectedCountry=getBasket("country")[0]?.label
+                                if(selectedCountry)
+                                {
+                                    countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
+                                    selectedState=getBasket("state")[0]?.label
+                                    if(selectedState)
+                                    {
+                                        cities=(countryMapped && selectedState)?await fetchCities(countryMapped,selectedState):undefined
+                                    }
+                                }
+                                console.log("city dropdown",selectedCountry,selectedState);
                                 return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
@@ -5626,36 +5639,6 @@ const forms:FormInfo[]=[
         // {type:'openNow',title:"Open now?",selectionType:"custom",customContainer:{name:"opennowfiltercontainer"},handler:openNowFilterhandler,filterUpdateEventName:"onToggle"},
         // {type:"AcademicTestName",dropdownDirection:"bottom2top",title:"Academic Test",options:["GRE", "GMAT"].map((item)=>({label:item,value:item})),selectionType:"multi",focusEventName:"onToggle",filterUpdateEventName:"onPress",styles:{zIndex:1}},
         allFields:[
-            // {
-            //     id:"country",
-            //     componentInfo:{
-            //         component:Dropdown,
-            //         props:{
-            //             options:{
-            //                 fetcher:(data:AppliedFilter)=>{
-            //                     let baseFilter:AppliedQuickFilter|undefined=getBasket("Universitiesfilter").baseFilters.find((item)=>item.type=="country");
-            //                     let options=Countries.map((country)=>({label:country,value:country}))
-            //                     return  {success:true,data:baseFilter?baseFilter.data:options,messsage:""}
-            //                 },
-            //                 //list:Countries.map((country)=>({label:country,value:country})),
-            //                 idExtractor:(item:ListItem)=>item.label,
-            //                 labelExtractor:(item:ListItem)=>item.label
-            //             },
-            //             pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"country",newvalue:data}}}),
-            //             selectionMode:"single",
-            //             basketid:"sector-dropdown"
-            //         }
-            //     },
-            //     isOptional:true,
-            //     title:"Country",
-            //     onUpdate:{
-            //         event:"onTextInput",
-            //         handler:undefined
-            //     },
-            //     onFocus:{
-            //         event:"onFocus"
-            //     }
-            // },
             {
                 id:"country",
                 componentInfo:{
@@ -5694,10 +5677,14 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
+                                let countryMapped,states;
                                 let selectedCountry=getBasket("country")[0]?.label
-                                let countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
-                                let states=countryMapped?await fetchStates(countryMapped):undefined
-                                return {success:(countryMapped!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
+                                if(selectedCountry)
+                                {
+                                    countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
+                                    states=countryMapped?await fetchStates(countryMapped):undefined
+                                }
+                                return {success:(selectedCountry!=undefined && countryMapped!=undefined && states!=undefined),data:states?states.map((state:any)=>({label:setWordCase(state.name),value:state.name})):undefined,message:selectedCountry==undefined?"Select the Country":undefined}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
@@ -5709,6 +5696,7 @@ const forms:FormInfo[]=[
                         cityFieldId:"city"
                     }
                 },
+                isOptional:true,
                 title:"State",
                 onUpdate:{
                     event:"onSelect",
@@ -5724,10 +5712,18 @@ const forms:FormInfo[]=[
                     props:{
                         options:{
                             fetcher:async ()=>{
-                                let selectedCountry=getBasket("country")[0]?.label
-                                let countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
-                                let selectedState=getBasket("state")[0]?.label
-                                let cities=(countryMapped && selectedState)?await fetchCities(countryMapped,selectedState):undefined
+                                let selectedCountry,countryMapped,selectedState,cities;
+                                selectedCountry=getBasket("country")[0]?.label
+                                if(selectedCountry)
+                                {
+                                    countryMapped=selectedCountry.toLowerCase()=="united states of america"?"United states":selectedCountry;
+                                    selectedState=getBasket("state")[0]?.label
+                                    if(selectedState)
+                                    {
+                                        cities=(countryMapped && selectedState)?await fetchCities(countryMapped,selectedState):undefined
+                                    }
+                                }
+                                console.log("city dropdown",selectedCountry,selectedState);
                                 return {success:(selectedCountry!=undefined && selectedState!=undefined && cities!=undefined),data:cities?cities.map((city:any)=>({label:setWordCase(city),value:city})):undefined,message:selectedCountry==undefined?"Select the Country and State":"Select the State"}
                             },
                             labelExtractor:(item:ListItem)=>item.label,
@@ -5739,8 +5735,8 @@ const forms:FormInfo[]=[
                         basketid:"city-dropdown"
                         }
                 },
-                isOptional:true,
                 title:"City",
+                isOptional:true,
                 onUpdate:{
                     event:"onSelect",
                     handler:undefined
