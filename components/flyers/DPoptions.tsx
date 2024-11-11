@@ -11,6 +11,8 @@ import { useAppDispatch } from "../../hooks/useAppDispatch"
 import { setSharedInfo } from "../../store/slices/sharedinfoSlice"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { Image } from "expo-image"
+import { addToBasket } from "../../constants/basket"
+import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -65,7 +67,8 @@ const DPoptions=()=>{
     const [loading,setloading]=useState(false);
 
     const show=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Dp",params:{image:sample_pic}}}):null
+        addToBasket("viewimage",store.getState().sharedinfo.data?.displayPicSrc)
+        navigate?navigate({type:"AddScreen",payload:{screen:"Dp"}}):null
     }
 
     const uploadImage=async (file:any)=>{

@@ -4,6 +4,7 @@ import useNavigation from "../../hooks/useNavigation"
 import { store } from "../../store"
 import { useRef } from "react"
 import defaultDP from '../../assets/images/misc/defaultDP.png'
+import { getBasket } from "../../constants/basket"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -20,10 +21,11 @@ const GeneralStyles=StyleSheet.create({
     }
 })
 
-const Dp=(props:{image:string})=>{
+const Dp=()=>{
         
     const [path,navigate]=useNavigation()
-    const image=useRef(store.getState().sharedinfo.data?.displayPicSrc?store.getState().sharedinfo.data?.displayPicSrc:defaultDP).current
+    const image:any=useRef(getBasket("viewimage")).current;
+   
 
     const close=()=>{
         navigate?navigate({type:"RemoveScreen"}):null
