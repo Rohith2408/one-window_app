@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Course, Event, Package, Product, ServerResponse } from "../../types"
-import { PackageProductsValidator, Word2Sentence, compareProducts, getDevice, getLightThemeColor, getMonth, getServerRequestURL, getThemeColor, serverRequest, setWordCase } from "../../utils";
+import { PackageProductsValidator, Word2Sentence, compareProducts, getAccessTokenFromStore, getDevice, getLightThemeColor, getMonth, getServerRequestURL, getThemeColor, serverRequest, setWordCase } from "../../utils";
 import { cartRequest } from "../../utils/serverrequests";
 import useNavigation from "../../hooks/useNavigation";
 import { addToBasket } from "../../constants/basket";
@@ -475,11 +475,13 @@ const Program=(props:{programid:string})=>{
     ]
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
     const [isLoading,setLoading]=useState(false);
+    const [AT,setAT]=useState<undefined|string|null>();
 
     const fetchProgram=async ()=>{
         console.log("id",props.programid)
         const res:ServerResponse=await serverRequest({
             url:getServerRequestURL("program","GET",{id:props.programid,currency:"INR"}),
+            routeType:"public",
             reqType:"GET"
         });
         res.success?setProgramInfo(res.data):null
@@ -663,6 +665,7 @@ const Program=(props:{programid:string})=>{
 
 
     useEffect(()=>{
+        getAccessTokenFromStore().then((Token)=>setAT(Token))
         fetchProgram();
     },[])
 
@@ -687,7 +690,7 @@ const Program=(props:{programid:string})=>{
                         </View>
                         <View style={[GeneralStyles.actions_wrapper]}>
                             {
-                                !programInfo.elite
+                                AT && !programInfo.elite
                                 ?
                                 <Pressable onPress={()=>showIntakes(applyForFree,"order")} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
                                     {/* <Image source={cart_icon} style={[styles[Device].cart_icon]}/> */}
@@ -696,17 +699,22 @@ const Program=(props:{programid:string})=>{
                                 :
                                 null
                             }
-                            <Pressable  onPress={()=>showIntakes(addToCart,"cart")} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:programInfo.elite?1.2:0,padding:10,paddingLeft:programInfo.elite?15:5,paddingRight:programInfo.elite?15:5,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
-                                <Image source={cart_icon} style={[styles[Device].cart_icon]}/>
-                                {
-                                    programInfo.elite
-                                    ?
-                                    <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Add to Cart</Text>
-                                    :
-                                    null
-                                }
-                                {/*  */}
-                            </Pressable>
+                            {
+                                AT
+                                ?
+                                <Pressable  onPress={()=>showIntakes(addToCart,"cart")} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:programInfo.elite?1.2:0,padding:10,paddingLeft:programInfo.elite?15:5,paddingRight:programInfo.elite?15:5,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
+                                    <Image source={cart_icon} style={[styles[Device].cart_icon]}/>
+                                    {
+                                        programInfo.elite
+                                        ?
+                                        <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Add to Cart</Text>
+                                        :
+                                        null
+                                    }
+                                </Pressable>
+                                :
+                                null
+                            }
                         </View>
                     </View>
                     <View>
@@ -715,7 +723,11 @@ const Program=(props:{programid:string})=>{
                         ?
                         <Loader  isLoading={isLoading} loaderStyles={[styles[Device].cart_icon]}/>
                         :
+                        AT
+                        ?
                         <Pressable onPress={!isLoading?modilfyWishlist:null}><Image style={[styles[Device].cart_icon]} source={wishlist.data.find((item)=>item._id==programInfo?._id)?wishlisted_icon:wishlist_icon}/></Pressable>
+                        :
+                        null
                     }
                     </View>
                 </View>

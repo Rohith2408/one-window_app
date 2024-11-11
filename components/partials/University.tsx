@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Course, Event, Product, ProgramIntake, ServerResponse, University as UniversityType } from "../../types"
-import { PackageProductsValidator, Word2Sentence, getDevice, getLightThemeColor, getServerRequestURL, getThemeColor, serverRequest } from "../../utils";
+import { PackageProductsValidator, Word2Sentence, getAccessTokenFromStore, getDevice, getLightThemeColor, getServerRequestURL, getThemeColor, serverRequest } from "../../utils";
 import { cartRequest } from "../../utils/serverrequests";
 import useNavigation from "../../hooks/useNavigation";
 import { addToBasket } from "../../constants/basket";
@@ -422,11 +422,13 @@ const University=(props:{universityid:string})=>{
         {type:"Autumn",value:universityInfo?.average_temperatures.autumn.min+" °C "+"-"+universityInfo?.average_temperatures.autumn.max+" °C "},
         {type:"Spring",value:universityInfo?.average_temperatures.spring.min+" °C "+"-"+universityInfo?.average_temperatures.spring.max+" °C "},
     ]
+    const [AT,setAT]=useState<undefined|string|null>();
 
     const fetchUniversity=async ()=>{
         console.log("id",props.universityid)
         const res:ServerResponse=await serverRequest({
             url:getServerRequestURL("university","GET",{id:props.universityid,currency:"INR"}),
+            routeType:"public",
             reqType:"GET"
         });
         console.log("res",res);
@@ -434,6 +436,7 @@ const University=(props:{universityid:string})=>{
     }
 
     useEffect(()=>{
+        getAccessTokenFromStore().then((Token)=>setAT(Token))
         fetchUniversity();
     },[])
 
@@ -463,9 +466,15 @@ const University=(props:{universityid:string})=>{
                             <Image source={location_icon} style={[styles[Device].location_icon]}/>
                             <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([universityInfo.location.city,universityInfo.location.state,universityInfo.location.country],"",",",true)}</Text></View>
                         </View>
-                        <Pressable onPress={showCourses} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
-                            <Text style={[styles[Device].uni_location,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Show Courses</Text>
-                        </Pressable>
+                        {
+                            AT
+                            ?
+                            <Pressable onPress={showCourses} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
+                                <Text style={[styles[Device].uni_location,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Show Courses</Text>
+                            </Pressable>
+                            :
+                            null
+                        }
                     </View>
                 </View>
                 <View style={[GeneralStyles.dashboards_wrapper,styles[Device].dashboards_wrapper]}>
