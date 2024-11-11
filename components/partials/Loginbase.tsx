@@ -107,10 +107,10 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     body_wrapper:{
-        gap:40
+        gap:26
     },
     banner_wrapper:{
-        gap:30
+        gap:20
     },
     header_wrapper:{
         height:160,
@@ -179,6 +179,9 @@ const TabStyles=StyleSheet.create({
     login_text:{
         fontSize:22,
         padding:15
+    },
+    explore_text:{
+        fontSize:20
     }
 })
 
@@ -274,6 +277,9 @@ const MobileSStyles=StyleSheet.create({
     },
     login_text:{
         fontSize:14
+    },
+    explore_text:{
+        fontSize:12
     }
 })
 
@@ -350,6 +356,9 @@ const MobileMStyles=StyleSheet.create({
     },
     login_text:{
         fontSize:16
+    },
+    explore_text:{
+        fontSize:14
     }
 })
 
@@ -426,6 +435,9 @@ const MobileLStyles=StyleSheet.create({
     },
     login_text:{
         fontSize:16
+    },
+    explore_text:{
+        fontSize:14
     }
 })
 
@@ -541,10 +553,6 @@ const Loginbase=(props:{auth:string})=>{
                     </View>
                 </View>
                 <View style={{flexDirection:"column",gap:25,alignItems:'center',padding:10}}>
-                    <Pressable onPress={openExplore} style={[GeneralStyles.login_button_wrapper,{borderWidth:0}]}>
-                        <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Start Exploring" focusWord="Exploring"/>
-                        {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
-                    </Pressable>
                     <Pressable onPress={emailLogin} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
                         <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Login with Email" focusWord="Email"/>
                         {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
@@ -552,6 +560,10 @@ const Loginbase=(props:{auth:string})=>{
                     <Pressable onPress={phoneLogin} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
                         <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Login with Mobile" focusWord="Mobile"/>
                         {/* <Text style={[styles[Device].login_text,{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}></Text> */}
+                        {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
+                    </Pressable>
+                    <Pressable onPress={openExplore}>
+                        <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium,textAlign:"center",lineHeight:22},styles[Device].explore_text]} text="Ready to Explore? Discover your dream university today!" focusWord="Discover your dream university today!"/>
                         {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
                     </Pressable>
                 </View>
