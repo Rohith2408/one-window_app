@@ -264,7 +264,7 @@ const Productcard=(props:PurchasedProduct & {index:number})=>{
                 <View style={[GeneralStyles.icon_wrapper]}><Image source={props.course.university.logoSrc} style={[styles[Device].card_icon,{borderRadius:100}]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.35)} style={[GeneralStyles.title_wrapper,{transform:[{translateY:titleTranslate}]}]}>
-                        <View style={{width:5,height:5,borderRadius:100,backgroundColor:"lightgreen"}}></View>
+                        <View style={{width:5,height:5,borderRadius:100,backgroundColor:"orange"}}></View>
                         <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.category)}</Text>
                     </Animated.View>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.course.name}</Text>
