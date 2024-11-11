@@ -1239,12 +1239,14 @@ export interface Order{
     Package:Package,
     products: PurchasedProduct[],
     status: string,
-    logs: {
-        action: string,
-        time: string,//ex.2024-08-02T20:48:24.751Z
-        details: string,// ex. "{\"note_key\":\"purchase initiated by Rohith Kumar\",\"item_ids\":{\"package\":null,\"products\":[\"66ad463cedb6f560dea4327a\",\"66ad463cedb6f560dea4327b\"]}}"
-        _id: string
-    }[]
+    logs: Orderlogs[]
+}
+
+export interface Orderlogs{
+    action: string,
+    time: string,//ex.2024-08-02T20:48:24.751Z
+    details: string,// ex. "{\"note_key\":\"purchase initiated by Rohith Kumar\",\"item_ids\":{\"package\":null,\"products\":[\"66ad463cedb6f560dea4327a\",\"66ad463cedb6f560dea4327b\"]}}"
+    _id: string
 }
 
 export interface Package{

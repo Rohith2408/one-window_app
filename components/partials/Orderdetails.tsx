@@ -12,6 +12,8 @@ import Productcard from "../cards/Productcard"
 import Productcompactcard from "../cards/Productcompactcard"
 import Styledtext from "../resources/Styledtext"
 import Productcompact2card from "../cards/Productcompactcard2"
+import Orderlogscard from "../cards/Orderlogscard"
+import Transitionview from "../resources/Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -234,7 +236,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
         
     }
 
-    console.log(order?.paymentDetails);
+    //console.log(JSON.stringify("logs",order?.logs,null,2));
 
     return(
         <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginSmall]}>
@@ -283,25 +285,41 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                         </ScrollView>
                     </View>
                 </View>
-                <View>
-                    <Styledtext styles={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Payment Details" focusWord="Details"/>
-                    <View>
-                    {/* {
-                        product.docChecklist.map((item)=>
-                        <Text>{item.name}</Text>
-                        )
-                    } */}
+                <View style={{gap:10}}> 
+                    <Styledtext styles={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Payment Details:" focusWord="Details"/>
+                    <View style={{gap:15,padding:7.5}}>
+                        <View style={{flexDirection:"row",alignItems:"center"}}>
+                            <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Total</Text></View>
+                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{order.paymentDetails.currency+" "+order.paymentDetails.amount}</Text>
+                        </View>
+                        <View style={{flexDirection:"row",alignItems:"center"}}>
+                            <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Amount Due</Text></View>
+                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{order.paymentDetails.currency+" "+order.paymentDetails.amount_due}</Text>
+                        </View>
+                        <View style={{flexDirection:"row",alignItems:"center"}}>
+                            <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Amount Paid</Text></View>
+                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{order.paymentDetails.currency+" "+(order.paymentDetails.amount-order.paymentDetails.amount_due)}</Text>
+                        </View>
                     </View>
                 </View>
-                <View>
-                    <Text style={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]}>Logs</Text>
-                    <View>
-                    {/* {
-                        product.docChecklist.map((item)=>
-                        <Text>{item.name}</Text>
+                <View style={{gap:10}}>
+                    <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Logs</Text>
+                    <ScrollView horizontal contentContainerStyle={{gap:10}}>
+                    {
+                        order.logs.map((log,i)=>
+                        <View style={{flexDirection:"row",alignItems:"center"}}>
+                            <Orderlogscard {...log} index={i}/>
+                            {
+                                i<order.logs.length-1
+                                ?
+                                <Transitionview effect="pan"><View style={{height:2,width:70,backgroundColor:Themes.Light.OnewindowPrimaryBlue(1),borderRadius:5}}/></Transitionview>
+                                :
+                                null
+                            }
+                        </View>
                         )
-                    } */}
-                    </View>
+                    }
+                    </ScrollView>
                 </View>
             </View>
             :
