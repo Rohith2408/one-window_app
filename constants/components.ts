@@ -141,7 +141,7 @@ const components:ScreenInfo[]=[
     {id:"Orderdetails",component:Orderdetails,type:"Partial",title:"Order Details",props:["orderdetailsid"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Myproducts",component:Myproducts,type:"Partial",title:"My Products",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Product",component:Product,type:"Partial",title:"Product",props:["productId"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
-    {id:"Payment",component:Payment,type:"Partial",title:"Payment",props:["paymentOrderId"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
+    {id:"Payment",component:Payment,type:"Partial",title:"Payment",props:["paymentOrderId"],nonClosable:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Recommendations",component:Recommendations,type:"Partial",title:"Recommendations",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Coursepreference",component:Coursepreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Countrypreference",component:Countrypreference,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
