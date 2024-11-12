@@ -5,7 +5,7 @@ import Loadingview from "../resources/Loadingview"
 import clock_icon from '../../assets/images/misc/clock.png'
 import suitcase_icon from '../../assets/images/misc/workexperience.png'
 import { Image } from "expo-image"
-import { Word2Sentence, formatDate, getDevice, profileUpdator } from "../../utils"
+import { Word2Sentence, formatDate, getDevice, profileUpdator, setWordCase } from "../../utils"
 import { Fonts, Themes, setComponentInfo } from "../../constants"
 import delete_icon from '../../assets/images/misc/delete-black.png'
 import edit_icon from '../../assets/images/misc/edit-black.png'
@@ -280,7 +280,7 @@ const Familydetailscard=(props:{data:FamilyInfo,index:number})=>{
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
                     <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.35)} style={[GeneralStyles.title_wrapper,{transform:[{translateY:titleTranslate}]}]}>
                         <View style={{width:5,height:5,borderRadius:100,backgroundColor:"green"}}></View>
-                        <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.data.RelationshipWithStudent}</Text>
+                        <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.data.RelationshipWithStudent)}</Text>
                     </Animated.View>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.data.GuardianFirstName+" "+props.data.GuardianLastName}</Text>
                     <View style={{flexDirection:"row",gap:5}}>
