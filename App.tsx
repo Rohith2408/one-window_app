@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Linking, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Linking, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Stacknavigator from './navigation/stackNavigator';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { ComponentInfo, ServerResponse, StackScreen } from './types';
@@ -84,7 +84,7 @@ export default function App() {
   return (
     <StoreProvider store={store}>
       <Appcontext.Provider value={{path,navigate,theme,setTheme}}>
-        <SafeAreaView style={styles.container} >
+        <SafeAreaView  style={[styles.container,{paddingBottom:Platform.OS=="android"?5:0}]} >
           <Layout component={encodedData.screens[0]} screens={encodedData.screens.filter((screen,i)=>i!=0)} props={encodedData.props} invalidPathScreen={Invalidpath}></Layout>
         </SafeAreaView>
       </Appcontext.Provider>
