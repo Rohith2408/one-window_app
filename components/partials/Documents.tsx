@@ -307,7 +307,7 @@ const Test=(props:Request<DocumentsType>)=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [isLoading,setIsLoading]=useState<undefined|"language"|"general">(undefined)
     const [path,navigate]=useNavigation()
-    const docMaxSize=useRef(40).current
+    const docMaxSize=useRef(25).current
     
     const upload=async (fieldPath:string,type:undefined|"language"|"general")=>{
         setIsLoading(type);
@@ -364,7 +364,7 @@ const Document=(props:{title:string,docIdentifier:string,fieldPath:string,doc:Do
     const [isLoading,setIsLoading]=useState(false);
     const dispatch=useAppDispatch()
     const [path,navigate]=useNavigation()
-    const docMaxSize=useRef(40).current
+    const docMaxSize=useRef(25).current
 
     const upload=async ()=>{
         setIsLoading(true);
