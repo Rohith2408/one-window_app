@@ -944,7 +944,7 @@ const forms:FormInfo[]=[
                                 list:Countrycodes,
                                 labelExtractor:(item:Countrycode)=>item.dial_code,
                                 idExtractor:(item:Countrycode)=>item.code,
-                                searchEvaluator:(item:Countrycode,search:string)=>item.name.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                                searchEvaluator:(item:Countrycode,search:string)=>(item.dial_code+item.code+item.name).toLowerCase().trim().includes(search.toLowerCase().trim())
                             },
                             pathHandler:(data:Countrycode[])=>{
                                 let current:PhoneType=getBasket("phone")
@@ -1607,7 +1607,7 @@ const forms:FormInfo[]=[
                                 list:Countrycodes,
                                 labelExtractor:(item:Countrycode)=>item.dial_code,
                                 idExtractor:(item:Countrycode)=>item.code,
-                                searchEvaluator:(item:Countrycode,search:string)=>item.name.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                                searchEvaluator:(item:Countrycode,search:string)=>(item.dial_code+item.code+item.name).toLowerCase().trim().includes(search.toLowerCase().trim())
                             },
                             pathHandler:(data:Countrycode[])=>{
                                 let current:PhoneType=getBasket("phone")
