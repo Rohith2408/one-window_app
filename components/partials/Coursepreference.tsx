@@ -137,7 +137,7 @@ const Coursepreference=(props)=>{
 
     return(
         <View style={{flex:1,paddingTop:info?.eventHandler?0:15,gap:20}}>
-            <Styledtext styles={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Select your preferred courses" focusWord="preferred"/>
+            {/* <Styledtext styles={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Select your preferred courses" focusWord="preferred"/> */}
             <TextInput placeholder="Search..." onChangeText={(txt)=>setSearch(txt)} value={search.trim()} style={[styles[Device].preference,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular},{padding:10,borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}]}/>
             <ScrollView persistentScrollbar keyboardShouldPersistTaps="handled" contentContainerStyle={{gap:30,padding:15,paddingTop:5}}>
             {
