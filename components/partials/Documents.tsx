@@ -282,14 +282,14 @@ const Work=(props:Request<DocumentsType>)=>{
     }
 
     return(
-        <View style={{gap:15,paddingTop:10}}>
+        <View style={{gap:30,paddingTop:10}}>
             <Pressable onPress={()=>upload()}><Image source={isLoading?loading_gif:add_icon} style={[styles[Device].add,{alignSelf:'center'}]}></Image></Pressable> 
             {
                 documents?.length==0
                 ?
                 <View style={{alignSelf:"center"}}><Text style={[styles[Device].no_doc,{maxWidth:"75%",textAlign:'center',lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Please add your workexperience documents here!</Text></View>
                 :
-                <View style={{gap:15}}>
+                <View style={{gap:40}}>
                 {
                     documents?.map((doc)=>
                     <Document docIdentifier="Work Document" key={doc._id} title="Work Document" fieldPath="workExperiences" doc={doc}></Document>
@@ -319,14 +319,14 @@ const Test=(props:Request<DocumentsType>)=>{
     return(
         <View style={{gap:30,padding:10}}>
             <Nestedview title="Language Proficiency" maxHeight={150}>
-                <View style={{gap:15,paddingTop:10}}>
+                <View style={{gap:25,paddingTop:10}}>
                     <Pressable onPress={()=>upload("test.languageProf","language")}><Image source={isLoading=="language"?loading_gif:add_icon} style={[styles[Device].add,{alignSelf:'center'}]}></Image></Pressable> 
                     {
                         documents?.languageProf?.length==0
                         ?
                         <View style={{flex:1,alignSelf:"center"}}><Text style={[styles[Device].no_doc,{maxWidth:"75%",textAlign:'center',lineHeight:24},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Please add your IELTS,TOEFL,DET,PTE test documents here!</Text></View>
                         :
-                        <View style={{gap:15}}>
+                        <View style={{gap:35}}>
                         {
                             documents?.languageProf?.map((doc)=>
                             <Document docIdentifier="Test Document" key={doc._id} title="Test Document" fieldPath="test.languageProf" doc={doc}></Document>
@@ -337,14 +337,14 @@ const Test=(props:Request<DocumentsType>)=>{
                 </View>
             </Nestedview>
             <Nestedview title="General" maxHeight={150}>
-                <View style={{gap:15,paddingTop:10}}>
+                <View style={{gap:25,paddingTop:10}}>
                     <Pressable onPress={()=>upload("test.general","general")}><Image source={isLoading=="general"?loading_gif:add_icon} style={[styles[Device].add,{alignSelf:'center'}]}></Image></Pressable> 
                     {
                         documents?.general?.length==0
                         ?
                         <View style={{flex:1,alignSelf:"center"}}><Text style={[styles[Device].no_doc,{maxWidth:"75%",textAlign:'center',lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Please add your GRE,GMAT,DET test documents here!</Text></View>
                         :
-                        <View style={{gap:15}}>
+                        <View style={{gap:35}}>
                         {
                             documents?.general?.map((doc)=>
                             <Document docIdentifier="Test Document" key={doc._id} title="Test Document" fieldPath="test.general" doc={doc}></Document>
@@ -453,7 +453,7 @@ const uploadDoc=async (fieldPath:string,docIdentifier:string,docMaxSize:number,c
     {
         const data = new FormData()
         data.append('fieldPath', fieldPath)
-        data.append("fileIdentifier",docIdentifier)
+        data.append("fileIdentifier",docRes.data.name)
         data.append('uploaded_file',docRes.data);
         console.log("uploading ",data);
         let res:ServerResponse=await serverRequest({

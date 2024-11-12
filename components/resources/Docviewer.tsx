@@ -114,7 +114,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:16
     },
     category:{
-        fontSize:14
+        fontSize:12
     },
     intake:{
         fontSize:13
@@ -143,7 +143,7 @@ const MobileLStyles=StyleSheet.create({
         fontSize:16
     },
     category:{
-        fontSize:14
+        fontSize:12
     },
     intake:{
         fontSize:11
@@ -228,12 +228,12 @@ const Docviewer=(props:{value:Document|undefined,title:string,id:string,eventHan
                     ?
                     <View style={{flexDirection:"row"}}>
                         <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
-                            <View style={{width:5,height:5,borderRadius:10,backgroundColor:"#69FF6F"}}></View>
+                            <View style={{width:5,height:5,borderRadius:10,backgroundColor:"lightblue"}}></View>
                             <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.title}</Text>
                         </Animated.View>
-                        <View style={{flex:1}}><Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.value?.data.FileName}</Text></View>
+                        <View style={{flex:1}}><Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.value?.data.FileName}</Text></View>
                         <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
-                            <Pressable onPress={viewDoc} style={{borderWidth:1,borderColor:Themes.Light.OnewindowPrimaryBlue(1),borderRadius:100,padding:5}}>
+                            <Pressable onPress={viewDoc} style={{borderWidth:1.3,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100,padding:5}}>
                                 <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>View</Text>
                             </Pressable>
                             <Pressable onPress={!isLoading?remove:null}>

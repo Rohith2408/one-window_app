@@ -482,7 +482,7 @@ export const pickDocument=async (sizeLimit:number)=>{
           let uploadedFile={
             uri : res.assets[0].uri,
             type: res.assets[0].mimeType,
-            name: new Date().getTime()+res.assets[0].name
+            name: new Date().getTime()+"_"+res.assets[0].name
           };
           response.success=true;
           response.data=uploadedFile;
