@@ -272,7 +272,7 @@ const Work=(props:Request<DocumentsType>)=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [isLoading,setIsLoading]=useState<boolean>(false)
     const [path,navigate]=useNavigation()
-    const docMaxSize=useRef(40).current
+    const docMaxSize=useRef(25).current
 
     const upload=async ()=>{
         setIsLoading(true);
