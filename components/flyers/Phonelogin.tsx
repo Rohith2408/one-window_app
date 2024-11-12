@@ -327,7 +327,7 @@ const Phonelogin=()=>{
                     </View>
                     <View style={{flex:1}}>
                         {
-                            phone.countryCode?.length==1 && validations.PHONENUMBER.regex.test(phone.phoneNumber) && !error
+                            screen=="verify-otp" && phone.countryCode?.length==1 && validations.PHONENUMBER.regex.test(phone.phoneNumber) && !error
                             ?
                             <Verifyuser type="mobile" data={{phone:{countryCode:phone.countryCode[0].dial_code,phoneNumber:phone.phoneNumber}}}/>
                             :
