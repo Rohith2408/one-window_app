@@ -33,12 +33,14 @@ const GeneralStyles=StyleSheet.create({
         borderRadius:100
     },
     dial_code_wrapper:{
-        flex:1,
+        // flex:1,
         borderWidth:1,
-        borderRadius:5
+        borderRadius:5,
+        paddingLeft:5,
+        paddingRight:5
     },
     phone_number_wrapper:{
-        flex:3,
+        flex:1,
         borderWidth:1,
         borderRadius:5
     }
