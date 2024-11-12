@@ -1,4 +1,4 @@
-import { Animated, Dimensions, Easing, Keyboard, LayoutRectangle, PanResponder, Pressable, StyleSheet, Text, View } from "react-native"
+import { Animated, Dimensions, Easing, Keyboard, LayoutRectangle, PanResponder, Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import { StackNavigator, StackScreen as StackScreenType } from "../types"
 import { useEffect, useRef, useState } from "react"
 import useNavigation from "../hooks/useNavigation"
@@ -152,8 +152,10 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
     ])
 
     let keyboardWillShow,keyboardWillHide;
+    
     if(screenInfo?.type=="Flyer"){
-      keyboardWillShow = Keyboard.addListener('keyboardWillShow', (event) => {
+      keyboardWillShow = Keyboard.addListener(Platform.OS=="android"?'keyboardDidShow':'keyboardWillShow', (event) => {
+        console.log("keyboard",event.endCoordinates.height);
         Animated.timing(translateY, {
           duration: event.duration,
           toValue: finalState.y-(event.endCoordinates.height/Dimensions.get("screen").height),
@@ -161,7 +163,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
         }).start();
       });
 
-      keyboardWillHide = Keyboard.addListener('keyboardWillHide', (event) => {
+      keyboardWillHide = Keyboard.addListener(Platform.OS=="android"?'keyboardDidHide':'keyboardWillHide', (event) => {
         Animated.timing(translateY, {
           duration: event.duration,
           toValue: finalState.y,
@@ -197,12 +199,12 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
 
   const Container=getComponent(props.component)?.component
 
-  //console.log(screenInfo)
+  console.log("non closable",screenInfo?.id,screenInfo?.nonClosable)
 
   return(
       <Animated.View onLayout={(e)=>setScreenDimensions(e.nativeEvent.layout)} key={props.id} style={[styles.screenWrapper,screenInfo?.type=="Flyer"?{shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
         {
-          props.index!=0 && screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY"
+          props.index!=0 && (screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY") && !screenInfo.nonClosable
           ?
           <View {...panResponder.panHandlers} style={[styles.swipeStripL]}></View>
           :
@@ -237,7 +239,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
           null
         }
         {
-          screenInfo?.type=="Partial" && props.index!=0
+          screenInfo?.type=="Partial" && props.index!=0 && !screenInfo.nonClosable
           ?
           <Pressable hitSlop={{left:50,right:50,top:50,bottom:50}} style={[styles.back,{left:10,top:30}]} onPress={()=>{back(200)}}><Image source={back_icon} style={[styles.back_icon]}></Image></Pressable>
           :

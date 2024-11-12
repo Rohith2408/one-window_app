@@ -60,7 +60,7 @@ const Payment = (props:{paymentOrderId:string}) => {
         console.log("after payment",JSON.stringify(response1.data.products[0].advisors,null,2));
         dispatch(updateOrder(response1.data));
         dispatch(replaceProducts(response1.data.products));
-        navigate({type:"RemovePages",payload:[{id:"Order"},{id:"Ordersummary"},{id:"Cart"}]})
+        navigate({type:"RemovePages",payload:[{id:"Order"},{id:"Payment"},{id:"Ordersummary"},{id:"Cart"}]})
       }
     } 
     else {
