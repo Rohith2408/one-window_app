@@ -1,6 +1,6 @@
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
 import { Countrycode, Dropdown, Event, ServerResponse } from "../../types"
-import { getDevice, getLocation, getServerRequestURL, serverRequest } from "../../utils"
+import { getDevice, getLocation, getServerRequestURL, serverRequest, setWordCase } from "../../utils"
 import { useEffect, useRef, useState } from "react"
 import Verifyuser from "./Verifyuser"
 import { addToBasket } from "../../constants/basket"
@@ -296,7 +296,7 @@ const Phonelogin=()=>{
                             {
                                 error
                                 ?
-                                <Transitionview effect="fade"><Text style={[styles[Device].error,{alignSelf:"flex-start"},{fontFamily:Fonts.NeutrifStudio.Regular,color:"red"}]}>{error}</Text></Transitionview>
+                                <Transitionview effect="fade"><Text style={[styles[Device].error,{alignSelf:"flex-start"},{fontFamily:Fonts.NeutrifStudio.Regular,color:"red"}]}>{setWordCase(error)}</Text></Transitionview>
                                 :
                                 null
                             }
