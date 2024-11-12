@@ -106,7 +106,8 @@ const Order=(props:{orderinfoid:string})=>{
     const [Package,setPackage]=useState(orderInfo.package)
     const [Products,setProducts]=useState<Product[]>(orderInfo.products)
     const errors=useRef<error>({category:undefined,products:undefined,general:undefined});
-    const suggestedPackages=useAppSelector((state)=>state.suggestedpackages.data);
+    const orders=useAppSelector((state)=>state.orders);
+    const suggestedPackages=useAppSelector((state)=>state.suggestedpackages).data.filter((Package)=>(Package.priceDetails.totalPrice!=0 || (Package.priceDetails.totalPrice==0 && !orders.data.find((order)=>order.Package.priceDetails.totalPrice==0))));
 
     const packageSelected=(item:Package[])=>{
         setPackage(item[0]);
@@ -132,16 +133,24 @@ const Order=(props:{orderinfoid:string})=>{
             <View>
                 <Text style={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Suggested Packages</Text>
                 <View>
-                    <ScrollView horizontal contentContainerStyle={{padding:15}}>
                     {
-                        suggestedPackages.map((item,i)=>
-                        <Pressable onPress={()=>setPackage(Package?._id==item._id?undefined:item)} style={{position:"relative"}}>
-                            <Image source={tick} style={[styles[Device].icon,{transform:[{scale:item._id==Package?._id?1:0}]},{zIndex:1,position:"absolute",left:"80%",top:"10%"}]}/>
-                            <Packagecard {...item} index={i}/>
-                        </Pressable>
-                        )
+                        suggestedPackages.length!=0
+                        ?
+                        <ScrollView horizontal contentContainerStyle={{padding:15}}>
+                        {
+                            suggestedPackages.map((item,i)=>
+                            <Pressable onPress={()=>setPackage(Package?._id==item._id?undefined:item)} style={{position:"relative"}}>
+                                <Image source={tick} style={[styles[Device].icon,{transform:[{scale:item._id==Package?._id?1:0}]},{zIndex:1,position:"absolute",left:"80%",top:"10%"}]}/>
+                                <Packagecard {...item} index={i}/>
+                            </Pressable>
+                            )
+                        }
+                        </ScrollView>
+                        :
+                        <Text  style={[styles[Device].title,{padding:15,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>No Packages available</Text>
+
                     }
-                    </ScrollView>
+                    
                 </View>
                     <View>{
                         errors.current.category?.map((error)=>
