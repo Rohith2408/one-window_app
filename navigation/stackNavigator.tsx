@@ -241,7 +241,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
         {
           screenInfo?.type=="Partial" && props.index!=0 && !screenInfo.nonClosable
           ?
-          <Pressable hitSlop={{left:50,right:50,top:50,bottom:50}} style={[styles.back,{left:10,top:30}]} onPress={()=>{back(200)}}><Image source={back_icon} style={[styles.back_icon]}></Image></Pressable>
+          <Pressable hitSlop={{left:15,right:15,top:15,bottom:15}} style={[styles.back,{left:10,top:30}]} onPress={()=>{back(200)}}><Image source={back_icon} style={[styles.back_icon]}></Image></Pressable>
           :
           null
         }
