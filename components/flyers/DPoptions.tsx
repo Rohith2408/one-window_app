@@ -107,12 +107,11 @@ const DPoptions=()=>{
             if(serverRes.success)
             {
                 dispatch(setSharedInfo({...info,displayPicSrc:serverRes.data.displayPicSrc}))
-                navigate({type:"RemoveScreen"});
+                navigate({type:"RemoveSpecificScreen",payload:{id:"DPoptions"}});
             }   
             
         }
     }
-
 
     return(
         <View style={[GeneralStyles.wrapper]}>
