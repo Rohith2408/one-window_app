@@ -525,7 +525,8 @@ const Loginbase=(props:{auth:string})=>{
         navigate({type:"AddScreen",payload:{screen:"Phonelogin"}})
     }
 
-    const openExplore=()=>{
+    const openExplore=async ()=>{
+        await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,"");
         navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null
     }
 
