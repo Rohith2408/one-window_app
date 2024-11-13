@@ -1,7 +1,7 @@
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { addToBasket, getBasket } from "../../constants/basket"
 import { useEffect, useRef, useState } from "react"
-import { PackageProductsValidator, Word2Sentence, compareProducts, formatDate, getDevice, getThemeColor } from "../../utils"
+import { PackageProductsValidator, Word2Sentence, compareProducts, formatCurrency, formatDate, getDevice, getThemeColor } from "../../utils"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
@@ -290,15 +290,15 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                     <View style={{gap:15,padding:7.5}}>
                         <View style={{flexDirection:"row",alignItems:"center"}}>
                             <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Total</Text></View>
-                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{order.paymentDetails.currency+" "+order.paymentDetails.amount}</Text>
+                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{(formatCurrency(order.paymentDetails.amount/100,order.paymentDetails.currency))}</Text>
                         </View>
                         <View style={{flexDirection:"row",alignItems:"center"}}>
                             <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Amount Due</Text></View>
-                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{order.paymentDetails.currency+" "+order.paymentDetails.amount_due}</Text>
+                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{(formatCurrency(order.paymentDetails.amount_due/100,order.paymentDetails.currency))}</Text>
                         </View>
                         <View style={{flexDirection:"row",alignItems:"center"}}>
                             <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Amount Paid</Text></View>
-                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{order.paymentDetails.currency+" "+(order.paymentDetails.amount-order.paymentDetails.amount_due)}</Text>
+                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{(formatCurrency(((order.paymentDetails.amount/100)-(order.paymentDetails.amount_due/100)),order.paymentDetails.currency))}</Text>
                         </View>
                     </View>
                 </View>

@@ -7,7 +7,7 @@ import { Image } from "expo-image"
 import upload_icon from '../../assets/images/misc/upload.png'
 import clock_icon from '../../assets/images/misc/clock.png'
 import products_icon from '../../assets/images/misc/order.png'
-import { Word2Sentence, formatDate, getDevice, getThemeColor, setWordCase } from "../../utils"
+import { Word2Sentence, formatCurrency, formatDate, getDevice, getThemeColor, setWordCase } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 import go_icon from '../../assets/images/misc/back.png'
 
@@ -206,24 +206,24 @@ const Ordercard=(props:Order & {index:number})=>{
         </View>
         <View style={[GeneralStyles.info_wrapper]}>
             <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
-                <View style={{width:5,height:5,borderRadius:10,backgroundColor:"orange"}}></View>
+                <View style={{width:5,height:5,borderRadius:10,backgroundColor:"lightblue"}}></View>
                 <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.products.length+(props.products.length==1?" product":" products")}</Text>
             </Animated.View>
-            <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.Package?props.Package.name:"Direct Purchase"}</Text>
+            <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.Package?props.Package.name:"Direct Purchase"}</Text>
             <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
                 <Image style={[styles[Device].clock_icon]} source={clock_icon} />
                 <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Order placed on "+formatDate(props.paymentDetails.created_at)}</Text>
             </View>
             <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
                 <Image style={[styles[Device].clock_icon]} source={upload_icon} />
-                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Amount"+(props.paymentDetails.paymentStatus=="pending"?+" to be ":"")+" paid "+ (props.paymentDetails.currency+" "+props.paymentDetails.amount/100)}</Text>
+                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Amount"+(props.paymentDetails.paymentStatus=="pending"?+" to be ":"")+" paid: "+ (formatCurrency(props.paymentDetails.amount/100,props.paymentDetails.currency))}</Text>
             </View>
         </View>
         {
             props.paymentDetails.paymentStatus=="pending"
             ?
-            <Pressable onPress={redirectToPayment} style={{alignSelf:"center"}}>
-                <Text style={[styles[Device].paynow,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Pay Now</Text>
+            <Pressable onPress={redirectToPayment} style={{alignSelf:"center",borderWidth:1.3,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}>
+                <Text style={[styles[Device].paynow,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium,padding:7}]}>Pay Now</Text>
             </Pressable>
             :
             <View style={{alignSelf:"center"}}><Image source={go_icon} style={[styles[Device].go_icon,{transform:[{scaleX:-1}]}]} /></View>
