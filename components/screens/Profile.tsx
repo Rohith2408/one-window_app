@@ -398,7 +398,7 @@ const Profile=(props:any)=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Warning"}}}):null;
     }
 
-    //console.log(sharedInfo.responseStatus!="recieved")
+    console.log(sharedInfo.responseStatus!="recieved")
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
