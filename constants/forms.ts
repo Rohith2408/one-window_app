@@ -5549,7 +5549,7 @@ const forms:FormInfo[]=[
             //     }
             // },
             {
-                id:"Type",
+                id:"type",
                 title:"University Type",
                 componentInfo:{
                     component:Dropdown,
@@ -5562,7 +5562,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
-                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"Type",newvalue:data}}}),
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"type",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"unitype-dropdown"
                     },
@@ -5663,6 +5663,7 @@ const forms:FormInfo[]=[
                     }
                 },
                 title:"Country",
+                isOptional:true,
                 onUpdate:{
                     event:"onSelect",
                 },
@@ -5746,7 +5747,7 @@ const forms:FormInfo[]=[
                 }
             },
             {
-                id:"Type",
+                id:"type",
                 title:"University Type",
                 componentInfo:{
                     component:Dropdown,
@@ -5759,6 +5760,7 @@ const forms:FormInfo[]=[
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
                         },
+                        pathHandler:(data:ListItem[])=>({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:"type",newvalue:data}}}),
                         selectionMode:"single",
                         basketid:"unitype-dropdown"
                     },

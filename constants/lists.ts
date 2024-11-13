@@ -56,8 +56,8 @@ const lists:ListInfo[]=[
                 //     icon:sample_icon
                 // },
                 {
-                    type:"Type",
-                    title:"Universaity Type",
+                    type:"type",
+                    title:"University Type",
                     icon:sample_icon
                 },
                 {
@@ -167,7 +167,7 @@ const lists:ListInfo[]=[
                     icon:sample_icon
                 },
                 {
-                    type:"Type",
+                    type:"type",
                     title:"Universaity Type",
                     icon:sample_icon
                 }
@@ -206,7 +206,7 @@ const lists:ListInfo[]=[
         },
         pageUpdator:(page:number)=>({type:"UpdateParam",payload:{param:"programspage",newValue:page+1}}),
         listFetcher:async (query:{search:string,filters:any[],page:number})=>{
-            console.log("query recieved uni",query,JSON.stringify(query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),null,2));
+            console.log("query recieved uni",JSON.stringify(query,null,2),JSON.stringify(query.filters.filter((item)=>item.data.length>0).map((item)=>({...item,data:item.data.map((val:ListItem)=>val.value)})),null,2));
             let res:ServerResponse=await serverRequest({
                     url: getServerRequestURL("universities","POST"),
                     reqType: "POST",
@@ -250,7 +250,7 @@ const lists:ListInfo[]=[
         card:Degreepreferencecard,
         pagnation:false,
         showSearch:false,
-        // listFetcher:async (data:Listquery)=>listHandler("degreepreference",data)
+        listFetcher:async (data:Listquery)=>listHandler("degreepreference",data)
     },
 ]
 
