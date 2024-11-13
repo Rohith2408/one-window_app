@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Course, Event, Package, Product, ServerResponse } from "../../types"
-import { PackageProductsValidator, Word2Sentence, compareProducts, getAccessTokenFromStore, getDevice, getLightThemeColor, getMonth, getServerRequestURL, getThemeColor, serverRequest, setWordCase } from "../../utils";
+import { PackageProductsValidator, Word2Sentence, compareProducts, formatCurrency, getAccessTokenFromStore, getDevice, getLightThemeColor, getMonth, getServerRequestURL, getThemeColor, serverRequest, setWordCase } from "../../utils";
 import { cartRequest } from "../../utils/serverrequests";
 import useNavigation from "../../hooks/useNavigation";
 import { addToBasket } from "../../constants/basket";
@@ -663,13 +663,12 @@ const Program=(props:{programid:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"University",params:{universityid:programInfo?.university?._id}}}):null
     }
 
-
     useEffect(()=>{
         getAccessTokenFromStore().then((Token)=>setAT(Token))
         fetchProgram();
     },[])
 
-    console.log(programInfo?.startDate)
+    console.log(programInfo?.applicationDetails)
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
@@ -770,7 +769,7 @@ const Program=(props:{programid:string})=>{
                     <Image style={{width:"100%",aspectRatio:2.2,objectFit:"contain"}} source={applicarion_details_template}/>
                     <View style={[{position:"absolute",top:"15%",left:"5%",gap:10}]}>
                         <Text style={[styles[Device].application_title,{fontFamily:Fonts.NeutrifStudio.Medium}]}>Application Details</Text>
-                        <Text style={[styles[Device].application_fee,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{"Fee: "+programInfo.currency?.symbol+" "+programInfo.applicationDetails.applicationFee}</Text>
+                        <Text style={[styles[Device].application_fee,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{"Fee: "+(programInfo.applicationDetails.applicationFee=="NaN"?"Info not available":formatCurrency(parseInt(programInfo.applicationDetails.applicationFee),programInfo.currency?.code))}</Text>
                     </View>
                 </View>
                 <View style={[GeneralStyles.about_wrapper]}>
