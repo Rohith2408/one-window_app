@@ -61,7 +61,7 @@ type list={
 }
 
 type query={
-    listid:string,
+    //listid:string,
     search:string,
     page:number,
     additionalFilters:AppliedFilter[],
@@ -222,26 +222,23 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
     const [contentWidth, setContentWidth] = useState(2);
     const offset=new Animated.Value(0)
     const [dimensions,setDimensions]=useState<LayoutRectangle>({width:0,height:0,x:0,y:0})
-    const exploreLists=[];
-    const lists=[];
-    props.programslistquery?exploreLists.push("programs"):null
-    props.universitieslistquery?exploreLists.push("universities"):null
-    props.programslistquery?lists.push({
+    const lists=[{
         listid:"Programs",
         basketid:"programs-filter",
         search:props.programslistquery.search?props.programslistquery.search:"",
         page:props.programslistquery.page?props.programslistquery.page:1,
         additionalFilters:props.programslistquery.additionalFilters?props.programslistquery.additionalFilters:[],
         quickFilters:props.programslistquery.quickFilters?props.programslistquery.quickFilters:[]
-    }):null
-    props.universitieslistquery?lists.push({
-        listid:"Universities",
-        basketid:"universities-filter",
-        search:props.universitieslistquery.search?props.universitieslistquery.search:"",
-        page:props.universitieslistquery.page?props.universitieslistquery.page:1,
-        additionalFilters:props.universitieslistquery.additionalFilters?props.universitieslistquery.additionalFilters:[],
-        quickFilters:props.universitieslistquery.quickFilters?props.universitieslistquery.quickFilters:[]
-    }):null
+        },
+        {
+            listid:"Universities",
+            basketid:"universities-filter",
+            search:props.universitieslistquery.search?props.universitieslistquery.search:"",
+            page:props.universitieslistquery.page?props.universitieslistquery.page:1,
+            additionalFilters:props.universitieslistquery.additionalFilters?props.universitieslistquery.additionalFilters:[],
+            quickFilters:props.universitieslistquery.quickFilters?props.universitieslistquery.quickFilters:[]
+        }
+    ];
     const ref=useRef<any>()
     const tabs=useRef([{label:"Programs",value:"programs"},{label:"Universities",value:"universities"}]).current
     const [path,navigate]=useNavigation()
