@@ -116,12 +116,12 @@ const Productcompact2card=(props:PurchasedProduct & {index:number})=>{
     const titleTranslate=useRef(new Animated.Value(0)).current
     const titleHeight=useRef().current
 
-    const showProduct=()=>{
-        navigate({type:"RemoveSpecificScreen",payload:{id:"Product"}})
-        setTimeout(()=>{
-            navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:props._id}}})
-        },100)
-    }
+    // const showProduct=()=>{
+    //     navigate({type:"RemoveSpecificScreen",payload:{id:"Product"}})
+    //     setTimeout(()=>{
+    //         navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:props._id}}})
+    //     },100)
+    // }
 
     const animate=(y:number)=>{
         Animated.spring(titleTranslate,{
@@ -131,14 +131,14 @@ const Productcompact2card=(props:PurchasedProduct & {index:number})=>{
     }
 
     return(
-        <Pressable onPress={showProduct} style={[GeneralStyles.main_wrapper]}>
+        <View style={[GeneralStyles.main_wrapper]}>
             <View><Image style={[styles[Device].dp,{borderRadius:100}]} source={props.course.university.logoSrc}/></View>
             <View style={{flex:1,flexDirection:"column",alignItems:'flex-start',gap:5}}>
                 <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(props.course.name)}</Text>
                 <Text style={[styles[Device].role,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.category)+", "+formatDate(props.intake)}</Text>
             </View>
             <View><Image style={[styles[Device].go,{transform:[{scaleX:-1}]}]} source={go_icon}/></View>
-        </Pressable> 
+        </View> 
         // <Pressable onPress={showProduct} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
         // {
         //     dimensions
