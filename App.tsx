@@ -17,6 +17,7 @@ import Appcontext from './contexts/AppContext';
 import * as Font from 'expo-font';
 import { secureStoreKeys } from './constants';
 import NetInfo from '@react-native-community/netinfo';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 export default function App() {
 
@@ -29,7 +30,9 @@ export default function App() {
   const responseListener = useRef<Notifications.Subscription>();
 
   useEffect(() => {
-    
+
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+
     Linking.addEventListener('url', (event: { url: string })=>{
     });
   
