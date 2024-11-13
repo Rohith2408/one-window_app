@@ -1,4 +1,4 @@
-import { Animated, Dimensions, Easing, Keyboard, LayoutRectangle, PanResponder, Platform, Pressable, StyleSheet, Text, View } from "react-native"
+import { Animated, Dimensions, Easing, Keyboard, KeyboardEvent, LayoutRectangle, PanResponder, Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import { StackNavigator, StackScreen as StackScreenType } from "../types"
 import { useEffect, useRef, useState } from "react"
 import useNavigation from "../hooks/useNavigation"
@@ -11,6 +11,23 @@ import { Image } from "expo-image"
 const Stacknavigator=(props:StackNavigator)=>{
 
     const Invalidscreen=props.invalidPathScreen
+    const [keyboardInfo,setkeyboardInfo]=useState<KeyboardEvent>()
+
+    useEffect(()=>{
+      let keyboardWillShow = Keyboard.addListener(Platform.OS=="android"?'keyboardDidShow':'keyboardWillShow', (event) => {
+        setkeyboardInfo(event)
+      });
+
+      let keyboardWillHide = Keyboard.addListener(Platform.OS=="android"?'keyboardDidHide':'keyboardWillHide', (event) => {
+        setkeyboardInfo(event)
+      });
+
+      return () => {
+        keyboardWillShow?.remove();
+        keyboardWillHide?.remove();
+      };
+
+    },[])
 
     return(
         <View style={[styles.wrapper]}>
@@ -20,7 +37,7 @@ const Stacknavigator=(props:StackNavigator)=>{
             <View style={{width:'100%',height:"100%"}}>
             {
                 props.screens.map((screen:StackScreenType,i)=>
-                <StackScreen key={screen.id} {...screen} index={i}/>
+                <StackScreen keyboardInfo={keyboardInfo} key={screen.id} {...screen} index={i}/>
                 )
             }
             </View>
@@ -31,7 +48,7 @@ const Stacknavigator=(props:StackNavigator)=>{
     )
 }
 
-const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
+const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo:KeyboardEvent|undefined})=>{
 
   const screenInfo=useRef(components.find((component)=>component.id==props.id)).current
   const getState=(type:"initial"|"final")=>{
@@ -56,7 +73,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
   let initialState=useRef(getState("initial")).current
   let finalState=useRef(getState("final")).current
   const currentState=useRef(finalState);
-  const translateY=useRef(new Animated.Value(initialState?initialState.y:0)).current;
+  const translateY=useRef(new Animated.Value(initialState?(initialState.y):0)).current;
   const translateX=useRef(new Animated.Value(initialState?initialState.x:0)).current;
   const opacity=useRef(new Animated.Value(initialState?initialState.opacity:0)).current;
   const scale=useRef(new Animated.Value(initialState?initialState.scale:0)).current
@@ -150,34 +167,45 @@ const StackScreen=React.memo((props:StackScreenType & {index:number})=>{
       {property:width,value:finalState?finalState.width:0,duration:200},
       {property:height,value:finalState?finalState.height:0,duration:200},
     ])
-
-    let keyboardWillShow,keyboardWillHide;
     
-    if(screenInfo?.type=="Flyer"){
-      keyboardWillShow = Keyboard.addListener(Platform.OS=="android"?'keyboardDidShow':'keyboardWillShow', (event) => {
-        console.log("keyboard",event.endCoordinates.height);
-        Animated.timing(translateY, {
-          duration: event.duration,
-          toValue: finalState.y-(event.endCoordinates.height/Dimensions.get("screen").height),
-          useNativeDriver: false,
-        }).start();
-      });
+    // if(screenInfo?.type=="Flyer"){
+    //   keyboardWillShow = Keyboard.addListener(Platform.OS=="android"?'keyboardDidShow':'keyboardWillShow', (event) => {
+    //     console.log("keyboard",event.endCoordinates.height);
+    //     Animated.timing(translateY, {
+    //       duration: event.duration,
+    //       toValue: finalState.y-(event.endCoordinates.height/Dimensions.get("screen").height),
+    //       useNativeDriver: false,
+    //     }).start();
+    //   });
 
-      keyboardWillHide = Keyboard.addListener(Platform.OS=="android"?'keyboardDidHide':'keyboardWillHide', (event) => {
-        Animated.timing(translateY, {
-          duration: event.duration,
-          toValue: finalState.y,
-          useNativeDriver: false,
-        }).start();
-      });
-    }
+    //   keyboardWillHide = Keyboard.addListener(Platform.OS=="android"?'keyboardDidHide':'keyboardWillHide', (event) => {
+    //     Animated.timing(translateY, {
+    //       duration: event.duration,
+    //       toValue: finalState.y,
+    //       useNativeDriver: false,
+    //     }).start();
+    //   });
+    // }
 
-    return () => {
-      keyboardWillShow?.remove();
-      keyboardWillHide?.remove();
-    };
+    // return () => {
+    //   keyboardWillShow?.remove();
+    //   keyboardWillHide?.remove();
+    // };
 
   },[])
+
+  useEffect(()=>{
+    console.log(props.id,props.keyboardInfo);
+    if(screenInfo?.type=="Flyer" && props.keyboardInfo && finalState)
+    {
+      Animated.timing(translateY, {
+        duration: props.keyboardInfo.duration,
+        toValue: finalState.y-((Dimensions.get("screen").height-props.keyboardInfo.endCoordinates.screenY)/Dimensions.get("screen").height),
+        //easing:props.keyboardInfo.easing,
+        useNativeDriver: false,
+      }).start();
+    }
+  },[props.keyboardInfo])
 
   //console.log("screen",initialState,finalState);
 
