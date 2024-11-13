@@ -941,6 +941,15 @@ export const getLocation=async ()=>{
     return res;
 }
 
+export const formatCurrency=(amount:number, currency = "INR", locale = "en-US")=>{
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(amount);
+}
+
 // export const bakeFilters=(additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[])=>{
 
 // }
