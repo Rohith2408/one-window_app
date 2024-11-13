@@ -546,7 +546,7 @@ const University=(props:{universityid:string})=>{
                         <View style={{gap:20}}>
                         {
                             Object.keys(universityInfo.rank).map((item,i)=>
-                            <View style={{flexDirection:"column",gap:7,paddingLeft:15,paddingTop:15,paddingBottom:15,alignItems:"flex-start",backgroundColor:getLightThemeColor(i),borderRadius:20,position:"relative"}}>
+                            <View style={{flexDirection:"column",gap:7,paddingLeft:15,paddingTop:15,paddingBottom:15,alignItems:"flex-start",backgroundColor:getLightThemeColor(i%4),borderRadius:20,position:"relative"}}>
                                 <Image source={uni_ranking_image} style={[{width:"100%",height:"auto",aspectRatio:4.166,position:"absolute"}]}/>
                                 <Text style={[styles[Device].ranking_value,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Object.values(universityInfo?.rank)[i]}</Text>
                                 <Text style={[styles[Device].ranking_label,{maxWidth:"85%"},{fontFamily:Fonts.NeutrifStudio.Regular}]}>{item}</Text>
