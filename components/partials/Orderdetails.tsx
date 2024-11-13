@@ -14,6 +14,7 @@ import Styledtext from "../resources/Styledtext"
 import Productcompact2card from "../cards/Productcompactcard2"
 import Orderlogscard from "../cards/Orderlogscard"
 import Transitionview from "../resources/Transitionview"
+import { PurchasedProduct } from "../../types"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -232,8 +233,11 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Payment",params:{paymentOrderId:order?._id}}}):null
     }
 
-    const showProduct=()=>{
-        
+    const showProduct=(product:PurchasedProduct)=>{
+        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Product"}}):null
+        setTimeout(()=>{
+            navigate?navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:product._id}}}):null
+        },100)
     }
 
     //console.log(JSON.stringify("logs",order?.logs,null,2));
@@ -279,7 +283,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                         <ScrollView contentContainerStyle={{gap:10,paddingTop:10}}>
                         {
                             order.products.map((product,i)=>
-                            <Pressable onPress={()=>showProduct(product._id)} style={[{padding:10}]}><Productcompact2card {...product} index={i}/></Pressable>
+                            <Pressable onPress={()=>order.paymentDetails.paymentStatus!="pending"?showProduct(product):null} style={[{padding:10}]}><Productcompact2card {...product} index={i}/></Pressable>
                             )
                         }
                         </ScrollView>
