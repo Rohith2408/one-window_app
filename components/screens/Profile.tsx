@@ -27,7 +27,8 @@ const GeneralStyles=StyleSheet.create({
         height:"100%",
         backgroundColor:'white',
         paddingLeft:10,
-        paddingRight:10
+        paddingRight:10,
+        paddingBottom:5
     },
     user_wrapper:{
         display:"flex",
