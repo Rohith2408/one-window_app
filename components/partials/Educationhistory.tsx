@@ -372,7 +372,7 @@ const School=(props:{data:EducationHistory_School|undefined})=>{
                     </View>
                     <View style={{flexDirection:"row",gap:5}}>
                         <Image style={[styles[Device].info_icon,{opacity:0.5}]} source={info_icon}/>
-                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.board,props.data.gradingSystem,props.data.totalScore],"","|")}</Text>
+                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.board,props.data.totalScore+" "+props.data.gradingSystem],"","|")}</Text>
                     </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>
