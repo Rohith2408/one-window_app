@@ -120,7 +120,7 @@ const components:ScreenInfo[]=[
     {id:"Mydetails",component:Mydetails,type:"Partial",title:"My Details",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Address",component:Address,type:"Partial",title:"Address",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Datetimeproselector",component:Datetimeproselector,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
-    {id:"Successfull",component:Successfull,props:["message","preventAutoHide","hideInterval"],type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Successfull",component:Successfull,props:["message","preventAutoHide","hideInterval"],type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,opacity:1,height:0.35,width:1},final:{x:0,y:0.65,scale:1,opacity:1,height:0.35,width:1}},removalThreshold:5/6},
     {id:"Emaillogin",component:Emaillogin,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",removalThreshold:5/6,customPlacement:{initial:{x:0,y:1,scale:1,height:0.35,width:1,opacity:1},final:{x:0,y:0.65,scale:1,opacity:1,height:0.35,width:1}}},
     {id:"Phonelogin",component:Phonelogin,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",removalThreshold:5/6,customPlacement:{initial:{x:0,y:1,scale:1,height:0.4,width:1,opacity:1},final:{x:0,y:0.6,scale:1,opacity:1,height:0.4,width:1}}},
     {id:"Nointernet",component:Nointernet,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,height:0.35,width:1,opacity:1},final:{x:0,y:0.65,scale:1,opacity:1,height:0.35,width:1}},removalThreshold:5/6},
