@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import Verifyuser from "./Verifyuser"
 import { addToBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
-import { Countrycodes, Fonts, Themes, appStandardStyles } from "../../constants"
+import { Countrycodes, Fonts, Themes, appStandardStyles, secureStoreKeys } from "../../constants"
 import Styledtext from "../resources/Styledtext"
 import { validations } from "../../utils/validations"
 import Transitionview from "../resources/Transitionview"
@@ -17,6 +17,8 @@ import Phoneinput from "../resources/Phoneinput"
 import Dialcode from "../cards/Dialcode"
 import Dropdownoptions from "./Dropdownoptions"
 import { useAppSelector } from "../../hooks/useAppSelector"
+import { store } from "../../store"
+import * as SecureStore from 'expo-secure-store';
 
 
 const GeneralStyles=StyleSheet.create({
@@ -190,12 +192,13 @@ const Phonelogin=()=>{
     const screens=useRef(["request-otp","verify-otp","dial-code"]).current;
 
     const verify_phone=async (otp:string,data:{ phone: { countryCode: string; number: string } })=>{
-        console.log("phone veeeee",otp,data)
+        //console.log("phone veeeee",otp,data)
+        let deviceToken=await SecureStore.getItemAsync(secureStoreKeys.DEVICE_TOKEN);
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("verify-user","POST"),
             reqType: "POST",
             routeType:"public",
-            body:{...data.phone,otp:otp,type:"phone"}
+            body:{...data.phone,otp:otp,type:"phone",DeviceToken:deviceToken}
         })
         if(res.success)
         {

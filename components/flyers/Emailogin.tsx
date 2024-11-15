@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import Verifyuser from "./Verifyuser"
 import { addToBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
-import { Fonts, Themes, appStandardStyles } from "../../constants"
+import { Fonts, Themes, appStandardStyles, secureStoreKeys } from "../../constants"
 import Textbox from "../resources/Textbox"
 import Styledtext from "../resources/Styledtext"
 import { validations } from "../../utils/validations"
@@ -13,6 +13,7 @@ import Transitionview from "../resources/Transitionview"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
 import back_icon from '../../assets/images/misc/back.png'
 import { Image } from "expo-image"
+import * as SecureStore from 'expo-secure-store';
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -129,6 +130,8 @@ const Emaillogin=()=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     const verify_email=async (otp:string,data:{ email: string })=>{
+        let deviceToken=await SecureStore.getItemAsync(secureStoreKeys.DEVICE_TOKEN);
+        console.log("DT",deviceToken);
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("verify-user","POST"),
             reqType: "POST",
@@ -162,8 +165,10 @@ const Emaillogin=()=>{
     },[screen])
 
     useEffect(()=>{
+        SecureStore.getItemAsync(secureStoreKeys.DEVICE_TOKEN).then((deviceToken)=>console.log("DT",deviceToken));
         addToBasket("verification-callback",{callback:verify_email});
     },[])
+
 
     return(
         <View style={[{flex:1,paddingTop:25},appStandardStyles.screenMarginSmall]} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
