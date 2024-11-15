@@ -106,7 +106,7 @@ const requests:RequestInfo[]=[
             {
                 store.dispatch(addOrders(res.data.order));
                 console.log("Order place res",JSON.stringify(res.data.order.products,null,2));
-                store.dispatch(addProducts(res.data.order.products));
+                //store.dispatch(addProducts(res.data.order.products));
             }
         }
     },
