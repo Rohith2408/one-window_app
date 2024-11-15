@@ -1,9 +1,9 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { getDevice } from "../../utils"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import useTheme from "../../hooks/useTheme"
-import {Fonts, Themes } from "../../constants"
+import {Fonts, Themes, secureStoreKeys } from "../../constants"
 import { Image } from "expo-image";
 import destinations_icon from "../../assets/images/explore/destinations.png"
 import universities_icon from '../../assets/images/explore/universities.png'
@@ -25,6 +25,7 @@ import banner_2 from '../../assets/images/banners/2.png'
 import banner_3 from '../../assets/images/banners/3.png'
 import Productcompactcard from "../cards/Productcompactcard"
 import Transitionview from "../resources/Transitionview"
+import * as SecureStore from 'expo-secure-store';
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -348,7 +349,7 @@ const Home=(props:undefined|{name:string})=>{
                         <Text style={{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.5)}}>Malla Reddy University</Text>
                     </View> */}
                 </View>
-                {/* <Text style={[GeneralStyles.products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Update No.-3.5</Text> */}
+                <Text style={[GeneralStyles.products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Update No.-3.6</Text>
                 <Transitionview effect="pan">
                     <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
                         <Dynamicplaceholder/>                     
