@@ -185,21 +185,25 @@ const Ordersummary=()=>{
             reqType:"POST",
             body:details
         })
+        console.log("payment details res",res)
         if(res.success)
         {
-            setPaymentData({
-                requestStatus:"initiated",
-                responseStatus:"recieved",
-                data:res.data,
-                haveAnIssue:!res.success,
-                issue:res.message
-            })
+            
         }
+        setPaymentData({
+            requestStatus:"initiated",
+            responseStatus:"recieved",
+            data:(res.data && res.data!=null)?res.data:{items:[],totalPrice:0},
+            haveAnIssue:!res.success,
+            issue:res.message
+        })
     }
 
     useEffect(()=>{
         getPaymentDetails()
     },[])
+
+    console.log("dyatre",paymentData)
 
     return(
         <View style={{flex:1,gap:30}}>
