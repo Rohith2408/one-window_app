@@ -24,13 +24,14 @@ import { resetTests } from "../store/slices/testScoresSlice";
 import { resetVerification } from "../store/slices/verificationSlice";
 import { resetWorkExperience } from "../store/slices/workexperienceSlice";
 import { resetSharedinfo } from "../store/slices/sharedinfoSlice";
-import { baseURL, endPoints } from "../constants/server";
+import { baseURL, endPoints, serverResponses } from "../constants/server";
 import {components} from "../constants/components";
 import * as DocumentPicker from 'expo-document-picker';
 import Textbox from "../components/resources/Textbox";
 import Datetime from "../components/resources/Datetime";
 import { getBasket } from "../constants/basket";
 import * as Location from 'expo-location';
+import { setRequest } from "../store/slices/requestSlice";
 
 export const propsMapper=(screens:string[],params:any|undefined)=>{
   return screens.map((screen)=>{
@@ -192,7 +193,7 @@ export const serverRequest=async (requestData:ServerRequest)=>{
   }
   else
   {
-      //console.log("aaaallll",requestData)
+      console.log("aaaallll",requestData)
       let fetchObj:RequestInit={
         headers:{"Authorization":"Bearer "+accessToken},
         method:requestData.reqType,
@@ -204,7 +205,7 @@ export const serverRequest=async (requestData:ServerRequest)=>{
       //console.log("url",requestData)
       let serverRes=await fetch(requestData.url,fetchObj);
       let data:ServerResponse=requestData.responseType=="JSON"||requestData.responseType==undefined?await serverRes.json():{success:true,message:"",data:await serverRes.blob()}
-      //console.log("server res",data);
+      store.dispatch(setRequest(data))
       if(data.AccessToken)
       {
         await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,data.AccessToken)
@@ -668,7 +669,7 @@ export const PackageProductsValidator=(Package:Package|undefined,Products:Produc
         {
           if(categoryInPackage==undefined)
           {
-            productsErrors=[...productsErrors,...categoryproducts.map((item)=>({product:item,error:"Not allowed in the current package"}))]
+            productsErrors=[...productsErrors,...categoryproducts.map((item)=>({product:item,error:setWordCase(item.category)+" cannot be added in the package selected"}))]
           }
           else
           {

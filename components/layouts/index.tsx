@@ -5,6 +5,9 @@ import {components} from "../../constants/components"
 import { getDevice, getLocation } from "../../utils"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
 import { initLocation } from "../../store/slices/locationSlice"
+import { useAppSelector } from "../../hooks/useAppSelector"
+import useNavigation from "../../hooks/useNavigation"
+import { serverResponses } from "../../constants/server"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -47,6 +50,8 @@ const Layout=(props:LayoutType)=>{
     const Invalidpathscreen=props.invalidPathScreen
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const dispatch=useAppDispatch()
+    const request=useAppSelector((state)=>state.request);
+    const [path,navigate]=useNavigation()
 
     useEffect(()=>{
         getLocation().then((res:ServerResponse)=>{
@@ -59,6 +64,13 @@ const Layout=(props:LayoutType)=>{
             }))
           })
     },[])
+
+    useEffect(()=>{
+        if(!request.data?.success && (request.data?.message==serverResponses.VerificationFailed || request.data?.message==serverResponses.TokenMissing || request.data?.message==serverResponses.InvalidTokens))
+        {
+            navigate?navigate({type:"Logout"}):null
+        }
+    },[request])
 
     return(
         <View style={[styles[Device].wrapper]}>

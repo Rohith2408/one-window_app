@@ -33,6 +33,7 @@ import ordersSlice from "./slices/ordersSlice";
 import locationSlice from "./slices/locationSlice";
 import blockedUsersSlice from "./slices/blockedUsersSlice";
 import blockedByUsersSlice from "./slices/blockedByUsersSlice";
+import requestSlice from "./slices/requestSlice";
 
 const store = configureStore({
         reducer:{
@@ -60,7 +61,6 @@ const store = configureStore({
             userauthstatus:userAuthStatusSlice,
             error:errorSlice,
             notifications:notificationsSlice,
-            // applayout:appLayoutSlice,
             popup:popupSlice,
             products:productsSlice,
             cart:cartSlice,
@@ -69,7 +69,8 @@ const store = configureStore({
             orders:ordersSlice,
             location:locationSlice,
             blockedusers:blockedUsersSlice,
-            blockedbyusers:blockedByUsersSlice
+            blockedbyusers:blockedByUsersSlice,
+            request:requestSlice
         }
     });
 
