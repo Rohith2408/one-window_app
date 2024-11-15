@@ -8,6 +8,8 @@ import useNavigation from "../../hooks/useNavigation";
 import Asynchronousbutton from "./Asynchronousbutton";
 import { addToBasket, clearBasket, getBasket, getFullBasket } from "../../constants/basket";
 import Transitionview from "./Transitionview";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -104,6 +106,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     const [path,navigate]=useNavigation()
     const [keyboard,setKeyboard]=useState({duration:0,height:0});
     const offset=useRef(new Animated.Value(0)).current
+    const storeDispatch=useAppDispatch()
     //console.log("fodod",additionalInfo,props.formbasket)
 
     const eventHandler=async (event:Event)=>{
@@ -156,7 +159,8 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
                     navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Error",flyerdata:{error:res.message}}}})
                 }
                 else{
-                    navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Form"}}):null
+                    storeDispatch(setRemoveScreen({id:"Form"}));
+                    //navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Form"}}):null
                     if(formInfo?.submit.redirect)
                     {
                         navigate?navigate(formInfo.submit.redirect(res.data)):null
