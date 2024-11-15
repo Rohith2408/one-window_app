@@ -505,7 +505,7 @@ const Program=(props:{programid:string})=>{
             },            
         }
         addToBasket("intakes-dropdownoptions",dropdowndata);
-        navigate?navigate({type:"AddScreen",payload:{screen:"Intake",params:{basketid:"intakes-dropdownoptions"}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Intake",params:{intakebasketid:"intakes-dropdownoptions"}}}):null
         //navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
     }
 
@@ -527,7 +527,7 @@ const Program=(props:{programid:string})=>{
                 requestInfo?.responseHandler(serverRes);
                 navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
                 setTimeout(()=>{
-                    navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Item added to cart successfully!"}}}}):null;
+                    navigate?navigate({type:"AddScreen",payload:{screen:"Successfull",params:{message:"Item added to cart successfully!"}}}):null;
                 },100)
             }
         }
@@ -606,7 +606,7 @@ const Program=(props:{programid:string})=>{
             //dispatch(setRemoveScreen({id:"Intake"}));
             navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
             setTimeout(()=>{
-                navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Error",flyerdata:{error:"Seems like you have exhausted all your free applications",preventAutoHide:true}}}}):null;
+                navigate?navigate({type:"AddScreen",payload:{screen:"Error",params:{error:"Seems like you have exhausted all your free applications",preventAutoHide:true}}}):null;
             },200)
         }
         else
@@ -617,7 +617,7 @@ const Program=(props:{programid:string})=>{
             {
                 navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
                 setTimeout(()=>{
-                    navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"You can check the application progress in the products section",hideInterval:4000}}}}):null;
+                    navigate?navigate({type:"AddScreen",payload:{screen:"Successfull",params:{message:"You can check the application progress in the products section",hideInterval:4000}}}):null;
                 },100)
             }
         }

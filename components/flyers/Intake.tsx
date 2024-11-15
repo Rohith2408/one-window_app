@@ -57,9 +57,9 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Intake=(props:{basketid:"intakes-dropdownoptions"})=>{
+const Intake=(props:{intakebasketid:"intakes-dropdownoptions"})=>{
 
-    const info=getBasket(props.basketid);
+    const info=getBasket(props.intakebasketid);
     const [intake,setIntake]=useState<{year:undefined|string,month:undefined|string}>({year:info.selected?new Date(info.selected).getFullYear().toString():undefined,month:info.selected?(new Date(info.selected).getMonth()+1).toString():undefined})
     const [path,navigate]=useNavigation()
     const [error,setError]=useState<string|undefined>(undefined)
