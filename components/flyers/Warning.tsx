@@ -5,6 +5,8 @@ import { getDevice } from "../../utils"
 import { Fonts, Themes, appStandardStyles } from "../../constants"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
 import { getBasket } from "../../constants/basket"
+import Transitionview from "../resources/Transitionview"
+import { ServerResponse } from "../../types"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -12,7 +14,7 @@ const GeneralStyles=StyleSheet.create({
         padding:20,
         justifyContent:"center",
         alignItems:'center',
-        gap:40
+        gap:30
     }
 })
 
@@ -76,10 +78,18 @@ const styles={
     MobileL:MobileLStyles
 }
 
+type WarningProps={
+    warningTitle?:string,
+    warningMessage?:string,
+    proceedCallback:()=>Promise<boolean>,
+    yesLabel?:string,
+    noLabel?:string
+}
+
 const Warning=()=>{
 
     const [path,navigate]=useNavigation()
-    const info:{warningMessage?:string,proceedCallback:()=>Promise<boolean>,yesLabel?:string,noLabel?:string}=getBasket("warning");
+    const info:WarningProps=getBasket("warning");
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     useEffect(()=>{
@@ -87,16 +97,31 @@ const Warning=()=>{
     },[])
 
     const close=()=>{
-        navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}});
+        navigate({type:"RemoveSpecificScreen",payload:{id:"Warning"}});
+    }
+
+    const proceed=async ()=>{
+        let res=await info.proceedCallback()
+        close()
+        return res
     }
 
     return(
         <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginSmall]}>
+            {
+                info.warningTitle
+                ?
+                <Transitionview effect="pan" delay={200}>
+                    <Text style={[styles[Device].text,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{info.warningTitle}</Text>
+                </Transitionview>
+                :
+                null
+            }
             <View><Text style={[styles[Device].subtext,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>{info.warningMessage}</Text></View>
             <View style={{flexDirection:"row",gap:10}}>
-                <View style={[{flex:1}]}><Asynchronousbutton successText="Success" idleText={info.yesLabel?info.yesLabel:"Proceed"} failureText="Something went wront" callback={info.proceedCallback}/></View>
+                <View style={[{flex:1}]}><Asynchronousbutton successText="Success" idleText={info.yesLabel?info.yesLabel:"Proceed"} failureText="Something went wront" callback={proceed}/></View>
                 <Pressable onPress={close} style={{flex:1,alignItems:'center',justifyContent:"center",borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}>
-                    <Text style={[styles[Device].no,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{info.noLabel?info.noLabel:"No"}</Text></Pressable>
+                <Text style={[styles[Device].no,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{info.noLabel?info.noLabel:"No"}</Text></Pressable>
             </View>
         </View>
     )

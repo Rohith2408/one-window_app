@@ -393,9 +393,9 @@ const Profile=(props:any)=>{
         return res.success
     }
 
-    const deleteWarning=()=>{
-        addToBasket("warning",{warningMessage:"Are you sure you want to delete your account , this action can't be undone!",proceedCallback:deleteAccount,yesLabel:"Delete",noLabel:"No"});
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Warning"}}}):null;
+    const logoutWarning=()=>{
+        addToBasket("warning",{warningTitle:"Leaving Already?",warningMessage:"Are you sure you want to logout?",proceedCallback:logout,yesLabel:"Logout",noLabel:"Stay"});
+        navigate?navigate({type:"AddScreen",payload:{screen:"Warning"}}):null;
     }
 
     console.log(sharedInfo.responseStatus!="recieved")
@@ -422,7 +422,7 @@ const Profile=(props:any)=>{
             }
             </View>
             <View style={[GeneralStyles.logout_wrapper]}>
-                <Pressable onPress={logout} style={[GeneralStyles.logout,{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]}><Text style={[GeneralStyles.logout,styles[Device].logout,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Logout</Text></Pressable>
+                <Pressable onPress={logoutWarning} style={[GeneralStyles.logout,{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]}><Text style={[GeneralStyles.logout,styles[Device].logout,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Logout</Text></Pressable>
             </View>
             {/* <View style={[GeneralStyles.logout_wrapper]}>
                 <Pressable onPress={deleteWarning} style={[GeneralStyles.logout,{borderWidth:0,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]}><Text style={[GeneralStyles.logout,styles[Device].delete_account,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Medium}]}>Delete Account?</Text></Pressable>

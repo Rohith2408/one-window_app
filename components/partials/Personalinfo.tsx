@@ -188,8 +188,8 @@ const Personalinfo=()=>{
     }
 
     const deleteWarning=()=>{
-        addToBasket("warning",{warningMessage:"Are you sure you want to delete your account , this action can't be undone!",proceedCallback:deleteAccount,yesLabel:"Delete",noLabel:"No"});
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Warning"}}}):null;
+        addToBasket("warning",{warningTitle:"You’re leaving?",warningMessage:"Are you sure you want to delete your account, this action can't be undone!",proceedCallback:deleteAccount,yesLabel:"Delete",noLabel:"No"});
+        navigate?navigate({type:"AddScreen",payload:{screen:"Warning"}}):null;
     }
 
     useEffect(()=>{
