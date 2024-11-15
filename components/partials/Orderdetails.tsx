@@ -233,11 +233,23 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Payment",params:{paymentOrderId:order?._id}}}):null
     }
 
+    const redirectToPayment=async ()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Payment",params:{paymentOrderId:order?._id}}}):null
+    }
+
     const showProduct=(product:PurchasedProduct)=>{
-        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Product"}}):null
-        setTimeout(()=>{
-            navigate?navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:product._id}}}):null
-        },100)
+        if(product.stage && product.status)
+        {
+            navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Product"}}):null
+            setTimeout(()=>{
+                navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:product._id}}})
+            },100)
+        }
+        else
+        {
+            addToBasket("warning",{warningTitle:"Oops!",warningMessage:"Seems like the payment is pending",proceedCallback:redirectToPayment,yesLabel:"Pay Now",noLabel:"Back"});
+            navigate?navigate({type:"AddScreen",payload:{screen:"Warning"}}):null;
+        }
     }
 
     //console.log(JSON.stringify("logs",order?.logs,null,2));
@@ -283,7 +295,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                         <ScrollView contentContainerStyle={{gap:10,paddingTop:10}}>
                         {
                             order.products.map((product,i)=>
-                            <Pressable onPress={()=>order.paymentDetails.paymentStatus!="pending"?showProduct(product):null} style={[{padding:10}]}><Productcompact2card {...product} index={i}/></Pressable>
+                            <Pressable onPress={()=>showProduct(product)} style={[{padding:10}]}><Productcompact2card {...product} index={i}/></Pressable>
                             )
                         }
                         </ScrollView>
