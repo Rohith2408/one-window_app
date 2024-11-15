@@ -20,6 +20,7 @@ import { store } from "../../store"
 import Docview from "../flyers/Docview"
 import Docviewer from "../resources/Docviewer"
 import Listselection from "../resources/Listselection"
+import { addToBasket } from "../../constants/basket"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -385,6 +386,7 @@ const Document=(props:{title:string,docIdentifier:string,fieldPath:string,doc:Do
             if(res.success)
             {
                 dispatch(setDocuments(res.data));
+                //navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Warning"}}):null
             }   
             return res
         }
@@ -400,12 +402,18 @@ const Document=(props:{title:string,docIdentifier:string,fieldPath:string,doc:Do
                 break
 
             case "delete":
-                await remove()
+                deleteWarning()
+                // await remove()
                 break
         }
     }
 
-    console.log("docssss",props.docIdentifier,props.doc)
+    const deleteWarning=()=>{
+        addToBasket("warning",{warningTitle:"Erase it?",warningMessage:"Are you sure you want to delete the document?",proceedCallback:remove,yesLabel:"Delete",noLabel:"No"});
+        navigate?navigate({type:"AddScreen",payload:{screen:"Warning"}}):null;
+    }
+
+    //console.log("docssss",props.docIdentifier,props.doc)
 
     return(
         <View style={[GeneralStyles.document_wrapper]}>
