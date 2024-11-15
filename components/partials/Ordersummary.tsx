@@ -185,14 +185,16 @@ const Ordersummary=()=>{
             reqType:"POST",
             body:details
         })
-        setPaymentData({
-            requestStatus:"initiated",
-            responseStatus:"recieved",
-            data:res.data,
-            haveAnIssue:!res.success,
-            issue:res.message
-        })
-        console.log("response",JSON.stringify(res,null,2));
+        if(res.success)
+        {
+            setPaymentData({
+                requestStatus:"initiated",
+                responseStatus:"recieved",
+                data:res.data,
+                haveAnIssue:!res.success,
+                issue:res.message
+            })
+        }
     }
 
     useEffect(()=>{
