@@ -34,6 +34,7 @@ import locationSlice from "./slices/locationSlice";
 import blockedUsersSlice from "./slices/blockedUsersSlice";
 import blockedByUsersSlice from "./slices/blockedByUsersSlice";
 import requestSlice from "./slices/requestSlice";
+import removeScreenSlice from "./slices/removeScreenSlice";
 
 const store = configureStore({
         reducer:{
@@ -70,7 +71,8 @@ const store = configureStore({
             location:locationSlice,
             blockedusers:blockedUsersSlice,
             blockedbyusers:blockedByUsersSlice,
-            request:requestSlice
+            request:requestSlice,
+            removescreen:removeScreenSlice
         }
     });
 

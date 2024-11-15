@@ -7,6 +7,9 @@ import React from "react"
 import { Fonts, Themes, components } from "../constants"
 import back_icon from '../assets/images/misc/back.png'
 import { Image } from "expo-image"
+import { useAppSelector } from "../hooks/useAppSelector"
+import { useAppDispatch } from "../hooks/useAppDispatch"
+import { resetRemoveScreen, setRemoveScreen } from "../store/slices/removeScreenSlice"
 
 const Stacknavigator=(props:StackNavigator)=>{
 
@@ -82,6 +85,8 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
   const swipeThreshold = 100;
   const [screenDimensions,setScreenDimensions]=useState<LayoutRectangle>()
   const [path,navigate]=useNavigation();
+  const removeScreen=useAppSelector((state)=>state.removescreen)
+  const dispatch=useAppDispatch()
 
   const getCurrentPosition=()=>(currentState.current)
   const setCurrentPosition=(val:{x:number,y:number,opacity:number,scale:number})=>{currentState.current=val}
@@ -207,6 +212,13 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
     }
   },[props.keyboardInfo])
 
+  useEffect(()=>{
+    if(removeScreen.id==props.id)
+    {
+      back(200);
+    }
+  },[JSON.stringify(removeScreen)])
+
   //console.log("screen",initialState,finalState);
 
   const animate=(animData:{property:Animated.Value,style?:"timing"|"spring",value:number,duration:number,native?:boolean}[],callBack?:any)=>{
@@ -222,12 +234,13 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
       {property:opacity,value:initialState?initialState.opacity:0,duration:duration},
       {property:width,value:initialState?initialState.width:0,native:false,duration:duration},
       {property:height,value:initialState?initialState.height:0,native:false,duration:duration},
-    ],()=>{navigate?navigate({type:"RemoveScreen"}):null})
+    ],()=>{
+      dispatch(resetRemoveScreen());
+      navigate?navigate({type:"RemoveSpecificScreen",payload:{id:props.id}}):null
+    })
   }
 
   const Container=getComponent(props.component)?.component
-
-  console.log("non closable",screenInfo?.id,screenInfo?.nonClosable)
 
   return(
       <Animated.View onLayout={(e)=>setScreenDimensions(e.nativeEvent.layout)} key={props.id} style={[styles.screenWrapper,screenInfo?.type=="Flyer"?{shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
@@ -262,7 +275,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
         {
           screenInfo?.type=="Flyer" || screenInfo?.type=="Popup"
           ?
-          <Pressable onPress={()=>!screenInfo?.nonClosable?back(200):null} style={{position:"absolute",backgroundColor:'rgba(0,0,0,0.075)',zIndex:-2,bottom:"90%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}}></Pressable>
+          <Animated.View style={[{opacity:height.interpolate({inputRange:[0,1],outputRange:[0,1]})},{position:"absolute",backgroundColor:'rgba(0,0,0,0.075)',zIndex:-2,bottom:"90%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}]}><Pressable onPress={()=>!screenInfo?.nonClosable?back(200):null} style={{flex:1}}></Pressable></Animated.View>
           :
           null
         }
