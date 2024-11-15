@@ -5,7 +5,7 @@ import Loadingview from "../resources/Loadingview"
 import clock_icon from '../../assets/images/misc/clock.png'
 import suitcase_icon from '../../assets/images/misc/workexperience.png'
 import { Image } from "expo-image"
-import { Word2Sentence, compareProducts, formatDate, getDevice, getMonth, profileUpdator } from "../../utils"
+import { Word2Sentence, compareProducts, formatCurrency, formatDate, getDevice, getMonth, profileUpdator } from "../../utils"
 import { Fonts, Themes } from "../../constants"
 import delete_icon from '../../assets/images/misc/delete-black.png'
 import apply_icon from '../../assets/images/misc/apply.png'
@@ -265,14 +265,11 @@ const Ordercompactcard=(props:Order & {index:number})=>{
                         <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.Package?props.Package.name:"Direct Purchase"}</Text>
                     </Animated.View>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{"Order placed on "+formatDate(props.paymentDetails.created_at)}</Text>
-                    <View style={{flexDirection:"row",gap:5}}>
+                    <View style={{flexDirection:"row",alignItems:"center",gap:5}}>
                         <Image style={[styles[Device].info_icon]} source={clock_icon}/>
-                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Products- "+props.products.length+" | "+"Paid- "+props.paymentDetails.currency.toUpperCase()+" "+props.paymentDetails.amount}</Text>
+                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.products.length+" Products"}</Text>
+                        {/* <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Products- "+props.products.length+" | "+"Paid- "+formatCurrency(props.paymentDetails.amount/100,props.paymentDetails.currency)}</Text> */}
                     </View>
-                    {/* <View style={{flexDirection:"row",gap:5}}>
-                        <Image style={[styles[Device].location_icon]} source={apply_icon}/>
-                        <Text style={[styles[Device].text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.data.startDate?("Start Dates: "+Word2Sentence(props.data.startDate?.map((item)=>getMonth(item.courseStartingMonth+1,true)),"",",")):null}</Text>
-                    </View> */}
                 </View>
             </View>
             :
