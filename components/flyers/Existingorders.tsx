@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import useNavigation from "../../hooks/useNavigation"
 import sample_pic from '../../assets/images/misc/sampledp.png'
 import loader from '../../assets/images/misc/loader.gif'
@@ -16,12 +16,11 @@ import Ordercard from "../cards/Ordercard"
 import { addToBasket, getBasket } from "../../constants/basket"
 import Ordercompactcard from "../cards/Ordercompactcard"
 import Styledtext from "../resources/Styledtext"
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
-        flex:1,
-        padding:10,
-        gap:10
+        flex:1
     }
 })
 
@@ -104,17 +103,19 @@ const Existingorders=()=>{
             //package:selected?.Package,
             products:orderinfo.products
         }) 
-        navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
+        dispatch(setRemoveScreen({id:"Existingorders"}))
+        //navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
         navigate?navigate({type:"AddScreen",payload:{screen:"Addtoorder",params:{orderinfoid:"orderinfo"}}}):null
     }
 
     const newOrder=()=>{
-        navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
+        dispatch(setRemoveScreen({id:"Existingorders"}))
+        //navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
         navigate?navigate({type:"AddScreen",payload:{screen:"Order",params:{orderinfoid:"orderinfo"}}}):null
     }
 
     return(
-        <View style={[GeneralStyles.wrapper,{gap:20}]}>
+        <View style={[GeneralStyles.wrapper,appStandardStyles.screenMarginSmall,{paddingTop:20,gap:20}]}>
             <Styledtext styles={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Do you want to add the products to an existing purchase?" focusWord="products"/>
             {/* <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}></Text> */}
             <View style={{flex:1}}>

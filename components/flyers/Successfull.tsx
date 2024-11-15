@@ -3,6 +3,8 @@ import { StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { getDevice } from "../../utils"
 import { Fonts, Themes, appStandardStyles } from "../../constants"
+import { useAppDispatch } from "../../hooks/useAppDispatch"
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         flex:1,
@@ -61,12 +63,14 @@ const Successfull=(props:{message:string,preventAutoHide?:boolean,hideInterval?:
 
     const [path,navigate]=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const dispatch=useAppDispatch()
 
     useEffect(()=>{
         if(!props.preventAutoHide)
         {
             setTimeout(()=>{
-                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
+                dispatch(setRemoveScreen({id:"Successfull"}))
+                //navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
             },props.hideInterval?props.hideInterval:2500)
         }
     },[])

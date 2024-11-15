@@ -7,6 +7,8 @@ import Asynchronousbutton from "../resources/Asynchronousbutton"
 import { getBasket } from "../../constants/basket"
 import Transitionview from "../resources/Transitionview"
 import { ServerResponse } from "../../types"
+import { useAppDispatch } from "../../hooks/useAppDispatch"
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -91,13 +93,15 @@ const Warning=()=>{
     const [path,navigate]=useNavigation()
     const info:WarningProps=getBasket("warning");
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const dispatch=useAppDispatch()
 
     useEffect(()=>{
 
     },[])
 
     const close=()=>{
-        navigate({type:"RemoveSpecificScreen",payload:{id:"Warning"}});
+        dispatch(setRemoveScreen({id:"Warning"}));
+        //navigate({type:"RemoveSpecificScreen",payload:{id:"Warning"}});
     }
 
     const proceed=async ()=>{

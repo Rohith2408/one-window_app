@@ -6,6 +6,8 @@ import { useRef } from "react"
 import { getDevice } from "../../utils"
 import { store } from "../../store"
 import Styledtext from "../resources/Styledtext"
+import { useAppDispatch } from "../../hooks/useAppDispatch"
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -70,15 +72,16 @@ const Testoptions=()=>{
 
     const [path,navigate]=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const dispatch=useAppDispatch()
 
     const openForm=(test:string)=>{
         setComponentInfo("Form","title","Test")
-        navigate?navigate({type:"RemoveScreen"}):null
+        dispatch(setRemoveScreen({id:"Testoptions"}));
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:test,forminitialdataid:test}}}):null
     }
 
     return(
-        <View style={{paddingTop:10}}>
+        <View style={[appStandardStyles.screenMarginSmall,{paddingTop:20}]}>
             <Styledtext styles={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="test" text="Select the test"/>
             <ScrollView contentContainerStyle={{gap:30,padding:15}}>
             {

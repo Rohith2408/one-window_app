@@ -6,6 +6,8 @@ import { Fonts, Themes, appStandardStyles } from "../../constants"
 import { getBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
 import Styledtext from "../resources/Styledtext"
+import { useAppDispatch } from "../../hooks/useAppDispatch"
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -94,6 +96,7 @@ const Currentlyworking=(props:{currentlyWorkingBasketid:string})=>{
     const [isCompleted,setIsCompleted]=useState(info.initialStatus!=undefined?info.initialStatus:true);
     const animindex=useRef(new Animated.Value(0)).current;
     const [path,navigate]=useNavigation()
+    const dispatch=useAppDispatch()
 
     useEffect(()=>{
         Animated.spring(animindex,{
@@ -103,7 +106,8 @@ const Currentlyworking=(props:{currentlyWorkingBasketid:string})=>{
     },[isCompleted])
 
     const next=()=>{
-        navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
+        dispatch(setRemoveScreen({id:"Currentlyworking"}))
+        //navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
         info.callback(!isCompleted)
     }
 

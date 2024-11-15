@@ -2,9 +2,11 @@ import { Animated, Pressable, StyleSheet, Text, View } from "react-native"
 import Checkbox from "../resources/Checkbox"
 import { useEffect, useRef, useState } from "react"
 import { getDevice } from "../../utils"
-import { Fonts, Themes } from "../../constants"
+import { Fonts, Themes, appStandardStyles } from "../../constants"
 import { getBasket } from "../../constants/basket"
 import useNavigation from "../../hooks/useNavigation"
+import { useAppDispatch } from "../../hooks/useAppDispatch"
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -95,6 +97,7 @@ const Intermediatecompleted=(props:{intermediateCompletedBasketid:string})=>{
     const [isCompleted,setIsCompleted]=useState(info.initialStatus!=undefined?info.initialStatus:true);
     const animindex=useRef(new Animated.Value(0)).current;
     const [path,navigate]=useNavigation()
+    const dispatch=useAppDispatch()
 
     useEffect(()=>{
         Animated.spring(animindex,{
@@ -104,12 +107,13 @@ const Intermediatecompleted=(props:{intermediateCompletedBasketid:string})=>{
     },[isCompleted])
 
     const next=()=>{
-        navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
+        //navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}})
+        dispatch(setRemoveScreen({id:"Intermediatecompleted"}))
         info.callback(isCompleted)
     }
 
     return(
-        <View style={{paddingTop:20,gap:15}}>
+        <View style={[appStandardStyles.screenMarginSmall,{paddingTop:20,gap:15}]}>
             <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Have you successfully completed your course of study{info.institute?" at "+info.institute:""}?</Text>
             <View style={{gap:15}}>
                 <View>

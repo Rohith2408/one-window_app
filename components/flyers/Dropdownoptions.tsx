@@ -8,6 +8,8 @@ import tick_icon from '../../assets/images/misc/tick.png'
 import { Image } from "expo-image"
 import { getDevice, setLayoutAnimation } from "../../utils"
 import loading_gif from '../../assets/images/misc/loader.gif'
+import { useAppDispatch } from "../../hooks/useAppDispatch"
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
 
 const GeneralStyles=StyleSheet.create({
     options_wrapper:{
@@ -113,6 +115,7 @@ const Dropdownoptions=(props:{basketid:string})=>{
     const maxPages=useRef((info.options.list.length/itemsPerPage)+(info.options.list.length%itemsPerPage!=0?1:0)).current
     const pageUpdated=useRef(false);
     const [selectionType,setSelectionType]=useState<"custom"|"default">("default");
+    const dispatch=useAppDispatch()
     //const [custom,setCustom]=useState<string|undefined>(info.options.custom?info.selected:undefined);
 
     const selection=(data:any)=>{
@@ -158,7 +161,8 @@ const Dropdownoptions=(props:{basketid:string})=>{
     const apply=(selected:any)=>{
         info.eventHandler?info.eventHandler({name:"onSelect",data:selected,triggerBy:"dropdownoptions"}):null
         info.pathHandler?navigate?navigate(info.pathHandler(selected)):null:null
-        !info.preventCloseOnApply?navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Dropdownoptions"}}):null:null
+        !info.preventCloseOnApply?dispatch(setRemoveScreen({id:"Dropdownoptions"})):null
+        //!info.preventCloseOnApply?navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Dropdownoptions"}}):null:null
         //console.log("apply",info.apply)
     }
 
