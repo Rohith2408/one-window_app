@@ -14,6 +14,7 @@ import { addProduct, addProducts, replaceProducts } from "../../store/slices/pro
 import { useAppSelector } from "../../hooks/useAppSelector";
 import Transitionview from "../resources/Transitionview";
 import Styledtext from "../resources/Styledtext";
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice";
 
 const GeneralStyles=StyleSheet.create({
  
@@ -100,7 +101,8 @@ const Payment = (props:{paymentOrderId:string}) => {
         console.log("after payment",JSON.stringify(response1.data.products[0].advisors,null,2));
         dispatch(updateOrder(response1.data));
         dispatch(replaceProducts(response1.data.products));
-        navigate({type:"RemovePages",payload:[{id:"Order"},{id:"Payment"},{id:"Ordersummary"},{id:"Cart"}]})
+        dispatch(setRemoveScreen({id:"Payment"}));
+        navigate({type:"RemovePages",payload:[{id:"Order"},{id:"Ordersummary"},{id:"Cart"}]})
       }
     } 
     else {
@@ -157,7 +159,9 @@ const Payment = (props:{paymentOrderId:string}) => {
                 setError(undefined);
               } 
               else if (data.status === 'cancelled') {
-                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Payment"}}):null
+                dispatch(setRemoveScreen({id:"Payment"}));
+                navigate({type:"RemovePages",payload:[{id:"Order"},{id:"Ordersummary"}]})
+                //navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Payment"}}):null
               } 
               else if (data.status === 'error') {
                 setError(data.message);

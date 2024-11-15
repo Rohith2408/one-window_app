@@ -23,6 +23,8 @@ import wishlisted_icon from '../../assets/images/misc/wishlisted.png'
 import applicarion_details_template from '../../assets/images/misc/application-details-template.png'
 import Loader from "../resources/Loader";
 import Styledtext from "../resources/Styledtext";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -476,6 +478,7 @@ const Program=(props:{programid:string})=>{
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
     const [isLoading,setLoading]=useState(false);
     const [AT,setAT]=useState<undefined|string|null>();
+    const dispatch=useAppDispatch()
 
     const fetchProgram=async ()=>{
         console.log("id",props.programid)
@@ -600,10 +603,11 @@ const Program=(props:{programid:string})=>{
         console.log("Free apply res",res);
         if(freeOrder && freeOrder?.products.length==Package?.products.find((item)=>item.category=="premium application")?.quantity)
         {
+            //dispatch(setRemoveScreen({id:"Intake"}));
             navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
             setTimeout(()=>{
                 navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Error",flyerdata:{error:"Seems like you have exhausted all your free applications",preventAutoHide:true}}}}):null;
-            },100)
+            },200)
         }
         else
         {
