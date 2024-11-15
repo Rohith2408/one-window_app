@@ -432,7 +432,7 @@ const Intermediate=(props:{data:EducationHistory_Plus2|undefined})=>{
 
     const openCompletedFlyer=()=>{
         addToBasket("intermediatecompleted",{callback:openForm,institute:props.data?.instituteName,initialStatus:props.data?.isCompleted==undefined?true:props.data .isCompleted})
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intermediatecompleted",flyerdata:{intermediateCompletedBasketid:"intermediatecompleted"}}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Intermediatecompleted",params:{intermediateCompletedBasketid:"intermediatecompleted"}}}):null
     }
 
     //console.log("in",props.data?.backlogs)
@@ -498,13 +498,6 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
         }).start()
     }
 
-    const showInstitutes=()=>{
-        addToBasket("institutions-flyer",{
-            callback:add
-        });
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Institutes",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
-    }
-
     const remove=async ()=>{
         setIsLoading(true);
         let res:ServerResponse=await profileUpdator({education:{...store.getState().educationhistory.data,underGraduation:undefined}},(res)=>res.success?store.dispatch(setEducationHistory(res.data.education)):null)
@@ -524,7 +517,7 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
 
     const openCompletedFlyer=()=>{
         addToBasket("intermediatecompleted",{callback:openForm,institute:props.data?.instituteName,initialStatus:props.data?.isCompleted==undefined?true:props.data.isCompleted})
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intermediatecompleted",flyerdata:{intermediateCompletedBasketid:"intermediatecompleted"}}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Intermediatecompleted",params:{intermediateCompletedBasketid:"intermediatecompleted"}}}):null
     }
 
     const checkIfEmpty=(data:EducationHistory_UnderGraduation|undefined)=>{
@@ -615,7 +608,7 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
 
     const openCompletedFlyer=()=>{
         addToBasket("intermediatecompleted",{callback:openForm,institute:props.data?.instituteName,initialStatus:props.data?.isCompleted==undefined?true:props.data.isCompleted})
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intermediatecompleted",flyerdata:{intermediateCompletedBasketid:"intermediatecompleted"}}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Intermediatecompleted",params:{intermediateCompletedBasketid:"intermediatecompleted"}}}):null
     }
 
     return(

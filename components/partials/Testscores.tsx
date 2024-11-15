@@ -368,7 +368,7 @@ const Testscores=()=>{
     const tests=useAppSelector((state)=>state.testscores)
 
     const add=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Testoptions"}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Testoptions"}}):null
     }
 
     useEffect(()=>{

@@ -176,12 +176,11 @@ const Personalinfo=()=>{
             url:getServerRequestURL("delete-account","GET"),
             reqType:"PUT"
         })
-        console.log("delete",res);
         if(res.success)
         {
             await logout();
             setTimeout(()=>{
-                navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Account Deleted Successfully"}}}}):null;
+                navigate?navigate({type:"AddScreen",payload:{screen:"Successfull",params:{message:"Account Deleted Successfully"}}}):null;
             },500)
         }
         return res.success

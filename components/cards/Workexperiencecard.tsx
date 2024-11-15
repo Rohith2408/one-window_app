@@ -257,7 +257,7 @@ const Workexperiencecard=(props:{data:WorkExperience,index:number})=>{
 
     const edit=()=>{
         addToBasket("currentlyworking",{callback:addWork,initialStatus:!props.data.Ongoing})
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Currentlyworking",flyerdata:{currentlyWorkingBasketid:"currentlyworking"}}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Currentlyworking",params:{currentlyWorkingBasketid:"currentlyworking"}}}):null
         //navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Workexperience",forminitialdataid:props.data._id}}}):null
     }
 

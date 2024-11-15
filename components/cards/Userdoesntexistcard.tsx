@@ -236,7 +236,7 @@ const Userdoesntexist=()=>{
     const [path,navigate]=useNavigation()
 
     const info=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Error",flyerdata:{error:"This chat is no longer available , this happens when all the members of the chatroom have deleted their accounts and are no longer a part of onewindow",preventAutoHide:true}}}}):null;
+        navigate?navigate({type:"AddScreen",payload:{screen:"Error",params:{error:"This chat is no longer available , this happens when all the members of the chatroom have deleted their accounts and are no longer a part of onewindow",preventAutoHide:true}}}):null;
     }
 
     return(

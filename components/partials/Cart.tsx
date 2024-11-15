@@ -196,7 +196,7 @@ const Cart=()=>{
         }) 
         if(existingOrders?.length>0)
         {
-            navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Existingorders",flyerdata:{existingordersbasketid:"orderinfo"}}}}):null
+            navigate?navigate({type:"AddScreen",payload:{screen:"Existingorders",params:{existingordersbasketid:"orderinfo"}}}):null
         }
         else
         {
