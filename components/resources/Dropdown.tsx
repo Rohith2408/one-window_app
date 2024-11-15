@@ -106,7 +106,7 @@ const Dropdown=(props:DropdownType & {value:any[],id:string,eventHandler:(event:
         if(props.isAsync)
         {
             addToBasket(props.basketid+"-dropdownoptions",{options:{...props.options},pathHandler:props.pathHandler,eventHandler:props.eventHandler,selectionMode:props.selectionMode,fieldid:props.id,selected:props.value});
-            navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Dropdownoptionsasync",flyerdata:{basketid:props.basketid+"-dropdownoptions"}}}}):null
+            navigate?navigate({type:"AddScreen",payload:{screen:"Dropdownoptionsasync",params:{basketid:props.basketid+"-dropdownoptions"}}}):null
         }
         else
         {
