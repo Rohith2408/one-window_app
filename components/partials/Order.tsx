@@ -148,7 +148,7 @@ const Order=(props:{orderinfoid:string})=>{
     }
 
     const proceed=()=>{
-        if(suggestedPackages.length>0){
+        if(suggestedPackages.length>0 && Package==undefined){
             showWarning()
         }
         else
