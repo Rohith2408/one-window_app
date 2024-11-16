@@ -430,6 +430,8 @@ const Message=(props:{chatId:string})=>{
             url:getServerRequestURL("messages","GET")+"/"+props.chatId,
             reqType: "GET"
         })
+        console.log("messages",res);
+        let clone=[...res.data];
         if(res.success)
         {
             dispatch(initMessages({
@@ -437,7 +439,7 @@ const Message=(props:{chatId:string})=>{
                 responseStatus:"recieved",
                 haveAnIssue:false,
                 issue:"",
-                data:res.data?.reverse()
+                data:clone.reverse()
             }))
             //dispatch(addMessage({...res.data[0],content:"I am fine",sender:chat?.participants.find((item)=>item._id!=profile.data?._id)}))
         }
@@ -470,6 +472,7 @@ const Message=(props:{chatId:string})=>{
     },[message])
 
     const triggerMessages=(triggerObject:TriggerObject)=>{
+        console.log("Message trigger",triggerObject.action,triggerObject.data)
         switch(triggerObject.action){
             case "send":
                 dispatch(addMessage({...triggerObject.data.message,type:"normal"}))
@@ -593,7 +596,7 @@ const Message=(props:{chatId:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Chatoptions",params:{chatId:props.chatId}}}):null
     }
 
-    console.log("messages",blockedUsers)
+    console.log("messages data",chat);
 
     return(
         <View style={[GeneralStyles.wrapper]}>
