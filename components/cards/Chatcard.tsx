@@ -3,7 +3,7 @@ import { Chat, Meeting, ServerResponse, Sharedinfo } from "../../types"
 import meeting_icon from '../../assets/images/misc/meeting.png'
 import { Image } from "expo-image"
 import { useRef, useState } from "react"
-import { Word2Sentence, formatDate, formatTime, getDevice, getServerRequestURL, serverRequest, setWordCase } from "../../utils"
+import { Word2Sentence, formatDate, formatTime, getDevice, getServerRequestURL, serverRequest, setWordCase, truncateString } from "../../utils"
 import delete_icon from '../../assets/images/misc/delete.png'
 import edit_icon from '../../assets/images/misc/edit.png'
 import { Fonts, Themes } from "../../constants"
@@ -288,7 +288,7 @@ const Chatcard=(props:Chat & {index:number})=>{
                             ?
                             <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.participants.length==2?"User blocked":"Sent from a blocked user"}</Text>
                             :
-                            <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:(props.lastMessage!=undefined && lastMessageInfo.sender=="other" && lastMessageInfo.status=="unseen")?Fonts.NeutrifStudio.Bold:Fonts.NeutrifStudio.Regular}]}>{props.lastMessage==undefined?"Tap to chat":props.lastMessage?.content}</Text>
+                            <Text style={[styles[Device].datetime,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:(props.lastMessage!=undefined && lastMessageInfo.sender=="other" && lastMessageInfo.status=="unseen")?Fonts.NeutrifStudio.Bold:Fonts.NeutrifStudio.Regular}]}>{props.lastMessage==undefined?"Tap to chat":truncateString(props.lastMessage?.content,75,true)}</Text>
                             
                         }
                         {
