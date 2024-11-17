@@ -22,6 +22,7 @@ import close_icon from '../../assets/images/misc/close.png'
 import { TypingAnimation } from 'react-native-typing-animation';
 import { getSocket } from "../../socket"
 import Transitionview from "../resources/Transitionview"
+import ai_icon from '../../assets/images/profile/ai.png'
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -619,7 +620,7 @@ const Message=(props:{chatId:string})=>{
                     </View>
                     <Pressable onPress={showChatOptions} style={[GeneralStyles.dp_wrapper]}>
                         <View style={[GeneralStyles.dp_bg,styles[Device].dp_bg,{backgroundColor:Themes.Light.OnewindowPurple(1)}]} />
-                        <Image style={[styles[Device].dp,{borderRadius:100}]} source={chat?.participants.length==2?chat.participants.find((participant)=>participant._id!=profile.data?._id)?.displayPicSrc:default_icon} />
+                        <Image style={[styles[Device].dp,{borderRadius:100}]} source={chat?.participants.find((participant)=>participant.role=="Virtual_Assistant")?ai_icon:chat?.participants.length==2?chat.participants.find((participant)=>participant._id!=profile.data?._id)?.displayPicSrc:default_icon} />
                     </Pressable>
                 </View>
             </View>
