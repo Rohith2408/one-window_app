@@ -119,6 +119,13 @@ const Payment = (props:{paymentOrderId:string}) => {
     // Handle the verification response
   };
 
+  // useEffect(()=>{
+  //   if(!showRazorpayPage)
+  //   {
+
+  //   }
+  // },[showRazorpayPage])
+
   return (
     <View style={[{ flex: 1},appStandardStyles.screenMarginSmall]}>
       {showRazorpayPage ? (
