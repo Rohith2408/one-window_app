@@ -4,8 +4,8 @@ import { store } from "../../store"
 import useNavigation from "../../hooks/useNavigation"
 import Textbox from "../resources/Textbox"
 import { Countrycode, Dropdown, Event, ServerResponse } from "../../types"
-import { getDevice, getServerRequestURL, profileUpdator, serverRequest } from "../../utils"
-import { Countrycodes, Fonts, Themes } from "../../constants"
+import { getDevice, getServerRequestURL, profileUpdator, resetStore, serverRequest } from "../../utils"
+import { Countrycodes, Fonts, Themes, appStandardStyles, secureStoreKeys } from "../../constants"
 import { Image } from "expo-image"
 import verified_icon from '../../assets/images/misc/verified.png'
 import next_icon from '../../assets/images/misc/next.png'
@@ -21,6 +21,8 @@ import { setSharedInfo } from "../../store/slices/sharedinfoSlice"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
 import { Verified } from "../../store/slices/verificationSlice"
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
+import * as SecureStore from 'expo-secure-store'
 
 type Listitem={
     id:string,
@@ -90,6 +92,9 @@ const TabStyles=StyleSheet.create({
         width:30,
         height:30,
         resizeMode:"contain"
+    },
+    logout:{
+        fontSize:16
     }
 })
 
@@ -124,6 +129,9 @@ const MobileSStyles=StyleSheet.create({
         width:18,
         height:18,
         resizeMode:"contain"
+    },
+    logout:{
+        fontSize:12
     }
 })
 
@@ -158,6 +166,9 @@ const MobileMStyles=StyleSheet.create({
         width:20,
         height:20,
         resizeMode:"contain"
+    },
+    logout:{
+        fontSize:14
     }
 })
 
@@ -192,6 +203,9 @@ const MobileLStyles=StyleSheet.create({
         width:20,
         height:20,
         resizeMode:"contain"
+    },
+    logout:{
+        fontSize:14
     }
 })
 
@@ -293,6 +307,7 @@ const Basicinfo=()=>{
     const requiredData=useRef(dataList.filter((item)=>item.emptyChecker(item.data))).current;
     const scrollRef=useRef()
     const [path,navigate]=useNavigation()
+    const Device=useRef<keyof typeof styles>(getDevice()).current
 
     const setScreen=(screenIndex:number)=>{
         (dimensions && scrollRef.current)?scrollRef.current.scrollTo({x:screenIndex*dimensions.width,animated:true}):null
@@ -303,10 +318,18 @@ const Basicinfo=()=>{
         requiredData.length==0?navigate({type:"RemoveSpecificScreen",payload:{id:"Basicinfo"}}):null
     },[])
 
+    const logout=async ()=>{
+        await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,"");
+        resetStore();
+        navigate?navigate({type:"Logout"}):null
+        //navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Basicinfo"}}):null
+    }
+
     console.log("location",store.getState().location.data)
      
     return(
-        <View style={{flex:1,paddingTop:15}} onLayout={(e)=>setDimesnions(e.nativeEvent.layout)}>
+        <View style={{flex:1,paddingTop:10}} onLayout={(e)=>setDimesnions(e.nativeEvent.layout)}>
+        <Pressable onPress={logout} style={[{alignSelf:"flex-end",borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderWidth:1.2,padding:7},appStandardStyles.screenMarginSmall]}><Text style={[styles[Device].logout,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Logout</Text></Pressable>
         {
             dimensions
             ?
@@ -332,15 +355,18 @@ const Container=(props:Listitem & {index:number,total:number,setScreen:any})=>{
     const [loading,setLoading]=useState(false)
     const [error,setError]=useState<undefined|string>(undefined)
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const dispatch=useAppDispatch();
 
     const skip=()=>{
-        props.index==(props.total-1)?navigate({type:"RemoveSpecificScreen",payload:{id:"Basicinfo"}}):props.setScreen(props.index+1)
+        //props.index==(props.total-1)?navigate({type:"RemoveSpecificScreen",payload:{id:"Basicinfo"}}):props.setScreen(props.index+1)
+        props.index==(props.total-1)?dispatch(setRemoveScreen({id:"Basicinfo"})):props.setScreen(props.index+1)
     }
 
     const next=async ()=>{
         setLoading(true)
         let res:ServerResponse=props.request?.serverHandler?await props.request?.serverHandler(data):{success:true,data:undefined,message:""}
-        res.success?props.index==(props.total-1)?navigate({type:"RemoveSpecificScreen",payload:{id:"Basicinfo"}}):props.setScreen(props.index+1):setError(res.message);
+        //res.success?props.index==(props.total-1)?navigate({type:"RemoveSpecificScreen",payload:{id:"Basicinfo"}}):props.setScreen(props.index+1):setError(res.message);
+        res.success?props.index==(props.total-1)?dispatch(setRemoveScreen({id:"Basicinfo"})):props.setScreen(props.index+1):setError(res.message);
         setLoading(false)
     }
 
@@ -565,6 +591,7 @@ const Phonenumber=(props:{setData:any,data:any,setError:any})=>{
                 countryCode:props.data.countryCode
             }    
         });
+        console.log("ressss p",res);
         res.success?setShowOtpUi(true):props.setError(res.message)
         setLoading({type:"request-otp",status:false})
         return res
