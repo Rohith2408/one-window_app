@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View,ScrollView } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { getDevice } from "../../utils"
 import { useEffect, useRef } from "react"
@@ -321,9 +321,9 @@ const Home=(props:undefined|{name:string})=>{
     ]).current
     const banners=useRef<Banner[]>([
         {title:"Choosing the right university",subTitle:"",image:banner_1,url:"https://onewindow.co/steps-to-select-university/"},
-        // {title:"Scholorship vs Student Loan",subTitle:"",image:sample_banner,url:"https://onewindow.co/scholarship-vs-student-loan-understanding-the-pros-and-cons/"},
-        {title:"Making friends abroad",subTitle:"",image:banner_2,url:"https://onewindow.co/07-tips-to-make-friends-while-you-study-abroad/"},
-        {title:"Academic success strategies",subTitle:"",image:banner_3,url:"https://onewindow.co/top-5-academic-success-strategies-for-study-abroad/"},
+        {title:"Scholorship vs Student Loan",subTitle:"",image:banner_2,url:"https://onewindow.co/scholarship-vs-student-loan-understanding-the-pros-and-cons/"},
+        {title:"Making friends abroad",subTitle:"",image:banner_3,url:"https://onewindow.co/07-tips-to-make-friends-while-you-study-abroad/"},
+        //{title:"Academic success strategies",subTitle:"",image:banner_2,url:"https://onewindow.co/top-5-academic-success-strategies-for-study-abroad/"},
         // {title:"Summer Programs",subTitle:"",image:sample_banner,url:"https://onewindow.co/summer-programs-short-term-opportunities/"}
     ]).current
 
@@ -340,61 +340,50 @@ const Home=(props:undefined|{name:string})=>{
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
-            <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper]}>
-                <View style={{position:"relative",gap:10}}>
-                    <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
-                    <Transitionview effect="pan"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?(personalinfo.data.firstName):"User")}!</Text></Transitionview>
-                    {/* <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
-                        <Image source={university_icon} style={[GeneralStyles.explore_icon,{width:24,height:24,resizeMode:"contain"}]}></Image>
-                        <Text style={{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.5)}}>Malla Reddy University</Text>
-                    </View> */}
-                </View>
-                {/* <Text style={[GeneralStyles.products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Update No.-4</Text> */}
-                <Transitionview effect="pan">
-                    <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
-                        <Dynamicplaceholder/>                     
-                    </Pressable>
-                </Transitionview>
-                <View style={[GeneralStyles.explore_wrapper]}>
-                {
-                    exploreTabs.map((item,i)=>
-                    <Exploreitem key={item.text} {...item} device={Device} theme={theme}></Exploreitem>
-                    // <Transitionview style={[{flex:1,alignSelf:"stretch"}]} effect="pan" delay={i==1?0:100}>
-                    //     <Exploreitem key={item.text} {...item} device={Device} theme={theme}></Exploreitem>
-                    // </Transitionview>
-                    )
-                }
-                </View>
-                <View style={[{width:"100%"}]}>
-                    <Carousel data={banners} card={Bannercard}/>
-                </View>
-                {/* <View style={[{width:"100%"}]}>
-                    <Carousel data={banners} card={Bannercard}/>
-                </View> */}
-                <View style={[GeneralStyles.products_wrapper,styles[Device].products_wrapper]}>
-                    <Text style={[GeneralStyles.products_title,styles[Device].products_title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
+            <View style={[GeneralStyles.sub_wrapper]}>
+                <ScrollView style={[{flex:1}]} contentContainerStyle={[styles[Device].sub_wrapper]}>
+                    <View style={{position:"relative",gap:10}}>
+                        <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
+                        <Transitionview effect="pan"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?(personalinfo.data.firstName):"User")}!</Text></Transitionview>
+                    </View>
+                    {/* <Text style={[GeneralStyles.products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Update No.-4</Text> */}
+                    <Transitionview effect="pan">
+                        <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
+                            <Dynamicplaceholder/>                     
+                        </Pressable>
+                    </Transitionview>
+                    <View style={[GeneralStyles.explore_wrapper]}>
                     {
-                        products.responseStatus=="not_recieved"
-                        ?
-                        <Loadinglistscreen cardStyles={styles[Device].loader_card} cardGap={30} count={3} direction="horizontal"/>
-                        :
-                            products.data.length==0
-                            ?
-                            <View style={{flexDirection:"row",justifyContent:"center",alignItems:'center',gap:10}}>
-                                <View style={{flex:1,flexDirection:"column",alignItems:"flex-start",justifyContent:"center",gap:10}}>
-                                    <View><Text style={[styles[Device].no_products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>Not purchased any products yet</Text></View>
-                                    <Pressable onPress={openExplore}><Text style={[styles[Device].no_products,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>Explore now!</Text></Pressable>
-                                </View>
-                                <Image source={emptylist} style={[styles[Device].no_products_image]}/>
-                            </View>
-                            :
-                            <List cardStyles={styles[Device].card} list={products.data} card={Productcompactcard} direction="Horizontal" mode="Scroll"></List>
+                        exploreTabs.map((item,i)=>
+                        <Exploreitem key={item.text} {...item} device={Device} theme={theme}></Exploreitem>
+                        )
                     }
-                </View>
+                    </View>
+                    <View style={[{width:"100%"}]}>
+                        <Carousel data={banners} card={Bannercard}/>
+                    </View>
+                    <View style={[GeneralStyles.products_wrapper,styles[Device].products_wrapper]}>
+                        <Text style={[GeneralStyles.products_title,styles[Device].products_title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
+                        {
+                            products.responseStatus=="not_recieved"
+                            ?
+                            <Loadinglistscreen cardStyles={styles[Device].loader_card} cardGap={30} count={3} direction="horizontal"/>
+                            :
+                                products.data.length==0
+                                ?
+                                <View style={{flexDirection:"row",justifyContent:"center",alignItems:'center',gap:10}}>
+                                    <View style={{flex:1,flexDirection:"column",alignItems:"flex-start",justifyContent:"center",gap:10}}>
+                                        <View><Text style={[styles[Device].no_products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>Not purchased any products yet</Text></View>
+                                        <Pressable onPress={openExplore}><Text style={[styles[Device].no_products,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>Explore now!</Text></Pressable>
+                                    </View>
+                                    <Image source={emptylist} style={[styles[Device].no_products_image]}/>
+                                </View>
+                                :
+                                <List cardStyles={styles[Device].card} list={products.data} card={Productcompactcard} direction="Horizontal" mode="Scroll"></List>
+                        }
+                    </View>
+                </ScrollView>
             </View>
-            {/* <Text>Home</Text>
-            <Text>{props?.name}</Text>
-            <Pressable onPress={()=>Nav?.navigate({type:"Logout"})}><Text>Logout</Text></Pressable> */}
         </View>
     )
 }
