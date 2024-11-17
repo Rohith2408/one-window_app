@@ -2143,7 +2143,7 @@ const forms:FormInfo[]=[
                 {id:"city",value:data?.city?[{label:setWordCase(data.city),value:data.city}]:[]},
                 {id:"languageofinstruction",value:data?.languageOfInstruction?[{label:setWordCase(data.languageOfInstruction),value:data.languageOfInstruction}]:[]},
                 {id:"board",value:data?.board?[{label:data.board,value:data.board}]:[]},
-                {id:"gradingsystem",value:data?.gradingSystem?[{label:data.gradingSystem,value:data.gradingSystem}]:[]},
+                {id:"gradingsystem",value:data?.gradingSystem?[{label:setWordCase(data.gradingSystem),value:data.gradingSystem}]:[]},
                 {id:"totalscore",value:data?.totalScore?data.totalScore:undefined},
                 {id:"startdate",value:data?.startDate?data.startDate:undefined},
                 {id:"enddate",value:data?.endDate?data.endDate:undefined},
