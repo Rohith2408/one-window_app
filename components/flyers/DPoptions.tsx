@@ -13,6 +13,7 @@ import { useAppSelector } from "../../hooks/useAppSelector"
 import { Image } from "expo-image"
 import { addToBasket } from "../../constants/basket"
 import { store } from "../../store"
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -96,21 +97,49 @@ const DPoptions=()=>{
         return result
     }
 
+    const deleteImage=async ()=>{
+        let formdata=new FormData();
+        formdata.append('public_id',info?.displayPicSrc)
+        let serverRes=await fetch("https://api.cloudinary.com/v1_1/dffdp7skh/image/destroy",{
+            method:"POST",
+            body:formdata
+        })
+        let res:any=await serverRes.json()
+        console.log("cloudinary response",JSON.stringify(res));
+        return res
+    }
+
     const add=async ()=>{
         const pickerRes=await pickImage()
         if(!pickerRes.canceled && pickerRes.assets[0]){
             setloading(true)
             let file="data:image/jpg;base64,"+pickerRes.assets[0].base64
             const uploadRes:any=await uploadImage(file);
-            let serverRes=await profileUpdator({displayPicSrc:uploadRes.secure_url});
-            console.log("server res",serverRes);
-            if(serverRes.success)
-            {
-                dispatch(setSharedInfo({...info,displayPicSrc:serverRes.data.displayPicSrc}))
-                navigate({type:"RemoveSpecificScreen",payload:{id:"DPoptions"}});
-            }   
-            
+            console.log("upload res",uploadRes);
+            if(uploadRes.secure_url){
+                let serverRes=await profileUpdator({displayPicSrc:uploadRes.secure_url});
+                console.log("server res",serverRes);
+                if(serverRes.success)
+                {
+                    dispatch(setSharedInfo({...info,displayPicSrc:serverRes.data.displayPicSrc}))
+                    // navigate({type:"RemoveSpecificScreen",payload:{id:"DPoptions"}});
+                    dispatch(setRemoveScreen({id:"DPoptions"}));
+                }  
+            }
         }
+    }
+
+    const remove=async ()=>{
+        setloading(true)
+        const removeRes:any=await deleteImage();
+        let serverRes=await profileUpdator({displayPicSrc:""});
+        console.log("server res",serverRes);
+        if(serverRes.success)
+        {
+            dispatch(setSharedInfo({...info,displayPicSrc:serverRes.data.displayPicSrc}))
+            //navigate({type:"RemoveSpecificScreen",payload:{id:"DPoptions"}});
+            dispatch(setRemoveScreen({id:"DPoptions"}));
+        }   
     }
 
     return(
