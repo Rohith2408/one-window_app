@@ -155,7 +155,8 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     normal_msg:{
-        fontSize:14
+        fontSize:14,
+        lineHeight:20
     },
     repliedTo:{
         fontSize:10
@@ -211,7 +212,8 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     normal_msg:{
-        fontSize:16
+        fontSize:16,
+        lineHeight:22
     },
     repliedTo:{
         fontSize:12
@@ -320,7 +322,7 @@ const Blocked=()=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
-        <View style={{flexDirection:"column",alignSelf:"flex-start",maxWidth:"50%",backgroundColor:"#F6F6F6",borderRadius:10}}>
+        <View style={{flexDirection:"column",alignSelf:"flex-start",maxWidth:"65%",backgroundColor:"#F6F6F6",borderRadius:10}}>
             <Text style={[styles[Device].normal_msg,{fontFamily:Fonts.NeutrifStudio.Regular,padding:10}]}>Message sent from a blocked user</Text>
             {/* <Text style={[styles[Device].normal_msg,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Unblock the user to see the message</Text> */}
         </View>
@@ -375,7 +377,7 @@ const Normal=(props:Message)=>{
     }
 
     return(
-        <View style={{gap:5,alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start",maxWidth:"50%"}}>
+        <View style={{gap:5,alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start",maxWidth:"65%"}}>
             {
                 props.sender && props.sender._id==undefined
                 ?
