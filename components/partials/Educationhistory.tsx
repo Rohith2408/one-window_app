@@ -17,7 +17,7 @@ import info_icon from '../../assets/images/misc/info.png'
 import location_icon from '../../assets/images/misc/location.png'
 
 import useNavigation from "../../hooks/useNavigation"
-import { Word2Sentence, formatDate, getDevice, profileUpdator } from "../../utils"
+import { Word2Sentence, formatDate, getDevice, profileUpdator, setWordCase } from "../../utils"
 import { store } from "../../store"
 import { setEducationHistory } from "../../store/slices/educationHistorySlice"
 import { useRef, useState } from "react"
@@ -372,7 +372,7 @@ const School=(props:{data:EducationHistory_School|undefined})=>{
                     </View>
                     <View style={{flexDirection:"row",gap:5}}>
                         <Image style={[styles[Device].info_icon,{opacity:0.5}]} source={info_icon}/>
-                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.board,props.data.totalScore+" "+props.data.gradingSystem],"","|")}</Text>
+                        <Text style={[styles[Device].text3,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.data.board+" | "+props.data.totalScore+" "+setWordCase(props.data.gradingSystem)}</Text>
                     </View>
                 </View>
                 <View style={[GeneralStyles.actions_wrapper]}>
