@@ -17,6 +17,7 @@ import seen_icon from '../../assets/images/misc/seen.png'
 import delivered_icon from '../../assets/images/misc/delivered.png'
 import default_icon from '../../assets/images/misc/defaultDP.png'
 import go_icon from '../../assets/images/misc/back.png'
+import ai_icon from '../../assets/images/profile/ai.png'
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -255,13 +256,13 @@ const Chatcard=(props:Chat & {index:number})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Message",params:{chatId:props._id}}}):null;
     }
 
-    //console.log("ac",props.lastMessage?._id,lastMessageInfo);
+    //console.log("ac",props.participants);
 
     return(
         <Pressable onPress={openChat} style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.sub_wrapper]}>
                 <View style={[GeneralStyles.icon_wrapper]}>
-                    <Image source={chatInfo.dp.length==0?default_icon:chatInfo.dp} style={[{borderRadius:100},styles[Device].icon]}/>
+                    <Image source={props.participants.find((participant)=>participant.role=="Virtual_Assistant")?ai_icon:chatInfo.dp.length==0?default_icon:chatInfo.dp} style={[{borderRadius:100},styles[Device].icon]}/>
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
                     {
@@ -281,7 +282,7 @@ const Chatcard=(props:Chat & {index:number})=>{
                             }
                         </Animated.View>
                     }
-                    <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{chatInfo.name}</Text>
+                    <Text style={[styles[Device].title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{chatInfo.name}</Text>
                     <View style={{display:"flex",alignItems:'center',flexDirection:'row',gap:5}}>
                         {
                             props?.participants.length==2 && props?.participants.filter((item)=>item._id!=profile?._id && (blockedByUsers?.find((user)=>user._id==item._id)!=undefined || blockedUsers?.find((user)=>user._id==item._id)!=undefined)).length==1
