@@ -259,7 +259,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
         {
             order
             ?
-            <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:40}}>
+            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:40}}>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
                         <Image source={products_icon} style={[styles[Device].uni_icon]}/>
@@ -337,7 +337,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                     }
                     </ScrollView>
                 </View>
-            </View>
+            </ScrollView>
             :
             null
         }
