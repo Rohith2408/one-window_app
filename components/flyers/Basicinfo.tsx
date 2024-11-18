@@ -52,6 +52,7 @@ const GeneralStyles=StyleSheet.create({
         alignItems:'center',
         gap:7.5,
         backgroundColor:'white',
+        elevation:2,
         shadowOpacity:0.08,
         shadowRadius:6,
         padding:7.5,
