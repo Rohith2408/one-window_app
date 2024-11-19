@@ -32,6 +32,7 @@ import Datetime from "../components/resources/Datetime";
 import { getBasket } from "../constants/basket";
 import * as Location from 'expo-location';
 import { setRequest } from "../store/slices/requestSlice";
+import { KeyboardEvent } from "react-native";
 
 export const propsMapper=(screens:string[],params:any|undefined)=>{
   return screens.map((screen)=>{
@@ -949,6 +950,10 @@ export const formatCurrency=(amount:number, currency = "INR", locale = "en-US")=
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(amount);
+}
+
+export const getKeyboardHeight=(keyboardInfo:KeyboardEvent)=>{
+  return Platform.OS=="android"?(keyboardInfo.endCoordinates.height/Dimensions.get("screen").height):(Dimensions.get("screen").height-keyboardInfo.endCoordinates.screenY)/Dimensions.get("screen").height
 }
 
 // export const bakeFilters=(additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[])=>{

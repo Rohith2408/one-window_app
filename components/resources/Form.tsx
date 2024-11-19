@@ -3,7 +3,7 @@ import { FormReducer } from "../../reducers/FormReducer";
 import { Event, FormField as FieldType, FormData, Form as FormType, ServerResponse} from "../../types";
 import { Animated, Keyboard, Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Fonts, Themes, appStandardStyles, forms } from "../../constants";
-import { getDevice } from "../../utils";
+import { getDevice, getKeyboardHeight } from "../../utils";
 import useNavigation from "../../hooks/useNavigation";
 import Asynchronousbutton from "./Asynchronousbutton";
 import { addToBasket, clearBasket, getBasket, getFullBasket } from "../../constants/basket";
@@ -240,7 +240,7 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
     },[keyboard])
 
     useEffect(()=>{
-        let keyboardWillShow = Keyboard.addListener(Platform.OS=="android"?'keyboardDidShow':'keyboardWillShow', (event) => {console.log("Workinggggg",event.endCoordinates);setKeyboard({duration:event.duration,height:event.endCoordinates.height})});
+        let keyboardWillShow = Keyboard.addListener(Platform.OS=="android"?'keyboardDidShow':'keyboardWillShow', (event) => setKeyboard({duration:event.duration,height:getKeyboardHeight(event)}));
         let keyboardWillHide = Keyboard.addListener(Platform.OS=="android"?'keyboardDidHide':'keyboardWillHide', (event) => setKeyboard({duration:event.duration,height:0}));
 
         console.log("form info",props.formid,formInfo?.id)

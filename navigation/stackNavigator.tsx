@@ -2,7 +2,7 @@ import { Animated, Dimensions, Easing, Keyboard, KeyboardEvent, LayoutRectangle,
 import { StackNavigator, StackScreen as StackScreenType } from "../types"
 import { useEffect, useRef, useState } from "react"
 import useNavigation from "../hooks/useNavigation"
-import { getComponent } from "../utils"
+import { getComponent, getKeyboardHeight } from "../utils"
 import React from "react"
 import { Fonts, Themes, components } from "../constants"
 import back_icon from '../assets/images/misc/back.png'
@@ -200,12 +200,13 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
   },[])
 
   useEffect(()=>{
-    console.log(props.id,props.keyboardInfo);
     if(screenInfo?.type=="Flyer" && props.keyboardInfo && finalState)
     {
+      //console.log(props.id,props.keyboardInfo,finalState.y,Dimensions.get("screen").height,props.keyboardInfo.endCoordinates.screenY);
       Animated.timing(translateY, {
         duration: props.keyboardInfo.duration,
-        toValue: finalState.y-((Dimensions.get("screen").height-props.keyboardInfo.endCoordinates.screenY)/Dimensions.get("screen").height),
+        toValue:finalState.y-getKeyboardHeight(props.keyboardInfo),
+        //toValue: finalState.y-((Dimensions.get("screen").height-props.keyboardInfo.endCoordinates.screenY)/Dimensions.get("screen").height),
         //easing:props.keyboardInfo.easing,
         useNativeDriver: false,
       }).start();
@@ -243,7 +244,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
   const Container=getComponent(props.component)?.component
 
   return(
-      <Animated.View onLayout={(e)=>setScreenDimensions(e.nativeEvent.layout)} key={props.id} style={[styles.screenWrapper,screenInfo?.type=="Flyer"?{elevation:2,shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
+      <Animated.View onLayout={(e)=>setScreenDimensions(e.nativeEvent.layout)} key={props.id} style={[styles.screenWrapper,screenInfo?.type=="Flyer"?{elevation:3,shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
         {
           props.index!=0 && (screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY") && !screenInfo.nonClosable
           ?
@@ -286,7 +287,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
           :
           null
         }
-        <View style={[styles.screen,screenInfo?.type=="Flyer"?{borderRadius:30,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{}]}> 
+        <View style={[styles.screen,screenInfo?.type=="Flyer"?{borderRadius:30,elevation:10,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{}]}> 
           {
             screenInfo?.title
             ?
