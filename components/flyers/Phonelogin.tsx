@@ -19,7 +19,7 @@ import Dropdownoptions from "./Dropdownoptions"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { store } from "../../store"
 import * as SecureStore from 'expo-secure-store';
-
+import * as Localization from 'expo-localization';
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -76,6 +76,9 @@ const TabStyles=StyleSheet.create({
     },
     main_wrapper:{
         paddingTop:45
+    },
+    main:{
+        fontSize:14
     }
 })
 
@@ -107,6 +110,9 @@ const MobileSStyles=StyleSheet.create({
     },
     main_wrapper:{
         paddingTop:25
+    },
+    main:{
+        fontSize:18
     }
 })
 
@@ -138,6 +144,9 @@ const MobileMStyles=StyleSheet.create({
     },
     main_wrapper:{
         paddingTop:25
+    },
+    main:{
+        fontSize:16
     }
 })
 
@@ -169,6 +178,9 @@ const MobileLStyles=StyleSheet.create({
     },
     main_wrapper:{
         paddingTop:25
+    },
+    main:{
+        fontSize:16
     }
 })
 
@@ -270,22 +282,24 @@ const Phonelogin=()=>{
 
     useEffect(()=>{
         addToBasket("verification-callback",{callback:verify_phone});
+        let currentCode=Countrycodes.find((code)=>code.code==Localization.getLocales()[0]?.regionCode);
+        currentCode?setPhone({...phone,countryCode:[currentCode]}):null
     },[])
 
-    useEffect(()=>{
-        if(userLocation.responseStatus=="recieved" && userLocation.data)
-        {
-            let currentCode=Countrycodes.find((code)=>code.name==userLocation.data?.country);
-            currentCode?setPhone({...phone,countryCode:[currentCode]}):null
-        }
-    },[userLocation])
+    // useEffect(()=>{
+    //     if(userLocation.responseStatus=="recieved" && userLocation.data)
+    //     {
+    //         let currentCode=Countrycodes.find((code)=>code.code==Localization.getLocales()[0]?.regionCode);
+    //         currentCode?setPhone({...phone,countryCode:[currentCode]}):null
+    //     }
+    // },[userLocation])
 
-    console.log("number",phone)
+    console.log("number",phone,userLocation)
 
     return(
         <View style={[{flex:1},appStandardStyles.screenMarginSmall,styles[Device].main_wrapper]} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
         {
-            dimensions && userLocation.responseStatus=="recieved"
+            dimensions
             ?
             <ScrollView keyboardShouldPersistTaps="handled" scrollEnabled={false} ref={scrollRef} horizontal pagingEnabled style={{flex:1}}>
                 <View style={{width:dimensions.width,gap:30}}>
@@ -355,8 +369,9 @@ const Phonelogin=()=>{
                 </View>
             </ScrollView>
             :
-            <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+            <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:10}}>
                 <Image source={loading_gif} style={[styles[Device].loading]}/>
+                <Text style={[styles[Device].wait,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Just a moment</Text>
             </View>
         }
         </View>
