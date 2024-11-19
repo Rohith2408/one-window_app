@@ -54,15 +54,39 @@ const Layout=(props:LayoutType)=>{
     const [path,navigate]=useNavigation()
 
     useEffect(()=>{
-        getLocation().then((res:ServerResponse)=>{
-            dispatch(initLocation({
-              requestStatus: 'initiated',
-              responseStatus: 'recieved',
-              haveAnIssue: res.success,
-              issue:"",
-              data:res.data
-            }))
-          })
+        //let localLocationInfo=Countrycodes.find((code)=>code.code==Localization.getLocales()[0]?.regionCode);
+        // if(!localLocationInfo)
+        // {
+        //     let timer=setTimeout(()=>{
+        //         dispatch(initLocation({
+        //             requestStatus: 'initiated',
+        //             responseStatus: 'recieved',
+        //             haveAnIssue:false,
+        //             issue:"",
+        //             data:undefined
+        //         }))
+        //     },8000)
+        //     getLocation().then((res:ServerResponse)=>{
+        //         clearTimeout(timer);
+        //         dispatch(initLocation({
+        //           requestStatus: 'initiated',
+        //           responseStatus: 'recieved',
+        //           haveAnIssue: res.success,
+        //           issue:"",
+        //           data:res.data
+        //         }))
+        //     })
+        // }
+        // else
+        // {
+        //     dispatch(initLocation({
+        //         requestStatus: 'initiated',
+        //         responseStatus: 'recieved',
+        //         haveAnIssue:false,
+        //         issue:"",
+        //         data:{country:localLocationInfo.code}
+        //     }))
+        // }
     },[])
 
     useEffect(()=>{
