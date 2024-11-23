@@ -557,7 +557,7 @@ const Program=(props:{programid:string})=>{
         if(inputvalidation?.success)
         {
             let serverRes=await requestInfo?.serverCommunicator(inputvalidation.data);
-            //console.log("server res",JSON.stringify(serverRes,null,2));
+            console.log("server res",JSON.stringify(serverRes,null,2));
             if(serverRes?.success)
             {
                 requestInfo?.responseHandler(serverRes);
@@ -622,7 +622,7 @@ const Program=(props:{programid:string})=>{
                 navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
                 setTimeout(()=>{
                     navigate?navigate({type:"AddScreen",payload:{screen:"Successfull",params:{message:"You can check the application progress in the products section",hideInterval:4000}}}):null;
-                },100)
+                },200)
             }
         }
         return res.success;
