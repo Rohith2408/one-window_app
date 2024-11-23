@@ -148,7 +148,7 @@ const components:ScreenInfo[]=[
     {id:"Degreepreference",component:Degreepreference,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,height:0.3,width:1,opacity:1},final:{x:0,y:0.7,scale:1,opacity:1,height:0.3,width:1}},removalThreshold:5/6},
     {id:"Currentlyworking",component:Currentlyworking,type:"Flyer",props:["currentlyWorkingBasketid"],swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,height:0.35,width:1,opacity:1},final:{x:0,y:0.65,scale:1,opacity:1,height:0.35,width:1}},removalThreshold:5/6},
     {id:"Existingorders",component:Existingorders,props:["existingordersbasketid"],type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
-    {id:"Basicinfo",component:Basicinfo,type:"Flyer",nonClosable:true,delay:150,swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
+    {id:"Basicinfo",component:Basicinfo,type:"Flyer",nonClosable:true,swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},
     {id:"Familydetails",component:Familydetails,type:"Partial",title:"Family Details",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
     {id:"Intermediatecompleted",component:Intermediatecompleted,props:["intermediateCompletedBasketid"],type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,height:0.35,width:1,opacity:1},final:{x:0,y:0.65,scale:1,opacity:1,height:0.35,width:1}},removalThreshold:5/6},
     {id:"Message",component:Message,type:"Partial",occupyFullScreen:true,props:["chatId"],swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
