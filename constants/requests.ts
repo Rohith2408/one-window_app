@@ -1,14 +1,15 @@
+import { getSocket } from "../socket";
 import { store } from "../store";
 import { addBlockedUser, removeBlockedUser } from "../store/slices/blockedUsersSlice";
 import { setCart } from "../store/slices/cartSlice";
 import { updateChat } from "../store/slices/chatsSlice";
 import { addMessage } from "../store/slices/messagesSlice";
 import { addOrders, setOrders, updateOrder } from "../store/slices/ordersSlice";
-import { addProducts, replaceProducts, setProducts } from "../store/slices/productsSlice";
+import { addProducts, replaceProducts, setProducts, updateProduct } from "../store/slices/productsSlice";
 import { setRecommendations } from "../store/slices/recommendationsSlice";
 import { setWishlist } from "../store/slices/wishlistSlice";
-import { Product, PurchasedProduct, Recommendation, RecommendationType, RequestInfo, ServerResponse, ServerUnpurchasedProduct } from "../types";
-import { ISOtoIntakeformat, Word2Sentence, getServerRequestURL, keyVerifier, profileUpdator, serverRequest } from "../utils";
+import { Advisor_compact, Product, PurchasedProduct, Recommendation, RecommendationType, RequestInfo, ServerResponse, ServerUnpurchasedProduct, TriggerObject } from "../types";
+import { ISOtoIntakeformat, Word2Sentence, getServerRequestURL, keyVerifier, pickDocument, profileUpdator, serverRequest } from "../utils";
 import { cartRequest } from "../utils/serverrequests";
 
 const requests:RequestInfo[]=[
@@ -262,6 +263,78 @@ const requests:RequestInfo[]=[
             if(res.success)
             {
                 store.getState().blockedusers.data?.find((user)=>user._id==res.data.blocked._id)!=undefined?store.dispatch(removeBlockedUser(res.data.blocked._id)):store.dispatch(addBlockedUser(res.data.blocked))
+            }
+        }
+    },
+    {
+        id:"upload-doc-application",
+        inputValidator:(data:{applicationId:string,checklistItemId:string,docMaxSize:number})=>{
+            return {success:data && data.applicationId.length!=0 && data.checklistItemId.length!=0 && data.docMaxSize!=undefined,data:undefined,message:""};
+        },
+        serverCommunicator:async (data:{applicationId:string,checklistItemId:string,docMaxSize:number})=>{
+            let docRes=await pickDocument(data.docMaxSize);
+            if(docRes.success)
+            {
+                const formData = new FormData()
+                formData.append('uploaded_file',docRes.data);
+                formData.append("applicationId", data.applicationId);
+                formData.append("checklistItemId",data.checklistItemId);
+                let res:ServerResponse=await serverRequest({
+                    url:getServerRequestURL("upload-doc-application","POST"),
+                    reqType:"POST",
+                    body:formData,
+                    preventStringify:true,
+                })
+                console.log("product doc res",res);
+                if(res.success)
+                {
+                    updateProduct(res.data);
+                    const triggerObj:TriggerObject={
+                        action:"checklist_updated",
+                        sender:store.getState().sharedinfo.data,
+                        recievers:[res.data.advisors.find((item:Advisor_compact)=>item.role=="counsellor")],
+                        data:"Document updated"
+                    };
+                    getSocket().emit("trigger",triggerObj);
+                }
+                return res;   
+            }
+            return docRes;
+        },
+        responseHandler:(res:ServerResponse)=>{
+            if(res.success)
+            {
+                store.dispatch(setWishlist(res.data));
+            }
+        }
+    },
+    {
+        id:"delete-doc-application",
+        inputValidator:(data:{applicationId:string,checklistItemId:string,documentId:string})=>{
+            return {success:data && data.applicationId.length!=0 && data.checklistItemId.length!=0 && data.documentId.length!=0,data:undefined,message:""};
+        },
+        serverCommunicator:async (data:{applicationId:string,checklistItemId:string,documentId:string})=>{
+            console.log("doc data",data.documentId);
+            let res:ServerResponse=await serverRequest({
+                url:getServerRequestURL("delete-doc-application","POST"),
+                reqType:"POST",
+                body:data,
+                preventStringify:true,
+            })
+            console.log("product doc del res",res);
+            return res;
+        },
+        responseHandler:(res:ServerResponse)=>{
+            if(res.success)
+            {
+                updateProduct(res.data);
+                const triggerObj:TriggerObject={
+                    action:"checklist_updated",
+                    sender:store.getState().sharedinfo.data,
+                    recievers:[res.data.advisors.find((item:Advisor_compact)=>item.role=="counsellor")],
+                    data:"Document removed"
+                };
+                getSocket().emit("trigger",triggerObj);
             }
         }
     },

@@ -1,7 +1,7 @@
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { addToBasket, getBasket } from "../../constants/basket"
 import { useEffect, useRef, useState } from "react"
-import { PackageProductsValidator, Word2Sentence, compareProducts, formatDate, getDevice, getLightThemeColor, getThemeColor, setWordCase } from "../../utils"
+import { PackageProductsValidator, Word2Sentence, compareProducts, formatDate, getDevice, getLightThemeColor, getServerRequestURL, getThemeColor, pickDocument, serverRequest, setWordCase } from "../../utils"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
@@ -12,6 +12,14 @@ import Expertcard from "../cards/Expertcard"
 import fee_icon from '../../assets/images/misc/fee.png'
 import Expertcompactcard from "../cards/Expertcompactcard"
 import Styledtext from "../resources/Styledtext"
+import verified_icon from '../../assets/images/misc/verified.png'
+import loading_gif from '../../assets/images/misc/loader.gif'
+import Transitionview from "../resources/Transitionview"
+import delete_icon from '../../assets/images/misc/delete.png'
+import { ServerResponse } from "../../types"
+import { requests } from "../../constants/requests"
+import upload_icon from '../../assets/images/misc/upload.png'
+import document_icon from '../../assets/images/misc/document.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -132,6 +140,33 @@ const TabStyles=StyleSheet.create({
     },
     status:{
         fontSize:18
+    },
+    delete_icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    upload_icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    checked_icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    doc_name:{
+        fontSize:18
+    },
+    doc_icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    emptychecklist_msg:{
+        fontSize:18,
+        lineHeight:22
     }
 })
 
@@ -195,6 +230,33 @@ const MobileSStyles=StyleSheet.create({
     },
     status:{
         fontSize:12
+    },
+    delete_icon:{
+        width:18,
+        height:18,
+        resizeMode:"contain"
+    },
+    upload_icon:{
+        width:18,
+        height:18,
+        resizeMode:"contain"
+    },
+    checked_icon:{
+        width:18,
+        height:18,
+        resizeMode:"contain"
+    },
+    doc_name:{
+        fontSize:14
+    },
+    doc_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    emptychecklist_msg:{
+        fontSize:14,
+        lineHeight:18
     }
 })
 
@@ -257,7 +319,35 @@ const MobileMStyles=StyleSheet.create({
     },
     status:{
         fontSize:14
-    }
+    },
+    delete_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    upload_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    checked_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    doc_name:{
+        fontSize:16
+    },
+    doc_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    emptychecklist_msg:{
+        fontSize:16,
+        lineHeight:20
+    },
+    
 })
 
 const MobileLStyles=StyleSheet.create({
@@ -305,10 +395,6 @@ const MobileLStyles=StyleSheet.create({
         borderRadius:20,
         flex:1
     },
-    // dashboards_wrapper:{
-    //     height:240,
-    //     gap:20
-    // },
     dashboard_wrapper:{
         gap:20
     },
@@ -320,6 +406,33 @@ const MobileLStyles=StyleSheet.create({
     },
     status:{
         fontSize:14
+    },
+    delete_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    upload_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    checked_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    doc_name:{
+        fontSize:16
+    },
+    doc_icon:{
+        width:20,
+        height:20,
+        resizeMode:"contain"
+    },
+    emptychecklist_msg:{
+        fontSize:16,
+        lineHeight:20
     }
 })
 
@@ -337,6 +450,8 @@ const Product=(props:{productId:string})=>{
     const advisors=useAppSelector((state)=>state.advisors.data)
     const [path,navigate]=useNavigation()
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
+    const [loading,setLoading]=useState(false)
+    const docMaxSize=useRef(25).current;
 
     const openUniversity=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"University",params:{universityid:product?.course.university?._id}}}):null
@@ -353,15 +468,54 @@ const Product=(props:{productId:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Expert",params:{expertid:id}}}):null
     }
 
-    //console.log("order",JSON.stringify(store.getState().orders.data[0].products[0],null,2))
-    console.log("products",JSON.stringify(product,null,2));
+    const uploadDoc=async (checkListId:string)=>{
+        setLoading(true);
+        let data={
+            applicationId:props.productId,
+            checklistItemId:checkListId,
+            docMaxSize:docMaxSize
+        }
+        let serverRes={success:false,message:"",data:undefined};
+        let requestInfo=requests.find((item)=>item.id=="upload-doc-application");
+        let validation=requestInfo?.inputValidator(data);
+        if(validation?.success)
+        {
+            serverRes=await requestInfo?.serverCommunicator(data);
+            if(serverRes?.success)
+            {
+                requestInfo?.responseHandler(serverRes);
+            }
+        }
+        setLoading(false);
+    }
 
+    const deleteDoc=async (checkListId:string,docId:string)=>{
+        setLoading(true)
+        let data={
+            applicationId: props.productId,
+            checklistItemId: checkListId,
+            documentId: docId
+        }
+        let serverRes={success:false,message:"",data:undefined};
+        let requestInfo=requests.find((item)=>item.id=="delete-doc-application");
+        let validation=requestInfo?.inputValidator(data);
+        if(validation?.success)
+        {
+            serverRes=await requestInfo?.serverCommunicator(data);
+            if(serverRes?.success)
+            {
+                requestInfo?.responseHandler(serverRes);
+            }
+        }
+        setLoading(false)
+    }
+    
     return(
         <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginMini]}>
         {
             product
             ?
-            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:30}}>
+            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:40}}>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
                         <Image source={product.course.university.logoSrc} style={[styles[Device].uni_icon]}/>
@@ -388,7 +542,7 @@ const Product=(props:{productId:string})=>{
                     <Text style={[{padding:10},{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].status]}>{Word2Sentence([product.status,product.stage],"","-",true)}</Text>
                 </View>
                 <View style={{gap:15}}>
-                    <Styledtext styles={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Experts Assigned" focusWord="Assigned"/>
+                    <Styledtext styles={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Experts Assigned:" focusWord="Assigned"/>
                     <View style={{gap:20}}>
                     {
                         product.advisors.map((advisor,i)=>
@@ -400,12 +554,33 @@ const Product=(props:{productId:string})=>{
                     }
                     </View>
                 </View>
-                <View>
-                    <Text style={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Documents</Text>
+                <View style={{gap:10}}>
+                    <Styledtext styles={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Required Documents:" focusWord="Documents"/>
                     <View>
                     {
+                        product.docChecklist.length==0
+                        ?
+                        <Text style={[styles[Device].emptychecklist_msg,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>No documents required at the moment. Your expert will update this checklist if any documents are needed.</Text>
+                        :
                         product.docChecklist.map((item)=>
-                        <Text>{item.name}</Text>
+                        <View style={[{flexDirection:"row",alignItems:"center",gap:5}]}>
+                            <Image source={document_icon} style={[styles[Device].doc_icon]}/>
+                            <View style={{flex:1}}><Text style={[styles[Device].doc_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{item.name}</Text></View>
+                            {
+                                item.doc
+                                ?
+                                    item.isChecked
+                                    ?
+                                    <Transitionview effect="zoom"><Image source={verified_icon} style={[styles[Device].checked_icon]}/></Transitionview>
+                                    :
+                                    <Pressable onPress={()=>!loading?deleteDoc(item._id,item.doc._id):null}><Image source={!loading?delete_icon:loading_gif} style={[styles[Device].delete_icon]}/></Pressable>
+                                :
+                                <Pressable onPress={()=>!loading?uploadDoc(item._id):null}><Image source={!loading?upload_icon:loading_gif} style={[styles[Device].upload_icon]}/></Pressable>
+                            }
+                            {
+                                
+                            }
+                        </View>
                         )
                     }
                     </View>
