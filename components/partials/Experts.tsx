@@ -1,5 +1,5 @@
-import { useRef, useState } from "react"
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
+import { useEffect, useRef, useState } from "react"
+import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import Loadinglistscreen from "../resources/Loadinglistscreen"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { getChatType, getDevice } from "../../utils"
@@ -15,6 +15,8 @@ import { Image } from "expo-image"
 import add_icon from '../../assets/images/misc/add.png'
 import stars_icon from '../../assets/images/misc/stars.png'
 import next_icon from '../../assets/images/misc/next.png'
+import { addTutorial, setTutorial } from "../../store/slices/tutorialSlice"
+import { useAppDispatch } from "../../hooks/useAppDispatch"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -163,6 +165,9 @@ const Experts=()=>{
     const experts=useAppSelector((state)=>state.advisors);
     const [pageLoad,setPageload]=useState()
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const viewRef1 = useRef(null);
+    const viewRef2 = useRef(null);
+    const dispatch=useAppDispatch()
 
     const showDetails=(expert:Advisor)=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Expert",params:{expertid:expert.info._id}}}):null
@@ -172,6 +177,16 @@ const Experts=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Expertintro"}}):null
     }
 
+    const setTutorialPos=(pos:LayoutRectangle,id:string)=>{
+        console.log("posssssitionnn",pos);
+        dispatch(addTutorial({x:pos.x,y:pos.y-pos.height,id:id}))
+    }
+
+    useEffect(()=>{
+        // viewRef1.current?.measureInWindow((x, y, width, height) =>setTutorialPos({x:x,y:y,width:width,height:height},"Experts1"));
+        // viewRef2.current?.measureInWindow((x, y, width, height) =>setTutorialPos({x:x,y:y,width:width,height:height},"Experts2"));
+    },[])
+
     return(
         <View style={{flex:1,paddingTop:15}}>
         {
@@ -180,11 +195,12 @@ const Experts=()=>{
             <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
             :
             <View style={{flex:1,gap:0}}>
-                <Pressable onPress={showExperts} style={[GeneralStyles.add_wrapper]}>
+                {/* <View style={{position:"absolute",top:0,backgroundColor:'red',width:20,height:20,borderRadius:100}}></View> */}
+                <Pressable ref={viewRef2} onPress={showExperts} style={[GeneralStyles.add_wrapper]}>
                     <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].add_text]}>Who’s Here to Help?</Text>
                     <Image style={[styles[Device].next_icon]} source={next_icon}></Image>
                 </Pressable>
-                <View style={[GeneralStyles.text_wrapper,appStandardStyles.screenMarginMini,{borderColor:Themes.Light.OnewindowLightBlue}]}>
+                <View ref={viewRef1} style={[GeneralStyles.text_wrapper,appStandardStyles.screenMarginMini,{borderColor:Themes.Light.OnewindowLightBlue}]}>
                     <Image style={[styles[Device].stars_icon]} source={stars_icon}></Image>
                     <Styledtext styles={[{lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].briefing]} text="Your Study Abroad Success Starts with Our Expert Guidance" focusWord="Study Abroad"/>
                 </View>
