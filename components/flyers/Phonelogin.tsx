@@ -206,6 +206,7 @@ const Phonelogin=()=>{
     const verify_phone=async (otp:string,data:{ phone: { countryCode: string; number: string } })=>{
         //console.log("phone veeeee",otp,data)
         let deviceToken=await SecureStore.getItemAsync(secureStoreKeys.DEVICE_TOKEN);
+        console.log("phone veeeee",otp,data)
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("verify-user","POST"),
             reqType: "POST",
@@ -352,7 +353,7 @@ const Phonelogin=()=>{
                         }
                     </View>
                 </View>
-                <View style={{width:dimensions.width}}>
+                {/* <View style={{width:dimensions.width}}>
                     <View style={{flexDirection:"row",alignItems:'center',gap:5}}>
                         <Image source={back_icon} style={[styles[Device].back_icon,{opacity:0.5}]}/>
                         <Pressable onPress={()=>setScreen("request-otp")}><Text style={[styles[Device].no_code,{alignSelf:"flex-start"},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Back</Text></Pressable>
@@ -366,7 +367,7 @@ const Phonelogin=()=>{
                         null
                     }
                     </View>
-                </View>
+                </View> */}
             </ScrollView>
             :
             <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:10}}>

@@ -11,7 +11,7 @@ let initialState:Request<LocationGeocodedAddress|undefined>={
 }
 
 const LocationSlice=createSlice({
-    name:'Meetings',
+    name:'Location',
     initialState:initialState,
     reducers:{
         initLocation:(state,action:PayloadAction<Request<LocationGeocodedAddress>>)=>({...action.payload}),

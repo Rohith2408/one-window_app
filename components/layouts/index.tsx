@@ -8,6 +8,7 @@ import { initLocation } from "../../store/slices/locationSlice"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import useNavigation from "../../hooks/useNavigation"
 import { serverResponses } from "../../constants/server"
+import { setRequest } from "../../store/slices/requestSlice"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -93,7 +94,12 @@ const Layout=(props:LayoutType)=>{
         if(!request.data?.success && (request.data?.message==serverResponses.VerificationFailed || request.data?.message==serverResponses.TokenMissing || request.data?.message==serverResponses.InvalidTokens))
         {
             navigate?navigate({type:"Logout"}):null
+
         }
+        else if(!request.data?.success && request.data?.message==serverResponses.Timeout){
+            navigate?navigate({type:"AddScreen",payload:{screen:"Error",params:{error:"Server is taking longer time to respond than expected, please try again after sometime",preventAutoHide:true}}}):null
+        }
+        dispatch(setRequest(undefined));
     },[request])
 
     return(

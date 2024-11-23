@@ -56,7 +56,7 @@
           ]
         }
       ],
-      "softwareKeyboardLayoutMode" : "pan",
+      "softwareKeyboardLayoutMode": "pan",
       "versionCode": 6
     },
     "web": {
@@ -75,7 +75,8 @@
           "locationAlwaysAndWhenInUsePermission": "Your location helps us personalize your experience by automatically setting your country code, currency, and other relevant preferences. "
         }
       ],
-      "expo-font"
+      "expo-font",
+      "expo-localization"
     ],
     "extra": {
       "eas": {
