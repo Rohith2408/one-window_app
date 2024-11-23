@@ -484,7 +484,7 @@ const Program=(props:{programid:string})=>{
     const fetchProgram=async ()=>{
         //console.log("id",props.programid)
         const res:ServerResponse=await serverRequest({
-            url:getServerRequestURL("program-new","GET",{id:props.programid,currency:"INR"}),
+            url:getServerRequestURL("program","GET",{id:props.programid,currency:"INR"}),
             routeType:"public",
             reqType:"GET"
         });
