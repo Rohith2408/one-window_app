@@ -463,9 +463,10 @@ const Program=(props:{programid:string})=>{
     const [path,navigate]=useNavigation();
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const dashboardInfo=[
-        {icon:fee_icon,label:"Duration",value:programInfo?.duration},
+        // {icon:fee_icon,label:"Duration",value:programInfo?.duration},
+        {icon:fee_icon,label:"Global Ranking",value:programInfo?.globalRankingPosition},
         {icon:fee_icon,label:"Credits",value:programInfo?.totalCredits},
-        {icon:fee_icon,label:"Fees",value:(programInfo?.currency?.symbol+" "+programInfo?.tuitionFee?.tuitionFee)+(programInfo?.tuitionFee?.tuitionFeeType=="year"?"/p.a":"")},
+        {icon:fee_icon,label:"Fees",value:((programInfo?.tuitionFee?.tuitionFee?formatCurrency(programInfo.tuitionFee.tuitionFee,programInfo?.currency?.code):""))+(programInfo?.tuitionFee?.tuitionFeeType=="year"?"/p.a":"")},
         {icon:fee_icon,label:"Study Level",value:programInfo?.studyLevel},
         {icon:fee_icon,label:"Study Mode",value:programInfo?.studyMode},
         {icon:fee_icon,label:"Course Type",value:programInfo?.stemDetails?(programInfo.stemDetails.stem?"STEM":"NON-STEM"):"No Info"}
@@ -481,12 +482,13 @@ const Program=(props:{programid:string})=>{
     const dispatch=useAppDispatch()
 
     const fetchProgram=async ()=>{
-        console.log("id",props.programid)
+        //console.log("id",props.programid)
         const res:ServerResponse=await serverRequest({
-            url:getServerRequestURL("program","GET",{id:props.programid,currency:"INR"}),
+            url:getServerRequestURL("program-new","GET",{id:props.programid,currency:"INR"}),
             routeType:"public",
             reqType:"GET"
         });
+        //console.log("program res",res);
         res.success?setProgramInfo(res.data):null
     }
 
@@ -510,7 +512,7 @@ const Program=(props:{programid:string})=>{
     }
 
     const addToCart=async (event:Event)=>{
-        console.log("res",event);
+        //console.log("res",event);
         let data={
             action:"add",
             category:programInfo?.elite?"elite application":"premium application",
@@ -519,9 +521,11 @@ const Program=(props:{programid:string})=>{
         }
         let requestInfo=requests.find((item)=>item.id=="addToCart");
         let validation=requestInfo?.inputValidator(data);
+        console.log("validation",validation);
         if(validation?.success)
         {
             let serverRes=await requestInfo?.serverCommunicator(data);
+            console.log("cart response",serverRes);
             if(serverRes?.success)
             {
                 requestInfo?.responseHandler(serverRes);
@@ -580,7 +584,7 @@ const Program=(props:{programid:string})=>{
         if(validation?.success)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
-            console.log("Server res",JSON.stringify(serverRes,null,2))
+            //console.log("Server res",JSON.stringify(serverRes,null,2))
             if(serverRes?.success)
             {
                 requestInfo?.responseHandler(serverRes);
@@ -600,7 +604,7 @@ const Program=(props:{programid:string})=>{
         let Package=store.getState().suggestedpackages.data.find((pkg)=>pkg.priceDetails.totalPrice==0)
         let freeOrder=store.getState().orders.data.find((order)=>order.paymentDetails.amount==0)
         let res:ServerResponse={success:false,data:undefined,message:""};
-        console.log("Free apply res",res);
+        //console.log("Free apply res",res);
         if(freeOrder && freeOrder?.products.length==Package?.products.find((item)=>item.category=="premium application")?.quantity)
         {
             //dispatch(setRemoveScreen({id:"Intake"}));
@@ -612,7 +616,7 @@ const Program=(props:{programid:string})=>{
         else
         {
             res=freeOrder==undefined?await placeFreeOrder(products,Package?._id):await addToFreeOrder(freeOrder._id,products)
-            console.log("server res",res);
+            //console.log("server res",res);
             if(res.success)
             {
                 navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
@@ -632,11 +636,11 @@ const Program=(props:{programid:string})=>{
         let serverRes={success:false,message:"",data:undefined};
         let requestInfo=requests.find((item)=>item.id=="removeFromCart");
         let validation=requestInfo?.inputValidator(data);
-        console.log("Res",serverRes,requestInfo);
+        //console.log("Res",serverRes,requestInfo);
         if(validation?.success)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
-            console.log("Server res",JSON.stringify(serverRes,null,2))
+            //console.log("Server res",JSON.stringify(serverRes,null,2))
             if(serverRes?.success)
             {
                 requestInfo?.responseHandler(serverRes);
@@ -671,8 +675,6 @@ const Program=(props:{programid:string})=>{
         getAccessTokenFromStore().then((Token)=>setAT(Token))
         fetchProgram();
     },[])
-
-    console.log(programInfo?.applicationDetails)
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
@@ -784,7 +786,7 @@ const Program=(props:{programid:string})=>{
                             <View style={{flexDirection:"row",alignItems:"center"}}>
                                 <View style={{flex:1,flexDirection:"column",alignItems:'center',justifyContent:"center",gap:5}}>
                                     <Image source={deadline_icon} style={[styles[Device].deadline_icon]}/>
-                                    <Text style={[styles[Device].keyinfo_value,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{getMonth(date.deadlineMonth+1,true)}</Text>
+                                    <Text style={[styles[Device].keyinfo_value,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{date.deadlines.length==0?"-":Word2Sentence(date.deadlines.map((item)=>getMonth(item.deadlineMonth)),"",",")}</Text>
                                     <Text style={[styles[Device].keyinfo_type,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.35)}]}>Deadline</Text>
                                 </View>
                                 <Image source={arrow_icon} style={{width:40,height:40,objectFit:"contain"}}/>

@@ -114,6 +114,7 @@ export type ScreenInfo={
     nonClosable?:boolean,
     showTouchCaptureScreen?:boolean,
     occupyFullScreen?:boolean,
+    tutorialId?:string,
     animationStyle?:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTopPartial"|"VerticalSlideToTop"|"CenterPopIn"|"CenterFadeIn"|"FadeIn"|"Custom",
     removalThreshold?:number,
     customPlacement?:{
@@ -278,10 +279,14 @@ export type CartItem={
 
 export type ProgramIntake={
     _id: string,
-    courseStarting: string,
-    Deadline: string,
+    deadlines: {
+        deadlineLabel:string,
+        deadlineMonth:number
+    }[],
     courseStartingMonth: number,
-    deadlineMonth: number
+    //courseStarting: string,
+    //Deadline: string,
+    //deadlineMonth: number
 }
 
 export type wishlistItem={
@@ -676,7 +681,8 @@ export interface Course{
         tuitionFeeType:string
     },
     stemDetails: {
-        stem: boolean
+        stem: boolean,
+        stemLink:string
     }
     AdmissionsRequirements?: {
         LanguageRequirements?: {
@@ -732,18 +738,43 @@ export interface Course{
     discipline: string[],
     studyLevel:string,
     totalCredits:string,
-    duration: string,
+    duration: {
+        duration: number,
+        durationType:string
+    }[],
     studyMode: string[],
     startDate?:{
         _id:string,
-        courseStarting:string,
-        Deadline: string,
+        // courseStarting:string,
+        deadlines: {
+            deadlineLabel:string,
+            deadlineMonth:number
+        }[],
         courseStartingMonth: number,
-        deadlineMonth: number
+        // deadlineMonth: number
     }[],
     type: string,
     unisName: string,
-    elite: true
+    elite: true,
+    // Duolingo:boolean,
+    // Duolingo_MinScore:string,
+    // GMAT: boolean,
+    // GMAT_MinScore:string,
+    // GPA: boolean,
+    // GPA_MinScore:string,
+    // GRE:boolean,
+    // GRE_MinScore: string,
+    // IELTS: boolean,
+    // IELTS_MinScore:string,
+    // PTE:boolean,
+    // PTE_MinScore:string,
+    // TOEFL: boolean,
+    // TOEFL_MinScore: string,
+    globalRankingPosition:  number,
+    globalTopRankingPercentage: number,
+    pathway: boolean, // hc hide
+    language: string,
+    courseType: string,
 }
 
 export interface CourseListObj{
@@ -752,8 +783,9 @@ export interface CourseListObj{
         tuitionFeeType: string
     },
     stemDetails: {
-        stem: boolean
-    },
+        stem: boolean,
+        stemLink:string
+    }
     currency: {
         symbol: string,
         code: string
@@ -773,15 +805,30 @@ export interface CourseListObj{
     schoolName:  string,
     discipline:  string[],
     studyLevel:  string,
-    duration: number,
-    studyMode: string [],
-    startDate: {
-        _id: string,
-        courseStarting: string,
-        Deadline: string,
-        courseStartingMonth: number,
-        deadlineMonth: number
+    duration: {
+        duration: number,
+        durationType:string
     }[],
+    studyMode: string [],
+    // startDate: {
+    //     _id: string,
+    //     courseStarting: string,
+    //     Deadline: string,
+    //     courseStartingMonth: number,
+    //     deadlineMonth: number
+    // }[],
+    startDate?:{
+        _id:string,
+        // courseStarting:string,
+        deadlines: {
+            deadlineLabel:string,
+            deadlineMonth:number
+        }[],
+        courseStartingMonth: number,
+        // deadlineMonth: number
+    }[],
+    globalRankingPosition:  number,
+    globalTopRankingPercentage: number,
     elite:boolean
 }
 
@@ -1353,3 +1400,11 @@ export type Banner={
     url:string,
     image:string
 }
+
+export type Tutorial={
+    index:number,
+    image:string,
+    title:string,
+    info:string
+}
+        

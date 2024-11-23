@@ -168,7 +168,7 @@ const Intakecard=(props:ProgramIntake & {index:number})=>{
                 <Text style={[styles[Device].intakemonth,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{getMonth(props.courseStartingMonth+1,true)}</Text>
                 <View style={{flexDirection:"row",gap:3}}>
                     {/* <Image source={intake_icon} style={[styles[Device].intake_icon,{opacity:0.5}]}/> */}
-                    <Text style={[styles[Device].deadline,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Application Deadline: "+getMonth(props.deadlineMonth+1,true)}</Text>
+                    <Text style={[styles[Device].deadline,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence(props.deadlines.map((item)=>getMonth(item.deadlineMonth+1,true)),"Application Deadline: ",",")}</Text>
                 </View>
             </View>
             {/* <Image source={go_icon} style={[styles[Device].go_icon,{transform:[{scaleX:-1}]}]}/> */}

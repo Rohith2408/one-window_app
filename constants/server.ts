@@ -1,7 +1,8 @@
 const serverResponses={
     VerificationFailed:"Token Verification Failed",
     TokenMissing:"Access Token Missing",
-    InvalidTokens:"Invalid Tokens"
+    InvalidTokens:"Invalid Tokens",
+    Timeout:"Request Timeout"
 }
 
 const endPoints=[
@@ -194,6 +195,19 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"upload-doc-application",
+        category:"student",
+        tail:"upload-application",
+        type:"POST",
+        
+    },
+    {
+        id:"delete-doc-application",
+        category:"student",
+        tail:"delete-uploaded-application",
+        type:"POST",
+    },
+    {
         id:"cart",
         category:"student",
         tail:"cart",
@@ -212,6 +226,12 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"universities-new",
+        category:"public",
+        tail:"newlistings/universities",
+        type:"POST",
+    },
+    {
         id:"programs",
         category:"public",
         tail:"listings/courses",
@@ -219,10 +239,23 @@ const endPoints=[
         
     },
     {
+        id:"programs-new",
+        category:"public",
+        tail:"newlistings/courses",
+        type:"POST",
+        
+    },
+    {
         id:"program",
         category:"public",
         tail:"single_course",
-        type:"POST",
+        type:"GET",
+    },
+    {
+        id:"program-new",
+        category:"public",
+        tail:"newsingle_course",
+        type:"GET",
     },
     {
         id:"university",
