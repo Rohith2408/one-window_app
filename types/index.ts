@@ -115,6 +115,7 @@ export type ScreenInfo={
     showTouchCaptureScreen?:boolean,
     occupyFullScreen?:boolean,
     tutorialId?:string,
+    delay?:number,
     animationStyle?:"HorizontalSlideToLeft"|"HorizontalSlideToRight"|"VerticalSlideToTopPartial"|"VerticalSlideToTop"|"CenterPopIn"|"CenterFadeIn"|"FadeIn"|"Custom",
     removalThreshold?:number,
     customPlacement?:{

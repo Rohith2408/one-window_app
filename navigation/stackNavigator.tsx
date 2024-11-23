@@ -10,6 +10,7 @@ import { Image } from "expo-image"
 import { useAppSelector } from "../hooks/useAppSelector"
 import { useAppDispatch } from "../hooks/useAppDispatch"
 import { resetRemoveScreen, setRemoveScreen } from "../store/slices/removeScreenSlice"
+import Transitionview from "../components/resources/Transitionview"
 
 const Stacknavigator=(props:StackNavigator)=>{
 
@@ -87,9 +88,10 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
   const [path,navigate]=useNavigation();
   const removeScreen=useAppSelector((state)=>state.removescreen)
   const dispatch=useAppDispatch()
-
+  // const tutorials=useAppSelector((state)=>state.tutorials);
   const getCurrentPosition=()=>(currentState.current)
   const setCurrentPosition=(val:{x:number,y:number,opacity:number,scale:number})=>{currentState.current=val}
+  const [loadScreen,setLoadScreen]=useState(screenInfo?.delay?false:true)
 
   const panResponder = useRef(
       PanResponder.create({
@@ -173,29 +175,12 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
       {property:height,value:finalState?finalState.height:0,duration:200},
     ])
     
-    // if(screenInfo?.type=="Flyer"){
-    //   keyboardWillShow = Keyboard.addListener(Platform.OS=="android"?'keyboardDidShow':'keyboardWillShow', (event) => {
-    //     console.log("keyboard",event.endCoordinates.height);
-    //     Animated.timing(translateY, {
-    //       duration: event.duration,
-    //       toValue: finalState.y-(event.endCoordinates.height/Dimensions.get("screen").height),
-    //       useNativeDriver: false,
-    //     }).start();
-    //   });
-
-    //   keyboardWillHide = Keyboard.addListener(Platform.OS=="android"?'keyboardDidHide':'keyboardWillHide', (event) => {
-    //     Animated.timing(translateY, {
-    //       duration: event.duration,
-    //       toValue: finalState.y,
-    //       useNativeDriver: false,
-    //     }).start();
-    //   });
-    // }
-
-    // return () => {
-    //   keyboardWillShow?.remove();
-    //   keyboardWillHide?.remove();
-    // };
+    if(screenInfo?.delay)
+    {
+      setTimeout(()=>{
+        setLoadScreen(true);
+      },screenInfo.delay)
+    }
 
   },[])
 
@@ -240,6 +225,8 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
       navigate?navigate({type:"RemoveSpecificScreen",payload:{id:props.id}}):null
     })
   }
+
+  //console.log("tutorials",tutorials)
 
   const Container=getComponent(props.component)?.component
 
@@ -288,6 +275,13 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
           null
         }
         <View style={[styles.screen,screenInfo?.type=="Flyer"?{borderRadius:30,elevation:10,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{}]}> 
+          {/* {
+            tutorials.length>0
+            ?
+            <View style={{width:"100%",height:"100%",position:"absolute",backgroundColor:'rgba(0,0,0,0.1)',zIndex:10}}><Tutorial id={screenInfo.tutorialId}/></View>
+            :
+            null
+          } */}
           {
             screenInfo?.title
             ?
@@ -298,22 +292,14 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
             null
           }
           {
-            Container
+            Container && loadScreen
             ?
-            <Container {...props.props}></Container>
+            <Transitionview style={[{flex:1}]} effect="fade"><Container {...props.props}></Container></Transitionview>
             :
             null
           }
-          {/* <View style={{position:"absolute"}}>
-            <Image source={}></Image>
-          </View> */}
         </View>
       </Animated.View>
-      // <GestureHandlerRootView>
-      //     <PanGestureHandler onGestureEvent={onGestureEvent} onHandlerStateChange={onHandlerStateChange}>
-              
-      //     </PanGestureHandler>
-      // </GestureHandlerRootView>
   )
 })
 
@@ -463,7 +449,7 @@ const styles=StyleSheet.create({
     screen:{
       width:"100%",
       height:"100%",
-      // position:"relative",
+      position:"relative",
       zIndex:1,
     },
     back:{
