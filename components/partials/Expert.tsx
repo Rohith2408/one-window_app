@@ -22,7 +22,6 @@ const GeneralStyles=StyleSheet.create({
     info_wrapper:{
         paddingTop:5,
         position:"relative",
-        backgroundColor:'red'
     },
     info_wrapper_bg:{
         position:"absolute",
