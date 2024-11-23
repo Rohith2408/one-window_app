@@ -65,8 +65,8 @@ const Payment = (props:{paymentOrderId:string}) => {
   const Device=useRef<keyof typeof styles>(getDevice()).current
   
   const paymentOptions = useRef({
-    key: 'rzp_test_TldsbrWlP8NUF5',
-    //key: 'rzp_live_K7hVMliRmR7G9j',
+    //key: 'rzp_test_TldsbrWlP8NUF5',
+    key: 'rzp_live_K7hVMliRmR7G9j',
     amount: order?.paymentDetails.amount*100,
     currency: order?.paymentDetails.currency,
     name: 'One Window',
