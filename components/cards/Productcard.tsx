@@ -2,13 +2,15 @@ import { useRef, useState } from "react"
 import { Product as ProductType, PurchasedProduct} from "../../types"
 import { Animated, LayoutRectangle, Pressable, StyleSheet, Text, View } from "react-native"
 import { Fonts, Themes } from "../../constants"
-import { Word2Sentence, formatDate, getDevice, getLightThemeColor, getThemeColor, setWordCase, truncateString } from "../../utils"
+import { Word2Sentence, compareProducts, formatDate, getDevice, getLightThemeColor, getThemeColor, setWordCase, truncateString } from "../../utils"
 import { Image } from "expo-image"
 import processing_icon from '../../assets/images/products/processing.png'
 import useNavigation from "../../hooks/useNavigation"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
 import clock_icon from '../../assets/images/misc/clock.png'
 import go_icon from '../../assets/images/misc/back.png'
+import { addToBasket } from "../../constants/basket"
+import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -241,11 +243,27 @@ const Productcard=(props:PurchasedProduct & {index:number})=>{
     const titleTranslate=useRef(new Animated.Value(0)).current
     const titleHeight=useRef().current
 
+    const redirectToPayment=async ()=>{
+        console.log("pay,ent",props.order);
+        if(props.order)
+        {
+            navigate?navigate({type:"AddScreen",payload:{screen:"Payment",params:{paymentOrderId:props.order}}}):null
+        }   
+    }
+
     const showProduct=()=>{
-        navigate({type:"RemoveSpecificScreen",payload:{id:"Product"}})
-        setTimeout(()=>{
-            navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:props._id}}})
-        },100)
+        if(props.stage && props.status)
+        {
+            navigate({type:"RemoveSpecificScreen",payload:{id:"Product"}})
+            setTimeout(()=>{
+                navigate({type:"AddScreen",payload:{screen:"Product",params:{productId:props._id}}})
+            },100)
+        }
+        else
+        {
+            addToBasket("warning",{warningTitle:"Oops!",warningMessage:"Seems like the payment is pending",proceedCallback:redirectToPayment,yesLabel:"Pay Now",noLabel:"Back"});
+            navigate?navigate({type:"AddScreen",payload:{screen:"Warning"}}):null;
+        }
     }
 
     const animate=(y:number)=>{
@@ -254,6 +272,8 @@ const Productcard=(props:PurchasedProduct & {index:number})=>{
             useNativeDriver:false
         }).start()
     }
+
+    //console.log("card",props.stage,props.status);
 
     return(
         <Pressable onPress={showProduct} onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,padding:5}}>
