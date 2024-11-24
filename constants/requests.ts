@@ -106,8 +106,12 @@ const requests:RequestInfo[]=[
             if(res.success)
             {
                 store.dispatch(addOrders(res.data.order));
-                console.log("Order place res",JSON.stringify(res.data.order.products,null,2));
-                //store.dispatch(addProducts(res.data.order.products));
+                console.log("Order place res",JSON.stringify(res.data.order,null,2));
+                if(res.data.order.paymentDetails.amount==0)
+                {
+                    store.dispatch(addProducts(res.data.order.products));
+                }
+                //
             }
         }
     },
@@ -285,10 +289,10 @@ const requests:RequestInfo[]=[
                     body:formData,
                     preventStringify:true,
                 })
-                console.log("product doc res",res);
+                console.log("product doc res",JSON.stringify(res,null,2));
                 if(res.success)
                 {
-                    updateProduct(res.data);
+                    store.dispatch(updateProduct(res.data));
                     const triggerObj:TriggerObject={
                         action:"checklist_updated",
                         sender:store.getState().sharedinfo.data,
@@ -314,20 +318,19 @@ const requests:RequestInfo[]=[
             return {success:data && data.applicationId.length!=0 && data.checklistItemId.length!=0 && data.documentId.length!=0,data:undefined,message:""};
         },
         serverCommunicator:async (data:{applicationId:string,checklistItemId:string,documentId:string})=>{
-            console.log("doc data",data.documentId);
+            console.log("doc data",data);
             let res:ServerResponse=await serverRequest({
                 url:getServerRequestURL("delete-doc-application","POST"),
                 reqType:"POST",
-                body:data,
-                preventStringify:true,
+                body:data
             })
-            console.log("product doc del res",res);
+            console.log("product doc del res",JSON.stringify(res,null,2));
             return res;
         },
         responseHandler:(res:ServerResponse)=>{
             if(res.success)
             {
-                updateProduct(res.data);
+                store.dispatch(updateProduct(res.data));
                 const triggerObj:TriggerObject={
                     action:"checklist_updated",
                     sender:store.getState().sharedinfo.data,

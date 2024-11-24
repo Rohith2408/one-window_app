@@ -1,7 +1,7 @@
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { addToBasket, getBasket } from "../../constants/basket"
 import { useEffect, useRef, useState } from "react"
-import { PackageProductsValidator, Word2Sentence, compareProducts, formatDate, getDevice, getLightThemeColor, getServerRequestURL, getThemeColor, pickDocument, serverRequest, setWordCase } from "../../utils"
+import { PackageProductsValidator, Word2Sentence, compareProducts, formatDate, getDevice, getLightThemeColor, getServerRequestURL, getThemeColor, pickDocument, serverRequest, setWordCase, truncateString } from "../../utils"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
@@ -451,6 +451,7 @@ const Product=(props:{productId:string})=>{
     const [path,navigate]=useNavigation()
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
     const [loading,setLoading]=useState(false)
+    const currentSelection=useRef(-1);
     const docMaxSize=useRef(25).current;
 
     const openUniversity=()=>{
@@ -468,7 +469,8 @@ const Product=(props:{productId:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Expert",params:{expertid:id}}}):null
     }
 
-    const uploadDoc=async (checkListId:string)=>{
+    const uploadDoc=async (index:number,checkListId:string)=>{
+        currentSelection.current=index;
         setLoading(true);
         let data={
             applicationId:props.productId,
@@ -486,10 +488,12 @@ const Product=(props:{productId:string})=>{
                 requestInfo?.responseHandler(serverRes);
             }
         }
+        currentSelection.current=-1;
         setLoading(false);
     }
 
-    const deleteDoc=async (checkListId:string,docId:string)=>{
+    const deleteDoc=async (index:number,checkListId:string,docId:string)=>{
+        currentSelection.current=index;
         setLoading(true)
         let data={
             applicationId: props.productId,
@@ -507,7 +511,15 @@ const Product=(props:{productId:string})=>{
                 requestInfo?.responseHandler(serverRes);
             }
         }
+        currentSelection.current=-1;
         setLoading(false)
+    }
+
+    const viewDoc=(doc:any)=>{
+        if(doc?.data.preview_url.length>0)
+        {
+            navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Documentview",flyerdata:{docpreviewurl:doc.data.preview_url}}}}):null
+        }
     }
     
     return(
@@ -556,16 +568,19 @@ const Product=(props:{productId:string})=>{
                 </View>
                 <View style={{gap:10}}>
                     <Styledtext styles={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Required Documents:" focusWord="Documents"/>
-                    <View>
+                    <View style={{gap:10}}>
                     {
                         product.docChecklist.length==0
                         ?
                         <Text style={[styles[Device].emptychecklist_msg,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>No documents required at the moment. Your expert will update this checklist if any documents are needed.</Text>
                         :
-                        product.docChecklist.map((item)=>
-                        <View style={[{flexDirection:"row",alignItems:"center",gap:5}]}>
+                        product.docChecklist.map((item,i)=>
+                        <Pressable onPress={()=>{viewDoc(item.doc)}} style={[{flexDirection:"row",alignItems:"center",gap:5}]}>
                             <Image source={document_icon} style={[styles[Device].doc_icon]}/>
-                            <View style={{flex:1}}><Text style={[styles[Device].doc_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{item.name}</Text></View>
+                            <View style={{flex:1,flexDirection:"row",alignItems:"center"}}>
+                                <View style={{flex:1}}><Text style={[styles[Device].doc_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{item.name}</Text></View>
+                                {/* <Text>{truncateString(item.doc.data.FileName,10,true)}</Text> */}
+                            </View>
                             {
                                 item.doc
                                 ?
@@ -573,14 +588,11 @@ const Product=(props:{productId:string})=>{
                                     ?
                                     <Transitionview effect="zoom"><Image source={verified_icon} style={[styles[Device].checked_icon]}/></Transitionview>
                                     :
-                                    <Pressable onPress={()=>!loading?deleteDoc(item._id,item.doc._id):null}><Image source={!loading?delete_icon:loading_gif} style={[styles[Device].delete_icon]}/></Pressable>
+                                    <Pressable onPress={()=>(loading && currentSelection.current==i)?null:deleteDoc(i,item._id,item.doc._id)}><Image source={(loading && currentSelection.current==i)?loading_gif:delete_icon} style={[styles[Device].delete_icon]}/></Pressable>
                                 :
-                                <Pressable onPress={()=>!loading?uploadDoc(item._id):null}><Image source={!loading?upload_icon:loading_gif} style={[styles[Device].upload_icon]}/></Pressable>
+                                <Pressable onPress={()=>(loading && currentSelection.current==i)?null:uploadDoc(i,item._id)}><Image source={(loading && currentSelection.current==i)?loading_gif:upload_icon} style={[styles[Device].upload_icon]}/></Pressable>
                             }
-                            {
-                                
-                            }
-                        </View>
+                        </Pressable>
                         )
                     }
                     </View>
