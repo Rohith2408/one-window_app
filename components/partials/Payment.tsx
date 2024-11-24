@@ -83,7 +83,7 @@ const Payment = (props:{paymentOrderId:string}) => {
   }).current;
 
   const handlePayment = async (response: any) => {
-    console.log("razor pay response",response,getServerRequestURL("payment-verification","POST"));
+    //console.log("razor pay response",response,getServerRequestURL("payment-verification","POST"));
     let res:ServerResponse=await serverRequest({
       reqType:"POST",
       url:getServerRequestURL("payment-verification","POST"),
@@ -102,13 +102,14 @@ const Payment = (props:{paymentOrderId:string}) => {
         console.log("after payment",JSON.stringify(response1.data.products[0].advisors,null,2));
         dispatch(updateOrder(response1.data));
         dispatch(replaceProducts(response1.data.products));
-        dispatch(setRemoveScreen({id:"Payment"}));
-        navigate({type:"RemovePages",payload:[{id:"Order"},{id:"Ordersummary"},{id:"Cart"}]})
       }
     } 
     else {
-      console.log('Payment verification failed');
+      navigate?navigate({type:"AddScreen",payload:{screen:"Error",params:{error:res.message}}}):null;
+
     }
+    dispatch(setRemoveScreen({id:"Payment"}));
+    navigate({type:"RemovePages",payload:[{id:"Order"},{id:"Ordersummary"},{id:"Cart"}]})
   };
 
   const verifyPayment = async (data: any) => {
