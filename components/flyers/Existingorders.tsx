@@ -115,7 +115,7 @@ const Existingorders=()=>{
     }
 
     return(
-        <View style={[GeneralStyles.wrapper,appStandardStyles.screenMarginSmall,{paddingTop:20,gap:20}]}>
+        <View style={[GeneralStyles.wrapper,appStandardStyles.screenMarginSmall,{paddingTop:20,paddingBottom:20,gap:10}]}>
             <Styledtext styles={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Do you want to add the products to an existing purchase?" focusWord="products"/>
             {/* <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}></Text> */}
             <View style={{flex:1}}>
@@ -135,7 +135,7 @@ const Existingorders=()=>{
                     }}}
                 />
             </View>
-            <View style={{flexDirection:'row',justifyContent:'center',gap:10,padding:10}}>
+            <View style={{flexDirection:'row',alignItems:"center",justifyContent:'center',gap:10}}>
                 {
                     selected
                     ?
