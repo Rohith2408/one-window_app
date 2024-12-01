@@ -224,7 +224,8 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     const onScroll=(e:NativeSyntheticEvent<NativeScrollEvent>)=>{
         if(props.page<maxPages.current)
         {
-            if(!dataRequested.current && (e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y>e.nativeEvent.contentSize.height-20))
+            console.log("scroll",e.nativeEvent.layoutMeasurement.height,e.nativeEvent.contentOffset.y,e.nativeEvent.contentSize.height);
+            if(!dataRequested.current && (e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y>e.nativeEvent.contentSize.height-60))
             {
                 // if(props.page+1>2)
                 // {
@@ -303,7 +304,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
             ?
                 list.length>0
                 ?
-                <ScrollView scrollEventThrottle={100} onScroll={(e)=>onScroll(e)} style={[GeneralStyles.sub_wrapper]} contentContainerStyle={{padding:10}}>
+                <ScrollView scrollEventThrottle={32} onScroll={(e)=>onScroll(e)} style={[GeneralStyles.sub_wrapper]} contentContainerStyle={{padding:10}}>
                 {
                     list.map((item:any,i:number)=>
                         <View key={item._id}><Component {...item} index={i}/></View>
