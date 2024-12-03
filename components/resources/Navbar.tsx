@@ -118,7 +118,7 @@ const Navbar=(props:{tab:string})=>{
     const tabs=useRef([
         {icon:home_icon,title:"Home",color:Themes.Light.OnewindowRed(1)},
         // {icon:home_icon,title:"Activity"},
-        {icon:community_icon,title:"Community",color:Themes.Light.OnewindowPurple(1)},
+        {icon:community_icon,title:"Feed",color:Themes.Light.OnewindowPurple(1)},
         {icon:chat_icon,title:"Chats",color:Themes.Light.OnewindowTeal(1)},
         {icon:profile_icon,title:"Profile",color:Themes.Light.OnewindowYellow(1)},
     ]).current
