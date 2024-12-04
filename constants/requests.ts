@@ -11,6 +11,7 @@ import { setWishlist } from "../store/slices/wishlistSlice";
 import { Advisor_compact, Product, PurchasedProduct, Recommendation, RecommendationType, RequestInfo, ServerResponse, ServerUnpurchasedProduct, TriggerObject } from "../types";
 import { ISOtoIntakeformat, Word2Sentence, getServerRequestURL, keyVerifier, pickDocument, profileUpdator, serverRequest } from "../utils";
 import { cartRequest } from "../utils/serverrequests";
+import Constants from "expo-constants";
 
 const requests:RequestInfo[]=[
     {
@@ -140,6 +141,28 @@ const requests:RequestInfo[]=[
                 store.dispatch(updateOrder(res.data));
                 //console.log("order",JSON.stringify(res.data,null,2));
                 store.dispatch(replaceProducts(res.data.products));
+            }
+        }
+    },
+    {
+        id:"cancel-product",
+        inputValidator:(data:{applicationId:string})=>{
+            let res={success:data.applicationId!=undefined,data:data,message:"No Application ID"}
+            return res
+        },
+        serverCommunicator:async (data:{applicationId:string})=>{
+            let res=await serverRequest({
+                url:getServerRequestURL("cancel-product","GET")+"/"+data.applicationId,
+                reqType:"PUT"
+            })
+            console.log("Cancel Order place res",JSON.stringify(res,null,2));
+            return res;
+        },
+        responseHandler:(res:ServerResponse)=>{
+            if(res.success)
+            {
+                store.dispatch(updateProduct(res.data));
+                console.log("Cancel Order place res",JSON.stringify(res.data,null,2));
             }
         }
     },
@@ -341,6 +364,20 @@ const requests:RequestInfo[]=[
             }
         }
     },
+    {
+        id:"Get-Appdata",
+        inputValidator:(data:{appId:string})=>{
+            return {success:data.appId!=undefined,data:undefined,message:""};
+        },
+        serverCommunicator:async (data:{appId:string})=>{
+            let res:any=await fetch("https://itunes.apple.com/lookup?id="+data.appId);
+            let versionMatch=res?.results[0]?.version==Constants.expoConfig?.version
+            return {success:versionMatch,data:res?.results[0],message:versionMatch?"":("A new version "+res?.results[0]?.version+" is now available, Please update to the latest version to continue!")};
+        },
+        responseHandler:(res:ServerResponse)=>{
+            
+        }
+    }
 ]
 
 

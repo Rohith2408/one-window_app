@@ -20,13 +20,15 @@ import { ServerResponse } from "../../types"
 import { requests } from "../../constants/requests"
 import upload_icon from '../../assets/images/misc/upload.png'
 import document_icon from '../../assets/images/misc/document.png'
+import add_icon from '../../assets/images/misc/info.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
         flex:1,
         padding:10,
         backgroundColor:'white',
-        gap:20
+        gap:20,
+        position:"relative"
     },
     info_wrapper:{
         alignSelf:"stretch",
@@ -79,6 +81,22 @@ const GeneralStyles=StyleSheet.create({
         gap:7,
         padding:10
     },
+    add_wrapper:{
+        display:"flex",
+        flexDirection:"row",
+        alignItems:"center",
+        position:'absolute',
+        gap:7.5,
+        bottom:20,
+        right:10,
+        zIndex:1,
+        backgroundColor:"white",
+        borderRadius:100,
+        shadowOpacity:0.1,
+        shadowRadius:5,
+        elevation:2,
+        padding:7
+    }
 })
 
 const TabStyles=StyleSheet.create({
@@ -167,6 +185,14 @@ const TabStyles=StyleSheet.create({
     emptychecklist_msg:{
         fontSize:18,
         lineHeight:22
+    },
+    add_text:{
+        fontSize:18
+    },
+    add_icon:{
+        width:34,
+        height:34,
+        resizeMode:"contain"
     }
 })
 
@@ -257,6 +283,14 @@ const MobileSStyles=StyleSheet.create({
     emptychecklist_msg:{
         fontSize:14,
         lineHeight:18
+    },
+    add_text:{
+        fontSize:14
+    },
+    add_icon:{
+        width:22,
+        height:22,
+        resizeMode:"contain"
     }
 })
 
@@ -347,6 +381,14 @@ const MobileMStyles=StyleSheet.create({
         fontSize:16,
         lineHeight:20
     },
+    add_text:{
+        fontSize:16
+    },
+    add_icon:{
+        width:26,
+        height:26,
+        resizeMode:"contain"
+    }
     
 })
 
@@ -433,7 +475,15 @@ const MobileLStyles=StyleSheet.create({
     emptychecklist_msg:{
         fontSize:16,
         lineHeight:20
-    }
+    },
+    add_text:{
+        fontSize:16
+    },
+    add_icon:{
+        width:28,
+        height:28,
+        resizeMode:"contain"
+    },
 })
 
 const styles={
@@ -521,9 +571,67 @@ const Product=(props:{productId:string})=>{
             navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Documentview",flyerdata:{docpreviewurl:doc.data.preview_url}}}}):null
         }
     }
+
+    const cancelProduct=async ()=>{
+        let data={
+            applicationId:props.productId
+        }
+        let requestInfo=requests.find((item)=>item.id=="cancel-product");
+        let validation=requestInfo?.inputValidator(data);
+        if(validation?.success)
+        {
+            let serverRes=await requestInfo?.serverCommunicator(data);
+            if(serverRes?.success)
+            {
+                requestInfo?.responseHandler(serverRes);
+                setTimeout(()=>{
+                    navigate?navigate({type:"AddScreen",payload:{screen:"Successfull",params:{message:"Request for cancellation successfull"}}}):null;
+                },100)
+            }
+        }
+    }
+
+    const showWarning=()=>{
+        addToBasket("warning",{warningTitle:"Are you sure??",warningMessage:"Think twice before you cancel,this might be just what you need. Once cancelled the action can't be undone, talk to our experts and let them help you make the right decision!",proceedCallback:cancelProduct,yesLabel:"Proceed",noLabel:"Don't Cancel"});
+        navigate?navigate({type:"AddScreen",payload:{screen:"Warning"}}):null;
+    }
+
+    const showMessage=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Error",params:{error:"The product has been cancelled!",preventAutoHide:true}}}):null;
+    }
+
+    const quits=()=>{
+        if(product?.cancellationRequest)
+        {
+            showMessage();
+        }
+        else
+        {
+            showWarning();
+        }
+    }
+
+    useEffect(()=>{
+        product?.cancellationRequest?showMessage():null
+    },[])
+
+    console.log(product?.cancellationRequest,product?.stage,product?.stage);
     
     return(
         <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginMini]}>
+        {
+            product
+            ?
+            <Transitionview effect="pan" style={[GeneralStyles.add_wrapper]}>
+                <Pressable onPress={quits} style={{flexDirection:"row",alignItems:'center',gap:5}}>
+                    <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].add_text]}>{product.cancellationRequest?"You called it quits!":"Call it quits?"}</Text>
+                    <Image style={[styles[Device].add_icon]} source={add_icon}></Image>
+                </Pressable>
+            </Transitionview>
+            
+            :
+            null
+        }  
         {
             product
             ?
