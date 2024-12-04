@@ -13,8 +13,9 @@ import Loader from "../resources/Loader"
 import { Fonts, Themes, appStandardStyles } from "../../constants"
 import Listselection from "../resources/Listselection"
 import Asynchronousbutton from "../resources/Asynchronousbutton"
-import emptylist from '../../assets/images/illustrations/happy.png'
+import emptylist from '../../assets/images/illustrations/thinking.png'
 import { Image } from "expo-image"
+import Transitionview from "../resources/Transitionview"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -165,7 +166,11 @@ const Recommendations=()=>{
     },[])
 
     const tabSelected=(selected:ListItem[])=>{
-        ref.current.scrollTo({x:dimensions.width*(tabs.findIndex((tab)=>tab.label==selected[0].label)),animated:true})
+        ref.current?.scrollTo({x:dimensions.width*(tabs.findIndex((tab)=>tab.label==selected[0].label)),animated:true})
+    }
+
+    const redirecToExperts=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Experts"}}):null
     }
 
     //console.log(recommendations.data?.data.length)
@@ -215,15 +220,36 @@ const Recommendations=()=>{
                                 </View>
                                 <ScrollView horizontal scrollEnabled={false} ref={ref} style={{flex:1}} contentContainerStyle={{paddingTop:0}}>
                                     <View style={{width:dimensions.width}}>
-                                        <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
                                         {
-                                            recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Safe").map((item,i)=>
-                                            <Recommendationcard {...item} index={i}/>
-                                            )
+                                            recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Safe").length==0
+                                            ?
+                                            <View style={{flex:1,justifyContent:'center',alignItems:'center',gap:10}}>
+                                                <Transitionview effect="pan"><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
+                                                <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Oh no..!</Text>
+                                                <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular,lineHeight:26}]}>Couldn't find any safe programs that match your preferences, don’t worry! Our experts are here to help you find the right match.!!</Text>
+                                                <Pressable style={{borderRadius:100,borderWidth:1.3,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={redirecToExperts}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}}>Talk to expert</Text></Pressable>
+                                            </View>
+                                            :
+                                            <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
+                                            {
+                                                recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Safe").map((item,i)=>
+                                                <Recommendationcard {...item} index={i}/>
+                                                )
+                                            }
+                                            </ScrollView>
                                         }
-                                        </ScrollView>
                                     </View>
                                     <View style={{width:dimensions.width}}>
+                                    {
+                                        recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Moderate").length==0
+                                        ?
+                                        <View style={{flex:1,justifyContent:'center',alignItems:'center',gap:10}}>
+                                            <Transitionview effect="pan"><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
+                                            <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Oh no..!</Text>
+                                            <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular,lineHeight:26}]}>Couldn't find any moderate programs that match your preferences, don’t worry! Our experts are here to help you find the right match.!!</Text>
+                                            <Pressable style={{borderRadius:100,borderWidth:1.3,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={redirecToExperts}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}}>Talk to expert</Text></Pressable>
+                                        </View>
+                                        :
                                         <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
                                         {
                                             recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Moderate").map((item,i)=>
@@ -231,8 +257,19 @@ const Recommendations=()=>{
                                             )
                                         }
                                         </ScrollView>
+                                    }
                                     </View>
                                     <View style={{width:dimensions.width}}>
+                                    {
+                                        recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Ambitious").length==0
+                                        ?
+                                        <View style={{flex:1,justifyContent:'center',alignItems:'center',gap:10}}>
+                                            <Transitionview effect="pan"><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
+                                            <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Oh no..!</Text>
+                                            <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular,lineHeight:26}]}>Couldn't find any ambitious programs that match your preferences, don’t worry! Our experts are here to help you find the right match.!!</Text>
+                                            <Pressable style={{borderRadius:100,borderWidth:1.3,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={redirecToExperts}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}}>Talk to expert</Text></Pressable>
+                                        </View>
+                                        :
                                         <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
                                         {
                                             recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Ambitious").map((item,i)=>
@@ -240,6 +277,7 @@ const Recommendations=()=>{
                                             )
                                         }
                                         </ScrollView>
+                                    }
                                     </View>
                                 </ScrollView>
                             </View>
