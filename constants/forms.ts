@@ -717,8 +717,8 @@ const forms:FormInfo[]=[
                             list:[
                                 {label:"Male",value:"male"},
                                 {label:"Female",value:"female"},
-                                {label:"Other",value:"other"},
-                                {label:"Rather not say",value:"rather not say"},
+                                {label:"Non-Binary",value:"non-binary"},
+                                {label:"Prefer Not to Say",value:"prefer not to say"},
                             ],
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
@@ -797,7 +797,7 @@ const forms:FormInfo[]=[
                         options:{
                             list:[
                                 {label:"Married",value:"married"},
-                                {label:"Bachelor",value:"bachelor"},
+                                {label:"Single",value:"single"},
                             ],
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
@@ -1003,8 +1003,8 @@ const forms:FormInfo[]=[
                             list:[
                                 {label:"Male",value:"male"},
                                 {label:"Female",value:"female"},
-                                {label:"Other",value:"other"},
-                                {label:"Rather not say",value:"rather not say"},
+                                {label:"Non-Binary",value:"non-binary"},
+                                {label:"Prefer Not to Say",value:"prefer not to say"},
                             ],
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
