@@ -75,6 +75,7 @@ import Emaillogin from "../components/flyers/Emailogin"
 import Phonelogin from "../components/flyers/Phonelogin"
 import Chatoptions from "../components/flyers/Chatoptions"
 import Exploreguest from "../components/flyers/Exploreguest"
+import Refundpolicy from "../components/flyers/Refundpolicy"
 
 const components:ScreenInfo[]=[
     {id:"Base",component:Base,props:["tab"],type:"Screen",swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",removalThreshold:0.3},
@@ -88,6 +89,7 @@ const components:ScreenInfo[]=[
     {id:"Popup",component:Popup,props:["popupid","popupdata"],swipeDirection:"XY",type:"Screen",animationStyle:"Custom",customPlacement:{initial:{x:0,y:0,scale:0,opacity:1,height:0,width:0},final:{x:0.25,y:0.25,scale:1,opacity:1,height:0.5,width:0.5}}},
     //{id:"Error",component:Error,props:["message","preventAutoHide"],type:"Popup"},
     {id:"Warning",component:Warning,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,opacity:1,height:0.4,width:1},final:{x:0,y:0.6,scale:1,opacity:1,height:0.4,width:1}},removalThreshold:5/6},
+    {id:"Refundpolicy",component:Refundpolicy,type:"Flyer",swipeDirection:"Y",animationStyle:"Custom",customPlacement:{initial:{x:0,y:1,scale:1,opacity:1,height:0.4,width:1},final:{x:0,y:0.6,scale:1,opacity:1,height:0.4,width:1}},removalThreshold:5/6},
     {id:"Loginbase",component:Loginbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
     {id:"Registerbase",component:Registerbase,occupyFullScreen:true,swipeDirection:"X",animationStyle:"HorizontalSlideToLeft",props:["auth"],type:"Partial"},
     {id:"Userdoesntexist",component:Userdoesntexist,type:"Flyer",swipeDirection:"Y",animationStyle:"VerticalSlideToTopPartial",removalThreshold:5/6},

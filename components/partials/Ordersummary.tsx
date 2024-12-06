@@ -140,15 +140,26 @@ const Ordersummary=()=>{
         if(inputvalidation?.success)
         {
             let serverRes=await requestInfo?.serverCommunicator(inputvalidation.data);
-            //console.log("server res",JSON.stringify(serverRes,null,2));
             if(serverRes?.success)
             {
                 requestInfo?.responseHandler(serverRes);
                 await removeCartItems(orderInfo.products);
                 setIsloading(false);
-                //addToBasket("payment_options",serverRes.data.order.paymentDetails);
                 navigate?navigate({type:"AddScreen",payload:{screen:"Payment",params:{paymentOrderId:serverRes.data.order._id}}}):null
             }
+        }
+    }
+
+    const proceed=()=>{
+        let ordersPlaced=store.getState().orders.data?.filter((order)=>order.paymentDetails.amount!=0)
+        if(ordersPlaced.length==0)
+        {
+            addToBasket("refundpolicy",{url:"https://campusroot.com/refundPolicy",proceedCallback:placeOrder});
+            navigate?navigate({type:"AddScreen",payload:{screen:"Refundpolicy"}}):null;
+        }
+        else
+        {
+            placeOrder();
         }
     }
 
@@ -248,7 +259,7 @@ const Ordersummary=()=>{
                     <Text>{paymentData.issue}</Text>
                 }
             </View>
-            <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={!isLoading?placeOrder:null}>
+            <Pressable style={{alignSelf:'center',borderRadius:100,borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),padding:5,paddingLeft:20,paddingRight:20,marginBottom:20}} onPress={!isLoading?proceed:null}>
             {
                 !isLoading
                 ?
