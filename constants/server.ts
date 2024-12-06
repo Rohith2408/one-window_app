@@ -137,6 +137,12 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"cancel-product",
+        category:"student",
+        tail:"request-cancellation",
+        type:"GET",
+    },
+    {
         id:"payment-verification",
         category:"student",
         tail:"payment-verification",
