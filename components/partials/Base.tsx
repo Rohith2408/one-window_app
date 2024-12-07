@@ -24,7 +24,7 @@ const Base=(props:{tab:string})=>{
             component:Profile,
         },
         {
-            id:"community",
+            id:"feed",
             component:Community,
         },
         {
