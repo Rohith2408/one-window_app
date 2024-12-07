@@ -531,10 +531,22 @@ const Program=(props:{programid:string})=>{
                 requestInfo?.responseHandler(serverRes);
                 navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
                 setTimeout(()=>{
-                    navigate?navigate({type:"AddScreen",payload:{screen:"Successfull",params:{message:"Item added to cart successfully!"}}}):null;
+                    addToBasket("success-flyer",{redirect:{text:"Go to cart",handler:openCart}});
+                    navigate?navigate({type:"AddScreen",payload:{screen:"Successfull",params:{message:"Item added to cart successfully!",preventAutoHide:true}}}):null;
                 },100)
             }
         }
+    }
+
+    const openCart=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Cart"}}):null
+    }
+
+    const showOrderDetails=(orderId:string)=>{
+        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Orderdetails"}}):null
+        setTimeout(()=>{
+            navigate?navigate({type:"AddScreen",payload:{screen:"Orderdetails",params:{orderdetailsid:orderId}}}):null
+        },100)
     }
 
     const removeFromCart=async (event:Event)=>{
@@ -604,10 +616,8 @@ const Program=(props:{programid:string})=>{
         let Package=store.getState().suggestedpackages.data.find((pkg)=>pkg.priceDetails.totalPrice==0)
         let freeOrder=store.getState().orders.data.find((order)=>order.paymentDetails.amount==0)
         let res:ServerResponse={success:false,data:undefined,message:""};
-        //console.log("Free apply res",res);
         if(freeOrder && freeOrder?.products.length==Package?.products.find((item)=>item.category=="premium application")?.quantity)
         {
-            //dispatch(setRemoveScreen({id:"Intake"}));
             navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
             setTimeout(()=>{
                 navigate?navigate({type:"AddScreen",payload:{screen:"Error",params:{error:"Seems like you have exhausted all your free applications",preventAutoHide:true}}}):null;
@@ -616,12 +626,12 @@ const Program=(props:{programid:string})=>{
         else
         {
             res=freeOrder==undefined?await placeFreeOrder(products,Package?._id):await addToFreeOrder(freeOrder._id,products)
-            //console.log("server res",res);
             if(res.success)
             {
                 navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
                 setTimeout(()=>{
-                    navigate?navigate({type:"AddScreen",payload:{screen:"Successfull",params:{message:"You can check the application progress in the products section",hideInterval:4000}}}):null;
+                    addToBasket("success-flyer",{redirect:{text:"Show order details",handler:()=>{showOrderDetails(freeOrder==undefined?res.data.order._id:res.data._id)}}});
+                    navigate?navigate({type:"AddScreen",payload:{screen:"Successfull",params:{message:"You can check the application progress in the products section",preventAutoHide:true}}}):null;
                 },200)
             }
         }
