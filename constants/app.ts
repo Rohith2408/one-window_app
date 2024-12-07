@@ -45,6 +45,20 @@ export const appStandardStyles=StyleSheet.create({
     screenMarginLarge:{
         marginLeft:Dimensions.get("screen").width*0.06,
         marginRight:Dimensions.get("screen").width*0.06
+    },
+    buttonWrapper:{
+        alignItems:'center',
+        justifyContent:"center",
+        borderWidth:1.2,
+        borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),
+        borderRadius:100
+    },
+    buttonText:{
+        padding:7.5,
+        paddingLeft:15,
+        paddingRight:15,
+        fontFamily:Fonts.NeutrifStudio.Medium,
+        color:Themes.Light.OnewindowPrimaryBlue(1)
     }
 })
 
