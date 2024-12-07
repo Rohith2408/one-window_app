@@ -102,8 +102,6 @@ const Bannercard=(props:Banner & {index:number})=>{
     const Device=useRef(getDevice()).current
     const [path,navigate]=useNavigation()
 
-    console.log(props)
-
     return(
         <Pressable onPress={()=>Linking.openURL(props.url)} style={[GeneralStyles.wrapper]}>
             <View><Image style={[{width:"100%",height:"auto",aspectRatio:1.6}]} source={props.image}/></View>
