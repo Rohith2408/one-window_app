@@ -228,7 +228,6 @@ const Phonelogin=()=>{
             routeType:"public",
             body:{...phone,countryCode:phone.countryCode[0].dial_code}
         })
-        console.log(res.data);
         res.success?setScreen("verify-otp"):setError(res.message);
         return res.success;
     }
