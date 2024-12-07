@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
-import { Message} from "../../types"
+import { Chat, Message} from "../../types"
 import { useRef, useState } from "react"
 import { getDevice} from "../../utils"
 import useNavigation from "../../hooks/useNavigation"
@@ -12,6 +12,7 @@ import { Image } from "expo-image"
 import default_icon from '../../assets/images/misc/defaultDP.png'
 import document_icon from '../../assets/images/misc/document.png'
 import WebView from "react-native-webview"
+import ai_icon from '../../assets/images/profile/ai.png'
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -292,8 +293,9 @@ const Messagecard=(props:Message & {index:number})=>{
     const [isLoading,setIsloading]=useState(false)
     const profile=useAppSelector((state)=>state.sharedinfo).data
     const blockedUsers=useAppSelector((state)=>state.blockedusers).data
+    let chat=useAppSelector((state)=>state.chats).data.find((chat)=>chat._id==props.chat)
 
-    //console.log("msgs",props.content)
+    console.log("msgs",chat)
 
     return(
         <View style={[GeneralStyles.wrapper]}>
@@ -304,7 +306,7 @@ const Messagecard=(props:Message & {index:number})=>{
             //:
                 props.type=="normal"
                 ?
-                <Normal {...props}/>
+                <Normal chatObj={chat} {...props}/>
                 :
                 props.type=="typing"
                 ?
@@ -363,7 +365,7 @@ const Typing=(props:Message)=>{
     )
 }
 
-const Normal=(props:Message)=>{
+const Normal=(props:Message & {chatObj:Chat|undefined})=>{
 
     const profile=useAppSelector((state)=>state.sharedinfo).data
     const Device=useRef<keyof typeof styles>(getDevice()).current
@@ -375,6 +377,8 @@ const Normal=(props:Message)=>{
            navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Documentview",flyerdata:{docpreviewurl:props.document.data.preview_url}}}}):null
         }
     }
+
+    console.log("message",props.chat)
 
     return(
         <View style={{gap:5,alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start",maxWidth:"65%"}}>
@@ -389,7 +393,7 @@ const Normal=(props:Message)=>{
                 {
                     props.sender?._id!=profile?._id
                     ?
-                    <Image style={[styles[Device].sender_dp,{transform:[{translateY:-styles[Device].sender_dp.height/1.5}],borderRadius:100}]} source={props.sender?.displayPicSrc?props.sender?.displayPicSrc:default_icon} />
+                    <Image style={[styles[Device].sender_dp,{transform:[{translateY:-styles[Device].sender_dp.height/1.5}],borderRadius:100}]} source={props.chatObj?.participants.find((participant)=>participant.role=="Virtual_Assistant")?ai_icon:props.sender?.displayPicSrc?props.sender?.displayPicSrc:default_icon} />
                     :
                     null
                 }
