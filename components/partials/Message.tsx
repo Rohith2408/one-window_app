@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
-import { Animated, Keyboard, LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
-import { Word2Sentence, getDevice, getServerRequestURL, pickDocument, serverRequest, setLastSeenMessage, setWordCase } from "../../utils"
+import { Animated, Dimensions, Keyboard, LayoutRectangle, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
+import { Word2Sentence, getDevice, getKeyboardHeight, getServerRequestURL, pickDocument, serverRequest, setLastSeenMessage, setWordCase } from "../../utils"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
@@ -32,7 +32,7 @@ const GeneralStyles=StyleSheet.create({
     info_wrapper:{
         paddingTop:5,
         position:"relative",
-        backgroundColor:'red'
+        
     },
     info_wrapper_bg:{
         position:"absolute",
@@ -460,7 +460,7 @@ const Message=(props:{chatId:string})=>{
     useEffect(()=>{
         Animated.timing(messageBarOffset, {
             duration: keyboard.duration*0.5,
-            toValue: -keyboard.height+30,
+            toValue: -keyboard.height+20,
             useNativeDriver: false,
           }).start();
     },[keyboard])
@@ -498,8 +498,8 @@ const Message=(props:{chatId:string})=>{
             {
                 getSocket().on("trigger",triggerMessages)
             }
-            keyboardWillShow = Keyboard.addListener('keyboardWillShow', (event) => setKeyboard({duration:event.duration,height:event.endCoordinates.height}));
-            keyboardWillHide = Keyboard.addListener('keyboardWillHide', (event) => setKeyboard({duration:event.duration,height:0})); 
+            keyboardWillShow = Keyboard.addListener(Platform.OS=="android"?'keyboardDidShow':'keyboardWillShow', (event) => setKeyboard({duration:event.duration,height:getKeyboardHeight(event)*Dimensions.get("screen").height}));
+            keyboardWillHide = Keyboard.addListener(Platform.OS=="android"?'keyboardDidHide':'keyboardWillHide', (event) => setKeyboard({duration:event.duration,height:0})); 
             called.current=true
         }
 
@@ -597,7 +597,7 @@ const Message=(props:{chatId:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Chatoptions",params:{chatId:props.chatId}}}):null
     }
 
-    console.log("messages data",chat);
+    console.log("messages data",keyboard);
 
     return(
         <View style={[GeneralStyles.wrapper]}>
