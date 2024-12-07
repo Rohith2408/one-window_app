@@ -81,7 +81,7 @@ const Testoptions=()=>{
     }
 
     return(
-        <View style={[appStandardStyles.screenMarginSmall,{paddingTop:20}]}>
+        <View style={[appStandardStyles.screenMarginSmall,{paddingTop:20,gap:10}]}>
             <Styledtext styles={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="test" text="Select the test"/>
             <ScrollView contentContainerStyle={{gap:30,padding:15}}>
             {
