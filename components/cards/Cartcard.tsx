@@ -226,24 +226,25 @@ const Cartcard=(props:CartItem & {index:number})=>{
     const [isLoading,setIsloading]=useState(false)
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
-    const showIntakes=()=>{
-        let product={
-            category:props.category,
-            intake:undefined,
-            course:props.course
-        }
-        let dropdowndata={
-            list:props?.course.startDate,
-            onselection:updateItem,
-            selected:props.intake,
-            validation:{
-                validator:(intake)=>!store.getState().products.data.find((product)=>compareProducts(product,{...product,intake:new Date(intake.year,parseInt(intake.month)-1,1).toISOString()})),
-                errorMessage:"Already applied for the program with the selected intake"
-            }
-        }
-        addToBasket("intakes-dropdownoptions",dropdowndata);
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
-    }
+    // const showIntakes=()=>{
+    //     let product={
+    //         category:props.category,
+    //         intake:undefined,
+    //         course:props.course
+    //     }
+    //     let dropdowndata={
+    //         list:props?.course.startDate,
+    //         onselection:updateItem,
+    //         selected:props.intake,
+    //         validation:{
+    //             validator:(intake)=>!store.getState().products.data.find((product)=>compareProducts(product,{...product,intake:new Date(intake.year,parseInt(intake.month)-1,1).toISOString()})),
+    //             errorMessage:"Already applied for the program with the selected intake"
+    //         }
+    //     }
+    //     addToBasket("intakes-dropdownoptions",dropdowndata);
+    //     navigate?navigate({type:"AddScreen",payload:{screen:"Intake",params:{intakebasketid:"intakes-dropdownoptions"}}}):null
+    //     //navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
+    // }
 
     const deleteItem=async ()=>{
         let data={
@@ -268,26 +269,26 @@ const Cartcard=(props:CartItem & {index:number})=>{
         return serverRes?.success
     }
 
-    const updateItem=async (event:Event)=>{
-        let data={
-            action:"update",
-            itemId:props._id,
-            courseId:props.course._id,
-            intake:(event.data.month).padStart(2, '0')+"/"+"10"+"/"+event.data.year
-        }
-        let serverRes={success:false,message:"",data:undefined};
-        let requestInfo=requests.find((item)=>item.id=="updateCart");
-        let validation=requestInfo?.inputValidator(data);
-        if(validation?.success)
-        {
-            serverRes=await requestInfo?.serverCommunicator(data);
-            if(serverRes?.success)
-            {
-                requestInfo?.responseHandler(serverRes);
-            }
-        }
-        return serverRes
-    }
+    // const updateItem=async (event:Event)=>{
+    //     let data={
+    //         action:"update",
+    //         itemId:props._id,
+    //         courseId:props.course._id,
+    //         intake:(event.data.month).padStart(2, '0')+"/"+"10"+"/"+event.data.year
+    //     }
+    //     let serverRes={success:false,message:"",data:undefined};
+    //     let requestInfo=requests.find((item)=>item.id=="updateCart");
+    //     let validation=requestInfo?.inputValidator(data);
+    //     if(validation?.success)
+    //     {
+    //         serverRes=await requestInfo?.serverCommunicator(data);
+    //         if(serverRes?.success)
+    //         {
+    //             requestInfo?.responseHandler(serverRes);
+    //         }
+    //     }
+    //     return serverRes
+    // }
 
     useEffect(()=>{
         return ()=>{
