@@ -82,7 +82,7 @@ const AndroidPicker=(props:{date:string,id:string,mode:string})=>{
                 mode={props.mode}
                 is24Hour={true}
                 //accentColor={THEME.COLOR.SECONDARY.SUNSHINE(1)}
-                style={{transform:[{scale:0.8}]}}
+                style={{transform:[{scale:1}]}}
                 onChange={(e,date)=>{
                     setShowPicker(false)
                     navigate?navigate({type:"UpdateParam",payload:{param:"formupdate",newValue:{id:props.id,newvalue:date?.toISOString()}}}):null
