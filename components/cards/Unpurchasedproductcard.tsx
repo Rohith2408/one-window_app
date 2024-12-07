@@ -166,24 +166,24 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     name:{
-        lineHeight:20,
-        fontSize:14
+        lineHeight:22,
+        fontSize:16
     },
     category:{
-        fontSize:12
+        fontSize:14
     },
     intake:{
-        fontSize:11
+        fontSize:14
     },
     icon:{
-        width:24,
-        height:24,
+        width:28,
+        height:28,
         resizeMode:"contain",
         borderRadius:100
     },
     icon_bg:{
-        width:24,
-        height:24,
+        width:28,
+        height:28,
         left:-5,
         top:5,
         borderRadius:100
