@@ -31,8 +31,8 @@ export default function App() {
 
   useEffect(() => {
 
+    
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-
     Linking.addEventListener('url', (event: { url: string })=>{
     });
   
