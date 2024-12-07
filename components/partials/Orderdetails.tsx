@@ -252,8 +252,6 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
         }
     }
 
-    //console.log(JSON.stringify("logs",order?.logs,null,2));
-
     return(
         <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginSmall]}>
         {
