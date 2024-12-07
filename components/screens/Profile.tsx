@@ -6,7 +6,7 @@ import { Fonts, Themes, secureStoreKeys, setComponentInfo } from "../../constant
 import * as SecureStore from 'expo-secure-store'
 import { Image } from "expo-image";
 import sample_pic from '../../assets/images/misc/sampledp.png'
-import { Word2Sentence, getDevice, getServerRequestURL, resetStore, serverRequest } from "../../utils";
+import { Word2Sentence, getDevice, getServerRequestURL, resetStore, serverRequest, truncateString } from "../../utils";
 import personal_icon from '../../assets/images/profile/personal.png'
 import cart_icon from '../../assets/images/profile/cart.png'
 import expert_icon from '../../assets/images/profile/expert.png'
@@ -388,7 +388,7 @@ const Profile=(props:any)=>{
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.user_wrapper,styles[Device].user_wrapper]}>
                 <View style={[GeneralStyles.name_wrapper]}>
-                    <Transitionview effect="pan"><Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.name,styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{(sharedInfo.data?.firstName || sharedInfo.data?.lastName)?sharedInfo.data?.firstName+" "+sharedInfo.data?.lastName:"User"}</Text></Loadingview></Transitionview>
+                    <Transitionview effect="pan"><Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.name,styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{(sharedInfo.data?.firstName || sharedInfo.data?.lastName)?truncateString(sharedInfo.data?.firstName+" "+sharedInfo.data?.lastName,15,true):"User"}</Text></Loadingview></Transitionview>
                     <Transitionview effect="pan"><Loadingview style={[styles[Device].loadingview_email]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.email,styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{sharedInfo.data?.email}</Text></Loadingview></Transitionview>
                 </View>
                 <Pressable onPress={showDpOptions} style={[GeneralStyles.dp_wrapper]}>
