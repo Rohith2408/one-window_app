@@ -83,7 +83,6 @@ const Payment = (props:{paymentOrderId:string}) => {
   }).current;
 
   const handlePayment = async (response: any) => {
-    //console.log("razor pay response",response,getServerRequestURL("payment-verification","POST"));
     let res:ServerResponse=await serverRequest({
       reqType:"POST",
       url:getServerRequestURL("payment-verification","POST"),
@@ -106,10 +105,12 @@ const Payment = (props:{paymentOrderId:string}) => {
     } 
     else {
       navigate?navigate({type:"AddScreen",payload:{screen:"Error",params:{error:res.message}}}):null;
-
     }
     dispatch(setRemoveScreen({id:"Payment"}));
-    navigate({type:"RemovePages",payload:[{id:"Order"},{id:"Ordersummary"},{id:"Cart"}]})
+    navigate({type:"RemovePages",payload:[{id:"Order"},{id:"Ordersummary"},{id:"Cart"},{id:"Orderdetails"}]})
+    setTimeout(()=>{
+      navigate?navigate({type:"AddScreen",payload:{screen:"Orderdetails",params:{orderdetailsid:order?._id}}}):null
+    },100)
   };
 
   const verifyPayment = async (data: any) => {
@@ -127,6 +128,16 @@ const Payment = (props:{paymentOrderId:string}) => {
 
   //   }
   // },[showRazorpayPage])
+  useEffect(()=>{
+    if(order?.paymentDetails.amount==0)
+    {
+      navigate({type:"RemovePages",payload:[{id:"Order"},{id:"Ordersummary"},{id:"Cart"},{id:"Orderdetails"}]})
+      setTimeout(()=>{
+        dispatch(setRemoveScreen({id:"Payment"}))
+        navigate?navigate({type:"AddScreen",payload:{screen:"Orderdetails",params:{orderdetailsid:order?._id}}}):null
+      },1000)
+    }
+  },[])
 
   return (
     <View style={[{ flex: 1},appStandardStyles.screenMarginSmall]}>
