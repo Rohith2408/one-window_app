@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View,ScrollView } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
-import { getDevice } from "../../utils"
+import { getDevice, truncateString } from "../../utils"
 import { useEffect, useRef } from "react"
 import useTheme from "../../hooks/useTheme"
 import {Fonts, Themes, secureStoreKeys } from "../../constants"
@@ -344,9 +344,9 @@ const Home=(props:undefined|{name:string})=>{
                 <ScrollView style={[{flex:1}]} contentContainerStyle={[styles[Device].sub_wrapper]}>
                     <View style={{position:"relative",gap:10}}>
                         <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
-                        <Transitionview effect="pan"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?(personalinfo.data.firstName):"User")}!</Text></Transitionview>
+                        <Transitionview effect="pan"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?truncateString(personalinfo.data.firstName,10,true):"User")}!</Text></Transitionview>
                     </View>
-                    {/* <Text style={[GeneralStyles.products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Update No.-7.4</Text> */}
+                    <Text style={[GeneralStyles.products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Update No.-8</Text>
                     <Transitionview effect="pan">
                         <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
                             <Dynamicplaceholder/>                     
