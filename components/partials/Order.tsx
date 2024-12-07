@@ -159,6 +159,7 @@ const Order=(props:{orderinfoid:string})=>{
     
     let validation=PackageProductsValidator(Package,Products)
     errors.current={category:validation.categoryErrors,products:validation.productsErrors,general:validation.generalErrors}
+    
 
     return(
         <View style={{flex:1,gap:30}}>
