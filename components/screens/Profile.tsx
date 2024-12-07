@@ -377,22 +377,6 @@ const Profile=(props:any)=>{
         screen?navigate?navigate({type:"AddScreen",payload:{screen:screen}}):null:null
     }
 
-    const deleteAccount=async ()=>{
-        let res=await serverRequest({
-            url:getServerRequestURL("delete-account","GET"),
-            reqType:"PUT"
-        })
-        console.log("delete",res);
-        if(res.success)
-        {
-            await logout();
-            setTimeout(()=>{
-                navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Account Deleted Successfully"}}}}):null;
-            },500)
-        }
-        return res.success
-    }
-
     const logoutWarning=()=>{
         addToBasket("warning",{warningTitle:"Leaving Already?",warningMessage:"Are you sure you want to logout?",proceedCallback:logout,yesLabel:"Logout",noLabel:"Stay"});
         navigate?navigate({type:"AddScreen",payload:{screen:"Warning"}}):null;
