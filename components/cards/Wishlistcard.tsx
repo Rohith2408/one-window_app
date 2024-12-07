@@ -16,6 +16,7 @@ import { setWorkExperience } from "../../store/slices/workexperienceSlice"
 import useNavigation from "../../hooks/useNavigation"
 import { addToBasket } from "../../constants/basket"
 import { requests } from "../../constants/requests"
+import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -284,9 +285,11 @@ const Wishlistcard=(props:{data:wishlistItem,index:number})=>{
             if(serverRes?.success)
             {
                 requestInfo?.responseHandler(serverRes);
-                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Flyer"}}):null
+                //dispatch(setRemoveScreen({id:"Intake"}))
+                navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Intake"}}):null
                 setTimeout(()=>{
-                    navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Successfull",flyerdata:{message:"Item added to cart successfully!"}}}}):null;
+                    addToBasket("success-flyer",{redirect:{text:"Go to cart",handler:openCart}});
+                    navigate?navigate({type:"AddScreen",payload:{screen:"Successfull",params:{message:"Item added to cart successfully!",preventAutoHide:true}}}):null;
                 },100)
             }
         }
@@ -306,11 +309,14 @@ const Wishlistcard=(props:{data:wishlistItem,index:number})=>{
                 errorMessage:"Program with the selected intake already exists in the cart"
             }
         }
+        console.log("callleddddd");
         addToBasket("intakes-dropdownoptions",dropdowndata);
-        navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Intake",params:{intakebasketid:"intakes-dropdownoptions"}}}):null
     }
 
-    //console.log("wishlist",props.data.discipline)
+    const openCart=()=>{
+        navigate?navigate({type:"AddScreen",payload:{screen:"Cart"}}):null
+    }
 
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,padding:5}}>
