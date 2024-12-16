@@ -18,6 +18,7 @@ import * as Font from 'expo-font';
 import { secureStoreKeys } from './constants';
 import NetInfo from '@react-native-community/netinfo';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
 
@@ -87,9 +88,12 @@ export default function App() {
   return (
     <StoreProvider store={store}>
       <Appcontext.Provider value={{path,navigate,theme,setTheme}}>
-        <SafeAreaView  style={[styles.container,{paddingBottom:Platform.OS=="android"?5:0}]} >
+        <SafeAreaProvider style={[styles.container]}>
           <Layout component={encodedData.screens[0]} screens={encodedData.screens.filter((screen,i)=>i!=0)} props={encodedData.props} invalidPathScreen={Invalidpath}></Layout>
-        </SafeAreaView>
+          {/* <SafeAreaView  style={[styles.container,{paddingBottom:Platform.OS=="android"?5:0}]} >
+            
+          </SafeAreaView> */}
+        </SafeAreaProvider>
       </Appcontext.Provider>
     </StoreProvider>
   );

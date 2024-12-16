@@ -11,6 +11,7 @@ import { useAppSelector } from "../hooks/useAppSelector"
 import { useAppDispatch } from "../hooks/useAppDispatch"
 import { resetRemoveScreen, setRemoveScreen } from "../store/slices/removeScreenSlice"
 import Transitionview from "../components/resources/Transitionview"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const Stacknavigator=(props:StackNavigator)=>{
 
@@ -89,6 +90,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
   const removeScreen=useAppSelector((state)=>state.removescreen)
   const dispatch=useAppDispatch()
   // const tutorials=useAppSelector((state)=>state.tutorials);
+  const insets = useSafeAreaInsets();
   const getCurrentPosition=()=>(currentState.current)
   const setCurrentPosition=(val:{x:number,y:number,opacity:number,scale:number})=>{currentState.current=val}
   const [loadScreen,setLoadScreen]=useState(screenInfo?.delay?false:true)
@@ -229,9 +231,10 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
   //console.log("tutorials",tutorials)
 
   const Container=getComponent(props.component)?.component
+  console.log("insets",insets);
 
   return(
-      <Animated.View onLayout={(e)=>setScreenDimensions(e.nativeEvent.layout)} key={props.id} style={[styles.screenWrapper,screenInfo?.type=="Flyer"?{elevation:3,shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").width]})}],opacity:opacity}]}>
+      <Animated.View onLayout={(e)=>setScreenDimensions(e.nativeEvent.layout)} key={props.id} style={[styles.screenWrapper,screenInfo?.type=="Flyer"?{elevation:3,shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height-insets.bottom-insets.top]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[insets.top,Dimensions.get("screen").height-insets.bottom]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[insets.left,Dimensions.get("screen").width-insets.right]})}],opacity:opacity}]}>
         {
           props.index!=0 && (screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY") && !screenInfo.nonClosable
           ?

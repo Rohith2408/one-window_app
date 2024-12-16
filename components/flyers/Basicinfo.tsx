@@ -58,7 +58,7 @@ const GeneralStyles=StyleSheet.create({
         padding:7.5,
         paddingLeft:15,
         paddingRight:15,
-        borderRadius:100
+        borderRadius:100,
     }
 })
 
@@ -374,7 +374,7 @@ const Container=(props:Listitem & {index:number,total:number,setScreen:any})=>{
     //console.log("data",data,props.emptyChecker(data));
     
     return(
-        <View style={{flex:1,padding:5,gap:15}}>
+        <View style={{flex:1,padding:5,gap:15,position:'relative'}}>
             <Styledtext styles={[styles[Device].card_title,{fontFamily:Fonts.NeutrifStudio.Medium}]} text={props.title.text} focusWord={props.title.highlight}/>
             <Card data={data} setData={setData} setError={setError}/>
             {
@@ -384,30 +384,26 @@ const Container=(props:Listitem & {index:number,total:number,setScreen:any})=>{
                 :
                 null
             }
-            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-end'}}>
-                {
-                    props.isSkippable
-                    ?
-                    <Pressable onPress={skip}><Text>Skip</Text></Pressable>
-                    :
-                    null
-                }
-                {
-                    !props.emptyChecker(data)
-                    ?
-                    <Transitionview effect="zoom">
-                        {/* <Pressable style={[{flexDirection:'row',alignItems:'center',gap:7.5,borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),padding:7.5,paddingLeft:15,paddingRight:15,borderRadius:100}]} onPress={next}>
-                            <Text style={[styles[Device].next,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Next</Text>
-                            <Image source={next_icon} style={[styles[Device].next_icon]}/>
-                        </Pressable> */}
-                        <Pressable style={[GeneralStyles.next_wrapper]} onPress={!loading?next:null}>
-                            <Text style={[styles[Device].next,{color:Themes.Light.OnewindowPrimaryBlue(0.7),fontFamily:Fonts.NeutrifStudio.Medium}]}>Next</Text>
-                            <Image source={loading?loading_gif:next_icon} style={[styles[Device].next_icon]}/>
-                        </Pressable>
-                    </Transitionview>
-                    :
-                    null
-                }
+            <View style={{position:"absolute",bottom:"10%",alignSelf:"flex-end",flexDirection:'row',alignItems:'center',justifyContent:'flex-end'}}>
+            {
+                props.isSkippable
+                ?
+                <Pressable onPress={skip}><Text>Skip</Text></Pressable>
+                :
+                null
+            }
+            {
+                !props.emptyChecker(data)
+                ?
+                <Transitionview effect="zoom">
+                    <Pressable style={[GeneralStyles.next_wrapper]} onPress={!loading?next:null}>
+                        <Text style={[styles[Device].next,{color:Themes.Light.OnewindowPrimaryBlue(0.7),fontFamily:Fonts.NeutrifStudio.Medium}]}>Next</Text>
+                        <Image source={loading?loading_gif:next_icon} style={[styles[Device].next_icon]}/>
+                    </Pressable>
+                </Transitionview>
+                :
+                <View></View>
+            }
             </View>
         </View>
     )
