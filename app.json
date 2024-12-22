@@ -64,6 +64,12 @@
     },
     "plugins": [
       [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.231285782629-393b2jhqgsao4j83nhu5j7b7pc99buv7"
+        }
+      ],
+      [
         "expo-secure-store",
         {
           "faceIDPermission": "Allow One Window to access your Face ID biometric data."
