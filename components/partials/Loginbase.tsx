@@ -671,7 +671,7 @@ const Loginbase=(props:{auth:string})=>{
                     }
                     </View>
                     <Pressable style={{alignSelf:'center'}} onPress={openExplore}>
-                        <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium,textAlign:"center",lineHeight:22},styles[Device].explore_text]} text="Ready to Explore? Take a quick tour" focusWord="Take a quick tour!"/>
+                        <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium,textAlign:"center",lineHeight:22},styles[Device].explore_text]} text="Ready to Explore? Take a quick tour" focusWord="Take a quick tour"/>
                     </Pressable> 
                 </View>
                 {/* <View style={{display:"flex",flexDirection:"column",gap:10,position:"relative"}}>

@@ -1,9 +1,11 @@
 import { initializeApp } from 'firebase/app';
+import * as Securestore from 'expo-secure-store'
 
 // Optionally import the services that you want to use
 import {getAuth,GoogleAuthProvider,signInWithPopup} from "firebase/auth";
 import { ServerResponse } from 'http';
 import { getServerRequestURL, serverRequest } from './utils';
+import { secureStoreKeys } from './constants';
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -27,7 +29,13 @@ export const googleSignin = (accessToken:string) => {
           body: JSON.stringify({ credential:accessToken }),
         }).then((serverRes) => {
           console.log("Server Response: ", serverRes);
-          return { success: true, message: "Login successful", data: serverRes };
+          if(serverRes.success)
+          {
+            Securestore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,serverRes.data).then(()=>{
+              return serverRes
+            })
+          }
+          return serverRes
         });
       } else {
         return { success: false, message: "No token found", data: undefined };
