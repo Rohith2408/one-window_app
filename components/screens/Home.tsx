@@ -25,6 +25,7 @@ import banner_2 from '../../assets/images/banners/2.png'
 import banner_3 from '../../assets/images/banners/3.png'
 import Productcompactcard from "../cards/Productcompactcard"
 import Transitionview from "../resources/Transitionview"
+import { getTask } from "../../constants/tasks"
 
 
 const GeneralStyles=StyleSheet.create({
@@ -326,6 +327,12 @@ const Home=(props:undefined|{name:string})=>{
         //{title:"Academic success strategies",subTitle:"",image:banner_2,url:"https://onewindow.co/top-5-academic-success-strategies-for-study-abroad/"},
         // {title:"Summer Programs",subTitle:"",image:sample_banner,url:"https://onewindow.co/summer-programs-short-term-opportunities/"}
     ]).current
+    const quickLinks=useRef([
+        {title:"Schedule Meet",taskId:"schedule-meeting"},
+        {title:"Chat with expert",taskId:"chat-expert"},
+        {title:"Ask AVA",taskId:"chat-AVA"},
+        {title:"Edit Profile",taskId:"edit-profile"}
+    ]).current
 
 
     const openSearch=()=>{
@@ -336,7 +343,14 @@ const Home=(props:undefined|{name:string})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null
     }
 
-    //console.log("ver",store.getState().products);
+    const quickLinksHandler=(quickLink:any)=>{
+        let task=getTask(quickLink.taskId);
+        if(task)
+        {
+            let screenInfo=task.stages[0].screenFetcher({taskId:task.id,stageId:task.stages[0].id});
+            navigate?navigate({type:"AddScreen",payload:{screen:screenInfo.id,params:screenInfo.props}}):null
+        }
+    }
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
@@ -346,7 +360,7 @@ const Home=(props:undefined|{name:string})=>{
                         <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
                         <Transitionview effect="pan"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?truncateString(personalinfo.data.firstName,10,true):"User")}!</Text></Transitionview>
                     </View>
-                    <Text style={[GeneralStyles.products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Update No.-8.1</Text>
+                    <Text style={[GeneralStyles.products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Update No.-9</Text>
                     <Transitionview effect="pan">
                         <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
                             <Dynamicplaceholder/>                     
@@ -362,6 +376,13 @@ const Home=(props:undefined|{name:string})=>{
                     <View style={[{width:"100%"}]}>
                         <Carousel data={banners} card={Bannercard}/>
                     </View>
+                    {/* <View style={{display:"flex",flexDirection:"row",gap:10}}>
+                    {
+                        quickLinks.map((item)=>
+                        <Pressable key={item.title} onPress={()=>quickLinksHandler(item)}><Text>{item.title}</Text></Pressable>
+                        )
+                    }
+                    </View> */}
                     <View style={[GeneralStyles.products_wrapper,styles[Device].products_wrapper]}>
                         <Text style={[GeneralStyles.products_title,styles[Device].products_title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
                         {
