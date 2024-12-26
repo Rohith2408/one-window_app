@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
 import { Event, ListItem, ServerResponse } from "../../types"
 import { Word2Sentence, getDevice, getServerRequestURL, serverRequest } from "../../utils"
 import { validations } from "../../utils/validations"
@@ -19,6 +19,8 @@ import { addToBasket, removeFromBasket } from "../../constants/basket"
 import Listselection from "../resources/Listselection"
 import Transitionview from "../resources/Transitionview"
 import Styledtext from "../resources/Styledtext"
+import { googleSignin } from "../../firebaseConfig"
+import * as Google from 'expo-auth-session/providers/google';
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -31,7 +33,6 @@ const GeneralStyles=StyleSheet.create({
         display:"flex",
         justifyContent:"center",
         alignItems:'center'
-
     },
     header_wrapper_bg:{
         position:"absolute",
@@ -364,7 +365,7 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     body_wrapper:{
-        gap:10
+        gap:5
     },
     banner_wrapper:{
         gap:24
@@ -455,7 +456,10 @@ const Loginbase=(props:{auth:string})=>{
     const [errors,setErrors]=useState<{id:string,error:string}>();
     const tabs=useRef([{label:"Email",value:"email"},{label:"Phone",value:"phone"}]).current
     const [loginType,setLoginType]=useState("email");
-
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+        clientId: '231285782629-393b2jhqgsao4j83nhu5j7b7pc99buv7.apps.googleusercontent.com',
+      });
+    
     const openSignup=()=>{
         navigate?navigate({type:"Register"}):null
         setTimeout(()=>{
@@ -525,13 +529,24 @@ const Loginbase=(props:{auth:string})=>{
         navigate({type:"AddScreen",payload:{screen:"Phonelogin"}})
     }
 
+    const googleLogin=(accessToken)=>{
+        googleSignin(accessToken).then((res:ServerResponse)=>navigate(res.success?{type:"Login"}:{type:"AddScreen",payload:{screen:"Error",params:{error:res.message}}})) ;
+    }
+
     const openExplore=async ()=>{
         await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,"");
         navigate?navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:"Programs",programslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1},universitieslistquery:{search:"",additionalFilters:[],quickFilters:[],page:1}}}}):null
     }
 
+    useEffect(() => {
+        if (response?.type === 'success') {
+            const { id_token, accessToken } = response.params;
+            googleLogin(accessToken); 
+        }
+      }, [response]);
+
     return(
-        <View style={[GeneralStyles.wrapper]}>
+        <ScrollView style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.header_wrapper,styles[Device].header_wrapper,{position:"relative"}]}>
                 <Image source={pie_icon} style={{width:30,height:30,resizeMode:"contain",position:'absolute',top:"30%",left:"10%"}}/>
                 <View style={{width:50,height:50,borderRadius:200,backgroundColor:Themes.ExtraLight.OnewindowPurple,transform:[{translateY:-25}],position:'absolute',top:"100%",left:"75%"}}></View>
@@ -563,6 +578,9 @@ const Loginbase=(props:{auth:string})=>{
                         {/* <Text style={[styles[Device].login_text,{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}></Text> */}
                         {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
                     </Pressable>
+                    <Pressable onPress={()=>promptAsync()} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
+                        <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Login with Google" focusWord="Google"/>
+                    </Pressable>
                     <Pressable onPress={openExplore}>
                         <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium,textAlign:"center",lineHeight:22},styles[Device].explore_text]} text="Ready to Explore? Discover your dream university today!" focusWord="Discover your dream university today!"/>
                         {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
@@ -570,7 +588,7 @@ const Loginbase=(props:{auth:string})=>{
                 </View>
                 
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
