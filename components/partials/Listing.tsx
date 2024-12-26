@@ -11,6 +11,7 @@ import Listselection from "../resources/Listselection"
 import Quickfiltercard from "../cards/Quickfiltercard"
 import filter_icon from '../../assets/images/misc/filter.png'
 import { useAppSelector } from "../../hooks/useAppSelector"
+import Styledtext from "../resources/Styledtext"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -224,7 +225,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     const onScroll=(e:NativeSyntheticEvent<NativeScrollEvent>)=>{
         if(props.page<maxPages.current)
         {
-            console.log("scroll",e.nativeEvent.layoutMeasurement.height,e.nativeEvent.contentOffset.y,e.nativeEvent.contentSize.height);
+            //console.log("scroll",e.nativeEvent.layoutMeasurement.height,e.nativeEvent.contentOffset.y,e.nativeEvent.contentSize.height);
             if(!dataRequested.current && (e.nativeEvent.layoutMeasurement.height+e.nativeEvent.contentOffset.y>e.nativeEvent.contentSize.height-60))
             {
                 // if(props.page+1>2)
@@ -312,10 +313,18 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
                 }
                 </ScrollView>
                 :
-                <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:5}}>
-                    <Text style={[styles[Device].not_found,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.listid+" not found "+":("}</Text>
-                    <Text style={[styles[Device].not_found_sub,{textAlign:"center",lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Waaait!, there are over 80,000+ Programs to choose from, start exploring now!</Text>
-                </View>
+                    isLoading 
+                    ?
+                    <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:5}}>
+                        <Styledtext styles={[styles[Device].not_found,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Hang in there, we’re almost done!" focusWord="almost"/>
+                        {/* <Text style={[styles[Device].not_found,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Hang in there, we’re almost done!</Text> */}
+                        {/* <Text style={[styles[Device].not_found_sub,{textAlign:"center",lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Waaait!, there are over 80,000+ Programs to choose from, start exploring now!</Text> */}
+                    </View>
+                    :
+                    <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:5}}>
+                        <Text style={[styles[Device].not_found,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.listid+" not found "+":("}</Text>
+                        <Text style={[styles[Device].not_found_sub,{textAlign:"center",lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Waaait!, there are over 80,000+ Programs to choose from, start exploring now!</Text>
+                    </View>
             :
             null
         }
