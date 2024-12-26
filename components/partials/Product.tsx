@@ -21,6 +21,7 @@ import { requests } from "../../constants/requests"
 import upload_icon from '../../assets/images/misc/upload.png'
 import document_icon from '../../assets/images/misc/document.png'
 import add_icon from '../../assets/images/misc/info.png'
+import happy_face from '../../assets/images/illustrations/happy.png'
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -33,9 +34,9 @@ const GeneralStyles=StyleSheet.create({
     info_wrapper:{
         alignSelf:"stretch",
         display:"flex",
-        flexDirection:"row",
+        flexDirection:"column",
         alignItems:"flex-start",
-        gap:10,
+        gap:5,
         padding:0
     },
     uni_icon_wrapper:{
@@ -64,22 +65,9 @@ const GeneralStyles=StyleSheet.create({
     },
     actions_wrapper:{
         flexDirection:'row',
-        gap:10
-    },
-    dashboard_wrapper:{
-        display:"flex",
-        flex:1,
-        flexDirection:"row",
         gap:10,
-        padding:10
-    },
-    dashboard_item_wrapper:{
-        display:'flex',
-        flex:1,
-        flexDirection:"column",
-        justifyContent:"center",
-        gap:7,
-        padding:10
+        alignItems:"flex-end",
+        alignSelf:"flex-end"
     },
     add_wrapper:{
         display:"flex",
@@ -106,122 +94,99 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:30,
-        height:30,
+        width:42,
+        height:42,
         borderRadius:100,
         resizeMode:"contain"
     },
     uni_icon_bg:{
-        width:28,
-        height:28,
-        borderRadius:100,
-        left:7,
-        top:7
-    },
-    uni_location:{
-        fontSize:16,
-        lineHeight:18
-    },
-    program_name:{
-        fontSize:20
-    },
-    advisor_card:{
-        height:175
-    },
-    advisor_heading:{
-        fontSize:18
-    },
-    show_order_details:{
-        fontSize:18
-    },
-    dashboard_icon:{
-        height:18,
-        width:18,
-        resizeMode:"contain"
-    },
-    dashboard_item_wrapper:{
-        borderRadius:20,
-        flex:1
-    },
-    // dashboards_wrapper:{
-    //     height:240,
-    //     gap:20
-    // },
-    dashboard_wrapper:{
-        gap:20
-    },
-    dashboard_value:{
-        fontSize:13
-    },
-    dashboard_label:{
-        fontSize:12
-    },
-    status:{
-        fontSize:18
-    },
-    delete_icon:{
         width:24,
         height:24,
-        resizeMode:"contain"
-    },
-    upload_icon:{
-        width:24,
-        height:24,
-        resizeMode:"contain"
-    },
-    checked_icon:{
-        width:24,
-        height:24,
-        resizeMode:"contain"
-    },
-    doc_name:{
-        fontSize:18
-    },
-    doc_icon:{
-        width:24,
-        height:24,
-        resizeMode:"contain"
-    },
-    emptychecklist_msg:{
-        fontSize:18,
-        lineHeight:22
-    },
-    add_text:{
-        fontSize:18
-    },
-    add_icon:{
-        width:34,
-        height:34,
-        resizeMode:"contain"
-    }
-})
-
-const MobileSStyles=StyleSheet.create({
-
-    location_icon:{
-        width:12,
-        height:12,
-        resizeMode:"contain"
-    },
-    uni_icon:{
-        width:22,
-        height:22,
-        borderRadius:100,
-        resizeMode:"contain"
-    },
-    uni_icon_bg:{
-        width:22,
-        height:22,
         borderRadius:100,
         left:5,
         top:5
     },
     uni_location:{
-        fontSize:10,
-        lineHeight:14
+        fontSize:15,
+        lineHeight:24
     },
     program_name:{
-        fontSize:12
+        fontSize:19
+    },
+    advisor_card:{
+        height:175
+    },
+    advisor_heading:{
+        fontSize:18
+    },
+    show_order_details:{
+        fontSize:15
+    },
+    status:{
+        fontSize:16
+    },
+    delete_icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    upload_icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    checked_icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    doc_name:{
+        fontSize:18
+    },
+    doc_icon:{
+        width:24,
+        height:24,
+        resizeMode:"contain"
+    },
+    emptychecklist_msg:{
+        fontSize:15,
+        lineHeight:20
+    },
+    add_text:{
+        fontSize:18
+    },
+    add_icon:{
+        width:26,
+        height:26,
+        resizeMode:"contain"
+    }
+})
+
+const MobileSStyles=StyleSheet.create({
+    location_icon:{
+        width:8,
+        height:8,
+        resizeMode:"contain"
+    },
+    uni_icon:{
+        width:32,
+        height:32,
+        borderRadius:100,
+        resizeMode:"contain"
+    },
+    uni_icon_bg:{
+        width:16,
+        height:16,
+        borderRadius:100,
+        left:5,
+        top:5
+    },
+    uni_location:{
+        fontSize:11,
+        lineHeight:24
+    },
+    program_name:{
+        fontSize:15
     },
     advisor_card:{
         height:175
@@ -230,66 +195,44 @@ const MobileSStyles=StyleSheet.create({
         fontSize:14
     },
     show_order_details:{
-        fontSize:12
-    },
-    dashboard_icon:{
-        height:18,
-        width:18,
-        resizeMode:"contain"
-    },
-    dashboard_item_wrapper:{
-        borderRadius:20,
-        flex:1
-    },
-    // dashboards_wrapper:{
-    //     height:240,
-    //     gap:20
-    // },
-    dashboard_wrapper:{
-        gap:20
-    },
-    dashboard_value:{
-        fontSize:13
-    },
-    dashboard_label:{
-        fontSize:12
+        fontSize:11
     },
     status:{
         fontSize:12
     },
     delete_icon:{
-        width:18,
-        height:18,
+        width:16,
+        height:16,
         resizeMode:"contain"
     },
     upload_icon:{
-        width:18,
-        height:18,
+        width:16,
+        height:16,
         resizeMode:"contain"
     },
     checked_icon:{
-        width:18,
-        height:18,
+        width:16,
+        height:16,
         resizeMode:"contain"
     },
     doc_name:{
         fontSize:14
     },
     doc_icon:{
-        width:20,
-        height:20,
+        width:16,
+        height:16,
         resizeMode:"contain"
     },
     emptychecklist_msg:{
-        fontSize:14,
-        lineHeight:18
+        fontSize:13,
+        lineHeight:20
     },
     add_text:{
         fontSize:14
     },
     add_icon:{
-        width:22,
-        height:22,
+        width:18,
+        height:18,
         resizeMode:"contain"
     }
 })
@@ -301,24 +244,24 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:26,
-        height:26,
+        width:38,
+        height:38,
         borderRadius:100,
         resizeMode:"contain"
     },
     uni_icon_bg:{
-        width:24,
-        height:24,
+        width:20,
+        height:20,
         borderRadius:100,
         left:5,
         top:5
     },
     uni_location:{
-        fontSize:14,
-        lineHeight:20
+        fontSize:13,
+        lineHeight:24
     },
     program_name:{
-        fontSize:16
+        fontSize:17
     },
     advisor_card:{
         height:175
@@ -327,29 +270,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:16
     },
     show_order_details:{
-        fontSize:14
-    },
-    dashboard_icon:{
-        height:18,
-        width:18,
-        resizeMode:"contain"
-    },
-    dashboard_item_wrapper:{
-        borderRadius:20,
-        flex:1
-    },
-    // dashboards_wrapper:{
-    //     height:240,
-    //     gap:20
-    // },
-    dashboard_wrapper:{
-        gap:20
-    },
-    dashboard_value:{
         fontSize:13
-    },
-    dashboard_label:{
-        fontSize:12
     },
     status:{
         fontSize:14
@@ -378,18 +299,17 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     emptychecklist_msg:{
-        fontSize:16,
+        fontSize:15,
         lineHeight:20
     },
     add_text:{
         fontSize:16
     },
     add_icon:{
-        width:26,
-        height:26,
+        width:22,
+        height:22,
         resizeMode:"contain"
     }
-    
 })
 
 const MobileLStyles=StyleSheet.create({
@@ -400,51 +320,33 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:26,
-        height:26,
+        width:38,
+        height:38,
         borderRadius:100,
         resizeMode:"contain"
     },
     uni_icon_bg:{
-        width:24,
-        height:24,
+        width:20,
+        height:20,
         borderRadius:100,
         left:5,
         top:5
     },
     uni_location:{
-        fontSize:12,
-        lineHeight:16
+        fontSize:13,
+        lineHeight:24
     },
     program_name:{
-        fontSize:16
+        fontSize:17
     },
     advisor_card:{
         height:175
     },
     advisor_heading:{
-        fontSize:14
+        fontSize:16
     },
     show_order_details:{
-        fontSize:14
-    },
-    dashboard_icon:{
-        height:18,
-        width:18,
-        resizeMode:"contain"
-    },
-    dashboard_item_wrapper:{
-        borderRadius:20,
-        flex:1
-    },
-    dashboard_wrapper:{
-        gap:20
-    },
-    dashboard_value:{
         fontSize:13
-    },
-    dashboard_label:{
-        fontSize:12
     },
     status:{
         fontSize:14
@@ -473,17 +375,17 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     emptychecklist_msg:{
-        fontSize:16,
+        fontSize:15,
         lineHeight:20
     },
     add_text:{
         fontSize:16
     },
     add_icon:{
-        width:28,
-        height:28,
+        width:22,
+        height:22,
         resizeMode:"contain"
-    },
+    }
 })
 
 const styles={
@@ -592,7 +494,14 @@ const Product=(props:{productId:string})=>{
     }
 
     const showWarning=()=>{
-        addToBasket("warning",{warningTitle:"Are you sure??",warningMessage:"Think twice before you cancel,this might be just what you need. Once cancelled the action can't be undone, talk to our experts and let them help you make the right decision!",proceedCallback:cancelProduct,yesLabel:"Proceed",noLabel:"Don't Cancel"});
+        addToBasket("warning",{
+            warningTitle:"Are you sure??",
+            warningMessage:"Think twice before you cancel,this might be just what you need. Once cancelled the action can't be undone, talk to our experts and let them help you make the right decision!",
+            redirect:{title:"Click here to see the Refund Policy",url:"https://campusroot.com/refundPolicy"},
+            proceedCallback:cancelProduct,
+            yesLabel:"Proceed",
+            noLabel:"Don't Cancel"
+        });
         navigate?navigate({type:"AddScreen",payload:{screen:"Warning"}}):null;
     }
 
@@ -624,7 +533,7 @@ const Product=(props:{productId:string})=>{
             ?
             <Transitionview effect="pan" style={[GeneralStyles.add_wrapper]}>
                 <Pressable onPress={quits} style={{flexDirection:"row",alignItems:'center',gap:5}}>
-                    <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].add_text]}>{product.cancellationRequest?"You called it quits!":"Call it quits?"}</Text>
+                    <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].uni_location]}>{product.cancellationRequest?"You called it quits!":"Call it quits?"}</Text>
                     <Image style={[styles[Device].add_icon]} source={add_icon}></Image>
                 </Pressable>
             </Transitionview>
@@ -635,34 +544,28 @@ const Product=(props:{productId:string})=>{
         {
             product
             ?
-            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:40}}>
+            <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:50}}>
                 <View style={[GeneralStyles.info_wrapper]}>
-                    <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
-                        <Image source={product.course.university.logoSrc} style={[styles[Device].uni_icon]}/>
-                        <View style={[styles[Device].uni_icon_bg,{position:"absolute",zIndex:-1,backgroundColor:getThemeColor(0)}]}></View>
+                    <View style={{display:'flex',flexDirection:"row",alignItems:"flex-end",gap:10}}>
+                        <View style={{flex:1,display:'flex',flexDirection:'row',alignItems:'flex-end'}}><Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.SemiBold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(product.course.name)}</Text></View>
+                        <Image source={product.course.university.logoSrc} style={[styles[Device].uni_icon,{marginRight:10}]}/>
                     </View>
-                    <View style={[GeneralStyles.uni_info_wrapper]}>
-                        <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(product.course.name)}</Text>
-                        <View style={[GeneralStyles.location_wrapper]}>
-                            <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>{formatDate(product.intake)}</Text></View>
-                        </View>
-                        <View style={[GeneralStyles.location_wrapper]}>
-                            <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>{Word2Sentence([setWordCase(product.category),product.course.university.name],"","|",true)}</Text></View>
-                        </View>
-                        <View style={[GeneralStyles.actions_wrapper]}>
-                            <Pressable onPress={showOrderDetails} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
-                                <Text style={[styles[Device].show_order_details,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Show Order Details</Text>
-                            </Pressable>
-                        </View>
+                    <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence(["Applied for "+formatDate(product.intake),setWordCase(product.category),product.course.university.name],"","|",true)}</Text>
+                    <View style={[GeneralStyles.actions_wrapper,styles[Device].actions_wrapper]}>
+                        <Pressable onPress={showOrderDetails} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,backgroundColor:Themes.Light.OnewindowPrimaryBlue(1)}}>
+                            <Text style={[styles[Device].show_order_details,{color:"white",fontFamily:Fonts.NeutrifStudio.Medium}]}>Show Order Details</Text>
+                        </Pressable>
                     </View>
                 </View>
-                <View style={[{alignSelf:'center',borderRadius:100,backgroundColor:Themes.Light.OnewindowLightBlue}]}>
-                    <Text style={[{padding:10},{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].status]}>{Word2Sentence([product.status,product.stage],"","-",true)}</Text>
-                </View>
+                {/* <View style={[{alignSelf:'center',borderRadius:100,backgroundColor:getThemeColor(0)}]}>
+                    <Text style={[{padding:10},{color:'black',fontFamily:Fonts.NeutrifStudio.Regular},styles[Device].status]}>{Word2Sentence([product.status,product.stage],"","-",true)}</Text>
+                </View> */}
                 <View style={{gap:15}}>
-                    <Styledtext styles={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Experts Assigned:" focusWord="Assigned"/>
+                    <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
+                        <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>EXPERTS ASSIGNED</Text>
+                        <View style={{width:100,height:1.5,backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.1)}}/>
+                    </View>
+                    {/* <Styledtext styles={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Experts Assigned:" focusWord="Assigned"/> */}
                     <View style={{gap:20}}>
                     {
                         product.advisors.map((advisor,i)=>
@@ -675,12 +578,22 @@ const Product=(props:{productId:string})=>{
                     </View>
                 </View>
                 <View style={{gap:10}}>
-                    <Styledtext styles={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Required Documents:" focusWord="Documents"/>
+                    <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
+                        <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>REQUIRED DOCUMENTS</Text>
+                        <View style={{width:100,height:1,backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.1)}}/>
+                    </View>
+                    {/* <Styledtext styles={[styles[Device].advisor_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Required Documents:" focusWord="Documents"/> */}
                     <View style={{gap:10}}>
                     {
                         product.docChecklist.length==0
                         ?
-                        <Text style={[styles[Device].emptychecklist_msg,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>No documents required at the moment. Your expert will update this checklist if any documents are needed.</Text>
+                        <View style={{flexDirection:'row',alignItems:"flex-start",gap:15}}>
+                            <View style={{flex:1,flexDirection:"column",alignItems:"flex-start"}}>
+                                <Text style={[styles[Device].emptychecklist_msg,{lineHeight:24,fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.85)}]}>No documents required at the moment.</Text>
+                                <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>Your expert will update this checklist if any documents are needed.</Text>
+                            </View>
+                            <Image source={happy_face} style={[{width:90,height:90,resizeMode:'contain'}]}/>
+                        </View>
                         :
                         product.docChecklist.map((item,i)=>
                         <Pressable onPress={()=>{viewDoc(item.doc)}} style={[{flexDirection:"row",alignItems:"center",gap:5}]}>
@@ -709,20 +622,6 @@ const Product=(props:{productId:string})=>{
             :
             null
         }
-        </View>
-    )
-
-}
-
-const Dashboarditem=(data:{label:string,value:string,icon:string,index:number})=>{
-
-    const Device=useRef<keyof typeof styles>(getDevice()).current
-
-    return(
-        <View style={[GeneralStyles.dashboard_item_wrapper,styles[Device].dashboard_item_wrapper,{backgroundColor:getLightThemeColor(data.index)}]}>
-            <Image style={[styles[Device].dashboard_icon]} source={data.icon}/>
-            <Text style={[styles[Device].dashboard_value,{color:"black",fontFamily:Fonts.NeutrifStudio.Bold}]}>{data.value}</Text>
-            <Text style={[styles[Device].dashboard_label,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{data.label}</Text>
         </View>
     )
 

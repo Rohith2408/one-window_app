@@ -61,10 +61,10 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     name:{
-        fontSize:16
+        fontSize:15
     },
     role:{
-        fontSize:14
+        fontSize:13
     },
     go:{
         width:8,
@@ -105,9 +105,9 @@ const Expertcompactcard=(props:Advisor_compact & {index:number})=>{
     
     return(
         <View style={[GeneralStyles.main_wrapper]}>
-            <View><Image style={[styles[Device].dp]} source={props.displayPicSrc?props.displayPicSrc:default_icon}/></View>
-            <View style={{flex:1}}><Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(props.firstName)}</Text></View>
-            <Text style={[styles[Device].role,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.3)}]}>{camelCaseToString(props.role)}</Text>
+            <View style={{flex:1}}><Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.SemiBold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(props.firstName)}</Text></View>
+            <View><Image style={[styles[Device].dp,{borderRadius:100}]} source={props.displayPicSrc?props.displayPicSrc:default_icon}/></View>
+            <Text style={[styles[Device].role,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>{camelCaseToString(props.role)}</Text>
             <View><Image style={[styles[Device].go,{transform:[{scaleX:-1}]}]} source={go_icon}/></View>
         </View> 
     )
