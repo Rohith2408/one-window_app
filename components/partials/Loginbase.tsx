@@ -21,11 +21,18 @@ import Transitionview from "../resources/Transitionview"
 import Styledtext from "../resources/Styledtext"
 import { googleSignin } from "../../firebaseConfig"
 import * as Google from 'expo-auth-session/providers/google';
+import Carousel2 from "../resources/Carousel2"
+import expertGuidanceImg from '../../assets/images/illustrations/expert-guidance.png'
+import testPrepImg from '../../assets/images/illustrations/test-prep.png'
+import shortlistingImg from '../../assets/images/illustrations/shortlisting.png'
+import google_icon from '../../assets/images/misc/login_google.png'
+import mobile_icon from '../../assets/images/misc/login_mobile.png'
+import mail_icon from '../../assets/images/misc/login_mail.png'
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
         display:"flex",
-        flex:1
+        flex:1,
     },
     header_wrapper:{
         padding:0,
@@ -49,7 +56,6 @@ const GeneralStyles=StyleSheet.create({
         justifyContent:"center",
         alignItems:'center',
         padding:30,
-        backgroundColor:'red'
     },
     name_wrapper:{
         display:"flex",
@@ -103,6 +109,14 @@ const GeneralStyles=StyleSheet.create({
         paddingLeft:20,
         paddingRight:20,
         alignSelf:"stretch"
+    },
+    carousel_card_wrapper:{
+        width:"100%",
+        display:'flex',
+        flexDirection:"column",
+        gap:20,
+        justifyContent:'center',
+        alignItems:"center"
     }
 })
 
@@ -138,7 +152,7 @@ const TabStyles=StyleSheet.create({
         fontSize:14
     },
     logo:{
-        width:250,
+        width:225,
         resizeMode: "contain"
     },
     airplane:{
@@ -183,6 +197,17 @@ const TabStyles=StyleSheet.create({
     },
     explore_text:{
         fontSize:20
+    },
+    carousel_card_image:{
+        width:300,
+        height:300,
+        objectFit:"contain"
+    },
+    carousel_card_title:{
+        fontSize:20
+    },
+    carousel_card_subtitle:{
+        fontSize:16
     }
 })
 
@@ -237,7 +262,7 @@ const MobileSStyles=StyleSheet.create({
         fontSize:14
     },
     logo:{
-        width:130,
+        width:110,
         resizeMode: "contain"
     },
     airplane:{
@@ -281,12 +306,23 @@ const MobileSStyles=StyleSheet.create({
     },
     explore_text:{
         fontSize:12
+    },
+    carousel_card_image:{
+        width:200,
+        height:200,
+        objectFit:"contain"
+    },
+    carousel_card_title:{
+        fontSize:16
+    },
+    carousel_card_subtitle:{
+        fontSize:12
     }
 })
 
 const MobileMStyles=StyleSheet.create({
     body_wrapper:{
-        gap:10
+        gap:30
     },
     banner_wrapper:{
         gap:24
@@ -316,7 +352,7 @@ const MobileMStyles=StyleSheet.create({
         fontSize:14
     },
     logo:{
-        width: 150,
+        width: 125,
         resizeMode: "contain"
     },
     airplane:{
@@ -360,6 +396,17 @@ const MobileMStyles=StyleSheet.create({
     },
     explore_text:{
         fontSize:14
+    },
+    carousel_card_image:{
+        width:250,
+        height:250,
+        objectFit:"contain"
+    },
+    carousel_card_title:{
+        fontSize:18
+    },
+    carousel_card_subtitle:{
+        fontSize:14
     }
 })
 
@@ -395,7 +442,7 @@ const MobileLStyles=StyleSheet.create({
         fontSize:14
     },
     logo:{
-        width: 150,
+        width: 125,
         resizeMode: "contain"
     },
     airplane:{
@@ -439,6 +486,17 @@ const MobileLStyles=StyleSheet.create({
     },
     explore_text:{
         fontSize:14
+    },
+    carousel_card_image:{
+        width:250,
+        height:250,
+        objectFit:"contain"
+    },
+    carousel_card_title:{
+        fontSize:18
+    },
+    carousel_card_subtitle:{
+        fontSize:14
     }
 })
 
@@ -459,6 +517,16 @@ const Loginbase=(props:{auth:string})=>{
     const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
         clientId: '231285782629-393b2jhqgsao4j83nhu5j7b7pc99buv7.apps.googleusercontent.com',
       });
+    const carouselData=useRef([
+        {title:{text:"Be Test Ready!",focus:"Test"},subTitle:"Your one-stop solution for comprehensive test preperation for a variety of exams.",image:testPrepImg},
+        {title:{text:"Shortlisting Made Easier!",focus:"Made"},subTitle:"Expert insights and AI recommendations that transform the shortlisting process into an effortless experience.",image:shortlistingImg},
+        {title:{text:"Expert Guidance!",focus:"Guidance"},subTitle:"Our experts bring years of experience to guide your global education journey.",image:expertGuidanceImg}
+    ]).current
+    const loginMethods=useRef([
+        {title:"Mobile",icon:mobile_icon},
+        {title:"Google",icon:google_icon},
+        {title:"Email",icon:mail_icon}
+    ]).current
     
     const openSignup=()=>{
         navigate?navigate({type:"Register"}):null
@@ -529,8 +597,8 @@ const Loginbase=(props:{auth:string})=>{
         navigate({type:"AddScreen",payload:{screen:"Phonelogin"}})
     }
 
-    const googleLogin=(accessToken)=>{
-        googleSignin(accessToken).then((res:ServerResponse)=>navigate(res.success?{type:"Login"}:{type:"AddScreen",payload:{screen:"Error",params:{error:res.message}}})) ;
+    const googleLogin=(tokenId:string)=>{
+        googleSignin(tokenId).then((res:ServerResponse)=>navigate(res.success?{type:"Login"}:{type:"AddScreen",payload:{screen:"Error",params:{error:res.message}}})) ;
     }
 
     const openExplore=async ()=>{
@@ -541,12 +609,29 @@ const Loginbase=(props:{auth:string})=>{
     useEffect(() => {
         if (response?.type === 'success') {
             const { id_token, accessToken } = response.params;
-            googleLogin(accessToken); 
+            googleLogin(id_token); 
         }
       }, [response]);
 
+    const loginHandler=(type:string)=>{
+        switch(type){
+            case "Mobile":
+                phoneLogin()
+                break;
+
+            case "Email":
+                emailLogin()
+                break;
+                
+            case "Google":
+                promptAsync()
+                break;
+            
+        }
+    }
+
     return(
-        <ScrollView style={[GeneralStyles.wrapper]}>
+        <View style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.header_wrapper,styles[Device].header_wrapper,{position:"relative"}]}>
                 <Image source={pie_icon} style={{width:30,height:30,resizeMode:"contain",position:'absolute',top:"30%",left:"10%"}}/>
                 <View style={{width:50,height:50,borderRadius:200,backgroundColor:Themes.ExtraLight.OnewindowPurple,transform:[{translateY:-25}],position:'absolute',top:"100%",left:"75%"}}></View>
@@ -554,41 +639,67 @@ const Loginbase=(props:{auth:string})=>{
                 {/* <Text style={[styles[Device].login,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Login</Text> */}
             </View>
             <View style={[GeneralStyles.body_wrapper,styles[Device].body_wrapper,{position:"relative"}]}>
-                {/* <Image style={[styles[Device].girl_peek,{position:"absolute"}]} source={girlPeek_image}/> */}
-                <Transitionview effect="zoom" delay={400}><View style={{alignSelf:'center',margin:20}}><Image style={[styles[Device].logo,{aspectRatio:5}]} source={logo}/></View></Transitionview>
-                <View style={{display:"flex",flexDirection:"column",gap:10,position:"relative"}}>
+                <Transitionview effect="zoom" delay={400}><View style={{alignSelf:'center'}}><Image style={[styles[Device].logo,{aspectRatio:5}]} source={logo}/></View></Transitionview>
+                <View style={{width:"100%"}}>
+                    <Carousel2 autoScrollInterval={3000} cardsCount={carouselData.length}>
+                    {
+                        carouselData.map((data)=>
+                            <View style={[GeneralStyles.carousel_card_wrapper]}>
+                                <Image style={[styles[Device].carousel_card_image]} source={data.image}/>
+                                <View style={{flexDirection:"column",alignItems:"center",justifyContent:"center",gap:10}}>
+                                    <Styledtext styles={[{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].carousel_card_title]} text={data.title.text} focusWord={data.title.focus}/>
+                                    <Text style={[{textAlign:"center",lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].carousel_card_subtitle]}>{data.subTitle}</Text>
+                                </View>
+                            </View>
+                        )
+                    }
+                    </Carousel2>
+                </View>
+                <View style={{display:"flex",flexDirection:"column",gap:20,alignItems:"center",justifyContent:'center'}}>
+                    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center',gap:10}}>
+                        <View style={{width:100,height:1,backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.1)}}/>
+                        <Text style={[styles[Device].login_text,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Login</Text>
+                        <View style={{width:100,height:1,backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.1)}}/>
+                    </View>
+                    <View style={{width:"100%",display:"flex",flexDirection:"row",alignItems:'center',justifyContent:'center',gap:50}}>
+                    {
+                        loginMethods.map((data)=>
+                        <Pressable onPress={()=>loginHandler(data.title)}>
+                            <Image source={data.icon} style={{width:30,height:30,resizeMode:'contain'}}/>
+                        </Pressable>
+                        )
+                    }
+                    </View>
+                    <Pressable style={{alignSelf:'center'}} onPress={openExplore}>
+                        <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium,textAlign:"center",lineHeight:22},styles[Device].explore_text]} text="Ready to Explore? Take a quick tour" focusWord="Take a quick tour!"/>
+                    </Pressable> 
+                </View>
+                {/* <View style={{display:"flex",flexDirection:"column",gap:10,position:"relative"}}>
                     <Transitionview effect="pan" delay={300}><Image style={[styles[Device].airplane,{position:"absolute",transform:[{rotate:"-20deg"}]}]} source={airplane}/></Transitionview>
                     <Transitionview effect="pan" delay={300}><Image style={[styles[Device].passport,{position:"absolute",transform:[{rotate:"20deg"}]}]} source={passport}/></Transitionview>
                     <View style={[styles[Device].banner_wrapper,{flexDirection:"column",alignItems:'center'}]}>
                         <Image source={banner} style={[{alignSelf:"center"},styles[Device].banner]}/>
                         <Transitionview effect="pan" delay={200}>
-                            <Text style={[styles[Device].banner_text,{padding:10,textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular,maxWidth:"80%"}]}>Explore over 8000 Universities and 70000 Courses</Text>
-                            {/* <Styledtext styles={[styles[Device].banner_text,{padding:10,textAlign:"center",fontFamily:Fonts.NeutrifStudio.Regular}]} text="Explore over 8000 Universities and 70000 Courses" focusWord="8000 Universities"/> */}
+                            <Text style={[styles[Device].banner_text,{padding:10,textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular,maxWidth:"80%"}]}>Explore over 8000 Universities and 70,Be 000 Courses</Text>
                         </Transitionview>
-                        {/* <Text style={[styles[Device].login,{textAlign:"center",fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>We make studying abroad easier</Text> */}
                     </View>
-                </View>
+                </View> */}
                 <View style={{flexDirection:"column",gap:25,alignItems:'center',padding:10}}>
-                    <Pressable onPress={emailLogin} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
+                    {/* <Pressable onPress={emailLogin} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
                         <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Login with Email" focusWord="Email"/>
-                        {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
                     </Pressable>
                     <Pressable onPress={phoneLogin} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
                         <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Login with Mobile" focusWord="Mobile"/>
-                        {/* <Text style={[styles[Device].login_text,{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}></Text> */}
-                        {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
                     </Pressable>
                     <Pressable onPress={()=>promptAsync()} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
                         <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Login with Google" focusWord="Google"/>
                     </Pressable>
                     <Pressable onPress={openExplore}>
                         <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium,textAlign:"center",lineHeight:22},styles[Device].explore_text]} text="Ready to Explore? Discover your dream university today!" focusWord="Discover your dream university today!"/>
-                        {/* <Image source={next_icon} style={[styles[Device].next_icon]}/> */}
-                    </Pressable>
+                    </Pressable> */}
                 </View>
-                
             </View>
-        </ScrollView>
+        </View>
     )
 }
 
