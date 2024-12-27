@@ -26,6 +26,7 @@ import banner_3 from '../../assets/images/banners/3.png'
 import Productcompactcard from "../cards/Productcompactcard"
 import Transitionview from "../resources/Transitionview"
 import { getTask } from "../../constants/tasks"
+import Heading from "../resources/Heading"
 
 
 const GeneralStyles=StyleSheet.create({
@@ -360,7 +361,7 @@ const Home=(props:undefined|{name:string})=>{
                         <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
                         <Transitionview effect="pan"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?truncateString(personalinfo.data.firstName,10,true):"User")}!</Text></Transitionview>
                     </View>
-                    <Text style={[GeneralStyles.products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Update No.-9</Text>
+                    {/* <Text style={[GeneralStyles.products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Update No.-9</Text> */}
                     <Transitionview effect="pan">
                         <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
                             <Dynamicplaceholder/>                     
@@ -384,7 +385,8 @@ const Home=(props:undefined|{name:string})=>{
                     }
                     </View> */}
                     <View style={[GeneralStyles.products_wrapper,styles[Device].products_wrapper]}>
-                        <Text style={[GeneralStyles.products_title,styles[Device].products_title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text>
+                        <Heading heading="PRODUCTS PURCHASED"/>
+                        {/* <Text style={[GeneralStyles.products_title,styles[Device].products_title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text> */}
                         {
                             products.responseStatus=="not_recieved"
                             ?
