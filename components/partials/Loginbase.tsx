@@ -524,7 +524,7 @@ const Loginbase=(props:{auth:string})=>{
     ]).current
     const loginMethods=useRef([
         {title:"Mobile",icon:mobile_icon},
-        {title:"Google",icon:google_icon},
+        // {title:"Google",icon:google_icon},
         {title:"Email",icon:mail_icon}
     ]).current
     
