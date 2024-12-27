@@ -266,7 +266,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                     </View>
                     <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{(order.Package?("Package purchased- "+order.Package.name):"Order placed without a package ")+" | "+("Amount"+(order.paymentDetails.paymentStatus=="pending"?+" to be ":"")+" paid "+ (order.paymentDetails.currency+" "+order.paymentDetails.amount/100)+" | "+order.products.length+(order.products.length==1?" product":" products"))}</Text>
                     {
-                        order.paymentDetails.paymentStatus!="pending"
+                        order.paymentDetails.paymentStatus=="pending"
                         ?
                         <View style={[GeneralStyles.actions_wrapper]}>
                             <Pressable onPress={makePayment} style={{flexDirection:'row',alignItems:'center',gap:5,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,backgroundColor:Themes.Light.OnewindowPrimaryBlue(1)}}>
