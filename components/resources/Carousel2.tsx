@@ -75,7 +75,7 @@ const Carousel2=(props:{children:React.ReactNode,cardsCount:number,preventAutoSc
                 )
             }
             </ScrollView>
-            <View style={{alignSelf:"center",flexDirection:'row',alignItems:'center',position:"relative",width:props.cardsCount*30}}>
+            {/* <View style={{alignSelf:"center",flexDirection:'row',alignItems:'center',position:"relative",width:props.cardsCount*30}}>
                 <Animated.View style={{zIndex:1,position:"absolute",width:7,height:7,borderRadius:100,alignSelf:"center",backgroundColor:"black",left:offset.interpolate({inputRange:[0,1],outputRange:[15,(props.cardsCount*30)+15]}),transform:[{translateX:"-50%"}]}}/>
                 {
                     React.Children.map(props.children,(child)=>
@@ -84,7 +84,7 @@ const Carousel2=(props:{children:React.ReactNode,cardsCount:number,preventAutoSc
                     </View>
                     )
                 }
-            </View>
+            </View> */}
         </View>
     )
 }
