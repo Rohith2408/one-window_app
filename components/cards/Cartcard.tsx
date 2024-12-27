@@ -57,7 +57,7 @@ const GeneralStyles=StyleSheet.create({
         justifyContent:"center",
         alignItems:"flex-start",
         flex:1,
-        gap:10
+        gap:2
     },
     footer_wrapper:{
         display:'flex',
@@ -81,18 +81,18 @@ const TabStyles=StyleSheet.create({
         top:10,
     },
     icon:{
-        width:22,
-        height:22,
+        width:36,
+        height:36,
         resizeMode:"contain"
     },
     course_name:{
-        fontSize:18
+        fontSize:17
     },
     uni_name:{
-        fontSize:16
+        fontSize:14
     },
     footer:{
-        fontSize:16
+        fontSize:14
     },
     delete:{
         width:20,
@@ -118,18 +118,18 @@ const MobileSStyles=StyleSheet.create({
         fontSize:10
     },
     icon:{
-        width:14,
-        height:14,
+        width:28,
+        height:28,
         resizeMode:"contain"
     },
     course_name:{
-        fontSize:14
+        fontSize:13
     },
     uni_name:{
-        fontSize:12
+        fontSize:11
     },
     footer:{
-        fontSize:12
+        fontSize:11
     },
     go_icon:{
         width:10,
@@ -157,19 +157,20 @@ const MobileMStyles=StyleSheet.create({
         top:10,
     },
     icon:{
-        width:16,
-        height:16,
+        width:32,
+        height:32,
         resizeMode:"contain"
     },
     course_name:{
-        fontSize:16,
+        fontSize:15,
         lineHeight:22
     },
     uni_name:{
-        fontSize:14
+        fontSize:12,
+        lineHeight:20
     },
     footer:{
-        fontSize:14
+        fontSize:12
     },
     delete:{
         width:16,
@@ -192,19 +193,19 @@ const MobileLStyles=StyleSheet.create({
         top:10,
     },
     icon:{
-        width:16,
-        height:16,
+        width:32,
+        height:32,
         resizeMode:"contain"
     },
     course_name:{
-        fontSize:16,
+        fontSize:15,
         lineHeight:22
     },
     uni_name:{
         fontSize:14
     },
     footer:{
-        fontSize:14
+        fontSize:13
     },
     delete:{
         width:16,
@@ -225,26 +226,6 @@ const Cartcard=(props:CartItem & {index:number})=>{
     const [path,navigate]=useNavigation()
     const [isLoading,setIsloading]=useState(false)
     const Device=useRef<keyof typeof styles>(getDevice()).current
-
-    // const showIntakes=()=>{
-    //     let product={
-    //         category:props.category,
-    //         intake:undefined,
-    //         course:props.course
-    //     }
-    //     let dropdowndata={
-    //         list:props?.course.startDate,
-    //         onselection:updateItem,
-    //         selected:props.intake,
-    //         validation:{
-    //             validator:(intake)=>!store.getState().products.data.find((product)=>compareProducts(product,{...product,intake:new Date(intake.year,parseInt(intake.month)-1,1).toISOString()})),
-    //             errorMessage:"Already applied for the program with the selected intake"
-    //         }
-    //     }
-    //     addToBasket("intakes-dropdownoptions",dropdowndata);
-    //     navigate?navigate({type:"AddScreen",payload:{screen:"Intake",params:{intakebasketid:"intakes-dropdownoptions"}}}):null
-    //     //navigate?navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Intake",flyerdata:{basketid:"intakes-dropdownoptions"}}}}):null
-    // }
 
     const deleteItem=async ()=>{
         let data={
@@ -269,27 +250,6 @@ const Cartcard=(props:CartItem & {index:number})=>{
         return serverRes?.success
     }
 
-    // const updateItem=async (event:Event)=>{
-    //     let data={
-    //         action:"update",
-    //         itemId:props._id,
-    //         courseId:props.course._id,
-    //         intake:(event.data.month).padStart(2, '0')+"/"+"10"+"/"+event.data.year
-    //     }
-    //     let serverRes={success:false,message:"",data:undefined};
-    //     let requestInfo=requests.find((item)=>item.id=="updateCart");
-    //     let validation=requestInfo?.inputValidator(data);
-    //     if(validation?.success)
-    //     {
-    //         serverRes=await requestInfo?.serverCommunicator(data);
-    //         if(serverRes?.success)
-    //         {
-    //             requestInfo?.responseHandler(serverRes);
-    //         }
-    //     }
-    //     return serverRes
-    // }
-
     useEffect(()=>{
         return ()=>{
             removeFromBasket("intakes-dropdownoptions")
@@ -310,11 +270,11 @@ const Cartcard=(props:CartItem & {index:number})=>{
                 </View>
                 <View style={[GeneralStyles.info_wrapper]}>
                     <View style={[GeneralStyles.info_subwrapper]}>
-                        <Text style={[styles[Device].course_name,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.course.name}</Text>
-                        <View style={{flexDirection:"row",alignItems:"center",gap:5}}>
+                        <View style={{flexDirection:"row",alignItems:"flex-end"}}>
+                            <View style={{flex:1}}><Text style={[styles[Device].course_name,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.course.name}</Text></View>
                             <Image style={[styles[Device].icon,{borderRadius:100}]} source={props.course.university.logoSrc}/>
-                            <Text style={[styles[Device].uni_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.course.university.name}</Text>
                         </View>
+                        <Text style={[styles[Device].uni_name,{lineHeight:20,fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.course.university.name}</Text>
                     </View>
                     <View style={{display:"flex",flexDirection:"row",alignItems:'center',transform:[{scaleX:-1}]}}><Image source={go_icon} style={[styles[Device].go_icon]}/></View>
                 </View>

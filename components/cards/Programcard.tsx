@@ -226,6 +226,8 @@ const Programcard=(props:CourseListObj & {index:number})=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Program",params:{programid:props._id}}}):null
     }
 
+    //console.log(props.globalTopRankingPercentage)
+
     return(
         <Pressable onPress={openProgram} style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.bg_wrapper,styles[Device].bg_wrapper,{backgroundColor:getThemeColor(props.index%4)}]}></View>
@@ -254,7 +256,7 @@ const Programcard=(props:CourseListObj & {index:number})=>{
                 </View>
                 <View style={[GeneralStyles.misc_wrapper]}>
                     {/* <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence([props.duration?props.duration.toString()+" Months":"",props.studyLevel,props.studyMode?Word2Sentence(props.studyMode,"",",",true):""],"","|")}</Text> */}
-                    <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence([props.globalRankingPosition+" Ranking",props.studyLevel,props.studyMode?Word2Sentence(props.studyMode,"",",",true):""],"","|")}</Text>
+                    <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence([props.university.globalRankingPosition+" Ranking",props.studyLevel,props.studyMode?Word2Sentence(props.studyMode,"",",",true):""],"","|")}</Text>
                 </View>
             </View>
         </Pressable>

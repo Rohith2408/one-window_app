@@ -227,7 +227,10 @@ const Universitycard=(props:UniversityListObj & {index:number})=>{
     const [path,navigate]=useNavigation()
 
     const openUniversity=()=>{
-        navigate?navigate({type:"AddScreen",payload:{screen:"University",params:{universityid:props._id}}}):null
+        navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"University"}}):null;
+        setTimeout(()=>{
+            navigate?navigate({type:"AddScreen",payload:{screen:"University",params:{universityid:props._id,replaceIfExists:true}}}):null
+        },100)
     }
 
     return(

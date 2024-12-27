@@ -66,6 +66,7 @@ const DPoptions=()=>{
     const dispatch=useAppDispatch()
     const info=useAppSelector((state)=>state.sharedinfo.data)
     const [loading,setloading]=useState(false);
+    const actionIndex=useRef(-1)
 
     const show=()=>{
         addToBasket("viewimage",store.getState().sharedinfo.data?.displayPicSrc)
@@ -110,6 +111,7 @@ const DPoptions=()=>{
     }
 
     const add=async ()=>{
+        actionIndex.current=1;
         const pickerRes=await pickImage()
         if(!pickerRes.canceled && pickerRes.assets[0]){
             setloading(true)
@@ -130,8 +132,10 @@ const DPoptions=()=>{
     }
 
     const remove=async ()=>{
+        actionIndex.current=2;
         setloading(true)
         const removeRes:any=await deleteImage();
+        console.log("remove res",removeRes);
         let serverRes=await profileUpdator({displayPicSrc:""});
         console.log("server res",serverRes);
         if(serverRes.success)
@@ -149,7 +153,7 @@ const DPoptions=()=>{
                 <View style={{display:"flex",flexDirection:'row'}}>
                     <View style={{flex:1}}><Text style={[styles[Device].option,{alignSelf:'stretch'},{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Add/Update</Text></View>
                     {
-                        loading
+                        loading && actionIndex.current==1
                         ?
                         <Image style={{width:20,height:20,resizeMode:"contain"}} source={loader} />
                         :
@@ -157,7 +161,18 @@ const DPoptions=()=>{
                     }
                 </View>
             </Pressable>
-            <Pressable style={[{padding:10}]}><Text  style={[styles[Device].option,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Remove</Text></Pressable>
+            {/* <Pressable onPress={remove} style={[{padding:10}]}>
+                <View style={{display:"flex",flexDirection:'row'}}>
+                    <View style={{flex:1}}><Text  style={[styles[Device].option,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Remove</Text></View>
+                    {
+                        loading && actionIndex.current==2
+                        ?
+                        <Image style={{width:20,height:20,resizeMode:"contain"}} source={loader} />
+                        :
+                        null
+                    }
+                </View>
+            </Pressable> */}
         </View>
     )
 

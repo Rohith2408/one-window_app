@@ -96,7 +96,7 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     checkout:{
-        fontSize:14
+        fontSize:15
     },
     not_found:{
         fontSize:18
@@ -127,7 +127,7 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     checkout:{
-        fontSize:12
+        fontSize:15
     },
     not_found:{
         fontSize:18
@@ -267,7 +267,7 @@ const Cart=()=>{
                     </View>
                     :
                     <View style={{flex:1,gap:15}}>
-                        <View style={[GeneralStyles.addmore_wrapper,styles[Device].addmore_wrapper,appStandardStyles.screenMarginSmall,{backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.05)}]}>
+                        <View style={[GeneralStyles.addmore_wrapper,styles[Device].addmore_wrapper,appStandardStyles.screenMarginSmall,{backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.035)}]}>
                             <Text style={[styles[Device].addmore,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Something is missing?</Text>
                             <Pressable onPress={openExplore}><Text style={[styles[Device].addmore,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Add more</Text></Pressable>
                         </View>
