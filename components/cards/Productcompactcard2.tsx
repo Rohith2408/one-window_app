@@ -15,7 +15,7 @@ const GeneralStyles=StyleSheet.create({
         display:"flex",
         flexDirection:"row",
         gap:10,
-        alignItems:'center'
+        alignItems:"center"
     }
 })
 
@@ -66,7 +66,7 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     name:{
-        fontSize:16,
+        fontSize:15,
         lineHeight:20
     },
     role:{
@@ -86,7 +86,7 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     name:{
-        fontSize:16,
+        fontSize:15,
         lineHeight:20
     },
     role:{
@@ -132,10 +132,12 @@ const Productcompact2card=(props:PurchasedProduct & {index:number})=>{
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
-            <View><Image style={[styles[Device].dp,{borderRadius:100}]} source={props.course.university.logoSrc}/></View>
-            <View style={{flex:1,flexDirection:"column",alignItems:'flex-start',gap:5}}>
-                <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(props.course.name)}</Text>
-                <Text style={[styles[Device].role,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.category)+", "+formatDate(props.intake)}</Text>
+            <View style={{flex:1,flexDirection:"column",gap:5}}>
+                <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(props.course.name)}</Text>
+                <View style={{flex:1,flexDirection:"row",alignItems:"center",gap:5}}>
+                    <Image style={[styles[Device].dp,{borderRadius:100}]} source={props.course.university.logoSrc}/>
+                    <Text style={[styles[Device].role,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{setWordCase(props.category)+", "+formatDate(props.intake)}</Text>
+                </View>
             </View>
             <View><Image style={[styles[Device].go,{transform:[{scaleX:-1}]}]} source={go_icon}/></View>
         </View> 

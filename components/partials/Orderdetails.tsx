@@ -26,9 +26,9 @@ const GeneralStyles=StyleSheet.create({
     info_wrapper:{
         alignSelf:"stretch",
         display:"flex",
-        flexDirection:"row",
+        flexDirection:"column",
         alignItems:"flex-start",
-        gap:10,
+        gap:7,
         paddingTop:10
     },
     uni_icon_wrapper:{
@@ -57,13 +57,14 @@ const GeneralStyles=StyleSheet.create({
     },
     actions_wrapper:{
         flexDirection:'row',
-        gap:10
+        gap:10,
+        alignSelf:"flex-end"
     }
 })
 
 const TabStyles=StyleSheet.create({
     products_heading:{
-        fontSize:18
+        fontSize:17
     },
     location_icon:{
         width:14,
@@ -72,8 +73,8 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:28,
-        height:28,
+        width:32,
+        height:32,
         resizeMode:"contain"
     },
     uni_icon_bg:{
@@ -94,14 +95,14 @@ const TabStyles=StyleSheet.create({
         height:200
     },
     paynow:{
-        fontSize:18
+        fontSize:17
     }
 })
 
 const MobileSStyles=StyleSheet.create({
 
     products_heading:{
-        fontSize:14
+        fontSize:13
     },
     location_icon:{
         width:8,
@@ -110,8 +111,8 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:20,
-        height:20,
+        width:24,
+        height:24,
         resizeMode:"contain"
     },
     uni_icon_bg:{
@@ -132,13 +133,13 @@ const MobileSStyles=StyleSheet.create({
         height:170
     },
     paynow:{
-        fontSize:14
+        fontSize:13
     }
 })
 
 const MobileMStyles=StyleSheet.create({
     products_heading:{
-        fontSize:16
+        fontSize:15
     },
     location_icon:{
         width:10,
@@ -147,8 +148,8 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:22,
-        height:22,
+        width:28,
+        height:28,
         resizeMode:"contain"
     },
     uni_icon_bg:{
@@ -159,8 +160,8 @@ const MobileMStyles=StyleSheet.create({
         top:5
     },
     uni_location:{
-        fontSize:14,
-        lineHeight:16
+        fontSize:13,
+        lineHeight:20
     },
     program_name:{
         fontSize:16
@@ -169,14 +170,14 @@ const MobileMStyles=StyleSheet.create({
         height:135
     },
     paynow:{
-        fontSize:16
+        fontSize:13
     }
 })
 
 const MobileLStyles=StyleSheet.create({
 
     products_heading:{
-        fontSize:16
+        fontSize:15
     },
     location_icon:{
         width:12,
@@ -185,8 +186,8 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:26,
-        height:26,
+        width:28,
+        height:28,
         resizeMode:"contain"
     },
     uni_icon_bg:{
@@ -207,7 +208,7 @@ const MobileLStyles=StyleSheet.create({
         height:160
     },
     paynow:{
-        fontSize:16
+        fontSize:15
     }
 })
 
@@ -259,65 +260,66 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
             ?
             <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:40}}>
                 <View style={[GeneralStyles.info_wrapper]}>
-                    <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
-                        <Image source={products_icon} style={[styles[Device].uni_icon]}/>
-                        {/* <View style={[styles[Device].uni_icon_bg,{position:"absolute",zIndex:-1,backgroundColor:getThemeColor(0)}]}></View> */}
+                    <View style={{display:'flex',flexDirection:"row",alignItems:"flex-end",gap:10}}>
+                        <View style={{flex:1,display:'flex',flexDirection:'row',alignItems:'flex-end'}}><Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.SemiBold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{"Order Placed on "+formatDate(order.paymentDetails.created_at)}</Text></View>
+                        <Image source={products_icon} style={[styles[Device].uni_icon,{marginRight:10}]}/>
                     </View>
-                    <View style={[GeneralStyles.uni_info_wrapper]}>
-                        <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{"Order Placed on "+formatDate(order.paymentDetails.created_at)}</Text>
-                        <View style={[GeneralStyles.location_wrapper]}>
-                            <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <View  style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{(order.Package?("Package purchased- "+order.Package.name):"Order placed without a package ")+(order.paymentDetails.paymentStatus=="pending"?+" to be ":"")}</Text></View>
+                    <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{(order.Package?("Package purchased- "+order.Package.name):"Order placed without a package ")+" | "+("Amount"+(order.paymentDetails.paymentStatus=="pending"?+" to be ":"")+" paid "+ (order.paymentDetails.currency+" "+order.paymentDetails.amount/100)+" | "+order.products.length+(order.products.length==1?" product":" products"))}</Text>
+                    {
+                        order.paymentDetails.paymentStatus!="pending"
+                        ?
+                        <View style={[GeneralStyles.actions_wrapper]}>
+                            <Pressable onPress={makePayment} style={{flexDirection:'row',alignItems:'center',gap:5,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,backgroundColor:Themes.Light.OnewindowPrimaryBlue(1)}}>
+                                <Text style={[styles[Device].paynow,{color:"white",fontFamily:Fonts.NeutrifStudio.SemiBold}]}>Pay Now</Text>
+                            </Pressable>
                         </View>
-                        <View style={[GeneralStyles.location_wrapper]}>
-                            <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <View  style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Amount"+(order.paymentDetails.paymentStatus=="pending"?+" to be ":"")+" paid "+ (order.paymentDetails.currency+" "+order.paymentDetails.amount/100)+" | "+order.products.length+" products"}</Text></View>
-                        </View>
-                        {
-                            order.paymentDetails.paymentStatus=="pending"
-                            ?
-                            <View style={[GeneralStyles.actions_wrapper]}>
-                                <Pressable onPress={makePayment} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
-                                    {/* <Image source={cart_icon} style={[styles[Device].cart_icon]}/> */}
-                                    <Text style={[styles[Device].paynow,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Pay Now</Text>
-                                </Pressable>
-                            </View>
-                            :
-                            null
-                        }
-                    </View>
+                        :
+                        null
+                    }
                 </View>
                 <View style={{gap:0}}>
-                    <Styledtext styles={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Products Purchased" focusWord="Purchased"/>
+                    <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
+                        <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>PRODUCTS PURCHASED</Text>
+                        <View style={{width:100,height:1,backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.1)}}/>
+                    </View>
+                    {/* <Styledtext styles={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Products Purchased" focusWord="Purchased"/> */}
                     <View style={{maxHeight:300}}>
-                        <ScrollView contentContainerStyle={{gap:10,paddingTop:10}}>
+                        <ScrollView contentContainerStyle={{gap:25,paddingTop:10}}>
                         {
                             order.products.map((product,i)=>
-                            <Pressable onPress={()=>showProduct(product)} style={[{padding:10}]}><Productcompact2card {...product} index={i}/></Pressable>
+                            <Pressable onPress={()=>showProduct(product)} style={[{padding:0}]}><Productcompact2card {...product} index={i}/></Pressable>
                             )
                         }
                         </ScrollView>
                     </View>
                 </View>
                 <View style={{gap:10}}> 
-                    <Styledtext styles={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Payment Details:" focusWord="Details"/>
+                    <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
+                        <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>PAYMENT DETAILS</Text>
+                        <View style={{width:100,height:1,backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.1)}}/>
+                    </View>
+                    {/* <Styledtext styles={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Payment Details:" focusWord="Details"/> */}
                     <View style={{gap:15,padding:7.5}}>
                         <View style={{flexDirection:"row",alignItems:"center"}}>
-                            <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Total</Text></View>
-                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{(formatCurrency(order.paymentDetails.amount/100,order.paymentDetails.currency))}</Text>
+                            <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Total</Text></View>
+                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(0.7),fontFamily:Fonts.NeutrifStudio.Regular}]}>{(formatCurrency(order.paymentDetails.amount/100,order.paymentDetails.currency))}</Text>
                         </View>
                         <View style={{flexDirection:"row",alignItems:"center"}}>
-                            <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Amount Due</Text></View>
-                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{(formatCurrency(order.paymentDetails.amount_due/100,order.paymentDetails.currency))}</Text>
+                            <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Amount Due</Text></View>
+                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(0.7),fontFamily:Fonts.NeutrifStudio.Regular}]}>{(formatCurrency(order.paymentDetails.amount_due/100,order.paymentDetails.currency))}</Text>
                         </View>
                         <View style={{flexDirection:"row",alignItems:"center"}}>
-                            <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Amount Paid</Text></View>
-                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{(formatCurrency(((order.paymentDetails.amount/100)-(order.paymentDetails.amount_due/100)),order.paymentDetails.currency))}</Text>
+                            <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Amount Paid</Text></View>
+                            <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(0.7),fontFamily:Fonts.NeutrifStudio.Regular}]}>{(formatCurrency(((order.paymentDetails.amount/100)-(order.paymentDetails.amount_due/100)),order.paymentDetails.currency))}</Text>
                         </View>
                     </View>
                 </View>
                 <View style={{gap:10}}>
-                    <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Logs</Text>
+                    {/* <Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Logs</Text> */}
+                    {/* <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
+                        <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>LOGS</Text>
+                        <View style={{width:100,height:1,backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.1)}}/>
+                    </View>
                     <ScrollView horizontal contentContainerStyle={{gap:10}}>
                     {
                         order.logs.map((log,i)=>
@@ -333,7 +335,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                         </View>
                         )
                     }
-                    </ScrollView>
+                    </ScrollView> */}
                 </View>
             </ScrollView>
             :

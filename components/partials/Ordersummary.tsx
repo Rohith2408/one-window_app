@@ -150,17 +150,29 @@ const Ordersummary=()=>{
         }
     }
 
+    // const proceed=()=>{
+    //     let ordersPlaced=store.getState().orders.data?.filter((order)=>order.paymentDetails.amount!=0)
+    //     if(ordersPlaced.length==0)
+    //     {
+    //         addToBasket("refundpolicy",{url:"https://campusroot.com/refundPolicy",proceedCallback:placeOrder});
+    //         navigate?navigate({type:"AddScreen",payload:{screen:"Refundpolicy"}}):null;
+    //     }
+    //     else
+    //     {
+    //         placeOrder();
+    //     }
+    // }
+
     const proceed=()=>{
-        let ordersPlaced=store.getState().orders.data?.filter((order)=>order.paymentDetails.amount!=0)
-        if(ordersPlaced.length==0)
-        {
-            addToBasket("refundpolicy",{url:"https://campusroot.com/refundPolicy",proceedCallback:placeOrder});
-            navigate?navigate({type:"AddScreen",payload:{screen:"Refundpolicy"}}):null;
-        }
-        else
-        {
-            placeOrder();
-        }
+        addToBasket("warning",{
+            warningTitle:"Proceed with the order?",
+            warningMessage:"Please review your order carefully before placing it. Once the order is placed, it cannot be canceled!",
+            redirect:{title:"Click here to see the Refund Policy",url:"https://campusroot.com/refundPolicy"},
+            proceedCallback:placeOrder,
+            yesLabel:"Proceed",
+            noLabel:"Cancel"
+        });
+        navigate?navigate({type:"AddScreen",payload:{screen:"Warning"}}):null;
     }
 
     const removeCartItems=async (products:Product[])=>{
