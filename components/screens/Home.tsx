@@ -98,7 +98,10 @@ const TabStyles=StyleSheet.create({
     },
     sub_wrapper:{
         // maxWidth:500,
-        gap:40
+        gap:50
+    },
+    sub_top_wrapper:{
+        gap:35
     },
     welcome_message:{
         fontSize:36,
@@ -160,6 +163,9 @@ const MobileSStyles=StyleSheet.create({
     sub_wrapper:{
         // maxWidth:500,
         gap:30
+    },
+    sub_top_wrapper:{
+        gap:15
     },
     welcome_message:{
         fontSize:20,
@@ -223,7 +229,10 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     sub_wrapper:{
-        gap:35
+        gap:40
+    },
+    sub_top_wrapper:{
+        gap:25
     },
     welcome_message:{
         fontSize:26,
@@ -288,6 +297,9 @@ const MobileLStyles=StyleSheet.create({
     sub_wrapper:{
         // maxWidth:500,
         gap:35
+    },
+    sub_top_wrapper:{
+        gap:25
     },
     welcome_message:{
         fontSize:26,
@@ -396,22 +408,25 @@ const Home=(props:undefined|{name:string})=>{
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.sub_wrapper]}>
                 <ScrollView showsVerticalScrollIndicator={false} style={[{flex:1}]} contentContainerStyle={[styles[Device].sub_wrapper]}>
-                    <View style={{position:"relative",gap:10,marginLeft:15}}>
-                        <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
-                        <Transitionview effect="pan"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?truncateString(personalinfo.data.firstName,10,true):"User")}!</Text></Transitionview>
-                    </View>
-                    {/* <Text style={[GeneralStyles.products_title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Update No.-9</Text> */}
-                    <Transitionview effect="pan">
-                        <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
-                            <Dynamicplaceholder/>                     
-                        </Pressable>
-                    </Transitionview>
-                    <View style={[GeneralStyles.explore_wrapper]}>
-                    {
-                        exploreTabs.map((item,i)=>
-                        <Exploreitem key={item.text} {...item} device={Device} theme={theme}></Exploreitem>
-                        )
-                    }
+                    <View style={{gap:25}}>
+                        <View style={{position:"relative",gap:10,marginLeft:15}}>
+                            <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
+                            <Transitionview effect="pan"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?truncateString(personalinfo.data.firstName,10,true):"User")}!</Text></Transitionview>
+                        </View>
+                        <Transitionview effect="pan">
+                            <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
+                                <Dynamicplaceholder/>                     
+                            </Pressable>
+                        </Transitionview>
+                        <View>
+                            <View style={[GeneralStyles.explore_wrapper]}>
+                            {
+                                exploreTabs.map((item,i)=>
+                                <Exploreitem key={item.text} {...item} device={Device} theme={theme}></Exploreitem>
+                                )
+                            }
+                            </View>
+                        </View>
                     </View>
                     <View style={[{width:"100%",gap:10}]}>
                         <Heading heading="CLICK, READ, ENLIGHTEN"/>
