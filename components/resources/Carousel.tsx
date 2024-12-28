@@ -52,7 +52,7 @@ const Carousel=(props:{card:React.FC,data:any[],preventAutoScroll?:boolean})=>{
         {
             dimensions
             ?
-            <ScrollView contentContainerStyle={{gap:gap}} decelerationRate="fast" snapToInterval={(dimensions.width*0.95)+gap} snapToAlignment="start" pagingEnabled horizontal>
+            <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={{gap:gap}} decelerationRate="fast" snapToInterval={(dimensions.width*0.95)+gap} snapToAlignment="start" pagingEnabled horizontal>
             {
                 props.data.map((item,i)=>
                 <View key={i} style={[{width:dimensions.width*(Device=="Tab"?0.6:0.95)}]}>

@@ -15,6 +15,7 @@ import Productcompact2card from "../cards/Productcompactcard2"
 import Orderlogscard from "../cards/Orderlogscard"
 import Transitionview from "../resources/Transitionview"
 import { PurchasedProduct } from "../../types"
+import Heading from "../resources/Heading"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -278,11 +279,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                     }
                 </View>
                 <View style={{gap:0}}>
-                    <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
-                        <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>PRODUCTS PURCHASED</Text>
-                        <View style={{width:100,height:1,backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.1)}}/>
-                    </View>
-                    {/* <Styledtext styles={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Products Purchased" focusWord="Purchased"/> */}
+                    <Heading heading="PRODUCTS PURCHASED"/>
                     <View style={{maxHeight:300}}>
                         <ScrollView contentContainerStyle={{gap:25,paddingTop:10}}>
                         {
@@ -294,11 +291,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                     </View>
                 </View>
                 <View style={{gap:10}}> 
-                    <View style={{flexDirection:"row",gap:5,alignItems:"center"}}>
-                        <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>PAYMENT DETAILS</Text>
-                        <View style={{width:100,height:1,backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.1)}}/>
-                    </View>
-                    {/* <Styledtext styles={[styles[Device].products_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Payment Details:" focusWord="Details"/> */}
+                    <Heading heading="PAYMENT DETAILS"/>
                     <View style={{gap:15,padding:7.5}}>
                         <View style={{flexDirection:"row",alignItems:"center"}}>
                             <View style={{flex:1}}><Text style={[styles[Device].products_heading,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Total</Text></View>

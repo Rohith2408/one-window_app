@@ -552,8 +552,8 @@ const Product=(props:{productId:string})=>{
                     </View>
                     <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence(["Applied for "+formatDate(product.intake),setWordCase(product.category),product.course.university.name],"","|",true)}</Text>
                     <View style={[GeneralStyles.actions_wrapper,styles[Device].actions_wrapper]}>
-                        <Pressable onPress={showOrderDetails} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,backgroundColor:Themes.Light.OnewindowPrimaryBlue(1)}}>
-                            <Text style={[styles[Device].show_order_details,{color:"white",fontFamily:Fonts.NeutrifStudio.Medium}]}>Show Order Details</Text>
+                        <Pressable onPress={showOrderDetails} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}>
+                            <Text style={[styles[Device].show_order_details,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Show Order Details</Text>
                         </Pressable>
                     </View>
                 </View>
