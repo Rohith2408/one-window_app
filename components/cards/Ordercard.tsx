@@ -27,14 +27,14 @@ const GeneralStyles=StyleSheet.create({
     icon_wrapper:{
         display:"flex",
         flexDirection:"row",
-        alignItems:"flex-start",
+        alignItems:"center",
         justifyContent:'center'
     },
     info_wrapper:{
         display:"flex",
         flex:1,
         flexDirection:"column",
-        gap:9,
+        gap:5,
     },
     actions_wrapper:{
         display:'flex',
@@ -61,8 +61,8 @@ const TabStyles=StyleSheet.create({
         fontSize:15
     },
     icon:{
-        width:26,
-        height:26,
+        width:24,
+        height:24,
         resizeMode:"contain",
     },
     clock_icon:{
@@ -118,8 +118,8 @@ const MobileMStyles=StyleSheet.create({
         fontSize:14
     },
     icon:{
-        width:24,
-        height:24,
+        width:18,
+        height:18,
         resizeMode:"contain",
     },
     clock_icon:{
@@ -145,8 +145,8 @@ const MobileLStyles=StyleSheet.create({
         fontSize:11
     },
     icon:{
-        width:16,
-        height:16,
+        width:18,
+        height:18,
         resizeMode:"contain",
     },
     clock_icon:{
@@ -201,22 +201,15 @@ const Ordercard=(props:Order & {index:number})=>{
 
     return(
     <Pressable onPress={showOrderDetails} style={[GeneralStyles.sub_wrapper]}>
-        <View style={[GeneralStyles.icon_wrapper]}>
-            <Image source={products_icon} style={[styles[Device].icon]}/>
-        </View>
         <View style={[GeneralStyles.info_wrapper]}>
             <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
-                <View style={{width:5,height:5,borderRadius:10,backgroundColor:"lightblue"}}></View>
+                <View style={{width:5,height:5,borderRadius:10,backgroundColor:"orange"}}></View>
                 <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.products.length+(props.products.length==1?" product":" products")}</Text>
             </Animated.View>
-            <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.Package?props.Package.name:"Direct Purchase"}</Text>
-            <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
-                <Image style={[styles[Device].clock_icon]} source={clock_icon} />
-                <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>{"Order placed on "+formatDate(props.paymentDetails.created_at)}</Text>
-            </View>
-            <View style={{alignSelf:"flex-start",borderRadius:10,display:"flex",alignItems:"center",flexDirection:"row",gap:5}}>
-                <Image style={[styles[Device].clock_icon]} source={upload_icon} />
-                <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{"Amount"+(props.paymentDetails.paymentStatus=="pending"?+" to be ":"")+" paid: "+ (formatCurrency(props.paymentDetails.amount/100,props.paymentDetails.currency))}</Text>
+            <View style={{flexDirection:"row",alignItems:'center'}}>
+                <Image source={products_icon} style={[styles[Device].icon]}/>
+                <View style={{flex:1}}><Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.SemiBold}]}>{props.Package?props.Package.name:"Direct Purchase"}</Text></View>
+                <Text style={[{alignSelf:'flex-end'},styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Medium}]}>{formatDate(props.paymentDetails.created_at)}</Text>
             </View>
         </View>
         {

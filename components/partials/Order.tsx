@@ -13,6 +13,10 @@ import Unpurchasedproductscard from "../cards/Unpurchasedproductcard"
 import tick from "../../assets/images/misc/tick_black.png"
 import { Image } from "expo-image"
 import Transitionview from "../resources/Transitionview"
+import Heading from "../resources/Heading"
+import sad_face from '../../assets/images/illustrations/sad.png'
+import { getTask } from "../../constants/tasks"
+import { store } from "../../store"
 
 const GeneralStyles=StyleSheet.create({
     
@@ -20,7 +24,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     title:{
-        fontSize:18
+        fontSize:17
     },
     icon:{
         width:10,
@@ -35,12 +39,15 @@ const TabStyles=StyleSheet.create({
     },
     remove_button:{
         fontSize:16
+    },
+    no_package_subtitle:{
+        fontSize:15
     }
 })
 
 const MobileSStyles=StyleSheet.create({
     title:{
-        fontSize:12
+        fontSize:13
     },
     icon:{
         width:10,
@@ -55,12 +62,15 @@ const MobileSStyles=StyleSheet.create({
     },
     remove_button:{
         fontSize:12
+    },
+    no_package_subtitle:{
+        fontSize:11
     }
 })
 
 const MobileMStyles=StyleSheet.create({
     title:{
-        fontSize:16
+        fontSize:15
     },
     icon:{
         width:12,
@@ -75,12 +85,15 @@ const MobileMStyles=StyleSheet.create({
     },
     remove_button:{
         fontSize:14
+    },
+    no_package_subtitle:{
+        fontSize:13
     }
 })
 
 const MobileLStyles=StyleSheet.create({
     title:{
-        fontSize:16
+        fontSize:15
     },
     icon:{
         width:10,
@@ -95,6 +108,9 @@ const MobileLStyles=StyleSheet.create({
     },
     remove_button:{
         fontSize:14
+    },
+    no_package_subtitle:{
+        fontSize:13
     }
 })
 
@@ -120,6 +136,7 @@ const Order=(props:{orderinfoid:string})=>{
     const [Products,setProducts]=useState<Product[]>(orderInfo.products)
     const errors=useRef<error>({category:undefined,products:undefined,general:undefined});
     const orders=useAppSelector((state)=>state.orders);
+    //const suggestedPackages=useAppSelector((state)=>state.suggestedpackages).data
     const suggestedPackages=useAppSelector((state)=>state.suggestedpackages).data.filter((Package)=>(Package.priceDetails.totalPrice!=0 || (Package.priceDetails.totalPrice==0 && !orders.data.find((order)=>(order.Package?.priceDetails?.totalPrice==0)))));
 
     const packageSelected=(item:Package[])=>{
@@ -159,17 +176,22 @@ const Order=(props:{orderinfoid:string})=>{
     
     let validation=PackageProductsValidator(Package,Products)
     errors.current={category:validation.categoryErrors,products:validation.productsErrors,general:validation.generalErrors}
+
+    const scheduleMeet=()=>{
+        let counsellor=store.getState().advisors.data?.find((expert)=>expert.info.role=="counsellor");
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"AddMeeting",forminitialdataid:counsellor?.info._id}}}):null
+    }
     
 
     return(
-        <View style={{flex:1,gap:30}}>
+        <View style={[{flex:1,gap:50},appStandardStyles.screenMarginSmall]}>
             <View>
-                <Text style={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Suggested Packages</Text>
+                <Heading heading="SUGGESTED PACKAGES"/>
                 <View>
                     {
                         suggestedPackages.length!=0
                         ?
-                        <ScrollView horizontal contentContainerStyle={{padding:15}}>
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         {
                             suggestedPackages.map((item,i)=>
                             <Pressable onPress={()=>setPackage(Package?._id==item._id?undefined:item)} style={{position:"relative"}}>
@@ -180,16 +202,22 @@ const Order=(props:{orderinfoid:string})=>{
                         }
                         </ScrollView>
                         :
-                        <Text  style={[styles[Device].title,{padding:15,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>No Packages available</Text>
+                        <View style={{flexDirection:'row',alignItems:"center",gap:15,paddingTop:10}}>
+                            <View style={{flex:1,flexDirection:"column",alignItems:"flex-start",gap:10}}>
+                                <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.85)}]}>No suggestions available</Text>
+                                <Text style={[styles[Device].no_package_subtitle,{lineHeight:22,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>Don’t worry! Connect with our experts to find the perfect package for you.</Text>
+                                <Pressable onPress={scheduleMeet} style={[appStandardStyles.buttonWrapper]}><Text style={[appStandardStyles.buttonText]}>Schedule a Meet</Text></Pressable>
+                            </View>
+                            <Image source={sad_face} style={[{width:90,height:90,resizeMode:'contain'}]}/>
+                        </View>
+                        // <Text  style={[styles[Device].title,{padding:15,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>No Packages available</Text>
                     }
                     
                 </View>
-                <View>
-                </View>
             </View>
-            <View style={{flex:1}}>
+            <View style={{flex:1,gap:7}}>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <View style={{flex:1}}><Text style={[styles[Device].title,appStandardStyles.screenMarginSmall,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text></View>
+                    <Heading heading="SELECTED PRODUCTS"/>
                     {
                         errors.current.products?.length>0
                         ?
@@ -198,7 +226,7 @@ const Order=(props:{orderinfoid:string})=>{
                         null
                     }
                 </View>
-                <ScrollView contentContainerStyle={{gap:25,padding:15}}>
+                <ScrollView contentContainerStyle={{gap:25,padding:0}}>
                 {
                     Products.map((product,i)=>
                     <View key={product.course._id+product.intake} style={{gap:7.5}}>

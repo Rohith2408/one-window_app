@@ -360,7 +360,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
             <View style={[appStandardStyles.screenMarginSmall]}>
                 <Listselection
                     direction="horizontal"
-                    selectionStyle="background"
+                    selectionStyle="background-with-wrapper"
                     initialSelection={[{label:props.initialexploretab,value:props.initialexploretab}]}
                     styles={{contentcontainer:{gap:10}}}
                     onselection={tabSelected}

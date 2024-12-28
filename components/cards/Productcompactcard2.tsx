@@ -133,11 +133,11 @@ const Productcompact2card=(props:PurchasedProduct & {index:number})=>{
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={{flex:1,flexDirection:"row",alignItems:'center',gap:5}}>
-                <View style={{flex:1,flexDirection:"row",alignItems:"center",gap:5}}>
+                <Text style={[styles[Device].name,{maxWidth:"85%",lineHeight:28,fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(props.course.name)}</Text>
+                <View style={{flex:1,flexDirection:"row",alignItems:"center",justifyContent:"flex-end",gap:5}}>
                     <Image style={[styles[Device].dp,{borderRadius:100}]} source={props.course.university.logoSrc}/>
-                    <Text style={[styles[Device].name,{maxWidth:"85%",fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{setWordCase(props.course.name)}</Text>
+                    <Text style={[styles[Device].role,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>{formatDate(props.intake)}</Text>
                 </View>
-                <Text style={[styles[Device].role,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>{formatDate(props.intake)}</Text>
             </View>
             <View><Image style={[styles[Device].go,{transform:[{scaleX:-1}]}]} source={go_icon}/></View>
         </View> 

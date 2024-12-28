@@ -20,7 +20,7 @@ const GeneralStyles=StyleSheet.create({
         display:"flex",
         justifyContent:"center",
         alignItems:'center',
-        padding:5
+        // padding:5
     },
     sub_wrapper:{
         display:"flex",
@@ -38,7 +38,7 @@ const GeneralStyles=StyleSheet.create({
         display:"flex",
         flex:1,
         flexDirection:"column",
-        gap:10,
+        gap:0,
     },
     actions_wrapper:{
         display:'flex',
@@ -59,17 +59,17 @@ const GeneralStyles=StyleSheet.create({
 const TabStyles=StyleSheet.create({
     name:{
         lineHeight:20,
-        fontSize:18
+        fontSize:17
     },
     category:{
         fontSize:16
     },
     intake:{
-        fontSize:16
+        fontSize:15
     },
     icon:{
-        width:24,
-        height:24,
+        width:36,
+        height:36,
         resizeMode:"contain",
         borderRadius:100
     },
@@ -101,11 +101,11 @@ const MobileSStyles=StyleSheet.create({
         fontSize:12
     },
     intake:{
-        fontSize:11
+        fontSize:10
     },
     icon:{
-        width:20,
-        height:20,
+        width:28,
+        height:28,
         resizeMode:"contain",
         borderRadius:100
     },
@@ -131,17 +131,17 @@ const MobileSStyles=StyleSheet.create({
 const MobileMStyles=StyleSheet.create({
     name:{
         lineHeight:22,
-        fontSize:16
+        fontSize:15
     },
     category:{
         fontSize:14
     },
     intake:{
-        fontSize:14
+        fontSize:13
     },
     icon:{
-        width:28,
-        height:28,
+        width:32,
+        height:32,
         resizeMode:"contain",
         borderRadius:100
     },
@@ -167,17 +167,17 @@ const MobileMStyles=StyleSheet.create({
 const MobileLStyles=StyleSheet.create({
     name:{
         lineHeight:22,
-        fontSize:16
+        fontSize:15
     },
     category:{
         fontSize:14
     },
     intake:{
-        fontSize:14
+        fontSize:13
     },
     icon:{
-        width:28,
-        height:28,
+        width:32,
+        height:32,
         resizeMode:"contain",
         borderRadius:100
     },
@@ -233,30 +233,29 @@ const Unpurchasedproductscard=(props:{data:Product,index:number,hideDelete?:bool
     return(
         <View style={[GeneralStyles.wrapper]}>
             <View style={[GeneralStyles.sub_wrapper]}>
-                <View style={[GeneralStyles.icon_wrapper]}>
+                <View style={[GeneralStyles.info_wrapper]}>
+                    <View style={{flexDirection:"row",alignItems:"center"}}>
+                        <View style={{flex:1}}><Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(0.9),fontFamily:Fonts.NeutrifStudio.Medium}]}>{props.data.course.name}</Text></View>
+                        <Image source={props.data.course.university.logoSrc} style={[styles[Device].icon]}/>
+                    </View>
+                    <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(0.5),lineHeight:22,fontFamily:Fonts.NeutrifStudio.Regular}]}>{Word2Sentence([props.data.course.name,setWordCase(props.data.category)],""," | ")}</Text>
+                    <View style={{flexDirection:"row",gap:10,alignItems:"center",justifyContent:"flex-end"}}>
+                        <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{formatDate(props.data.intake)}</Text>
+                        {
+                            !props.hideDelete
+                            ?
+                            <Pressable onPress={!isLoading?deleteItem:null} style={{display:"flex",flexDirection:"row",alignItems:"flex-end"}}>
+                                <Image style={[styles[Device].loader,{resizeMode:"contain"}]} source={isLoading?loader:delete_icon}/>
+                            </Pressable>
+                            :
+                            null
+                    }
+                    </View>
+                </View>
+                {/* <View style={[GeneralStyles.icon_wrapper]}>
                     <View style={[GeneralStyles.icon_bg,styles[Device].icon_bg,{backgroundColor:getThemeColor(props.index)}]}></View>
                     <Image source={props.data.course.university.logoSrc} style={[styles[Device].icon]}/>
-                </View>
-                <View style={[GeneralStyles.info_wrapper]}>
-                    <Text style={[styles[Device].name,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.data.course.name}</Text>
-                    <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5,opacity:0.7}}>
-                        <Image style={[styles[Device].clock_icon]} source={products_icon} />
-                        <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{setWordCase(props.data.category)}</Text>
-                    </View>
-                    <View style={{display:"flex",alignItems:"flex-start",flexDirection:"row",gap:5,opacity:0.7}}>
-                        <Image style={[styles[Device].clock_icon]} source={clock_icon} />
-                        <Text style={[styles[Device].intake,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{formatDate(props.data.intake)}</Text>
-                    </View>
-                </View>
-                {
-                    !props.hideDelete
-                    ?
-                    <Pressable onPress={!isLoading?deleteItem:null} style={{display:"flex",flexDirection:"row",alignItems:"flex-start"}}>
-                        <Image style={[styles[Device].loader,{resizeMode:"contain"}]} source={isLoading?loader:delete_icon}/>
-                    </Pressable>
-                    :
-                    null
-                }
+                </View> */}
             </View>
         </View>
     )
