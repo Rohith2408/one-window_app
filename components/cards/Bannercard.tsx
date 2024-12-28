@@ -6,6 +6,7 @@ import { Image } from "expo-image"
 import { Fonts, Themes } from "../../constants"
 import useNavigation from "../../hooks/useNavigation"
 import { Linking } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -13,8 +14,10 @@ const GeneralStyles=StyleSheet.create({
         flexDirection:"column",
         justifyContent:"center",
         alignItems:'center',
-        padding:10,
-        overflow:"hidden"
+        // padding:10,
+        overflow:"hidden",
+        backgroundColor:"#E8E9FF",
+        borderRadius:20
     }
 })
 
@@ -104,7 +107,7 @@ const Bannercard=(props:Banner & {index:number})=>{
 
     return(
         <Pressable onPress={()=>Linking.openURL(props.url)} style={[GeneralStyles.wrapper]}>
-            <View><Image style={[{width:"100%",height:"auto",aspectRatio:1.6}]} source={props.image}/></View>
+            <LinearGradient start={{x:0,y:0}} end={{x:1,y:1}} colors={["#E8E9FF","#F9F9FF"]}><Image style={[{width:"100%",height:"auto",aspectRatio:1.98}]} source={props.image}/></LinearGradient>
             {/* <View style={{alignSelf:"stretch",flexDirection:"column",alignItems:"flex-start",gap:5}}>
                 <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.title}</Text>
                 <Text style={[styles[Device].sub_title,{textAlign:"left"},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.7)}]}>{props.title}</Text>

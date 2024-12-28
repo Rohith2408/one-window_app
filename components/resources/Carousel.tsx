@@ -7,19 +7,27 @@ const GeneralStyles=StyleSheet.create({
 })
 
 const TabStyles=StyleSheet.create({
-    
+    card_wrapper:{
+        height:170
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
-    
+    card_wrapper:{
+        height:130
+    }
 })
 
 const MobileMStyles=StyleSheet.create({
-    
+    card_wrapper:{
+        height:150
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
-    
+    card_wrapper:{
+        height:150
+    }
 })
 
 const styles={
@@ -36,17 +44,23 @@ const Carousel=(props:{card:React.FC,data:any[],preventAutoScroll?:boolean})=>{
     const currentCard=useRef(0)
     const Card=props.card;
     const Device=useRef<keyof typeof styles>(getDevice()).current
+    const gap=useRef(10).current
 
 
     return(
-        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} >
+        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
         {
             dimensions
             ?
-            <ScrollView decelerationRate="fast" snapToInterval={dimensions.width*0.95} snapToAlignment="start" pagingEnabled horizontal>
+            <ScrollView contentContainerStyle={{gap:gap}} decelerationRate="fast" snapToInterval={(dimensions.width*0.95)+gap} snapToAlignment="start" pagingEnabled horizontal>
             {
                 props.data.map((item,i)=>
-                <View key={i} style={[{width:dimensions.width*(Device=="Tab"?0.6:0.95)}]}><Card index={i} {...item}/></View>
+                <View key={i} style={[{width:dimensions.width*(Device=="Tab"?0.6:0.95)}]}>
+                    <Card index={i} {...item}/>
+                </View>
+                // <View key={i} style={[{width:dimensions.width*(Device=="Tab"?0.6:0.95),backgroundColor:"#E8E9FF"}]}>
+                //     <Card index={i} {...item}/>
+                // </View>
                 )
             }
             </ScrollView>

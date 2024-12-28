@@ -27,6 +27,10 @@ import Productcompactcard from "../cards/Productcompactcard"
 import Transitionview from "../resources/Transitionview"
 import { getTask } from "../../constants/tasks"
 import Heading from "../resources/Heading"
+import quicklink_meet from '../../assets/images/quicklinks/meet.png'
+import quicklink_profile from '../../assets/images/quicklinks/profile.png'
+import quicklink_chat from '../../assets/images/quicklinks/chat.png'
+import quicklink_ai from '../../assets/images/quicklinks/ai.png'
 
 
 const GeneralStyles=StyleSheet.create({
@@ -76,6 +80,11 @@ const GeneralStyles=StyleSheet.create({
     },
     products_title:{
         fontWeight:"700"
+    },
+    quicklink_wrapper:{
+        flexDirection:"row",
+        gap:5,
+        alignItems:'center'
     }
 })
 
@@ -89,7 +98,7 @@ const TabStyles=StyleSheet.create({
     },
     sub_wrapper:{
         // maxWidth:500,
-        gap:38
+        gap:40
     },
     welcome_message:{
         fontSize:36,
@@ -129,6 +138,14 @@ const TabStyles=StyleSheet.create({
         width:160,
         height:160,
         resizeMode:"contain"
+    },
+    quicklink_icon:{
+        width:36,
+        height:36,
+        objectFit:"contain"
+    },  
+    quicklink_title:{
+        fontSize:17
     }
 })
 
@@ -142,7 +159,7 @@ const MobileSStyles=StyleSheet.create({
     },
     sub_wrapper:{
         // maxWidth:500,
-        gap:26
+        gap:30
     },
     welcome_message:{
         fontSize:20,
@@ -185,6 +202,14 @@ const MobileSStyles=StyleSheet.create({
     },
     banner_wrapper:{
         height:250
+    },
+    quicklink_icon:{
+        width:26,
+        height:26,
+        objectFit:"contain"
+    },  
+    quicklink_title:{
+        fontSize:13
     }
 })
 
@@ -198,8 +223,7 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     sub_wrapper:{
-        // maxWidth:500,
-        gap:30
+        gap:35
     },
     welcome_message:{
         fontSize:26,
@@ -242,11 +266,18 @@ const MobileMStyles=StyleSheet.create({
     },
     banner_wrapper:{
         height:150
+    },
+    quicklink_icon:{
+        width:30,
+        height:30,
+        objectFit:"contain"
+    },  
+    quicklink_title:{
+        fontSize:15
     }
 })
 
 const MobileLStyles=StyleSheet.create({
-
     prop:{
         top:10,
         left:-10,
@@ -256,7 +287,7 @@ const MobileLStyles=StyleSheet.create({
     },
     sub_wrapper:{
         // maxWidth:500,
-        gap:34
+        gap:35
     },
     welcome_message:{
         fontSize:26,
@@ -299,6 +330,14 @@ const MobileLStyles=StyleSheet.create({
     },
     banner_wrapper:{
         height:300
+    },
+    quicklink_icon:{
+        width:30,
+        height:30,
+        objectFit:"contain"
+    },  
+    quicklink_title:{
+        fontSize:15
     }
 })
 
@@ -329,10 +368,10 @@ const Home=(props:undefined|{name:string})=>{
         // {title:"Summer Programs",subTitle:"",image:sample_banner,url:"https://onewindow.co/summer-programs-short-term-opportunities/"}
     ]).current
     const quickLinks=useRef([
-        {title:"Schedule Meet",taskId:"schedule-meeting"},
-        {title:"Chat with expert",taskId:"chat-expert"},
-        {title:"Ask AVA",taskId:"chat-AVA"},
-        {title:"Edit Profile",taskId:"edit-profile"}
+        {title:"Schedule Meet",taskId:"schedule-meeting",icon:quicklink_meet},
+        {title:"Chat with expert",taskId:"chat-expert",icon:quicklink_chat},
+        {title:"Ask AVA",taskId:"chat-AVA",icon:quicklink_ai},
+        {title:"Edit Profile",taskId:"edit-profile",icon:quicklink_profile}
     ]).current
 
 
@@ -356,8 +395,8 @@ const Home=(props:undefined|{name:string})=>{
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.sub_wrapper]}>
-                <ScrollView style={[{flex:1}]} contentContainerStyle={[styles[Device].sub_wrapper]}>
-                    <View style={{position:"relative",gap:10}}>
+                <ScrollView showsVerticalScrollIndicator={false} style={[{flex:1}]} contentContainerStyle={[styles[Device].sub_wrapper]}>
+                    <View style={{position:"relative",gap:10,marginLeft:15}}>
                         <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
                         <Transitionview effect="pan"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?truncateString(personalinfo.data.firstName,10,true):"User")}!</Text></Transitionview>
                     </View>
@@ -374,16 +413,23 @@ const Home=(props:undefined|{name:string})=>{
                         )
                     }
                     </View>
-                    <View style={[{width:"100%"}]}>
+                    <View style={[{width:"100%",gap:10}]}>
+                        <Heading heading="CLICK, READ, ENLIGHTEN"/>
                         <Carousel data={banners} card={Bannercard}/>
                     </View>
-                    {/* <View style={{display:"flex",flexDirection:"row",gap:10}}>
-                    {
-                        quickLinks.map((item)=>
-                        <Pressable key={item.title} onPress={()=>quickLinksHandler(item)}><Text>{item.title}</Text></Pressable>
-                        )
-                    }
-                    </View> */}
+                    <View style={{gap:10}}>
+                        <Heading heading="QUICK LINKS"/>
+                        <ScrollView showsHorizontalScrollIndicator={false} horizontal contentContainerStyle={{gap:20}}>
+                        {
+                            quickLinks.map((item)=>
+                            <Pressable style={[GeneralStyles.quicklink_wrapper]} key={item.title} onPress={()=>quickLinksHandler(item)}>
+                                <Image style={[styles[Device].quicklink_icon]} source={item.icon}/>
+                                <Text style={[styles[Device].quicklink_title]}>{item.title}</Text>
+                            </Pressable>
+                            )
+                        }
+                        </ScrollView>
+                    </View>
                     <View style={[GeneralStyles.products_wrapper,styles[Device].products_wrapper]}>
                         <Heading heading="PRODUCTS PURCHASED"/>
                         {/* <Text style={[GeneralStyles.products_title,styles[Device].products_title,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Products</Text> */}
