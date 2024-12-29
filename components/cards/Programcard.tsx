@@ -65,7 +65,7 @@ const TabStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:18,
+        fontSize:17,
         lineHeight:26
     },
     icon:{
@@ -75,10 +75,10 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:16
+        fontSize:15
     },
     misc:{
-        fontSize:16
+        fontSize:15
     },
     important:{
         fontSize:12
@@ -104,7 +104,7 @@ const MobileSStyles=StyleSheet.create({
         top:14,
     },
     name:{
-        fontSize:14,
+        fontSize:13,
         lineHeight:20
     },
     icon:{
@@ -117,7 +117,7 @@ const MobileSStyles=StyleSheet.create({
         fontSize:11
     },
     misc:{
-        fontSize:12
+        fontSize:11
     },
     important:{
         fontSize:10
@@ -143,7 +143,7 @@ const MobileMStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:16,
+        fontSize:15,
         lineHeight:24
     },
     icon:{
@@ -153,10 +153,10 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:14
+        fontSize:13
     },
     misc:{
-        fontSize:14
+        fontSize:13
     },
     important:{
         fontSize:10
@@ -182,7 +182,7 @@ const MobileLStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:16,
+        fontSize:15,
         lineHeight:24
     },
     icon:{
@@ -192,10 +192,10 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:12
+        fontSize:13
     },
     misc:{
-        fontSize:14
+        fontSize:13
     },
     important:{
         fontSize:10
@@ -256,7 +256,7 @@ const Programcard=(props:CourseListObj & {index:number})=>{
                 </View>
                 <View style={[GeneralStyles.misc_wrapper]}>
                     {/* <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence([props.duration?props.duration.toString()+" Months":"",props.studyLevel,props.studyMode?Word2Sentence(props.studyMode,"",",",true):""],"","|")}</Text> */}
-                    <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence([props.university.globalRankingPosition+" Ranking",props.studyLevel,props.studyMode?Word2Sentence(props.studyMode,"",",",true):""],"","|")}</Text>
+                    <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence([props.studyLevel,props.studyMode?Word2Sentence(props.studyMode,"",",",true):""],"","|")}</Text>
                 </View>
             </View>
         </Pressable>

@@ -260,7 +260,7 @@ const Universitycard=(props:UniversityListObj & {index:number})=>{
                     <View style={{flexDirection:"row",alignItems:'center'}}><Image source={go_icon} style={[styles[Device].go_icon,{transform:[{scaleX:-1}]}]}/></View>
                 </View>
                 <View style={[GeneralStyles.misc_wrapper]}>
-                    <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence([props.acceptanceRate?(props.acceptanceRate+" Acceptence"):undefined,props.graduationRate?(props.graduationRate+" Graduation Rate"):undefined,props.courses?(props.courses+" Courses"):undefined],"","|")}</Text>
+                    <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence([props.acceptanceRate?(props.acceptanceRate+" Acceptence"):undefined,props.graduationRate?(props.graduationRate+" Graduation Rate"):"No Info",props.courses?(props.courses+" Courses"):"No Info"],"","|")}</Text>
                 </View>
             </View>
         </Pressable>
