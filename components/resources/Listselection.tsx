@@ -12,19 +12,19 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:20
+        fontSize:17
     }
 })
 
 const MobileSStyles=StyleSheet.create({
     text:{
-        fontSize:14
+        fontSize:13
     }
 })
 
 const MobileMStyles=StyleSheet.create({
     text:{
-        fontSize:16
+        fontSize:15
     }
     
 })
@@ -32,7 +32,7 @@ const MobileMStyles=StyleSheet.create({
 const MobileLStyles=StyleSheet.create({
 
     text:{
-        fontSize:16
+        fontSize:15
     }
 })
 
@@ -43,7 +43,7 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Listselection=(props:{direction:"horizontal"|"vertical",update?:any,blurUnSelected?:boolean,selectionStyle:"background"|"border"|"tick",initialSelection?:any[],styles?:{contentcontainer:any},onselection:(data:any)=>void,options:{list:any[],card?:React.FC<any>,idExtractor:(data:any)=>any,labelExtractor?:(data:any)=>any,selectionMode:"single"|"multi"}})=>{
+const Listselection=(props:{direction:"horizontal"|"vertical",update?:any,blurUnSelected?:boolean,selectionStyle:"background"|"border"|"tick"|"background-with-wrapper",initialSelection?:any[],styles?:{contentcontainer:any},onselection:(data:any)=>void,options:{list:any[],card?:React.FC<any>,idExtractor:(data:any)=>any,labelExtractor?:(data:any)=>any,selectionMode:"single"|"multi"}})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [selected,setSelected]=useState(props.initialSelection?props.initialSelection:[])
@@ -70,7 +70,7 @@ const Listselection=(props:{direction:"horizontal"|"vertical",update?:any,blurUn
 
     return(
         <View>
-            <ScrollView horizontal={props.direction=="horizontal"?true:false} contentContainerStyle={[props.styles?.contentcontainer?props.styles.contentcontainer:{}]}>
+            <ScrollView style={[props.selectionStyle=="background-with-wrapper"?{borderRadius:100,alignSelf:"center",backgroundColor:Themes.Light.OnewindowLightBlue}:{}]} horizontal={props.direction=="horizontal"?true:false} contentContainerStyle={[props.styles?.contentcontainer?props.styles.contentcontainer:{}]}>
             {
                 props.options.list.map((item,i)=>
                 <Transitionview effect="zoom" delay={50*i}><Pressable onPress={()=>selection(item)}><Listitem data={{selected:selected,blurUnSelected:props.blurUnSelected,selectionStyle:props.selectionStyle,index:i,card:props.options.card,idExtractor:props.options.idExtractor,labelExtractor:props.options.labelExtractor,item:item}}/></Pressable></Transitionview>
@@ -82,7 +82,7 @@ const Listselection=(props:{direction:"horizontal"|"vertical",update?:any,blurUn
 
 }
 
-const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick"|"background",blurUnSelected?:boolean,index:number,card?:any,idExtractor:any,labelExtractor:any,item:any}})=>{
+const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick"|"background"|"background-with-wrapper",blurUnSelected?:boolean,index:number,card?:any,idExtractor:any,labelExtractor:any,item:any}})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const scale=useRef(new Animated.Value(1)).current;
@@ -105,7 +105,7 @@ const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick"|"back
             <View style={{flex:1}}><Card {...props.data.item} index={props.data.index}/></View>
             :
             <View style={{flex:1}}>
-                <Text style={[styles[Device].text,{opacity:(props.data.blurUnSelected && !props.data.selected.find((item)=>props.data.idExtractor(item)==props.data.idExtractor(props.data.item)))?0.35:1,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1),padding:10}]}>{props.data.labelExtractor(props.data.item)}</Text>
+                <Text style={[styles[Device].text,{opacity:(props.data.blurUnSelected && !props.data.selected.find((item)=>props.data.idExtractor(item)==props.data.idExtractor(props.data.item)))?0.35:1,fontFamily:Fonts.NeutrifStudio.Medium,color:props.data.selectionStyle=="background-with-wrapper"?(props.data.selected.find((item)=>props.data.idExtractor(item)==props.data.idExtractor(props.data.item))?"white":Themes.Light.OnewindowPrimaryBlue(0.75)):Themes.Light.OnewindowPrimaryBlue(1),paddingLeft:20,paddingRight:20,padding:10}]}>{props.data.labelExtractor(props.data.item)}</Text>
             </View>
         }
         {
@@ -117,7 +117,11 @@ const Listitem=(props:{data:{selected:any[],selectionStyle:"border"|"tick"|"back
             ?
             <Animated.View style={{position:"absolute",width:dimensions?dimensions.width:0,height:dimensions?dimensions.height:0,borderWidth:1.25,top:0,left:0,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),transform:[{scale:scale}]}}/>
             :
+            props.data.selectionStyle=="background"
+            ?
             <Animated.View style={{position:"absolute",width:dimensions?dimensions.width:0,height:dimensions?dimensions.height:0,top:0,left:0,borderRadius:100,backgroundColor:Themes.Light.OnewindowLightBlue,zIndex:-1,transform:[{scale:scale}]}}/>
+            :
+            <Animated.View style={{position:"absolute",width:dimensions?dimensions.width:0,height:dimensions?dimensions.height:0,top:0,left:0,borderRadius:100,backgroundColor:Themes.Light.OnewindowPrimaryBlue(1),zIndex:-1,transform:[{scale:scale}]}}/>
         }
         </View>
     )

@@ -18,6 +18,7 @@ import useNavigation from "../../hooks/useNavigation"
 import { addToBasket } from "../../constants/basket"
 import { setPersonalInfo } from "../../store/slices/personalinfoSlice"
 
+
 const GeneralStyles=StyleSheet.create({
     wrapper:{
         flex:1,
@@ -52,7 +53,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     info_wrapper:{
-        gap:12
+        gap:15
     },
     card_icon:{
         width:28,
@@ -80,22 +81,22 @@ const TabStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:20
+        fontSize:17
     },
     text2:{
-        fontSize:16
+        fontSize:15
     },
     text3:{
-        fontSize:16
+        fontSize:15
     },
     title:{
-        fontSize:15
+        fontSize:14
     }
 })
 
 const MobileSStyles=StyleSheet.create({
     info_wrapper:{
-        gap:8
+        gap:6
     },
     card_icon:{
         width:20,
@@ -123,21 +124,22 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:14
+        fontSize:13
     },
     text2:{
-        fontSize:12
+        fontSize:11
     },
     text3:{
-        fontSize:12
+        fontSize:11
     },
     title:{
-        fontSize:10
+        fontSize:9
     },
 })
+
 const MobileMStyles=StyleSheet.create({
     info_wrapper:{
-        gap:15
+        gap:10
     },
     card_icon:{
         width:22,
@@ -165,21 +167,22 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:16
+        fontSize:15
     },
     text2:{
-        fontSize:14
+        fontSize:13
     },
     text3:{
-        fontSize:14
+        fontSize:13
     },
     title:{
-        fontSize:12
+        fontSize:11
     },
 })
+
 const MobileLStyles=StyleSheet.create({
     info_wrapper:{
-        gap:15
+        gap:10
     },
     card_icon:{
         width:22,
@@ -207,16 +210,16 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:'contain'
     },
     text1:{
-        fontSize:16
+        fontSize:15
     },
     text2:{
-        fontSize:14
+        fontSize:13
     },
     text3:{
-        fontSize:14
+        fontSize:13
     },
     title:{
-        fontSize:12
+        fontSize:11
     }
 })
 
@@ -252,33 +255,33 @@ const Addresscard=(props:{data:Address|undefined,type:"permanent"|"temporary"})=
     }
 
     const openForm=()=>{
-        setComponentInfo("Form","title",props.type=="permanent"?"Permanent Address":"Temporary Address")
+        setComponentInfo("Form","title",props.type=="permanent"?"Home Address":"Contact Address")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:props.type=="permanent"?"Permanentaddress":"Temporaryaddress"}}}):null
     }
 
     return(
-        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{padding:5}}>
+        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
         {
             dimensions
             ?
             props.data==undefined || Object.keys(props.data).length==0
             ?
-            <View style={{flexDirection:'row',alignItems:'center',gap:10}}>
+            <View style={{flexDirection:'row',alignItems:'center',gap:5}}>
                 <View><Image source={location_icon} style={[styles[Device].card_icon]} /></View>
-                <View style={{flex:1}}><Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.type=="permanent"?"Permanent Address":"Temporary Address"}</Text></View>
+                <View style={{flex:1}}><Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.type=="permanent"?"Home Address":"Contact Address"}</Text></View>
                 <Pressable onPress={openForm}><Image source={add_icon} style={[styles[Device].edit_icon]} /></Pressable>
             </View>
             :
-            <View style={{flexDirection:'row',gap:10}}>
+            <View style={{flexDirection:'row',gap:5}}>
                 <View style={[GeneralStyles.icon_wrapper]}><Image source={location_icon} style={[styles[Device].card_icon]} /></View>
                 <View style={[GeneralStyles.info_wrapper,styles[Device].info_wrapper]}>
-                    <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.35)} style={[GeneralStyles.title_wrapper,{transform:[{translateY:titleTranslate}]}]}>
-                        <View style={{width:5,height:5,borderRadius:100,backgroundColor:"lightgreen"}}></View>
-                        <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.type=="permanent"?"Permanent Address":"Temporary Address"}</Text>
+                    <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height*1.5)} style={[GeneralStyles.title_wrapper,{transform:[{translateY:titleTranslate}]}]}>
+                        <View style={{width:5,height:5,borderRadius:100,backgroundColor:"orange"}}></View>
+                        <Text style={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.type=="permanent"?"Home Address":"Contact Address"}</Text>
                     </Animated.View>
                     <Text style={[styles[Device].text1,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{props.data.addressLine1+", "+(props.data.addressLine2?props.data.addressLine2:"")+", "+(props.data.addressLine3?props.data.addressLine3:"")}</Text>
                     <View style={{flexDirection:"row",gap:5}}>
-                        <Image style={[styles[Device].location_icon]} source={edit_icon}/>
+                        {/* <Image style={[styles[Device].location_icon]} source={edit_icon}/> */}
                         <Text style={[styles[Device].text2,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([props.data.city,props.data.state,props.data.country],"",",")+"-"+props.data.pinCode}</Text>
                     </View>
                 </View>

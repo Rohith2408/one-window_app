@@ -439,7 +439,7 @@ const Home=(props:undefined|{name:string})=>{
                             quickLinks.map((item)=>
                             <Pressable style={[GeneralStyles.quicklink_wrapper]} key={item.title} onPress={()=>quickLinksHandler(item)}>
                                 <Image style={[styles[Device].quicklink_icon]} source={item.icon}/>
-                                <Text style={[styles[Device].quicklink_title]}>{item.title}</Text>
+                                <Text style={[styles[Device].quicklink_title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.title}</Text>
                             </Pressable>
                             )
                         }

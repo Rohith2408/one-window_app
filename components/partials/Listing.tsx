@@ -12,6 +12,7 @@ import Quickfiltercard from "../cards/Quickfiltercard"
 import filter_icon from '../../assets/images/misc/filter.png'
 import { useAppSelector } from "../../hooks/useAppSelector"
 import Styledtext from "../resources/Styledtext"
+import Heading from "../resources/Heading"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -22,7 +23,7 @@ const GeneralStyles=StyleSheet.create({
         flex:1
     },
     filter_wrapper:{
-        padding:10,
+        padding:0,
         gap:10,
         flexDirection:'row',
         alignItems:"center"
@@ -169,9 +170,9 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     //const lisbasket=getBasket(props.basketid);
 
     useEffect(()=>{
-
+        console.log("updated");
         getList().then((res:ServerResponse|undefined)=>{
-            console.log("server res",res);
+            //console.log("server res",res);
             maxPages.current=res?.data.totalPages;
             (res && res.success)?setList(props.page==1?[...res.data.list]:[...list,...res.data.list]):null
         })
@@ -268,28 +269,30 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
 
     return(
         <View style={[GeneralStyles.main_wrapper]}>
-            <View style={[GeneralStyles.filter_wrapper]}>
-                <View style={{flex:1,borderRadius:100}}>
-                    <Listselection 
-                        direction="horizontal"
-                        blurUnSelected={true}
-                        selectionStyle="border"
-                        initialSelection={props.quickFilters.map((item)=>ListInfo?.filters.quick.find((item2)=>item.type==item2.type))}
-                        styles={{contentcontainer:{gap:10,paddingTop:10,paddingBottom:10}}}
-                        onselection={applyQuickFilter}
-                        options={{
-                            list:ListInfo?.filters?.quick,
-                            card:Quickfiltercard,
-                            idExtractor:(data:QuickFilterInfo)=>data.type,
-                            labelExtractor:(data:QuickFilterInfo)=>data.title,
-                            selectionMode:"multi"
-                        }}
-                    />
+            <View style={{padding:10}}>
+                <Heading heading="QUICK FILTERS"/>
+                <View style={[GeneralStyles.filter_wrapper]}>
+                    <View style={{flex:1,borderRadius:100}}>
+                        <Listselection 
+                            direction="horizontal"
+                            blurUnSelected={true}
+                            selectionStyle="border"
+                            initialSelection={props.quickFilters.map((item)=>ListInfo?.filters.quick.find((item2)=>item.type==item2.type))}
+                            styles={{contentcontainer:{gap:10,paddingTop:10,paddingBottom:10}}}
+                            onselection={applyQuickFilter}
+                            options={{
+                                list:ListInfo?.filters?.quick,
+                                card:Quickfiltercard,
+                                idExtractor:(data:QuickFilterInfo)=>data.type,
+                                labelExtractor:(data:QuickFilterInfo)=>data.title,
+                                selectionMode:"multi"
+                            }}
+                        />
+                    </View>
+                    <Pressable hitSlop={{left:15,right:15,top:15,bottom:15}} style={{display:'flex',flexDirection:'row',alignItems:"center",justifyContent:"center"}} onPress={openAllFilters}>
+                        <Image style={[styles[Device].filter_icon]} source={filter_icon}/>
+                    </Pressable>
                 </View>
-                <Pressable hitSlop={{left:15,right:15,top:15,bottom:15}} style={{display:'flex',flexDirection:'row',alignItems:"center",justifyContent:"center"}} onPress={openAllFilters}>
-                    <Image style={[styles[Device].filter_icon]} source={filter_icon}/>
-                    {/* <Text style={[styles[Device].allfilters]}>All Filters</Text> */}
-                </Pressable>
             </View>
             {
                 isLoading
@@ -300,35 +303,36 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
                 :
                 null
             }
-        {
-            Component
-            ?
-                list.length>0
+            <View style={{padding:5}}><Heading heading="PICK ,CLICK ,FLY"/></View>
+            {
+                Component
                 ?
-                <ScrollView scrollEventThrottle={32} onScroll={(e)=>onScroll(e)} style={[GeneralStyles.sub_wrapper]} contentContainerStyle={{padding:10}}>
-                {
-                    list.map((item:any,i:number)=>
-                        <View key={item._id}><Component {...item} index={i}/></View>
-                    )
-                }
-                </ScrollView>
-                :
-                    isLoading 
+                    list.length>0
                     ?
-                    <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:5}}>
-                        <Styledtext styles={[styles[Device].not_found,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Hang in there, we’re almost done!" focusWord="almost"/>
-                        {/* <Text style={[styles[Device].not_found,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Hang in there, we’re almost done!</Text> */}
-                        {/* <Text style={[styles[Device].not_found_sub,{textAlign:"center",lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Waaait!, there are over 80,000+ Programs to choose from, start exploring now!</Text> */}
-                    </View>
+                    <ScrollView scrollEventThrottle={32} onScroll={(e)=>onScroll(e)} style={[GeneralStyles.sub_wrapper]} contentContainerStyle={{padding:10}}>
+                    {
+                        list.map((item:any,i:number)=>
+                            <View key={item._id}><Component {...item} index={i}/></View>
+                        )
+                    }
+                    </ScrollView>
                     :
-                    <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:5}}>
-                        <Text style={[styles[Device].not_found,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.listid+" not found "+":("}</Text>
-                        <Text style={[styles[Device].not_found_sub,{textAlign:"center",lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Waaait!, there are over 80,000+ Programs to choose from, start exploring now!</Text>
-                    </View>
-            :
-            null
-        }
-        </View>
+                        isLoading 
+                        ?
+                        <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:5}}>
+                            <Styledtext styles={[styles[Device].not_found,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Hang in there, we’re almost done!" focusWord="almost"/>
+                            {/* <Text style={[styles[Device].not_found,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Hang in there, we’re almost done!</Text> */}
+                            {/* <Text style={[styles[Device].not_found_sub,{textAlign:"center",lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Waaait!, there are over 80,000+ Programs to choose from, start exploring now!</Text> */}
+                        </View>
+                        :
+                        <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:5}}>
+                            <Text style={[styles[Device].not_found,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>{props.listid+" not found "+":("}</Text>
+                            <Text style={[styles[Device].not_found_sub,{textAlign:"center",lineHeight:20,color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Waaait!, there are over 80,000+ Programs to choose from, start exploring now!</Text>
+                        </View>
+                    :
+                    null
+                }
+                </View>
     )
 
 }

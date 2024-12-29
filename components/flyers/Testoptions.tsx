@@ -10,7 +10,11 @@ import { useAppDispatch } from "../../hooks/useAppDispatch"
 import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
 
 const GeneralStyles=StyleSheet.create({
-    
+    main_wrapper:{
+        display:"flex",
+        flexDirection:'column',
+        flex:1
+    }
 })
 
 const TabStyles=StyleSheet.create({
@@ -81,9 +85,9 @@ const Testoptions=()=>{
     }
 
     return(
-        <View style={[appStandardStyles.screenMarginSmall,{paddingTop:20,gap:10}]}>
+        <View style={[appStandardStyles.screenMarginSmall,GeneralStyles.main_wrapper,{paddingTop:20,gap:10}]}>
             <Styledtext styles={[styles[Device].title,{fontFamily:Fonts.NeutrifStudio.Medium}]} focusWord="test" text="Select the test"/>
-            <ScrollView contentContainerStyle={{gap:30,padding:10}}>
+            <ScrollView style={{flex:1}} contentContainerStyle={{gap:30,padding:10}}>
             {
                 Tests.filter((test)=>!store.getState().testscores.data?.find((item)=>item.name==test.name)).map((test)=>
                 <Pressable style={{flexDirection:"column",gap:5}} onPress={()=>openForm(test.name)}>

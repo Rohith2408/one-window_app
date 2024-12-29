@@ -471,7 +471,7 @@ const Test=(props:TestType & {index:number})=>{
                 </View>
                 <View style={[GeneralStyles.total_wrapper]}>
                     <Text style={[styles[Device].total_heading,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Total</Text>
-                    <Text style={[styles[Device].total,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Tests.find((item)=>item.name==props.name)?.totalEvaluator(props.scores)}</Text>
+                    <Text style={[styles[Device].total,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{Math.round(Tests.find((item)=>item.name==props.name)?.totalEvaluator(props.scores))}</Text>
                 </View>
             </View>
            {/* <View>

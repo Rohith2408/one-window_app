@@ -59,6 +59,8 @@ const Predefined=(props:{data:any})=>{
     const onsearch=(txt:string)=>{
         setSearch(txt)
     }
+
+    console.log("ueee");
     
 
     return(

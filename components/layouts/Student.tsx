@@ -31,10 +31,11 @@ import { initOrders } from "../../store/slices/ordersSlice"
 import { initSuggestedPackage } from "../../store/slices/suggestedpackageSlice"
 import { initProducts } from "../../store/slices/productsSlice"
 import { store } from "../../store"
-import { initChats, updateChat, updateParticipantActivity, updateParticipantsActivity } from "../../store/slices/chatsSlice"
+import { addChats, initChats, updateChat, updateParticipantActivity, updateParticipantsActivity } from "../../store/slices/chatsSlice"
 import { getSocket, initiateSocketConnection } from "../../socket"
 import { initBlockedUsers } from "../../store/slices/blockedUsersSlice"
 import { initBlockedByUsers } from "../../store/slices/blockedByUsersSlice"
+import AIAssist from "../resources/AIAssist"
 
 const Student=(props:{screens:string[],params:any})=>{
 
@@ -193,6 +194,7 @@ const Student=(props:{screens:string[],params:any})=>{
                 issue:"",
                 data:res.data.activity.products
             }))
+            console.log("products",JSON.stringify(res.data.activity,null,2));
             dispatch(initSuggestedPackage({
                 requestStatus:"initiated",
                 responseStatus:"recieved",
@@ -264,13 +266,16 @@ const Student=(props:{screens:string[],params:any})=>{
     const triggerRoot=(triggerObj:TriggerObject)=>{
         console.log("trigger chat",triggerObj.sender?.firstName,triggerObj.action);
         switch(triggerObj.action){
+
+            case "newFriend":
+                dispatch(addChats(triggerObj.data))
+                break;
+
             case "activityList":
-                //console.log("acctivityyy",triggerObj.data);
                 dispatch(updateParticipantsActivity(triggerObj.data))
                 break
 
             case "ping":
-                //console.log("recievd",triggerObj.sender.firstName,triggerObj.data);
                 dispatch(updateParticipantActivity({...triggerObj.sender,role:"",activity:triggerObj.data.status}))
                 break;
 
@@ -296,7 +301,9 @@ const Student=(props:{screens:string[],params:any})=>{
                 if(res.success)
                 {
                     let user={ _id:res.data._id,firstName:res.data.firstName,lastName:res.data.lastName}
-                    basicInfoChecker();
+                    setTimeout(()=>{
+                        basicInfoChecker()
+                    },200)
                     initiateSocketConnection(user._id);
                     getSocket().on("trigger",triggerRoot);
                     fetchChats().then((res2)=>{
@@ -334,8 +341,9 @@ const Student=(props:{screens:string[],params:any})=>{
     }
     
     return(
-        <View style={{width:"100%",height:"100%"}}>
+        <View style={{width:"100%",height:"100%",position:"relative"}}>
             {/* <Form fields={fields} initialFocussedField={0} submit={{successText:"Success",failureText:"Failed",idleText:"Submit",onSubmit:(data)=>console.log(data)}}></Form> */}
+            {/* <AIAssist/> */}
             <Stacknavigator 
                 invalidPathScreen={Invalidpath}
                 screens={propsMapper(props.screens,props.params).map((screen)=>({

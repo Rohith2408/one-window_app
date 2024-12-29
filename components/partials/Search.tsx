@@ -360,7 +360,7 @@ const Search=(props:{initialSearch:string})=>{
             <View style={{flex:1,gap:20}}>
                 <Listselection 
                     direction="horizontal"
-                    selectionStyle="border"
+                    selectionStyle='background'
                     initialSelection={[{label:"Universities",value:"universities"}]}
                     styles={{contentcontainer:{gap:10}}}
                     onselection={tabSelected}
