@@ -1,7 +1,5 @@
 import { initializeApp } from 'firebase/app';
 import * as Securestore from 'expo-secure-store'
-
-// Optionally import the services that you want to use
 import {getAuth,GoogleAuthProvider,signInWithPopup} from "firebase/auth";
 import { ServerResponse } from 'http';
 import { getServerRequestURL, serverRequest } from './utils';
@@ -20,7 +18,7 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 console.log("firebase",app);
 
-export const googleSignin = (accessToken:string) => {
+export const googleSignin = async (accessToken:string) => {
     if (accessToken) {
         return serverRequest({
           url: getServerRequestURL("google-login", "POST"),
@@ -28,7 +26,7 @@ export const googleSignin = (accessToken:string) => {
           routeType: "public",
           body: JSON.stringify({ credential:accessToken }),
         }).then((serverRes) => {
-          console.log("Server Response: ", serverRes);
+          //console.log("Server Response: ", serverRes);
           if(serverRes.success)
           {
             Securestore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,serverRes.data).then(()=>{

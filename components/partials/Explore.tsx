@@ -254,7 +254,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
         navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Search"}}):null
         setTimeout(()=>{
             navigate?navigate({type:"AddScreen",payload:{screen:"Search",params:{initialSearch:props.programslistquery.search}}}):null
-        },200)
+        },100)
     }
 
     const eventHandler=(event:Event)=>{
@@ -264,7 +264,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
             case "applyAdditionalFilters":
                 let universityFilter=props.programslistquery.additionalFilters.find((item)=>item.type=="universityId")
                 programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,page:1,additionalFilters:universityFilter?[...event.data,universityFilter]:event.data}:props.programslistquery
-                console.log("applyinggg",event.data,programslistquery)
+                //console.log("applyinggg",event.data,programslistquery)
                 universitieslistquery=event.triggerBy=="Universities"?{...props.universitieslistquery,page:1,additionalFilters:event.data}:props.universitieslistquery;
                 navigate({
                     type:"UpdateParams",
@@ -289,7 +289,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
                 //     navigate({type:"AddScreen",payload:{screen:"Explore",params:{initialexploretab:props.initialexploretab,programslistquery:programslistquery,universitieslistquery:universitieslistquery}}})
                 // },100)
                 //let universityFilter=props.programslistquery.additionalFilters.find((item)=>item.type=="universityId")
-                console.log("quick",event.data);
+                //console.log("quick",event.data);
                 programslistquery=event.triggerBy=="Programs"?{...props.programslistquery,page:1,quickFilters:event.data,additionalFilters:getAdditionalFilters(event.data,props.programslistquery.additionalFilters)}:props.programslistquery
                 universitieslistquery=event.triggerBy=="Universities"?{...props.universitieslistquery,page:1,quickFilters:event.data,additionalFilters:getAdditionalFilters(event.data,props.universitieslistquery.additionalFilters)}:props.universitieslistquery
                 navigate({
@@ -355,8 +355,8 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
     //console.log("ppaarraammss",props.programslistquery,props.universitieslistquery)
 
     return(
-        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:15}}>
-            <Pressable style={[{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100},appStandardStyles.screenMarginSmall]} onPress={openSearch}><Text style={[styles[Device].search,{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}]}>{props.programslistquery.search?props.programslistquery.search:"Search..."}</Text></Pressable>
+        <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,gap:25}}>
+            <Pressable style={[{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100},appStandardStyles.screenMarginSmall]} onPress={openSearch}><Text style={[styles[Device].search,{padding:10,fontFamily:Fonts.NeutrifStudio.SemiBold,color:Themes.Light.OnewindowPrimaryBlue(0.2)}]}>{props.programslistquery.search?props.programslistquery.search:"Search..."}</Text></Pressable>
             <View style={[appStandardStyles.screenMarginSmall]}>
                 <Listselection
                     direction="horizontal"
@@ -373,6 +373,7 @@ const Explore=(props:{initialexploretab:string,programslistquery:query,universit
                 />
             </View>
             <ScrollView 
+            showsHorizontalScrollIndicator={false}
             scrollEnabled={false}
             ref={ref}
             horizontal 

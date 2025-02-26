@@ -66,6 +66,8 @@ const Intake=(props:{intakebasketid:"intakes-dropdownoptions"})=>{
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [isLoading,setIsloading]=useState(false)
     const [paymentDetails,setPaymentDetails]=useState<Request<Paymentsummary>>()
+    const currentYear=useRef(new Date().getFullYear()).current
+    const years=useRef([0,1,2,3,4].map((item)=>currentYear+item)).current
 
     const yearSelected=(data:ListItem[])=>{
         setIntake({...intake,year:data.length==0?undefined:data[0].value})
@@ -116,11 +118,11 @@ const Intake=(props:{intakebasketid:"intakes-dropdownoptions"})=>{
                             onselection:yearSelected,
                             initialSelection:info.selected?[{label:new Date(info.selected).getFullYear(),value:new Date(info.selected).getFullYear()}]:[],
                             options:{
-                                list:[{label:2024,value:2024},{label:2025,value:2025},{label:2026,value:2026}],
+                                list:years.map((item)=>({label:item,value:item})),
                                 idExtractor:(item)=>item.label,
                                 labelExtractor:(item)=>item.label,
                                 selectionMode:"single"
-                            }}}
+                        }}}
                     />
                 </View>
             </View>

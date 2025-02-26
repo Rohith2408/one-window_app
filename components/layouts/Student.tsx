@@ -95,7 +95,7 @@ const Student=(props:{screens:string[],params:any})=>{
                 issue:"",
                 data:res.data.documents
             }))
-            console.log("documents",res.data.documents);
+            //console.log("documents",res.data.documents);
             dispatch(initPreferences({
                 requestStatus:"initiated",
                 responseStatus:"recieved",
@@ -194,7 +194,7 @@ const Student=(props:{screens:string[],params:any})=>{
                 issue:"",
                 data:res.data.activity.products
             }))
-            console.log("products",JSON.stringify(res.data.activity,null,2));
+            //console.log("products",JSON.stringify(res.data.activity,null,2));
             dispatch(initSuggestedPackage({
                 requestStatus:"initiated",
                 responseStatus:"recieved",
@@ -310,8 +310,6 @@ const Student=(props:{screens:string[],params:any})=>{
                         if(res2.success)
                         {
                             let friends:any=getFriends(res2.data,user._id);
-                            //console.log("friends",friends);
-                            //console.log("user",user.firstName,user._id,"Friends",friends.map((item)=>({name:item.firstName,id:item._id})))
                             let triggerObj:TriggerObject={
                                 action:"ping",
                                 sender:{...user,userType:"student"},

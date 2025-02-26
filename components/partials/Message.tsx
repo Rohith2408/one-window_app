@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
-import { Animated, Dimensions, Keyboard, LayoutRectangle, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
-import { Word2Sentence, getDevice, getKeyboardHeight, getServerRequestURL, pickDocument, serverRequest, setLastSeenMessage, setWordCase } from "../../utils"
+import { Animated, Dimensions, Keyboard, KeyboardAvoidingView, LayoutRectangle, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native"
+import { Word2Sentence, getDevice, getKeyboardHeight, getServerRequestURL, getViewportDimensions, pickDocument, serverRequest, setLastSeenMessage, setWordCase } from "../../utils"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import useNavigation from "../../hooks/useNavigation"
 import { Image } from "expo-image"
@@ -23,6 +23,9 @@ import { TypingAnimation } from 'react-native-typing-animation';
 import { getSocket } from "../../socket"
 import Transitionview from "../resources/Transitionview"
 import ai_icon from '../../assets/images/profile/ai.png'
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { KeyboardEvent } from "react-native"
+import { EmitterSubscription } from "react-native"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -100,6 +103,9 @@ const TabStyles=StyleSheet.create({
     email:{
         fontSize:16
     },
+    activity:{
+        fontSize:16
+    },
     dp:{
         width:70,
         height:70,
@@ -173,6 +179,9 @@ const MobileSStyles=StyleSheet.create({
         fontSize:18
     },
     email:{
+        fontSize:12
+    },
+    activity:{
         fontSize:12
     },
     dp:{
@@ -411,7 +420,7 @@ const Message=(props:{chatId:string})=>{
     let profile=useAppSelector((state)=>state.sharedinfo)
     let chat=useAppSelector((state)=>state.chats).data.find((chat)=>chat._id==props.chatId)
     let messages=useAppSelector((state)=>state.messages)
-    const [keyboard,setKeyboard]=useState({duration:0,height:0});
+    const [keyboard,setKeyboard]=useState<KeyboardEvent>();
     const [message,setMessage]=useState("")
     const [file,setFile]=useState<any|undefined>(undefined);
     const messageBarOffset=useRef(new Animated.Value(0)).current
@@ -420,18 +429,19 @@ const Message=(props:{chatId:string})=>{
     const sendButtonScale=useRef(new Animated.Value(0)).current
     const [sending,setSending]=useState(false);
     const scrollRef=useRef<any>();
-    let bakedMessages=(chat && messages.data && profile.data)?bakeMessages(chat,profile.data._id,messages.data):[];
+    let bakedMessages=(chat && messages.data && profile.data?._id)?bakeMessages(chat,profile.data._id,messages.data):[];
     const called=useRef(false);
-    const textInputRef=useRef();
+    const textInputRef=useRef<any>();
     const blockedByUsers=useAppSelector((state)=>state.blockedbyusers).data
     const blockedUsers=useAppSelector((state)=>state.blockedusers).data
+    const insets = useSafeAreaInsets();
 
     const fetchMessages=async ()=>{
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("messages","GET")+"/"+props.chatId,
             reqType: "GET"
         })
-        console.log("messages",res);
+        //console.log("messages",res);
         let clone=[...res.data];
         if(res.success)
         {
@@ -454,15 +464,19 @@ const Message=(props:{chatId:string})=>{
             setFile(res.data);
             textInputRef.current?.focus();
         }
-        console.log("pickkk",res);
+        //console.log("pickkk",res);
     }
 
     useEffect(()=>{
-        Animated.timing(messageBarOffset, {
-            duration: keyboard.duration*0.5,
-            toValue: -keyboard.height+20,
-            useNativeDriver: false,
-          }).start();
+        if(keyboard)
+        {
+            //console.log("Keyboard",getKeyboardHeight(keyboard,getViewportDimensions(insets)));
+            Animated.timing(messageBarOffset, {
+                duration: keyboard.duration,
+                toValue: -getKeyboardHeight(keyboard,getViewportDimensions(insets)),
+                useNativeDriver: false,
+            }).start();
+        }   
     },[keyboard])
 
     useEffect(()=>{
@@ -473,7 +487,7 @@ const Message=(props:{chatId:string})=>{
     },[message])
 
     const triggerMessages=(triggerObject:TriggerObject)=>{
-        console.log("Message trigger",triggerObject.action,triggerObject.data)
+        //console.log("Message trigger",triggerObject.action,triggerObject.data)
         switch(triggerObject.action){
             case "send":
                 dispatch(addMessage({...triggerObject.data.message,type:"normal"}))
@@ -491,18 +505,18 @@ const Message=(props:{chatId:string})=>{
     }
     
     useEffect(()=>{
-        let keyboardWillShow,keyboardWillHide
+        //console.log("rendered");
+        let keyboardWillShow:EmitterSubscription,keyboardWillHide:EmitterSubscription
         if(!called.current)
         {
             if(!getSocket().listeners("trigger").includes(triggerMessages))
             {
                 getSocket().on("trigger",triggerMessages)
             }
-            keyboardWillShow = Keyboard.addListener(Platform.OS=="android"?'keyboardDidShow':'keyboardWillShow', (event) => setKeyboard({duration:event.duration,height:getKeyboardHeight(event)*Dimensions.get("screen").height}));
-            keyboardWillHide = Keyboard.addListener(Platform.OS=="android"?'keyboardDidHide':'keyboardWillHide', (event) => setKeyboard({duration:event.duration,height:0})); 
+            keyboardWillShow = Keyboard.addListener(Platform.OS=="android"?'keyboardDidShow':'keyboardWillShow', (event) => setKeyboard(event));
+            keyboardWillHide = Keyboard.addListener(Platform.OS=="android"?'keyboardDidHide':'keyboardWillHide', (event) => setKeyboard(event)); 
             called.current=true
         }
-
         fetchMessages().then((res)=>{
             if(res.success)
             {
@@ -555,14 +569,25 @@ const Message=(props:{chatId:string})=>{
     }
 
     const typingTrigger=(action:"start"|"stop")=>{
-        console.log(chat?.participants.filter((item)=>item._id!=profile.data?._id));
-        let triggerObj:TriggerObject={
-            action:"typing",
-            sender:{...profile.data,userType:"student",role:"student"},
-            recievers:chat?.participants.filter((item)=>item._id!=profile.data?._id && blockedUsers?.find((user)=>user._id==item._id)==undefined),
-            data:action
+        let recievers=chat?.participants.filter((item)=>item._id!=profile.data?._id && blockedUsers?.find((user)=>user._id==item._id)==undefined)
+        if(profile.data?._id && recievers)
+        {
+            let triggerObj:TriggerObject={
+                action:"typing",
+                sender:{...profile.data,userType:"student",role:"student"},
+                recievers:recievers.map((reciever)=>({
+                    _id:reciever._id,
+                    firstName:reciever.firstName,
+                    lastName:reciever.lastName,
+                    displayPicSrc: reciever.displayPicSrc,
+                    email: reciever.email,
+                    userType:reciever.userType,
+                    role:reciever.role
+                })),
+                data:action
+            }
+            getSocket().emit("trigger",triggerObj);
         }
-        getSocket().emit("trigger",triggerObj);
     }     
 
     const messageTrigger=(message:MessageType,chat:Chat)=>{
@@ -594,10 +619,11 @@ const Message=(props:{chatId:string})=>{
     }
 
     const showChatOptions=()=>{
+        //c
         navigate?navigate({type:"AddScreen",payload:{screen:"Chatoptions",params:{chatId:props.chatId}}}):null
     }
 
-    console.log("messages data",keyboard);
+    //console.log("messages data",getViewportDimensions(insets))
 
     return(
         <View style={[GeneralStyles.wrapper]}>
@@ -605,7 +631,7 @@ const Message=(props:{chatId:string})=>{
                 <View style={[GeneralStyles.info_wrapper_bg,{backgroundColor:Themes.ExtraLight.OnewindowPurple}]}></View>
                 <View style={[GeneralStyles.info_subwrapper]}>
                     <View style={[GeneralStyles.name_wrapper]}>
-                        <Loadingview style={[styles[Device].loadingview_name]} isLoading={profile.responseStatus!="recieved"}><Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold}]}>{Word2Sentence([],"")}</Text></Loadingview>
+                        <View style={styles[Device].loadingview_name}><Loadingview style={[styles[Device].loadingview_name]} isLoading={profile.responseStatus!="recieved"}><Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold}]}>{Word2Sentence([],"")}</Text></Loadingview></View>
                         <Text style={[styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{chat?.participants.length==2?chat.participants.find((participant)=>participant._id!=profile.data?._id)?.firstName:"Group Name"}</Text>
                         {
                             chat?.participants.length==2 && chat?.participants.filter((item)=>item._id!=profile.data?._id && (blockedByUsers?.find((user)=>user._id==item._id)!=undefined || blockedUsers?.find((user)=>user._id==item._id)!=undefined)).length==1
@@ -613,8 +639,8 @@ const Message=(props:{chatId:string})=>{
                             null
                             :
                             <View style={{flexDirection:'row',alignItems:"center",gap:5}}>
-                                <View style={{width:5,height:5,borderRadius:10,backgroundColor:chat.participants.find((participant)=>participant._id!=profile.data?._id)?.activity=="offline"?"red":"green"}}></View>
-                                <Text style={[styles[Device].activity,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{chat.participants.find((participant)=>participant._id!=profile.data?._id)?.activity}</Text>
+                                <View style={{width:5,height:5,borderRadius:10,backgroundColor:chat?.participants.find((participant)=>participant._id!=profile.data?._id)?.activity=="offline"?"red":"green"}}></View>
+                                <Text style={[styles[Device].activity,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{chat?.participants.find((participant)=>participant._id!=profile.data?._id)?.activity}</Text>
                             </View>
                         }
                     </View>
@@ -629,7 +655,7 @@ const Message=(props:{chatId:string})=>{
                 {
                     messages.responseStatus=="not_recieved"
                     ?
-                    <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
+                    <View style={{flex:1}}><Loadinglistscreen cardGap={30} count={4} visibilityCount={3} direction="vertical"/></View>
                     :
                     bakedMessages.length==0
                     ?
@@ -639,7 +665,7 @@ const Message=(props:{chatId:string})=>{
                         {/* <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Click on the add button above to schedule a meet with the expert</Text> */}
                     </View>
                     :
-                    <ScrollView ref={scrollRef} onContentSizeChange={()=>scrollRef.current?.scrollToEnd({ animated: true })} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:20,paddingBottom:keyboard.height}}>
+                    <ScrollView keyboardShouldPersistTaps="handled" ref={scrollRef} onContentSizeChange={()=>scrollRef.current?.scrollToEnd({ animated: true })} style={{flex:1}} contentContainerStyle={{gap:30,paddingTop:20,paddingBottom:keyboard?getKeyboardHeight(keyboard,getViewportDimensions(insets)):0}}>
                     {
                         bakedMessages.map((msg,i)=>
                         <Pressable onLongPress={()=>reply(msg)} key={msg._id}>
@@ -665,7 +691,7 @@ const Message=(props:{chatId:string})=>{
                             {
                                 file
                                 ?
-                                <Transitionview effect="pan" style={[{flexDirection:"row",alignItems:"center",justifyContent:'flex-end'}]}>
+                                <Transitionview effect="panY" style={[{flexDirection:"row",alignItems:"center",justifyContent:'flex-end'}]}>
                                     <Text  style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}}>{file.name}</Text>
                                 </Transitionview>
                                 :
@@ -677,7 +703,7 @@ const Message=(props:{chatId:string})=>{
                             {
                                 replyTo
                                 ?
-                                <Transitionview effect="pan" style={[{flexDirection:"row",alignItems:"center",gap:5}]}>
+                                <Transitionview effect="panY" style={[{flexDirection:"row",alignItems:"center",gap:5}]}>
                                     <Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.75)}}>{"Replying to "+replyTo.sender?.firstName+"-"+replyTo.content}</Text>
                                     <Pressable hitSlop={{left:15,right:15,top:15,bottom:15}} onPress={()=>setRepliedTo(undefined)}><Image style={[styles[Device].close_icon]} source={close_icon}/></Pressable>
                                 </Transitionview>
@@ -701,8 +727,6 @@ const Message=(props:{chatId:string})=>{
 }
 
 const Activitybar=(props:{participants:Participant[]})=>{
-
-    //console.log("participants",props.participants,setParticipantsOrder(props.participants.filter((item)=>item && item._id)).map((item)=>item.firstName));
 
     return (
         <View style={{flex:1,flexDirection:'row',gap:5}}>
@@ -740,13 +764,13 @@ const Activityindicator=(props:{participant:Participant})=>{
                 ?
                 <View style={{zIndex:1,alignSelf:"center",transform:[{translateY:-7.5}]}}>
                     <TypingAnimation
-                    dotColor="black"
-                    dotMargin={5}
-                    dotAmplitude={2}
-                    dotSpeed={0.25}
-                    dotRadius={2}
-                    dotX={12}
-                    dotY={0}
+                        dotColor="black"
+                        dotMargin={5}
+                        dotAmplitude={2}
+                        dotSpeed={0.25}
+                        dotRadius={2}
+                        dotX={12}
+                        dotY={0}
                     />
                 </View>
                 :

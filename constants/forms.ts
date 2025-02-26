@@ -101,7 +101,7 @@ export const testToForm=(testname:string)=>{
         },
         title:item.name,
         validator:(data)=>({
-            success:(validations.TESTSCORE.regex.test(data) && (parseInt(data)>=item.validation.min && parseInt(data)<=item.validation.max)),
+            success:(validations.TESTSCORE.regex.test(data) && (parseFloat(data)>=item.validation.min && parseFloat(data)<=item.validation.max)),
             message:"Test Score needs to be in the range of "+(item.validation.min+" to "+item.validation.max),
             data:undefined
         }),
@@ -116,7 +116,7 @@ export const testToForm=(testname:string)=>{
   ]
   }
 
-    console.log("dropdown-forms",Dropdown);
+    //console.log("dropdown-forms",Dropdown);
 
 const forms:FormInfo[]=[
     {
@@ -241,7 +241,7 @@ const forms:FormInfo[]=[
                     data:undefined,
                     message:validations.PHONENUMBER.errorMessage
                 }),
-                emptyChecker:(data:{countryCode:ListItem[],phoneNumber?:string,verified?:boolean})=>({success:!(data.countryCode.length>0 && (data.phoneNumber && data.phoneNumber.length>0)),message:data.countryCode.length?"Dial code cannot be empty":"Phone number cannot be empty",data:undefined}),
+                emptyChecker:(data:{countryCode:ListItem[],phoneNumber?:string,verified?:boolean})=>({success:!(data.countryCode.length>0 && (data.phoneNumber && data.phoneNumber.length>0)),message:data.countryCode.length==0?"Dial code cannot be empty":"Phone number cannot be empty",data:undefined}),
                 title:"Phone",
                 onUpdate:{
                     event:"phone-input",
@@ -743,6 +743,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             list:Nationalities.map((item)=>({label:item,value:item})),
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label,
@@ -1273,6 +1274,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
@@ -1468,6 +1470,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
@@ -1498,7 +1501,7 @@ const forms:FormInfo[]=[
         id:"Familydetails",
         title:"Please provide your family member details",
         getInitialData:(id:string|undefined)=>{
-            let data:FamilyInfo|undefined=store.getState().familyinfo.data.find((item)=>item.RelationshipWithStudent==id)
+            let data:FamilyInfo|undefined=store.getState().familyinfo.data.find((item)=>item._id==id)
             return [
                 {id:"firstname",value:data?data.GuardianFirstName:""},
                 {id:"lastname",value:data?data.GuardianLastName:""},
@@ -1520,15 +1523,16 @@ const forms:FormInfo[]=[
                     RelationshipWithStudent: data[data.findIndex((item)=>item.id=="relationshipwithstudent")].value[0].value,
                     GuardianContactNumber: {countryCode:data[data.findIndex((item)=>item.id=="phone")].value.countryCode[0].dial_code,number:data[data.findIndex((item)=>item.id=="phone")].value.phoneNumber},
                 }
+                id?info={...info,_id:id}:null
                 return info
             },
             onSubmit:async (data:FamilyInfo)=>{
                 console.log("dyate",data);
                 let familydetails:FamilyInfo[]=store.getState().familyinfo.data;
                 console.log("details",familydetails)
-                if(familydetails.find((item)=>item.RelationshipWithStudent==data.RelationshipWithStudent))
+                if(familydetails.find((item)=>item._id==data._id))
                 {
-                    familydetails=familydetails.map((item)=>item.RelationshipWithStudent==data.RelationshipWithStudent?data:item)
+                    familydetails=familydetails.map((item)=>item._id==data._id?data:item)
                 }
                 else
                 {
@@ -1625,7 +1629,7 @@ const forms:FormInfo[]=[
                     data:undefined,
                     message:validations.PHONENUMBER.errorMessage
                 }),
-                emptyChecker:(data:{countryCode:ListItem[],phoneNumber?:string,verified?:boolean})=>({success:!(data.countryCode.length>0 && (data.phoneNumber && data.phoneNumber.length>0)),message:data.countryCode.length?"Dial code cannot be empty":"Phone number cannot be empty",data:undefined}),
+                emptyChecker:(data:{countryCode:ListItem[],phoneNumber?:string,verified?:boolean})=>({success:!(data.countryCode.length>0 && (data.phoneNumber && data.phoneNumber.length>0)),message:data.countryCode.length==0?"Dial code cannot be empty":"Phone number cannot be empty",data:undefined}),
                 title:"Phone",
                 onUpdate:{
                     event:"phone-input",
@@ -1671,6 +1675,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             list:[
                                 {label:"Father",value:"father"},
                                 {label:"Mother",value:"mother"},
@@ -1780,6 +1785,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             list:[
                                 {label:"Full-time",value:"full-time"},
                                 {label:"Part-time",value:"part-time"},
@@ -1816,6 +1822,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             list:Industries.map((item)=>({label:setWordCase(item),value:item})),
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label,
@@ -2019,6 +2026,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             list:[
                                 {label:"Full-time",value:"full-time"},
                                 {label:"Part-time",value:"part-time"},
@@ -2055,6 +2063,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             list:Industries.map((item)=>({label:setWordCase(item),value:item})),
                             idExtractor:(item:ListItem)=>item.label,
                             labelExtractor:(item:ListItem)=>item.label,
@@ -2264,6 +2273,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
@@ -2294,6 +2304,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             list:boards.map((board)=>({label:board,value:board})),
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
@@ -2627,6 +2638,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
@@ -2657,6 +2669,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             list:[
                                 {label:"CBSE",value:"CBSE"},
                                 {label:"ICSE",value:"ICSE"},
@@ -3003,6 +3016,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
@@ -3033,6 +3047,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             list:[
                                 {label:"CBSE",value:"CBSE"},
                                 {label:"ICSE",value:"ICSE"},
@@ -3296,6 +3311,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async (str:string)=>{
                                 console.log("search string",str);
                                 let res:ServerResponse=await serverRequest({
@@ -3388,6 +3404,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
@@ -3433,6 +3450,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let degree=getBasket("degreeprogram");
                                 let majors=degree.length>0?undergradCourses[degree[0].value].map((item)=>({label:item,value:item})):undefined
@@ -3460,6 +3478,7 @@ const forms:FormInfo[]=[
                 componentInfo:{
                     component:Dropdown,
                     props:{
+                        allowCustomInput:true,
                         options:{
                             list:Object.keys(undergradCourses).map((item)=>({label:item,value:item})),
                             labelExtractor:(item:ListItem)=>item.label,
@@ -3673,6 +3692,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async (str:string)=>{
                                 console.log("search string",str);
                                 let res:ServerResponse=await serverRequest({
@@ -3765,6 +3785,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
@@ -3810,6 +3831,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let degree=getBasket("degreeprogram");
                                 let majors=degree.length>0?undergradCourses[degree[0].value].map((item)=>({label:item,value:item})):undefined
@@ -3838,6 +3860,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             list:Object.keys(undergradCourses).map((item)=>({label:item,value:item})),
                             labelExtractor:(item:ListItem)=>item.label,
                             idExtractor:(item:ListItem)=>item.label
@@ -4134,6 +4157,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
@@ -4179,6 +4203,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let degree=getBasket("degreeprogram");
                                 let majors=degree.length>0?pgCourses[degree[0].value].map((item)=>({label:item,value:item})):undefined
@@ -4504,6 +4529,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let selectedCountry=getBasket("country")[0]?.label
                                 let selectedState=getBasket("state")[0]?.label
@@ -4549,6 +4575,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let degree=getBasket("degreeprogram");
                                 let majors=degree.length>0?pgCourses[degree[0].value].map((item)=>({label:item,value:item})):undefined
@@ -5361,6 +5388,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let selectedCountry,countryMapped,selectedState,cities;
                                 selectedCountry=getBasket("country")[0]?.label
@@ -5401,6 +5429,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:()=>{
                                 let baseFilter=getBasket("Programsfilter").baseFilters.find((item)=>item.type=="studyLevel");
                                 let options=studyLevel.map((item)=>({label:item,value:item}))
@@ -5462,6 +5491,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:()=>{
                                 let discipline=getBasket("discipline");
                                 console.log("discipline selected",discipline)
@@ -5712,6 +5742,7 @@ const forms:FormInfo[]=[
                     component:Dropdown,
                     props:{
                         options:{
+                            allowCustomInput:true,
                             fetcher:async ()=>{
                                 let selectedCountry,countryMapped,selectedState,cities;
                                 selectedCountry=getBasket("country")[0]?.label

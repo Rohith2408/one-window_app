@@ -88,7 +88,7 @@ const Community=()=>{
     return(
         <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
            <View style={{flex:2,flexDirection:"column",justifyContent:"center",alignItems:'center',gap:15}}>
-                <Transitionview effect="pan"><Image source={empty_image} style={[styles[Device].emptylist_image]}/></Transitionview>
+                <Transitionview effect="panY"><Image source={empty_image} style={[styles[Device].emptylist_image]}/></Transitionview>
                 <View style={{flexDirection:"column",alignItems:'center',gap:5}}>
                     <Text style={[styles[Device].no_feed,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Nothing to see here...!</Text>
                     <Text style={[styles[Device].no_feed_sub,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>University deadlines, programs, and scholarships—check back for fresh updates!!</Text>

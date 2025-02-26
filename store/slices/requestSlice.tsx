@@ -13,7 +13,7 @@ export const requestSlice=createSlice({
     name:'request',
     initialState:initialState,
     reducers:{
-        setRequest:(state,action:PayloadAction<ServerResponse>)=>{state.data=action.payload},
+        setRequest:(state,action:PayloadAction<ServerResponse|undefined>)=>{state.data=action.payload},
     }
 });
 

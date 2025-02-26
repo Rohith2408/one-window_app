@@ -197,16 +197,15 @@ const Phonelogin=()=>{
     const [phone,setPhone]=useState<{countryCode:Countrycode[],phoneNumber:string}>({countryCode:[],phoneNumber:""})
     const [error,setError]=useState<undefined|string>()
     const [screen,setScreen]=useState<"request-otp"|"verify-otp"|"dial-code">("request-otp")
-    const scrollRef=useRef()
+    const scrollRef=useRef<any>()
     const [dimensions,setDimensions]=useState<LayoutRectangle>()
     const [path,navigate]=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const screens=useRef(["request-otp","verify-otp","dial-code"]).current;
 
     const verify_phone=async (otp:string,data:{ phone: { countryCode: string; number: string } })=>{
-        //console.log("phone veeeee",otp,data)
         let deviceToken=await SecureStore.getItemAsync(secureStoreKeys.DEVICE_TOKEN);
-        console.log("phone veeeee",otp,data)
+        console.log("device token",deviceToken);
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("verify-user","POST"),
             reqType: "POST",
@@ -215,9 +214,9 @@ const Phonelogin=()=>{
         })
         if(res.success)
         {
-            navigate({type:"Login"})
+            navigate?navigate({type:"Login"}):null
         }
-        return res.success
+        return res
     }
 
     const request_otp=async ()=>{
@@ -264,12 +263,12 @@ const Phonelogin=()=>{
                 idExtractor:(item:Countrycode)=>item.code,
                 searchEvaluator:(item:Countrycode,search:string)=>(item.dial_code+item.code+item.name).toLowerCase().trim().includes(search.toLowerCase().trim()),
             },
-            selected:phone.countryCode[0]?.dial_code?phone.countryCode:[],
+            basketid:"phonelogin-dialcode-dropdown",
             eventHandler:dialcodeSelected,
             selectionMode:"single"
         }
-        addToBasket("dial-codes",data)
-        navigate({type:"AddScreen",payload:{screen:"Dropdownoptions",params:{basketid:"dial-codes"}}});
+        addToBasket("dial-codes",{...data,selected:phone.countryCode[0]?.dial_code?phone.countryCode:[],})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Dropdownoptions",params:{basketid:"dial-codes"}}}):null;
     }
 
     useEffect(()=>{
@@ -352,26 +351,11 @@ const Phonelogin=()=>{
                         }
                     </View>
                 </View>
-                {/* <View style={{width:dimensions.width}}>
-                    <View style={{flexDirection:"row",alignItems:'center',gap:5}}>
-                        <Image source={back_icon} style={[styles[Device].back_icon,{opacity:0.5}]}/>
-                        <Pressable onPress={()=>setScreen("request-otp")}><Text style={[styles[Device].no_code,{alignSelf:"flex-start"},{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Back</Text></Pressable>
-                    </View>
-                    <View style={{flex:1}}>
-                    {
-                        screen=="dial-code"
-                        ?
-                        <Transitionview style={[{flex:1}]} effect="fade"><Dropdownoptions basketid="dialcodes-dropdownoptions"/></Transitionview>
-                        :
-                        null
-                    }
-                    </View>
-                </View> */}
             </ScrollView>
             :
             <View style={{flex:1,justifyContent:"center",alignItems:"center",gap:10}}>
                 <Image source={loading_gif} style={[styles[Device].loading]}/>
-                <Text style={[styles[Device].wait,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Just a moment</Text>
+                {/* <Text style={[styles[Device].wait,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Just a moment</Text> */}
             </View>
         }
         </View>

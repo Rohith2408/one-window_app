@@ -217,7 +217,7 @@ const Cart=()=>{
         let requestInfo=requests.find((item)=>item.id=="removeFromCart");
         let validation=requestInfo?.inputValidator(data);
         console.log("Res",serverRes,requestInfo);
-        if(validation?.success)
+        if(validation?.success && requestInfo?.serverCommunicator)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
             console.log("Server res",JSON.stringify(serverRes,null,2))
@@ -274,7 +274,7 @@ const Cart=()=>{
                         <ScrollView style={{flex:1}} contentContainerStyle={{gap:20,padding:15}}>
                         {
                             cart.data.map((item,i)=>
-                            <Transitionview effect="pan" delay={100*i}>
+                            <Transitionview effect="panY" delay={100*i}>
                                 <Cartcard key={item._id} {...item} index={i}/>
                             </Transitionview>
                             )

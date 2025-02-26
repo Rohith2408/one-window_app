@@ -1,7 +1,6 @@
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useAppSelector } from "../../hooks/useAppSelector"
 import { ListItem, Recommendation, ServerResponse } from "../../types"
-import Loadingview from "../resources/Loadingview"
 import Recommendationcard from "../cards/Recommendationcard"
 import { useEffect, useRef, useState } from "react"
 import { getDevice } from "../../utils"
@@ -180,125 +179,122 @@ const Recommendations=()=>{
             {
                 loadPage
                 ?
-                <View style={{flex:1,gap:20}}>
-                    {
-                        recommendations.responseStatus!="recieved"
-                        ?
-                        <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
-                        :
-                        null
-                    }
-                    {
-                        profileCompletionStatus
-                        ?
-                        generationStatus 
-                        ?
-                        <View style={{flex:1,gap:15}}>
-                            {
-                                profileChangeStatus
-                                ?
-                                <View style={{alignSelf:"stretch",justifyContent:"center",alignItems:"center"}}><View style={{width:'50%'}}><Asynchronousbutton idleText={"Regenerate"} successText={"Success!"} failureText={"Failed"} callback={generateRecommendations}/></View></View>
-                                :
-                                null
-                            }
+                    recommendations.responseStatus!="recieved"
+                    ?
+                    <View style={{flex:1}}><Loadinglistscreen cardGap={30} count={6} visibilityCount={5} direction="vertical"/></View>
+                    :
+                    <View style={{flex:1,gap:20}}>
+                        {
+                            profileCompletionStatus
+                            ?
+                            generationStatus 
+                            ?
                             <View style={{flex:1,gap:15}}>
-                                <View style={[appStandardStyles.screenMarginMini]}>
-                                    <Listselection
-                                        direction="horizontal"
-                                        selectionStyle="background"
-                                        initialSelection={[{label:"Safe",value:"safe"}]}
-                                        blurUnSelected={true}
-                                        styles={{contentcontainer:{gap:10}}}
-                                        onselection={tabSelected}
-                                        options={{
-                                            list:tabs,
-                                            idExtractor:(data:ListItem)=>data.label,
-                                            labelExtractor:(data:any)=>data.label,
-                                            selectionMode:"single"
-                                        }}
-                                    />
-                                </View>
-                                <ScrollView horizontal scrollEnabled={false} ref={ref} style={{flex:1}} contentContainerStyle={{paddingTop:0}}>
-                                    <View style={{width:dimensions.width}}>
+                                {
+                                    profileChangeStatus
+                                    ?
+                                    <View style={{alignSelf:"stretch",justifyContent:"center",alignItems:"center"}}><View style={{width:'50%'}}><Asynchronousbutton idleText={"Regenerate"} successText={"Success!"} failureText={"Failed"} callback={generateRecommendations}/></View></View>
+                                    :
+                                    null
+                                }
+                                <View style={{flex:1,gap:15}}>
+                                    <View style={[appStandardStyles.screenMarginMini]}>
+                                        <Listselection
+                                            direction="horizontal"
+                                            selectionStyle="background"
+                                            initialSelection={[{label:"Safe",value:"safe"}]}
+                                            blurUnSelected={true}
+                                            styles={{contentcontainer:{gap:10}}}
+                                            onselection={tabSelected}
+                                            options={{
+                                                list:tabs,
+                                                idExtractor:(data:ListItem)=>data.label,
+                                                labelExtractor:(data:any)=>data.label,
+                                                selectionMode:"single"
+                                            }}
+                                        />
+                                    </View>
+                                    <ScrollView horizontal scrollEnabled={false} ref={ref} style={{flex:1}} contentContainerStyle={{paddingTop:0}}>
+                                        <View style={{width:dimensions.width}}>
+                                            {
+                                                recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Safe").length==0
+                                                ?
+                                                <View style={{flex:1,justifyContent:'center',alignItems:'center',gap:10}}>
+                                                    <Transitionview effect="panY"><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
+                                                    <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Oh no..!</Text>
+                                                    <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular,lineHeight:26}]}>Couldn't find any safe programs that match your preferences, don’t worry! Our experts are here to help you find the right match.!!</Text>
+                                                    <Pressable style={{borderRadius:100,borderWidth:1.3,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={redirecToExperts}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}}>Talk to expert</Text></Pressable>
+                                                </View>
+                                                :
+                                                <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
+                                                {
+                                                    recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Safe").map((item,i)=>
+                                                    <Recommendationcard {...item} index={i}/>
+                                                    )
+                                                }
+                                                </ScrollView>
+                                            }
+                                        </View>
+                                        <View style={{width:dimensions.width}}>
                                         {
-                                            recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Safe").length==0
+                                            recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Moderate").length==0
                                             ?
                                             <View style={{flex:1,justifyContent:'center',alignItems:'center',gap:10}}>
-                                                <Transitionview effect="pan"><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
+                                                <Transitionview effect="panY"><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
                                                 <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Oh no..!</Text>
-                                                <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular,lineHeight:26}]}>Couldn't find any safe programs that match your preferences, don’t worry! Our experts are here to help you find the right match.!!</Text>
+                                                <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular,lineHeight:26}]}>Couldn't find any moderate programs that match your preferences, don’t worry! Our experts are here to help you find the right match.!!</Text>
                                                 <Pressable style={{borderRadius:100,borderWidth:1.3,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={redirecToExperts}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}}>Talk to expert</Text></Pressable>
                                             </View>
                                             :
                                             <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
                                             {
-                                                recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Safe").map((item,i)=>
+                                                recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Moderate").map((item,i)=>
                                                 <Recommendationcard {...item} index={i}/>
                                                 )
                                             }
                                             </ScrollView>
                                         }
-                                    </View>
-                                    <View style={{width:dimensions.width}}>
-                                    {
-                                        recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Moderate").length==0
-                                        ?
-                                        <View style={{flex:1,justifyContent:'center',alignItems:'center',gap:10}}>
-                                            <Transitionview effect="pan"><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
-                                            <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Oh no..!</Text>
-                                            <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular,lineHeight:26}]}>Couldn't find any moderate programs that match your preferences, don’t worry! Our experts are here to help you find the right match.!!</Text>
-                                            <Pressable style={{borderRadius:100,borderWidth:1.3,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={redirecToExperts}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}}>Talk to expert</Text></Pressable>
                                         </View>
-                                        :
-                                        <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
+                                        <View style={{width:dimensions.width}}>
                                         {
-                                            recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Moderate").map((item,i)=>
-                                            <Recommendationcard {...item} index={i}/>
-                                            )
+                                            recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Ambitious").length==0
+                                            ?
+                                            <View style={{flex:1,justifyContent:'center',alignItems:'center',gap:10}}>
+                                                <Transitionview effect="panY"><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
+                                                <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Oh no..!</Text>
+                                                <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular,lineHeight:26}]}>Couldn't find any ambitious programs that match your preferences, don’t worry! Our experts are here to help you find the right match.!!</Text>
+                                                <Pressable style={{borderRadius:100,borderWidth:1.3,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={redirecToExperts}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}}>Talk to expert</Text></Pressable>
+                                            </View>
+                                            :
+                                            <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
+                                            {
+                                                recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Ambitious").map((item,i)=>
+                                                <Recommendationcard {...item} index={i}/>
+                                                )
+                                            }
+                                            </ScrollView>
                                         }
-                                        </ScrollView>
-                                    }
-                                    </View>
-                                    <View style={{width:dimensions.width}}>
-                                    {
-                                        recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Ambitious").length==0
-                                        ?
-                                        <View style={{flex:1,justifyContent:'center',alignItems:'center',gap:10}}>
-                                            <Transitionview effect="pan"><Image source={emptylist} style={[styles[Device].emptylist_image]}/></Transitionview>
-                                            <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Oh no..!</Text>
-                                            <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular,lineHeight:26}]}>Couldn't find any ambitious programs that match your preferences, don’t worry! Our experts are here to help you find the right match.!!</Text>
-                                            <Pressable style={{borderRadius:100,borderWidth:1.3,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}} onPress={redirecToExperts}><Text style={{padding:10,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}}>Talk to expert</Text></Pressable>
                                         </View>
-                                        :
-                                        <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:40,padding:15}}>
-                                        {
-                                            recommendations.data?.data.filter((item)=>item.possibilityOfAdmit=="Ambitious").map((item,i)=>
-                                            <Recommendationcard {...item} index={i}/>
-                                            )
-                                        }
-                                        </ScrollView>
-                                    }
-                                    </View>
-                                </ScrollView>
+                                    </ScrollView>
+                                </View>
                             </View>
-                        </View>
-                        :
-                        <View style={{flex:1}}>
-                            <View style={{alignSelf:"stretch",justifyContent:"center",alignItems:"center"}}><View style={{width:'50%'}}><Asynchronousbutton idleText={"Generate"} successText={"Success!"} failureText={"Failed"} callback={generateRecommendations}/></View></View>
+                            :
+                            <View style={{flex:1}}>
+                                <View style={{alignSelf:"stretch",justifyContent:"center",alignItems:"center"}}><View style={{width:'50%'}}><Asynchronousbutton idleText={"Generate"} successText={"Success!"} failureText={"Failed"} callback={generateRecommendations}/></View></View>
+                                <View style={{flex:1,gap:10,justifyContent:"center",alignItems:"center"}}>
+                                    <Image source={emptylist} style={[styles[Device].emptylist_image]}/>
+                                    <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Woaah</Text>
+                                    <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Your just one click away, click on the above generate button to get the AI powered recommendations!</Text>
+                                </View>
+                            </View>
+                            :
                             <View style={{flex:1,gap:10,justifyContent:"center",alignItems:"center"}}>
                                 <Image source={emptylist} style={[styles[Device].emptylist_image]}/>
-                                <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Woaah</Text>
-                                <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Your just one click away, click on the above generate button to get the AI powered recommendations!</Text>
+                                <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Oops...!</Text>
+                                <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Please add your undergraduate information , GRE Test Score and Course Preferences to start generating!</Text>
                             </View>
-                        </View>
-                        :
-                        <View style={{flex:1,gap:10,justifyContent:"center",alignItems:"center"}}>
-                            <Image source={emptylist} style={[styles[Device].emptylist_image]}/>
-                            <Text style={[styles[Device].no_workexperience,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Bold}]}>Oops...!</Text>
-                            <Text style={[styles[Device].click_message,{textAlign:"center",maxWidth:"85%",color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Regular}]}>Please add your undergraduate information , GRE Test Score and Course Preferences to start generating!</Text>
-                        </View>
-                    }
-                </View>
+                        }
+                    </View>
                 :
                 <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
                     <Loader loaderStyles={styles[Device].loader} isLoading={!loadPage}/>

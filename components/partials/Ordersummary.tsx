@@ -184,7 +184,7 @@ const Ordersummary=()=>{
         let requestInfo=requests.find((item)=>item.id=="removeFromCart");
         let validation=requestInfo?.inputValidator(data);
         console.log("Res",serverRes,requestInfo);
-        if(validation?.success)
+        if(validation?.success && requestInfo?.serverCommunicator)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
             //console.log("Server res",JSON.stringify(serverRes,null,2))

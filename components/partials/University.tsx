@@ -14,7 +14,9 @@ import location_icon from '../../assets/images/misc/location.png'
 import fee_icon from '../../assets/images/misc/fee.png'
 import uni_ranking_image from '../../assets/images/misc/uni-ranking-template.png'
 import sample_icon from '../../assets/images/profile/personal.png'
-import { Fonts, Themes } from "../../constants";    
+import { Fonts, Themes, appStandardStyles } from "../../constants";    
+import Heading from "../resources/Heading";
+import Loadinglistscreen from "../resources/Loadinglistscreen";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -25,9 +27,9 @@ const GeneralStyles=StyleSheet.create({
     info_wrapper:{
         alignSelf:"stretch",
         display:"flex",
-        flexDirection:"row",
+        flexDirection:"column",
         alignItems:"flex-start",
-        gap:10,
+        gap:5,
         padding:10
     },
     uni_icon_wrapper:{
@@ -89,8 +91,8 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:34,
-        height:34,
+        width:50,
+        height:50,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -157,6 +159,18 @@ const TabStyles=StyleSheet.create({
         fontSize:18,
         lineHeight:22
     },
+    loader_mid_wrapper:{
+        width:"100%",
+        height:275
+    },
+    loader_bottom_wrapper:{
+        width:"100%",
+        height:230
+    },
+    loader_top_wrapper:{
+        width:"100%",
+        height:180
+    }
 })
 
 const MobileSStyles=StyleSheet.create({
@@ -167,8 +181,8 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:22,
-        height:22,
+        width:34,
+        height:34,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -235,6 +249,18 @@ const MobileSStyles=StyleSheet.create({
         fontSize:14,
         lineHeight:22
     },
+    loader_mid_wrapper:{
+        width:"100%",
+        height:225
+    },
+    loader_bottom_wrapper:{
+        width:"100%",
+        height:180
+    },
+    loader_top_wrapper:{
+        width:"100%",
+        height:120
+    }
 })
 
 const MobileMStyles=StyleSheet.create({
@@ -244,8 +270,8 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:26,
-        height:26,
+        width:40,
+        height:40,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -312,6 +338,18 @@ const MobileMStyles=StyleSheet.create({
         fontSize:16,
         lineHeight:22
     },
+    loader_mid_wrapper:{
+        width:"100%",
+        height:250
+    },
+    loader_bottom_wrapper:{
+        width:"100%",
+        height:200
+    },
+    loader_top_wrapper:{
+        width:"100%",
+        height:150
+    }
 })
 
 const MobileLStyles=StyleSheet.create({
@@ -321,8 +359,8 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:26,
-        height:26,
+        width:40,
+        height:40,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -389,7 +427,18 @@ const MobileLStyles=StyleSheet.create({
         fontSize:16,
         lineHeight:22
     },
-    
+    loader_mid_wrapper:{
+        width:"100%",
+        height:250
+    },
+    loader_bottom_wrapper:{
+        width:"100%",
+        height:200
+    },
+    loader_top_wrapper:{
+        width:"100%",
+        height:150
+    }
 })
 
 const styles={
@@ -431,7 +480,7 @@ const University=(props:{universityid:string})=>{
             routeType:"public",
             reqType:"GET"
         });
-        console.log("res",res);
+        console.log("res-uni",res);
         res.success?setUniversityInfo(res.data):null
     }
 
@@ -456,51 +505,51 @@ const University=(props:{universityid:string})=>{
             ?
             <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1}} contentContainerStyle={{gap:34,padding:20}}>
                 <View style={[GeneralStyles.info_wrapper]}>
-                    <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
-                        <Image source={universityInfo.logoSrc} style={[styles[Device].uni_icon]}/>
-                        <View style={[styles[Device].uni_icon_bg,{position:"absolute",zIndex:-1,backgroundColor:getThemeColor(0)}]}></View>
-                    </View>
-                    <View style={[GeneralStyles.uni_info_wrapper]}>
-                        <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{universityInfo.name}</Text>
-                        <View style={[GeneralStyles.location_wrapper]}>
-                            <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <View style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([universityInfo.location.city,universityInfo.location.state,universityInfo.location.country],"",",",true)}</Text></View>
+                    <View style={{flexDirection:'row',alignItems:"flex-start",justifyContent:"flex-start",gap:5}}>
+                        <View style={{flex:1,flexDirection:"column",alignItems:"flex-start",gap:5}}>
+                            <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.SemiBold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{universityInfo.name}</Text>
+                            <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([universityInfo.location.city,universityInfo.location.state,universityInfo.location.country],"",",",true)}</Text> 
                         </View>
-                        {
-                            AT
-                            ?
-                            <Pressable onPress={showCourses} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
-                                <Text style={[styles[Device].uni_location,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Show Courses</Text>
-                            </Pressable>
-                            :
-                            null
-                        }
+                        <Image source={universityInfo.logoSrc} style={[styles[Device].uni_icon]}/>
                     </View>
+                    {
+                        AT
+                        ?
+                        <Pressable onPress={showCourses} style={{flexDirection:'row',alignSelf:"flex-end",alignItems:'center',gap:5,borderWidth:1.2,padding:7.5,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
+                            <Text style={[styles[Device].uni_location,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Show Courses</Text>
+                        </Pressable>
+                        :
+                        null
+                    }
                 </View>
-                <View style={[GeneralStyles.dashboards_wrapper,styles[Device].dashboards_wrapper]}>
-                    <View style={[GeneralStyles.dashboard_wrapper,styles[Device].dashboard_wrapper]}>
-                        <Dashboarditem {...dashboardInfo[0]} index={0}/>
-                        <Dashboarditem {...dashboardInfo[1]} index={1}/>
-                        <Dashboarditem {...dashboardInfo[2]} index={2}/>
-                    </View>
-                    <View style={[GeneralStyles.dashboard_wrapper,styles[Device].dashboard_wrapper]}>
-                        <Dashboarditem {...dashboardInfo[3]} index={3}/>
-                        <Dashboarditem {...dashboardInfo[4]} index={0}/>
-                        <Dashboarditem {...dashboardInfo[5]} index={1}/>
+                <View style={{gap:15}}>
+                    <Heading heading="Information at a Glance"/>
+                    <View style={[GeneralStyles.dashboards_wrapper,styles[Device].dashboards_wrapper]}>
+                        <View style={[GeneralStyles.dashboard_wrapper,styles[Device].dashboard_wrapper]}>
+                            <Dashboarditem {...dashboardInfo[0]} index={0}/>
+                            <Dashboarditem {...dashboardInfo[1]} index={1}/>
+                            <Dashboarditem {...dashboardInfo[2]} index={2}/>
+                        </View>
+                        <View style={[GeneralStyles.dashboard_wrapper,styles[Device].dashboard_wrapper]}>
+                            <Dashboarditem {...dashboardInfo[3]} index={3}/>
+                            <Dashboarditem {...dashboardInfo[4]} index={0}/>
+                            <Dashboarditem {...dashboardInfo[5]} index={1}/>
+                        </View>
                     </View>
                 </View>
                 <View style={[GeneralStyles.keyinfo_wrapper]}>
-                    <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Additional Information:</Text>
+                    <Heading heading="Additional Information"/>
+                    {/* <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Additional Information:</Text> */}
                     <View style={[{flexDirection:"column",gap:20}]}>
                     {
                         additionalInfo.map((item,i)=>
                         <View style={{flexDirection:"row",alignItems:"flex-start",gap:5}}>
-                            <View style={[{flexDirection:"column",alignItems:"flex-start",justifyContent:"center",gap:5}]}>
-                                <View style={{flexDirection:'row',alignItems:"center",gap:3}}>
-                                    {/* <View style={{width:4,height:4,borderRadius:100,backgroundColor:getThemeColor(i%4)}}></View> */}
-                                    <Text style={[styles[Device].keyinfo_type,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.35)}]}>{item.type}</Text>
+                            <View style={[{flexDirection:"row",alignItems:"center",justifyContent:"center",gap:5}]}>
+                                <View style={{borderWidth:0.25,borderColor:Themes.Light.OnewindowPrimaryBlue(1),width:5,height:5,borderRadius:100}}/>
+                                <View style={{flex:1,flexDirection:'row',alignItems:"center",gap:3}}>
+                                    <Text style={[styles[Device].keyinfo_value,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{item.type}</Text>
                                 </View>
-                                <Text style={[styles[Device].keyinfo_value,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{item.value}</Text>
+                                <Text style={[styles[Device].keyinfo_value,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{item.value}</Text>
                             </View>
                         </View>
                         )
@@ -508,7 +557,8 @@ const University=(props:{universityid:string})=>{
                     </View>
                 </View>
                 <View style={{gap:10}}>
-                    <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Rating</Text>
+                    <Heading heading="Rating"/>
+                    {/* <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Rating</Text> */}
                     <View>
                     {
                         ratings==undefined || ratings.keys.length==0
@@ -520,10 +570,6 @@ const University=(props:{universityid:string})=>{
                         {
                             ratings.keys.map((item,i)=>
                             <View style={{flexDirection:"row",gap:5,alignItems:"center",borderRadius:100}}>
-                                {/* <View style={{position:"relative"}}>
-                                    <View style={{position:"absolute",width:10,height:10,borderRadius:100,backgroundColor:getLightThemeColor(i%4)}}></View>
-                                    <Image source={sample_icon} style={[{width:26,height:26}]}/>
-                                </View> */}
                                 <Image source={sample_icon} style={[{width:26,height:26}]}/>
                                 <View style={{flex:1}}><Text style={[styles[Device].rating,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular,padding:10}]}>{item}</Text></View>
                                 <Text style={[styles[Device].rating,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>{(ratings.values[i]+"   ").substring(0,2)}</Text>
@@ -535,12 +581,11 @@ const University=(props:{universityid:string})=>{
                     </View>
                 </View>
                 <View style={{gap:10}}>
-                    <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Ranking</Text>
+                    <Heading heading="Ranking"/>
                     <View>
                     {
                         !universityInfo.rank
                         ?
-                        // <Text>Ratings not available</Text>
                         null
                         :
                         <View style={{gap:20}}>
@@ -559,7 +604,14 @@ const University=(props:{universityid:string})=>{
                 </View>
             </ScrollView>
             :
-            <Text>Loading</Text>
+            <View style={[{flex:1,gap:50,overflow:"hidden"},appStandardStyles.screenMarginSmall]}>
+                <View style={[styles[Device].loader_top_wrapper]}><Loadinglistscreen visibilityCount={2} cardGap={10} count={2} direction="vertical"/></View>
+                <View style={[styles[Device].loader_mid_wrapper,{gap:10,alignSelf:'center'}]}>
+                    <View style={{flex:1}}><Loadinglistscreen cardGap={10} visibilityCount={3} count={3} direction="horizontal" /></View>
+                    <View style={{flex:1}}><Loadinglistscreen cardGap={10} visibilityCount={3} count={3} direction="horizontal" /></View>
+                </View>
+                <View style={[styles[Device].loader_bottom_wrapper]}><Loadinglistscreen visibilityCount={1} cardGap={10} count={1} direction="vertical"/></View>
+            </View>
         }
         </View>
     )

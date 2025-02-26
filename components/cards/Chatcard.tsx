@@ -326,7 +326,7 @@ const BakeLastmessage=(chat:Chat,profile:Sharedinfo)=>{
     let sender=(chat.lastMessage?.sender==profile._id)?"current":"other";
     let status;
     let lastMessageSeenInfo=chat.unSeenMessages.find((msg)=>msg.message._id==chat.lastMessage?._id)?.seen
-    console.log("seen",lastMessageSeenInfo);
+    //console.log("seen",lastMessageSeenInfo);
     if(sender=="current"){
         status=lastMessageSeenInfo==undefined?"seen":"unseen";
     }

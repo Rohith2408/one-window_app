@@ -139,7 +139,7 @@ const Myproducts=()=>{
                 <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,padding:15}}>
                 {
                     products.data.map((product,i)=>
-                    <Transitionview effect="pan" delay={100*i}>
+                    <Transitionview effect="panY" delay={100*i}>
                         <View style={[{padding:0}]}><Product {...product} index={i}/></View>
                     </Transitionview>
                     )
@@ -148,7 +148,7 @@ const Myproducts=()=>{
             }
             </View>
             :
-            <Loadinglistscreen cardStyles={styles[Device].loader_card} cardGap={30} count={3} direction="vertical"/>
+            <View style={{flex:1}}><Loadinglistscreen cardGap={30} count={6} visibilityCount={5} direction="vertical"/></View>
         }
         </View>
     )

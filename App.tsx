@@ -24,17 +24,22 @@ export default function App() {
 
   const [theme,setTheme]=useState<"light"|"dark">("light");
   const [path,navigate]=useReducer(NavigationReducer,"onewindow://Student/Base?tab=home")//onewindow://Student/Base?tab=home //onewindow://Guest/Guestbase
+  const [encodedData,setEncodedData]=useState<{screens:string[],props:any}>({screens:[],props:{}})
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined);
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
 
-  useEffect(() => {
-
-    
+  useEffect(() => { 
+    //alert("updated");
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     Linking.addEventListener('url', (event: { url: string })=>{
+      if(event.url)
+      {
+        //alert(event.url);
+        navigate?navigate({type:"SetPath",payload:{path:event.url}}):null
+      }
     });
   
     const unsubscribe = NetInfo.addEventListener(state => {
@@ -58,7 +63,7 @@ export default function App() {
     })
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      //console.log(response);
+      //rconsole.log(response);
     });
 
     async function loadFonts() {
@@ -83,16 +88,22 @@ export default function App() {
     }
   }, []);
 
-  const encodedData:{screens:string[],props:any}=encodePath(path)
+  useEffect(()=>{
+    //console.log("encoded",path,encodePath(path,encodedData));
+    setEncodedData(encodePath(path,encodedData))
+  },[JSON.stringify(path)])
 
   return (
     <StoreProvider store={store}>
       <Appcontext.Provider value={{path,navigate,theme,setTheme}}>
         <SafeAreaProvider style={[styles.container]}>
-          <Layout component={encodedData.screens[0]} screens={encodedData.screens.filter((screen,i)=>i!=0)} props={encodedData.props} invalidPathScreen={Invalidpath}></Layout>
-          {/* <SafeAreaView  style={[styles.container,{paddingBottom:Platform.OS=="android"?5:0}]} >
-            
-          </SafeAreaView> */}
+        {
+          encodedData.screens.length>0
+          ?
+          <Layout component={encodedData.screens[0]} screens={encodedData.screens.filter((screen,i)=>i!=0)} props={encodedData.props} invalidPathScreen={Invalidpath}/>
+          :
+          null
+        }
         </SafeAreaProvider>
       </Appcontext.Provider>
     </StoreProvider>

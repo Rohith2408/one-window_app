@@ -1836,8 +1836,7 @@ export const topUniversities=[
     "University of Oxford",
     "Stanford University",
     "Massachusetts Institute of Technology",
-    "University of Cambridge",
-    
+    "University of Cambridge",  
 ]
 
   export const undergradCourses = {

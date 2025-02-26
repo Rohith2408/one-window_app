@@ -27,7 +27,7 @@ const GeneralStyles=StyleSheet.create({
 
 const TabStyles=StyleSheet.create({
     text:{
-        fontSize:18
+        fontSize:17
     },
     loader:{
         width:20,
@@ -35,13 +35,15 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     wrapper:{
-        padding:10
+        padding:12,
+        paddingLeft:17,
+        paddingRight:17
     } 
 })
 
 const MobileSStyles=StyleSheet.create({
     text:{
-        fontSize:14
+        fontSize:13
     },
     loader:{
         width:18,
@@ -49,12 +51,14 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     wrapper:{
-        padding:7.5
+        padding:7.5,
+        paddingLeft:10,
+        paddingRight:10
     }
 })
 const MobileMStyles=StyleSheet.create({
     text:{
-        fontSize:16
+        fontSize:15
     },
     loader:{
         width:15,
@@ -62,13 +66,15 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     wrapper:{
-        padding:10
+        padding:10,
+        paddingLeft:15,
+        paddingRight:15
     }
 })
 
 const MobileLStyles=StyleSheet.create({
     text:{
-        fontSize:16
+        fontSize:15
     },
     loader:{
         width:17,
@@ -76,7 +82,9 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     wrapper:{
-        padding:10
+        padding:10,
+        paddingLeft:15,
+        paddingRight:15
     }
 })
 

@@ -412,13 +412,13 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     body_wrapper:{
-        gap:5
+        gap:50
     },
     banner_wrapper:{
         gap:24
     },
     header_wrapper:{
-        height:125,
+        height:100,
         width:"100%",
         display:"flex",
     },
@@ -433,7 +433,7 @@ const MobileLStyles=StyleSheet.create({
         width:"100%"
     },
     login:{
-        fontSize:26
+        fontSize:24
     },
     forgot:{
         fontSize:12
@@ -446,15 +446,15 @@ const MobileLStyles=StyleSheet.create({
         resizeMode: "contain"
     },
     airplane:{
-        width:50,
-        height:50,
+        width:46,
+        height:46,
         top:0,
         left:0,
         resizeMode:"contain"
     },
     passport:{
-        width:36,
-        height:36,
+        width:32,
+        height:32,
         top:"50%",
         left:"90%",
         resizeMode:"contain"
@@ -468,8 +468,8 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     banner:{
-        width:240,
-        height:240,
+        width:230,
+        height:230,
         resizeMode:"contain"
     },
     banner_text:{
@@ -524,7 +524,7 @@ const Loginbase=(props:{auth:string})=>{
     ]).current
     const loginMethods=useRef([
         {title:"Mobile",icon:mobile_icon},
-        // {title:"Google",icon:google_icon},
+        {title:"Google",icon:google_icon},
         {title:"Email",icon:mail_icon}
     ]).current
     
@@ -540,7 +540,7 @@ const Loginbase=(props:{auth:string})=>{
     }
 
     const tabSelected=(tab:ListItem[])=>{
-        console.log("tab",tab[0].value)
+        //console.log("tab",tab[0].value)
         setLoginType(tab[0].value);
     }
 
@@ -563,13 +563,13 @@ const Loginbase=(props:{auth:string})=>{
         })
         if(res.success)
         {
-            navigate({type:"Login"})
+            navigate?navigate({type:"Login"}):null
         }
         return res.success
     }
 
     const verify_phone=async (otp:string,data:{ phone: { countryCode: string; number: string } })=>{
-        console.log("phone veeeee",otp,data)
+        //console.log("phone veeeee",otp,data)
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("verify-user","POST"),
             reqType: "POST",
@@ -578,7 +578,7 @@ const Loginbase=(props:{auth:string})=>{
         })
         if(res.success)
         {
-            navigate({type:"Login"})
+            navigate?navigate({type:"Login"}):null
         }
         return res.success
     }
@@ -590,15 +590,15 @@ const Loginbase=(props:{auth:string})=>{
 
     const emailLogin=()=>{
         // navigate({type:"AddScreen",payload:{screen:"Flyer",params:{flyerid:"Emaillogin"}}})
-        navigate({type:"AddScreen",payload:{screen:"Emaillogin"}})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Emaillogin"}}):null
     }
 
     const phoneLogin=()=>{
-        navigate({type:"AddScreen",payload:{screen:"Phonelogin"}})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Phonelogin"}}):null
     }
 
-    const googleLogin=(tokenId:string)=>{
-        googleSignin(tokenId).then((res:ServerResponse)=>navigate(res.success?{type:"Login"}:{type:"AddScreen",payload:{screen:"Error",params:{error:res.message}}})) ;
+    const googleLogin=async (tokenId:string)=>{
+        googleSignin(tokenId).then((res:ServerResponse)=>navigate?navigate(res.success?{type:"Login"}:{type:"AddScreen",payload:{screen:"Error",params:{error:res.message}}}):null) ;
     }
 
     const openExplore=async ()=>{
@@ -655,7 +655,7 @@ const Loginbase=(props:{auth:string})=>{
                     }
                     </Carousel2>
                 </View>
-                <View style={{display:"flex",flexDirection:"column",gap:20,alignItems:"center",justifyContent:'center'}}>
+                <View style={{flex:1,alignSelf:"stretch",display:"flex",flexDirection:"column",gap:30,alignItems:"center",justifyContent:'center'}}>
                     <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center',gap:10}}>
                         <View style={{width:100,height:1,backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.1)}}/>
                         <Text style={[styles[Device].login_text,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>Login</Text>
@@ -673,30 +673,6 @@ const Loginbase=(props:{auth:string})=>{
                     <Pressable style={{alignSelf:'center'}} onPress={openExplore}>
                         <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium,textAlign:"center",lineHeight:22},styles[Device].explore_text]} text="Ready to Explore? Take a quick tour" focusWord="Take a quick tour"/>
                     </Pressable> 
-                </View>
-                {/* <View style={{display:"flex",flexDirection:"column",gap:10,position:"relative"}}>
-                    <Transitionview effect="pan" delay={300}><Image style={[styles[Device].airplane,{position:"absolute",transform:[{rotate:"-20deg"}]}]} source={airplane}/></Transitionview>
-                    <Transitionview effect="pan" delay={300}><Image style={[styles[Device].passport,{position:"absolute",transform:[{rotate:"20deg"}]}]} source={passport}/></Transitionview>
-                    <View style={[styles[Device].banner_wrapper,{flexDirection:"column",alignItems:'center'}]}>
-                        <Image source={banner} style={[{alignSelf:"center"},styles[Device].banner]}/>
-                        <Transitionview effect="pan" delay={200}>
-                            <Text style={[styles[Device].banner_text,{padding:10,textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular,maxWidth:"80%"}]}>Explore over 8000 Universities and 70,Be 000 Courses</Text>
-                        </Transitionview>
-                    </View>
-                </View> */}
-                <View style={{flexDirection:"column",gap:25,alignItems:'center',padding:10}}>
-                    {/* <Pressable onPress={emailLogin} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
-                        <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Login with Email" focusWord="Email"/>
-                    </Pressable>
-                    <Pressable onPress={phoneLogin} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
-                        <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Login with Mobile" focusWord="Mobile"/>
-                    </Pressable>
-                    <Pressable onPress={()=>promptAsync()} style={[GeneralStyles.login_button_wrapper,{borderColor:Themes.Light.OnewindowPrimaryBlue(0.1)}]}>
-                        <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].login_text]} text="Login with Google" focusWord="Google"/>
-                    </Pressable>
-                    <Pressable onPress={openExplore}>
-                        <Styledtext styles={[{padding:10,fontFamily:Fonts.NeutrifStudio.Medium,textAlign:"center",lineHeight:22},styles[Device].explore_text]} text="Ready to Explore? Discover your dream university today!" focusWord="Discover your dream university today!"/>
-                    </Pressable> */}
                 </View>
             </View>
         </View>

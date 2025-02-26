@@ -317,7 +317,7 @@ const Educationhistory=()=>{
                 <View><Postgraduation data={education.data.postGraduation}/></View>
             </View>
             :
-            <Loadinglistscreen cardStyles={{width:"100%",height:150}} cardGap={30} count={3} direction="vertical"/>
+            <View style={{flex:1}}><Loadinglistscreen cardGap={30} count={4} visibilityCount={4} direction="vertical"/></View>
         }
         </View>
     )
@@ -527,7 +527,7 @@ const Undergraduation=(props:{data:EducationHistory_UnderGraduation|undefined})=
     return(
         <View>
         {
-            !checkIfEmpty(props.data)
+            props.data && !checkIfEmpty(props.data)
             ?
             <View style={{flexDirection:'row',gap:10}}>
                 <View style={[GeneralStyles.icon_wrapper]}><Image source={ug_icon} style={[styles[Device].card_icon]} /></View>
@@ -592,8 +592,8 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
         }).start()
     }
 
-    const checkIfEmpty=(data:EducationHistory_UnderGraduation|undefined)=>{
-        return (!data || Object.keys(data).length==0 || Object.keys(data).length==1 && data.custom!=undefined)?true:false
+    const checkIfEmpty=(data:EducationHistory_School|EducationHistory_Plus2|EducationHistory_UnderGraduation|EducationHistory_PostGraduation|undefined)=>{
+        return (!data || Object.keys(data).length==0 || Object.keys(data).length==1)?true:false
     }
 
     // const add=(data:boolean)=>{
@@ -614,7 +614,7 @@ const Postgraduation=(props:{data:EducationHistory_PostGraduation|undefined})=>{
     return(
         <View>
         {
-            !checkIfEmpty(props.data)
+            props.data && !checkIfEmpty(props.data)
             ?
             <View style={{flexDirection:'row',gap:10}}>
                 <View style={[GeneralStyles.icon_wrapper]}><Image source={pg_icon} style={[styles[Device].card_icon]} /></View>

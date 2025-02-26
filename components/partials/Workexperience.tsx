@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react"
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import { useAppSelector } from "../../hooks/useAppSelector"
-import Loadingview from "../resources/Loadingview"
 import Workexperiencecard from "../cards/Workexperiencecard"
 import Loadinglistscreen from "../resources/Loadinglistscreen"
 import add_icon from '../../assets/images/misc/add.png'

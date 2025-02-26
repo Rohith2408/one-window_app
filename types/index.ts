@@ -18,6 +18,24 @@ export type Tabbar={
     tabs:{icon?:string,title:string}[]
 }
 
+// export type feed{
+//     name:string,
+//     description:string,
+//     owner:User[],
+//     members:
+// }
+// {
+//     name: { type: String, required: true, unique: true },
+//     description: { type: String, required: true },
+//     owner: [{ type: Schema.Types.ObjectId, ref: "user" }],
+//     privacy: {
+//         type: String,
+//         enum: ['public', 'private', 'restricted'], // Public: anyone can view, Private: by invite only, Restricted: role-based
+//         default: 'public',
+//     },
+//     members: [{ type: Schema.Types.ObjectId, ref: "user" }],
+// }, { timestamps: true }
+
 export type ListInfo={
     id:string,
     basketid:string,
@@ -174,17 +192,18 @@ export type Dropdown={
         idExtractor:(item:any)=>string,
         labelExtractor:(item:any)=>string,
         searchEvaluator:(item:any,query:string)=>boolean,
-        custom:{
-            customMessage:string,
-            defaultMessage:string
-        }
+        allowCustomInput?:boolean,
+        // custom:{
+        //     customMessage:string,
+        //     defaultMessage:string
+        // }
     },
     isAsync?:boolean,
     basketid:string,
     selectionMode:"single"|"multi",
-    pathHandler:(data:any)=>NavigationActions,
+    pathHandler?:(data:any)=>NavigationActions,
     //apply:(data:any[])=>NavigationActions
-    //eventHandler?:(event:Event)=>void
+    eventHandler?:(event:Event)=>void
     //isFocussed?:boolean,
     //optionsCard?:React.FC<any>,
     //optionsFetcher?:(data?:any)=>Promise<ListItem[]>,
@@ -594,7 +613,7 @@ export interface Participant{
     lastName: string,
     activity:chatParticipantActions,
     lastSeenMessageId?:string,
-    role:string
+    role:UserRoles
 }
 
 export interface Message{
@@ -902,7 +921,7 @@ export interface EducationHistory_PostGraduation {
     isCompleted: boolean
 }
 
-export type UserRoles="student" | "guest" | "developer" | "counsellor" | "coordinator" 
+export type UserRoles="student" | "guest" | "developer" | "counsellor" | "coordinator"| "Virtual_Assistant"
 
 export interface User {
     _id: string,
@@ -1055,6 +1074,7 @@ export type Address={
 }
 
 export type FamilyInfo={
+    _id:string,
     GuardianFirstName: string,
     GuardianLastName: string,
     GuardianEmail: string,

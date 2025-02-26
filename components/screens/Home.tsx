@@ -387,7 +387,6 @@ const Home=(props:undefined|{name:string})=>{
         {title:"Edit Profile",taskId:"edit-profile",icon:quicklink_profile}
     ]).current
 
-
     const openSearch=()=>{
         navigate?navigate({type:"AddScreen",payload:{screen:"Search",params:{initialSearch:""}}}):null
     }
@@ -408,14 +407,14 @@ const Home=(props:undefined|{name:string})=>{
     return(
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.sub_wrapper]}>
-                <ScrollView showsVerticalScrollIndicator={false} style={[{flex:1}]} contentContainerStyle={[styles[Device].sub_wrapper]}>
+                <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={[{flex:1}]} contentContainerStyle={[styles[Device].sub_wrapper]}>
                     <View style={{gap:25}}>
                         <View style={{position:"relative",gap:10,marginLeft:15}}>
                             <View style={[styles[Device].prop,{position:"absolute",borderRadius:100,backgroundColor:Themes.Light.OnewindowPurple(1)}]}></View>
-                            <Transitionview effect="pan"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?truncateString(personalinfo.data.firstName,10,true):"User")}!</Text></Transitionview>
+                            <Transitionview effect="panY"><Text style={[{fontFamily:Fonts.NeutrifStudio.Bold,color:theme=="light"?Themes.Light.OnewindowPrimaryBlue(1):'white'},Device?styles[Device].welcome_message:{}]}>Hello , {(personalinfo.data?.firstName?truncateString(personalinfo.data.firstName,10,true):"User")}!</Text></Transitionview>
                         </View>
-                        <Text>Update No. 9</Text>
-                        <Transitionview effect="pan">
+                        {/* <Text>Update No. 9.1</Text> */}
+                        <Transitionview effect="panY">
                             <Pressable onPress={openSearch} style={[GeneralStyles.search,{borderColor:theme=="light"?Themes.Light.OnewindowPrimaryBlue(0.25):'white'}]}>
                                 <Dynamicplaceholder/>                     
                             </Pressable>
@@ -441,7 +440,7 @@ const Home=(props:undefined|{name:string})=>{
                             quickLinks.map((item)=>
                             <Pressable style={[GeneralStyles.quicklink_wrapper]} key={item.title} onPress={()=>quickLinksHandler(item)}>
                                 <Image style={[styles[Device].quicklink_icon]} source={item.icon}/>
-                                <Text style={[styles[Device].quicklink_title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.title}</Text>
+                                <Text numberOfLines={1} style={[styles[Device].quicklink_title,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{item.title}</Text>
                             </Pressable>
                             )
                         }
@@ -453,7 +452,7 @@ const Home=(props:undefined|{name:string})=>{
                         {
                             products.responseStatus=="not_recieved"
                             ?
-                            <Loadinglistscreen cardStyles={styles[Device].loader_card} cardGap={30} count={3} direction="horizontal"/>
+                            <View style={{flex:1,width:"100%",height:styles[Device].card.height}}><Loadinglistscreen cardGap={30} visibilityCount={Device=="Tab"?3:1} count={Device=="Tab"?4:2} direction="horizontal"/></View>
                             :
                                 products.data.length==0
                                 ?

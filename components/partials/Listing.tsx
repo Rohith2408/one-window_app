@@ -170,7 +170,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     //const lisbasket=getBasket(props.basketid);
 
     useEffect(()=>{
-        console.log("updated");
+        //console.log("updateddddd");
         getList().then((res:ServerResponse|undefined)=>{
             //console.log("server res",res);
             maxPages.current=res?.data.totalPages;
@@ -179,7 +179,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
     },[JSON.stringify(props.additionalFilters),JSON.stringify(props.quickFilters),props.search,props.page])
 
     const getList=async ()=>{
-        console.log("hitting",props.page);
+        //console.log("hitting",props.page);
         let AT=await getAccessTokenFromStore()
         if(!AT && props.page>2)
         {
@@ -218,7 +218,7 @@ const Listing=(props:{listid:string,eventHandler:(event:Event)=>void,additionalF
             baseFilters:mergeQuickFilters(props.quickFilters),
             callback:applyAdditionalFilters
         })
-        console.log("iddd",ListInfo?.formid);
+        //console.log("iddd",ListInfo?.formid);
         setComponentInfo("Form","title","Filters")
         navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:ListInfo?.formid,forminitialdataid:props.listid+"filter",formbasket:props.listid+"filter"}}}):null
     }

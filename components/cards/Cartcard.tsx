@@ -236,11 +236,11 @@ const Cartcard=(props:CartItem & {index:number})=>{
         let serverRes={success:false,message:"",data:undefined};
         let requestInfo=requests.find((item)=>item.id=="removeFromCart");
         let validation=requestInfo?.inputValidator(data);
-        console.log("Res",serverRes,requestInfo);
+        //console.log("Res",serverRes,requestInfo);
         if(validation?.success)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
-            console.log("Server res",JSON.stringify(serverRes,null,2))
+            //console.log("Server res",JSON.stringify(serverRes,null,2))
             if(serverRes?.success)
             {
                 setIsloading(false);

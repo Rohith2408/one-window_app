@@ -184,12 +184,10 @@ const Form=(props:{formid:string,formerrors?:{id:string,error:string},formupdate
         fields.forEach((field)=>{
             let info=formInfo?.allFields.find((item)=>item.id==field.id)
             let error:undefined|string=undefined
-            let isEmpty=false;
             let validation:ServerResponse={success:false,message:"",data:undefined}
-            isEmpty=(info?.emptyChecker)?(info.emptyChecker(field.value).success):(field.value==undefined || field.value?.length==0)
-            //console.log("bhai",field.id,isEmpty,field.value,info?.emptyChecker?info.emptyChecker(field.value):"ledu");
-            !isEmpty ? validation=(info?.validator)?info.validator(field.value):{success:true,message:"",data:undefined} :null
-            error=(isEmpty && !info?.isOptional)?info?.title+" cannot be empty":(!validation.success?validation.message:undefined)
+            let isEmpty:ServerResponse=(info?.emptyChecker)?(info.emptyChecker(field.value)):{success:(field.value==undefined || field.value?.length==0),message:info?.title+" cannot be empty",data:undefined};
+            !isEmpty.success ? validation=(info?.validator)?info.validator(field.value):{success:true,message:"",data:undefined} :null
+            error=(isEmpty.success && !info?.isOptional)?isEmpty.message:(!validation.success?validation.message:undefined)
             error?errors.push({id:field.id,error:error}):null
         })
         return errors;

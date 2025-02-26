@@ -64,11 +64,10 @@ export const formatQueryParamsToString=(params:any)=>{
     "")
 }
 
-export const formatQueryParamsToObj=(queryString:string)=>{
+export const formatQueryParamsToObj=(queryString:string,currentProps?:any)=>{
     if (queryString.startsWith('?')) {
       queryString = queryString.substring(1);
     }
-  
     const pairs = queryString.split('&');
     const result:{ [key: string]: string|number} = {};
   
@@ -78,7 +77,6 @@ export const formatQueryParamsToObj=(queryString:string)=>{
       const decodedValue = decodeURIComponent(value)
       if(isStringified(decodedValue))
       {
-        //console.log("decoded",decodedValue,decodedValue.replace(/__AND__/g, '&'))
         result[decodedKey] = JSON.parse(decodedValue.replace(/__AND__|__SLASH__/g, function(match) {
           if (match === andReplacer) {
             return '&';
@@ -90,8 +88,27 @@ export const formatQueryParamsToObj=(queryString:string)=>{
       else
       {
         result[decodedKey] = isNaN(Number(decodedValue)) ? decodedValue : Number(decodedValue);
-      }})
-    return result;
+      }
+    })
+    if(currentProps)
+    {
+      copyObject(currentProps,result);
+      return currentProps;
+    }
+    else
+    {
+      return result
+    }
+}
+
+function copyObject(obj1:any, obj2:any) {
+  console.log("copy layer",obj1,obj2);
+  Object.keys(obj1).forEach((key) => {
+    if (!(key in obj2)) {
+      delete obj1[key];
+    }
+  });
+  Object.assign(obj1, obj2);
 }
 
 export const isStringified=(str:string)=>{
@@ -108,14 +125,15 @@ export const isStringified=(str:string)=>{
     }
 }
 
-export const encodePath=(path:string)=>{
+export const encodePath=(path:string,currentData?:{screens:string[],props:any})=>{
+    console.log("current",path,currentData);
     let truncatedPath="/"+path.replace(baseAppUrl,"");
     let slashIndexs=getAllCharOccurences(truncatedPath,"/");
     let paramIndex=truncatedPath.indexOf("?")
     let screens=new Array(slashIndexs.length).fill({});
     return {
       screens:screens.map((screen,i)=>truncatedPath.substring(slashIndexs[i]+1,(i==(screens.length-1))?(paramIndex==-1?truncatedPath.length:paramIndex):slashIndexs[i+1])),
-      props:((paramIndex!=-1)?formatQueryParamsToObj(truncatedPath.substring(paramIndex+1,truncatedPath.length)):undefined)
+      props:((paramIndex!=-1)?formatQueryParamsToObj(truncatedPath.substring(paramIndex+1,truncatedPath.length),currentData?.props):undefined)
     } 
 }
 
@@ -139,6 +157,7 @@ export const getComponent=(id:string)=>{
 }
 
 export async function registerForPushNotificationsAsync() {
+  console.log("request recieved pushhhh")
   if (Platform.OS === 'android') {
     Notifications.setNotificationChannelAsync('default', {
       name: 'default',
@@ -147,7 +166,6 @@ export async function registerForPushNotificationsAsync() {
       lightColor: '#FF231F7C',
     });
   }
-
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
@@ -155,23 +173,27 @@ export async function registerForPushNotificationsAsync() {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
+    console.log("Final status",finalStatus);
     if (finalStatus !== 'granted') {
       //handleRegistrationError('Permission not granted to get push token for push notification!');
       return;
     }
     const projectId = Constants?.expoConfig?.extra?.eas?.projectId ??Constants?.easConfig?.projectId;
+    console.log("project id",projectId);
     if (!projectId) {
       //handleRegistrationError('Project ID not found');
     }
     try {
-    const pushTokenString = (
+    const pushTokenRes = (
         await Notifications.getExpoPushTokenAsync({
           projectId,
         })
-      ).data;
-      //console.log(pushTokenString);
+      )
+      const pushTokenString=pushTokenRes.data;
+      console.log("Push Res",pushTokenRes);
       return pushTokenString;
     } catch (e: unknown) {
+      console.log("Error1",e)
       //handleRegistrationError(`${e}`);
     }
   } else {
@@ -190,20 +212,22 @@ export const serverRequest=async (requestData:ServerRequest)=>{
   {
     res.success=false
     res.message="Access Token Missing"
-    //console.log("AT",accessToken,res);
   }
   else
   {
-      console.log("aaaallll",requestData)
+      console.log("request data",requestData)
       let fetchObj:RequestInit={
         headers:{"Authorization":"Bearer "+accessToken},
         method:requestData.reqType,
         body:!requestData.preventStringify?JSON.stringify({...requestData.body}):requestData.body
       }
-      //console.log("fetch",fetchObj)
       requestData.routeType=="public"?delete fetchObj.headers:null
       !requestData.body?delete fetchObj.body:null
       //console.log("url",requestData)
+      //settimer response expectancy time for 10s
+      let timer=setTimeout(()=>{
+        
+      },10000)
       let serverRes=await fetch(requestData.url,fetchObj);
       let data:ServerResponse=requestData.responseType=="JSON"||requestData.responseType==undefined?await serverRes.json():{success:true,message:"",data:await serverRes.blob()}
       store.dispatch(setRequest(data))
@@ -909,7 +933,7 @@ export const setLastSeenMessage=(chat:Chat,messages:Message[],userId:string)=>{
       }
     }
   }
-  console.log("updated",updatedMessages.map((msg)=>msg.content))
+  //console.log("updated",updatedMessages.map((msg)=>msg.content))
   return updatedMessages
 }
 
@@ -952,11 +976,11 @@ export const formatCurrency=(amount:number, currency = "INR", locale = "en-US")=
   }).format(amount);
 }
 
-export const getKeyboardHeight=(keyboardInfo:KeyboardEvent)=>{
-  return Platform.OS=="android"?(keyboardInfo.endCoordinates.height/Dimensions.get("screen").height):(Dimensions.get("screen").height-keyboardInfo.endCoordinates.screenY)/Dimensions.get("screen").height
+export const getKeyboardHeight=(keyboardInfo:KeyboardEvent,viewPortHeight?:any)=>{
+  return Platform.OS=="android"?keyboardInfo.endCoordinates.height:(Dimensions.get('screen').height-keyboardInfo.endCoordinates.screenY)
 }
 
-// export const bakeFilters=(additionalFilters:AppliedFilter[],quickFilters:AppliedQuickFilter[])=>{
-
-// }
+export const getViewportDimensions=(insets:any)=>{
+  return Platform.OS=="ios"?(Dimensions.get("screen").height-insets.bottom-insets.top):Dimensions.get("window").height
+}
 

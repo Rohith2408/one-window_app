@@ -17,6 +17,7 @@ import stars_icon from '../../assets/images/misc/stars.png'
 import next_icon from '../../assets/images/misc/next.png'
 import { addTutorial, setTutorial } from "../../store/slices/tutorialSlice"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
+import Heading from "../resources/Heading"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -192,10 +193,11 @@ const Experts=()=>{
         {
             experts.responseStatus=="not_recieved"
             ?
-            <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
+            <View style={[{flex:1},appStandardStyles.screenMarginSmall]}>
+                <Loadinglistscreen cardGap={30} count={4} visibilityCount={3} direction="vertical"/>
+            </View>
             :
-            <View style={{flex:1,gap:0}}>
-                {/* <View style={{position:"absolute",top:0,backgroundColor:'red',width:20,height:20,borderRadius:100}}></View> */}
+            <View style={{flex:1,gap:30}}>
                 <Pressable ref={viewRef2} onPress={showExperts} style={[GeneralStyles.add_wrapper]}>
                     <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].add_text]}>Who’s Here to Help?</Text>
                     <Image style={[styles[Device].next_icon]} source={next_icon}></Image>
@@ -204,27 +206,25 @@ const Experts=()=>{
                     <Image style={[styles[Device].stars_icon]} source={stars_icon}></Image>
                     <Styledtext styles={[{lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].briefing]} text="Your Study Abroad Success Starts with Our Expert Guidance" focusWord="Study Abroad"/>
                 </View>
-                {/* 
-                <Pressable onPress={showExperts} style={[{alignSelf:'center',borderRadius:100,borderWidth:2,borderColor:Themes.Light.OnewindowLightBlue}]}>
-                    <Styledtext styles={[{padding:10,textAlign:"center",lineHeight:20},{fontFamily:Fonts.NeutrifStudio.Medium},styles[Device].briefing]} text="Wondering Who’s Here to Help? Discover Our Dedicated Team" focusWord="Discover Our Dedicated Team"/>
-                </Pressable> 
-                */}
-                <ScrollView style={{flex:1}} contentContainerStyle={{gap:15,padding:15}}>
-                {
-                    store.getState().preferences.data?.country?.map((country)=>
-                    !alreadyAssigned(experts.data,country)
-                    ?
-                    <Requestcounsellorcard country={country}/>
-                    :
-                    null
-                    )
-                }
-                {
-                    experts.data?.map((expert,i)=>
-                    <Transitionview delay={100*i} effect="pan"><Pressable onPress={()=>showDetails(expert)} key={expert.info._id} style={[styles[Device].card_wrapper]}><Expertcard index={i} {...expert}/></Pressable></Transitionview>
-                    )
-                }
-                </ScrollView>
+                <View style={{gap:10,flex:1}}>
+                    <View style={[appStandardStyles.screenMarginSmall]}><Heading heading="Meet Your Experts!"/></View>
+                    <ScrollView style={{flex:1}} contentContainerStyle={{gap:15,paddingLeft:15,paddingRight:15}}>
+                    {
+                        store.getState().preferences.data?.country?.map((country)=>
+                        !alreadyAssigned(experts.data,country)
+                        ?
+                        <Requestcounsellorcard country={country}/>
+                        :
+                        null
+                        )
+                    }
+                    {
+                        experts.data?.map((expert,i)=>
+                        <Transitionview delay={100*i} effect="pan"><Pressable onPress={()=>showDetails(expert)} key={expert.info._id} style={[styles[Device].card_wrapper]}><Expertcard index={i} {...expert}/></Pressable></Transitionview>
+                        )
+                    }
+                    </ScrollView>
+                </View>
             </View>
         }
         </View>

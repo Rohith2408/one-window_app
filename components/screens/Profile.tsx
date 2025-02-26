@@ -20,6 +20,7 @@ import Loadingview from "../resources/Loadingview";
 import defaultDP from '../../assets/images/misc/defaultDP.png'
 import { addToBasket } from "../../constants/basket";
 import Transitionview from "../resources/Transitionview";
+import { ServerResponse } from "../../types";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -364,6 +365,11 @@ const Profile=(props:any)=>{
     }
 
     const logout=async ()=>{
+        console.log("URL",getServerRequestURL("logout","POST"));
+        let res:ServerResponse=await serverRequest({
+            url:getServerRequestURL("logout","POST"),
+            reqType:"POST"
+        });
         await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,"");
         resetStore();
         navigate?navigate({type:"Logout"}):null
@@ -388,29 +394,40 @@ const Profile=(props:any)=>{
         <View style={[GeneralStyles.main_wrapper]}>
             <View style={[GeneralStyles.user_wrapper,styles[Device].user_wrapper]}>
                 <View style={[GeneralStyles.name_wrapper]}>
-                    <Transitionview effect="pan"><Loadingview style={[styles[Device].loadingview_name]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.name,styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{(sharedInfo.data?.firstName || sharedInfo.data?.lastName)?truncateString(sharedInfo.data?.firstName+" "+sharedInfo.data?.lastName,15,true):"User"}</Text></Loadingview></Transitionview>
-                    <Transitionview effect="pan"><Loadingview style={[styles[Device].loadingview_email]} isLoading={sharedInfo.responseStatus!="recieved"}><Text style={[GeneralStyles.email,styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{sharedInfo.data?.email}</Text></Loadingview></Transitionview>
+                {
+                    sharedInfo.responseStatus=="not_recieved"
+                    ?
+                    <View style={[styles[Device].loadingview_name]}><Loadingview  isLoading></Loadingview></View>
+                    :
+                    <Transitionview effect="panX"><Text style={[GeneralStyles.name,styles[Device].name,{fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{(sharedInfo.data?.firstName || sharedInfo.data?.lastName)?truncateString(sharedInfo.data?.firstName+" "+sharedInfo.data?.lastName,15,true):"User"}</Text></Transitionview>   
+                }
+                {
+                    sharedInfo.responseStatus=="not_recieved"
+                    ?
+                    <View style={[styles[Device].loadingview_email]}><Loadingview isLoading></Loadingview></View>
+                    :
+                    <Transitionview effect="panY"><Text style={[GeneralStyles.email,styles[Device].email,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{sharedInfo.data?.email}</Text></Transitionview>   
+                }
                 </View>
                 <Pressable onPress={showDpOptions} style={[GeneralStyles.dp_wrapper]}>
                     <View style={[GeneralStyles.dpBg,styles[Device].dpBg,{backgroundColor:Themes.Light.OnewindowRed(1)}]}></View>
-                    <Loadingview style={[styles[Device].loadingview_dp]} isLoading={sharedInfo.responseStatus!="recieved"}>
-                        <Image source={sharedInfo.data?.displayPicSrc?sharedInfo.data.displayPicSrc:defaultDP} style={[GeneralStyles.dp,styles[Device].dp]}></Image>
-                    </Loadingview>
+                    <View style={[styles[Device].loadingview_dp]}>
+                        <Loadingview isLoading={sharedInfo.responseStatus!="recieved"}>
+                            <Image source={sharedInfo.data?.displayPicSrc?sharedInfo.data.displayPicSrc:defaultDP} style={[GeneralStyles.dp,styles[Device].dp]}></Image>
+                        </Loadingview>
+                    </View>     
                 </Pressable>
             </View>
             <View style={[GeneralStyles.options_wrapper,styles[Device].options_wrapper]}>
             {
                 options.map((option,i)=>
-                <Transitionview style={[{width:"45%",height:"20%",display:"flex",alignItems:'center',justifyContent:'center'}]} effect="pan" delay={30*i}><Pressable key={option.title} onPress={()=>openScreen(option.screen)}><Option key={option.title} {...option} Device={Device}></Option></Pressable></Transitionview>
+                <Transitionview style={[{width:"45%",height:"20%",display:"flex",alignItems:'center',justifyContent:'center'}]} effect="fade" delay={30*i}><Pressable key={option.title} onPress={()=>openScreen(option.screen)}><Option key={option.title} {...option} Device={Device}></Option></Pressable></Transitionview>
                 )
             }
             </View>
             <View style={[GeneralStyles.logout_wrapper]}>
                 <Pressable onPress={logoutWarning} style={[GeneralStyles.logout,{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]}><Text style={[GeneralStyles.logout,styles[Device].logout,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Logout</Text></Pressable>
             </View>
-            {/* <View style={[GeneralStyles.logout_wrapper]}>
-                <Pressable onPress={deleteWarning} style={[GeneralStyles.logout,{borderWidth:0,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}]}><Text style={[GeneralStyles.logout,styles[Device].delete_account,{color:Themes.Light.OnewindowPrimaryBlue(0.5),fontFamily:Fonts.NeutrifStudio.Medium}]}>Delete Account?</Text></Pressable>
-            </View> */}
         </View>
     )
 }

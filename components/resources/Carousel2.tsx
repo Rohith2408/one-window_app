@@ -48,7 +48,7 @@ const Carousel2=(props:{children:React.ReactNode,cardsCount:number,preventAutoSc
         {
             autoScrollDefined.current=true;
             swiperWatch.current=setInterval(()=>{
-                console.log(getCurrentCard(),dimensions);
+                //console.log(getCurrentCard(),dimensions);
                 setCurrentCard((getCurrentCard()>=props.cardsCount)?0:(getCurrentCard()+1));
                 scrollRef.current.scrollTo({x:getCurrentCard()*dimensions.width,animated:true})
             },props.autoScrollInterval?props.autoScrollInterval:2000)
@@ -68,7 +68,7 @@ const Carousel2=(props:{children:React.ReactNode,cardsCount:number,preventAutoSc
 
     return(
         <View style={{width:"100%",gap:20}} onLayout={(e)=>setDimensions(e.nativeEvent.layout)}>
-            <ScrollView scrollEnabled={false} scrollEventThrottle={50} onScroll={onscroll} style={{width:"100%"}} ref={scrollRef} decelerationRate="fast" snapToInterval={dimensions.width?dimensions.width*0.95:0} snapToAlignment="start" pagingEnabled horizontal>
+            <ScrollView showsHorizontalScrollIndicator={false} scrollEnabled={false} scrollEventThrottle={50} onScroll={onscroll} style={{width:"100%"}} ref={scrollRef} decelerationRate="fast" snapToInterval={dimensions.width?dimensions.width*0.95:0} snapToAlignment="start" pagingEnabled horizontal>
             {
                 React.Children.map(props.children,(child)=>
                 <View style={{width:dimensions.width}}>{child}</View>

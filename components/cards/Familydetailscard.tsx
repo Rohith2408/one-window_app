@@ -265,10 +265,10 @@ const Familydetailscard=(props:{data:FamilyInfo,index:number})=>{
     const edit=()=>{
         //console.log(props.data.RelationshipWithStudent)
         setComponentInfo("Form","title","Family Details")
-        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Familydetails",forminitialdataid:props.data.RelationshipWithStudent}}}):null
+        navigate?navigate({type:"AddScreen",payload:{screen:"Form",params:{formid:"Familydetails",forminitialdataid:props.data._id}}}):null
     }
 
-    //console.log("family",props.data)
+    //console.log("family",props.data);
 
     return(
         <View onLayout={(e)=>setDimensions(e.nativeEvent.layout)} style={{flex:1,padding:5}}>

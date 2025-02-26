@@ -4,6 +4,12 @@ import { decodePath, encodePath, formatQueryParamsToObj, formatQueryParamsToStri
 
 export type NavigationActions=
     {
+        type:"SetPath",
+        payload:{
+            path:string
+        }
+    }|
+    {
         type:"SetLayout",
         payload:{
             layoutScreen:string
@@ -63,15 +69,22 @@ export const NavigationReducer=(state:string,action:NavigationActions)=>{
     let truncatedUrl=state.replace(baseAppUrl,"");
     let encodedPath=encodePath(state);
     switch(action.type){
+
+        case "SetPath":
+            return action.payload.path
+            break;
+
         case "SetLayout":
             return baseAppUrl+action.payload.layoutScreen+action.payload.screens.reduce((acc,curr)=>acc+"/"+curr,"")+"?"+formatQueryParamsToString(action.payload.params)
             break;
 
         case "AddScreen":
             let exists=encodedPath.screens.find((screen)=>screen==action.payload.screen)
-            if(exists && action.payload.replaceIfExists)
+            console.log("scrren info",exists,action.payload.replaceIfExists);
+            if(exists && action.payload)
             {
                 encodedPath.screens=[...encodedPath.screens.filter((screen)=>screen!=action.payload.screen),action.payload.screen]
+                console.log("scrren info",encodedPath.screens);
                 action.payload.params?encodedPath.props={...encodedPath.props,...action.payload.params}:null
             }
             else if(!exists)

@@ -149,7 +149,7 @@ const Listbuilder=(props:{placeholder:string,addHandler:(list:string[],current:s
             {
                 error
                 ?
-                <Transitionview effect="pan"><Text style={[styles[Device].selected,{padding:10,fontFamily:Fonts.NeutrifStudio.Regular,color:"red"}]}>{error}</Text></Transitionview>
+                <Transitionview effect="panY"><Text style={[styles[Device].selected,{padding:10,fontFamily:Fonts.NeutrifStudio.Regular,color:"red"}]}>{error}</Text></Transitionview>
                 :
                 null
             }

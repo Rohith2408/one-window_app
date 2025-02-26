@@ -25,10 +25,10 @@ const Requestcounsellorcard=(props:{country:string})=>{
             }
         })
         setIsloading(false);
-        console.log("Request Response",serverRes);
+        //console.log("Request Response",serverRes);
         if(serverRes.success)
         {
-            console.log("request response",JSON.stringify(serverRes))
+            //console.log("request response",JSON.stringify(serverRes))
             if(store.getState().advisors.data?.find((advisor)=>advisor.info._id==serverRes.data.advisor.info._id))
             {
                 dispatch(updateAdvisor(serverRes.data.advisor))
@@ -65,8 +65,8 @@ const Requestcounsellorcard=(props:{country:string})=>{
     }
 
     return(
-        <View style={{gap:10,padding:10}}>
-            <Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}}>Seems like you are interested to go {setWordCase(props.country)}</Text>
+        <View style={{gap:10,padding:10,backgroundColor:Themes.Light.OnewindowLightBlue,borderRadius:20}}>
+            <Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1),lineHeight:24}}>Seems like you are interested to go to {setWordCase(props.country)}</Text>
             <Pressable onPress={!isLoading?requestForCounsellor:null} style={{alignSelf:"flex-end"}}>
                 {
                     !isLoading

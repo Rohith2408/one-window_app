@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import useNavigation from "../../hooks/useNavigation"
 import Tabnavigator from "../../navigation/tabNavigator"
 import { TabScreen } from "../../types"
@@ -15,28 +15,28 @@ const Base=(props:{tab:string})=>{
 
     const Nav=useNavigation()
     const Screens:TabScreen[]=useRef([
-        {
-            id:"home",
-            component:Home,
-        },
-        {
-            id:"profile",
-            component:Profile,
-        },
-        {
-            id:"feed",
-            component:Community,
-        },
-        {
-            id:"chats",
-            component:Chats,
-        }
+    {
+        id:"home",
+        component:Home,
+    },
+    {
+        id:"profile",
+        component:Profile,
+    },
+    {
+        id:"feed",
+        component:Community,
+    },
+    {
+        id:"chats",
+        component:Chats,
+    }
     ]).current
 
-    console.log("base props",props)
+    //console.log("base props",props)
 
     return(
-        <View style={[{flex:1,alignSelf:"stretch"},appStandardStyles.screenMarginSmall]}>
+        <View style={[{flex:1,alignSelf:"stretch",marginBottom:Platform.OS=="android"?10:0},appStandardStyles.screenMarginSmall]}>
             <View style={[styles.screenWrapper]}><Tabnavigator screens={Screens} currentTab={{id:props.tab,props:undefined}} invalidPathScreen={Invalidpath}></Tabnavigator></View>
             <View style={[styles.navWrapper]}><Navbar tab={props.tab}></Navbar></View>
         </View>

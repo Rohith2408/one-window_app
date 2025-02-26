@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
 import { Phone, ServerResponse } from "../../types"
-import { getDevice, getServerRequestURL, replaceCharacters, serverRequest } from "../../utils"
+import { getDevice, getServerRequestURL, replaceCharacters, serverRequest, setWordCase } from "../../utils"
 import { useEffect, useRef, useState } from "react"
 import useNavigation from "../../hooks/useNavigation"
 import { Fonts, Themes } from "../../constants"
@@ -96,7 +96,7 @@ const Verifyuser=(props:{type:"mobile"|"email",data:idData,callback:(otp:string,
 
     const verify=async ()=>{
         let res:ServerResponse=await getBasket("verification-callback").callback(otp,props.data);
-        !res.success?setError(res.message):null
+        !res.success?setError(setWordCase(res.message)):null
         return res.success
     }
 

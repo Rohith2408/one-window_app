@@ -432,7 +432,7 @@ const Product=(props:{productId:string})=>{
         let serverRes={success:false,message:"",data:undefined};
         let requestInfo=requests.find((item)=>item.id=="upload-doc-application");
         let validation=requestInfo?.inputValidator(data);
-        if(validation?.success)
+        if(validation?.success && requestInfo?.serverCommunicator)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
             if(serverRes?.success)
@@ -455,7 +455,7 @@ const Product=(props:{productId:string})=>{
         let serverRes={success:false,message:"",data:undefined};
         let requestInfo=requests.find((item)=>item.id=="delete-doc-application");
         let validation=requestInfo?.inputValidator(data);
-        if(validation?.success)
+        if(validation?.success && requestInfo?.serverCommunicator)
         {
             serverRes=await requestInfo?.serverCommunicator(data);
             if(serverRes?.success)
@@ -524,14 +524,14 @@ const Product=(props:{productId:string})=>{
         product?.cancellationRequest?showMessage():null
     },[])
 
-    console.log(product?.cancellationRequest,product?.stage,product?.stage);
+    //console.log(product?.cancellationRequest,product?.stage,product?.stage);
     
     return(
         <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginMini]}>
         {
             product
             ?
-            <Transitionview effect="pan" style={[GeneralStyles.add_wrapper]}>
+            <Transitionview effect="panY" style={[GeneralStyles.add_wrapper]}>
                 <Pressable onPress={quits} style={{flexDirection:"row",alignItems:'center',gap:5}}>
                     <Text style={[{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.75)},styles[Device].uni_location]}>{product.cancellationRequest?"You called it quits!":"Call it quits?"}</Text>
                     <Image style={[styles[Device].add_icon]} source={add_icon}></Image>
@@ -551,7 +551,7 @@ const Product=(props:{productId:string})=>{
                         <Image source={product.course.university.logoSrc} style={[styles[Device].uni_icon,{marginRight:10}]}/>
                     </View>
                     <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence(["Applied for "+formatDate(product.intake),setWordCase(product.category),product.course.university.name],"","|",true)}</Text>
-                    <View style={[GeneralStyles.actions_wrapper,styles[Device].actions_wrapper]}>
+                    <View style={[GeneralStyles.actions_wrapper]}>
                         <Pressable onPress={showOrderDetails} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:1.2,padding:10,paddingLeft:15,paddingRight:15,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.3)}}>
                             <Text style={[styles[Device].show_order_details,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Show Order Details</Text>
                         </Pressable>

@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
-import { ServerResponse, User } from "../../types"
+import { ServerResponse, TriggerObject, User } from "../../types"
 import { getDevice,  getServerRequestURL, serverRequest} from "../../utils"
 import { Image } from "expo-image"
 import { useRef, useState } from "react"
@@ -9,6 +9,8 @@ import { useAppDispatch } from "../../hooks/useAppDispatch"
 import { addChats } from "../../store/slices/chatsSlice"
 import add_icon from '../../assets/images/misc/add-friend.png'
 import loader from '../../assets/images/misc/loader.gif'
+import { useAppSelector } from "../../hooks/useAppSelector"
+import { getSocket } from "../../socket"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -91,18 +93,26 @@ const Chatsearchcard=(props:User & {index:number,alreadyFriend:boolean})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     const [loading,setLoading]=useState(false);
+    const profile=useAppSelector((state)=>state.sharedinfo).data
     const dispatch=useAppDispatch()
 
     const addFriend=async (user:User)=>{
         setLoading(true)
-        console.log("urrr",getServerRequestURL("add-friend","GET")+"/"+user._id)
+        //console.log("urrr",getServerRequestURL("add-friend","GET")+"/"+user._id)
         let res:ServerResponse=await serverRequest({
             url:getServerRequestURL("add-friend","GET")+"/"+user._id,
             reqType: "GET"
         })
-        console.log("new friend",res);
+        //console.log("new friend",res);
         if(res.success)
         {
+            let triggerObj:TriggerObject={
+                action:"add-chat",
+                sender:{...profile,userType:"student"},
+                recievers:[user],
+                data:res.data
+            }
+            getSocket().emit('trigger',triggerObj);
             dispatch(addChats(res.data));
         }
         setLoading(false)

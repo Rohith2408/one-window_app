@@ -28,7 +28,7 @@ const GeneralStyles=StyleSheet.create({
 const TabStyles=StyleSheet.create({
     card:{
         width:'100%',
-        height:90
+        height:200
     },
     checkbox:{
         width:10,
@@ -39,7 +39,7 @@ const TabStyles=StyleSheet.create({
 const MobileSStyles=StyleSheet.create({
     card:{
         width:'100%',
-        height:55
+        height:150
     },
     checkbox:{
         width:7,
@@ -50,7 +50,7 @@ const MobileSStyles=StyleSheet.create({
 const MobileMStyles=StyleSheet.create({
     card:{
         width:'100%',
-        height:65
+        height:170
     },
     checkbox:{
         width:15,
@@ -61,7 +61,7 @@ const MobileMStyles=StyleSheet.create({
 const MobileLStyles=StyleSheet.create({
     card:{
         width:'100%',
-        height:75
+        height:170
     },
     checkbox:{
         width:20,
@@ -86,6 +86,7 @@ const Address=()=>{
     const [loading,setLoading]=useState(false);
 
     //const initAddressesType=()=>(personalData.data?.temporaryAddress && personalData.data.permanentAddress && JSON.stringify(personalData.data.temporaryAddress)==JSON.stringify(personalData.data.permanentAddress))
+  
     const handleAddressType=async ()=>{
         if(addressesType=="same")
         {
@@ -123,13 +124,15 @@ const Address=()=>{
         {
             personalData.responseStatus=="not_recieved"
             ?
-            <Loadinglistscreen cardStyles={styles[Device].card} cardGap={30} count={2} direction="vertical"/>
+            <View style={[styles[Device].card]}>
+                <Loadinglistscreen cardGap={10} count={2} visibilityCount={2} direction="vertical"/>
+            </View>
             :
             <View style={{flex:1,gap:30}}>
                 <View style={{flexDirection:"row",alignItems:"center",gap:0}}>
-                    <View style={{flex:1,flexDirection:"row",alignItems:"center",gap:5}}>
+                    <View style={{flex:1,flexDirection:"row",alignItems:"flex-start",gap:7}}>
                         <Image source={loc_icon} style={{width:20,height:20,resizeMode:"contain"}}/>
-                        <Text style={{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}}>My Home address is the same as contact address</Text>
+                        <Text style={{maxWidth:"90%",lineHeight:22,fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}}>My Home address is the same as contact address</Text>
                     </View>
                     {
                         loading

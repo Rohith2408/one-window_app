@@ -2,7 +2,7 @@ import { Animated, Dimensions, Easing, Keyboard, KeyboardEvent, LayoutRectangle,
 import { StackNavigator, StackScreen as StackScreenType } from "../types"
 import { useEffect, useRef, useState } from "react"
 import useNavigation from "../hooks/useNavigation"
-import { getComponent, getKeyboardHeight } from "../utils"
+import { getComponent, getKeyboardHeight, getViewportDimensions } from "../utils"
 import React from "react"
 import { Fonts, Themes, components } from "../constants"
 import back_icon from '../assets/images/misc/back.png'
@@ -94,6 +94,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
   const getCurrentPosition=()=>(currentState.current)
   const setCurrentPosition=(val:{x:number,y:number,opacity:number,scale:number})=>{currentState.current=val}
   const [loadScreen,setLoadScreen]=useState(screenInfo?.delay?false:true)
+  const viewPortHeight=useRef(getViewportDimensions(insets)).current
 
   const panResponder = useRef(
       PanResponder.create({
@@ -189,12 +190,10 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
   useEffect(()=>{
     if(screenInfo?.type=="Flyer" && props.keyboardInfo && finalState)
     {
-      //console.log(props.id,props.keyboardInfo,finalState.y,Dimensions.get("screen").height,props.keyboardInfo.endCoordinates.screenY);
+      //console.log("heiiight stack",getKeyboardHeight(props.keyboardInfo))
       Animated.timing(translateY, {
         duration: props.keyboardInfo.duration,
-        toValue:finalState.y-getKeyboardHeight(props.keyboardInfo),
-        //toValue: finalState.y-((Dimensions.get("screen").height-props.keyboardInfo.endCoordinates.screenY)/Dimensions.get("screen").height),
-        //easing:props.keyboardInfo.easing,
+        toValue:finalState.y-(getKeyboardHeight(props.keyboardInfo,viewPortHeight)/viewPortHeight),
         useNativeDriver: false,
       }).start();
     }
@@ -228,13 +227,11 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
     })
   }
 
-  //console.log("tutorials",tutorials)
-
   const Container=getComponent(props.component)?.component
-  console.log("insets",insets);
+  //console.log("viewport",Dimensions.get("screen").height,Dimensions.get("window").height,insets,viewPortHeight)
 
   return(
-      <Animated.View onLayout={(e)=>setScreenDimensions(e.nativeEvent.layout)} key={props.id} style={[styles.screenWrapper,screenInfo?.type=="Flyer"?{elevation:3,shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:[0,Dimensions.get("screen").height-insets.bottom-insets.top]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[insets.top,Dimensions.get("screen").height-insets.bottom]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[insets.left,Dimensions.get("screen").width-insets.right]})}],opacity:opacity}]}>
+      <Animated.View onLayout={(e)=>setScreenDimensions(e.nativeEvent.layout)} key={props.id} style={[styles.screenWrapper,screenInfo?.type=="Flyer"?{elevation:3,shadowOffset:{width:0,height:-10},shadowOpacity:0.1,shadowRadius:5}:{},screenInfo?.shiftOriginToCenter?{top:"-50%",left:"-50%"}:null,{width:width.interpolate({inputRange:[0,1],outputRange:["0%","100%"]}),height:height.interpolate({inputRange:[0,1],outputRange:[0,viewPortHeight]}),transform:[{translateY:translateY.interpolate({inputRange:[0,1],outputRange:[insets.top,viewPortHeight+insets.top]})},{translateX:translateX.interpolate({inputRange:[0,1],outputRange:[insets.left,Dimensions.get("screen").width-insets.right]})}],opacity:opacity}]}>
         {
           props.index!=0 && (screenInfo?.swipeDirection=="X" || screenInfo?.swipeDirection=="XY") && !screenInfo.nonClosable
           ?
@@ -266,7 +263,7 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
         {
           screenInfo?.type=="Flyer" || screenInfo?.type=="Popup"
           ?
-          <Animated.View style={[{opacity:height.interpolate({inputRange:[0,1],outputRange:[0,1]})},{position:"absolute",backgroundColor:'rgba(0,0,0,0.075)',zIndex:-2,bottom:"90%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}]}><Pressable onPress={()=>!screenInfo?.nonClosable?back(200):null} style={{flex:1}}></Pressable></Animated.View>
+          <Transitionview effect="fade"><Animated.View style={[{position:"absolute",backgroundColor:'rgba(0,0,0,0.075)',zIndex:-2,bottom:"90%",left:0,width:Dimensions.get("screen").width,height:Dimensions.get("screen").height}]}><Pressable onPress={()=>!screenInfo?.nonClosable?back(200):null} style={{flex:1}}></Pressable></Animated.View></Transitionview>
           :
           null
         }
@@ -278,29 +275,22 @@ const StackScreen=React.memo((props:StackScreenType & {index:number,keyboardInfo
           null
         }
         <View style={[styles.screen,screenInfo?.type=="Flyer"?{borderRadius:30,elevation:10,shadowOffset:{width:0,height:-10},shadowOpacity:0.06,shadowRadius:5}:{},!screenInfo?.isTransparent?{backgroundColor:"white"}:{}]}> 
-          {/* {
-            tutorials.length>0
-            ?
-            <View style={{width:"100%",height:"100%",position:"absolute",backgroundColor:'rgba(0,0,0,0.1)',zIndex:10}}><Tutorial id={screenInfo.tutorialId}/></View>
-            :
-            null
-          } */}
-          {
-            screenInfo?.title
-            ?
-            <View style={[{flexDirection:"row",justifyContent:'center',alignItems:'center',position:"relative"},(screenInfo?.type=="Partial")?{paddingBottom:20,paddingTop:30}:{}]}>
-              <Text style={[{fontSize:13,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{screenInfo.title}</Text>
-            </View>
-            :
-            null
-          }
-          {
-            Container && loadScreen
-            ?
-            <Transitionview style={[{flex:1}]} effect="fade"><Container {...props.props}></Container></Transitionview>
-            :
-            null
-          }
+        {
+          screenInfo?.title
+          ?
+          <View style={[{flexDirection:"row",justifyContent:'center',alignItems:'center',position:"relative"},(screenInfo?.type=="Partial")?{paddingBottom:20,paddingTop:30}:{}]}>
+            <Text style={[{fontSize:13,color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{screenInfo.title}</Text>
+          </View>
+          :
+          null
+        }
+        {
+          Container && loadScreen
+          ?
+          <Transitionview style={[{flex:1}]} effect="fade"><Container {...props.props}></Container></Transitionview>
+          :
+          null
+        }
         </View>
       </Animated.View>
   )
@@ -448,10 +438,11 @@ const styles=StyleSheet.create({
       left:0,
       width:"100%",
       height:"100%",
+      
     },
     screen:{
-      width:"100%",
-      height:"100%",
+      //transform:[{translateY:-26}],
+      flex:1,
       position:"relative",
       zIndex:1,
     },
@@ -492,7 +483,7 @@ const styles=StyleSheet.create({
       bottom:0,
       width:"100%",
       position:"absolute",
-      // backgroundColor:'black',
+      // ]backgroundColor:'black',
       zIndex:2
     },
     back_icon:{

@@ -114,11 +114,11 @@ const Refundpolicy=()=>{
     const openInAppBrowser = async () => {
         const result = await WebBrowser.openBrowserAsync(info.url);
         console.log(result); 
-      };
+    };
 
     return(
         <View style={[GeneralStyles.main_wrapper,appStandardStyles.screenMarginSmall]}>
-            <Transitionview effect="pan" delay={200}><Text style={[styles[Device].text,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Just a sec!</Text></Transitionview>   
+            <Transitionview effect="panY" delay={200}><Text style={[styles[Device].text,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Just a sec!</Text></Transitionview>   
             <View><Text style={[styles[Device].subtext,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>Please review our refund and cancellation policies before placing your order!</Text></View>
             <Pressable onPress={openInAppBrowser}><Text style={[styles[Device].subtext,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>Show refund policy</Text></Pressable>
             <View style={{flexDirection:"row",gap:10}}>

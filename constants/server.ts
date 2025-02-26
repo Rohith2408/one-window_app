@@ -13,6 +13,18 @@ const endPoints=[
         type:"POST",
     },
     {
+        id:"logout",
+        category:"auth",
+        tail:"logout",
+        type:"POST",
+    },
+    {
+        id:"google-login",
+        category:"auth",
+        tail:"google/login",
+        type:"POST",
+    },
+    {
         id:"register",
         category:"auth",
         tail:"student-register",

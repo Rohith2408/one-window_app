@@ -9,6 +9,8 @@ import Transitionview from "../resources/Transitionview"
 import { ServerResponse } from "../../types"
 import { useAppDispatch } from "../../hooks/useAppDispatch"
 import { setRemoveScreen } from "../../store/slices/removeScreenSlice"
+import * as WebBrowser from 'expo-web-browser';
+import { Image } from "expo-image"
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -16,7 +18,7 @@ const GeneralStyles=StyleSheet.create({
         padding:20,
         justifyContent:"center",
         alignItems:'center',
-        gap:30
+        gap:25
     }
 })
 
@@ -85,7 +87,11 @@ type WarningProps={
     warningMessage?:string,
     proceedCallback:()=>Promise<boolean>,
     yesLabel?:string,
-    noLabel?:string
+    noLabel?:string,
+    redirect?:{
+        url:string,
+        title:string
+    }
 }
 
 const Warning=()=>{
@@ -104,6 +110,14 @@ const Warning=()=>{
         //navigate({type:"RemoveSpecificScreen",payload:{id:"Warning"}});
     }
 
+    const redirect = async () => {
+        if(info.redirect?.url)
+        {
+            const result = await WebBrowser.openBrowserAsync(info.redirect?.url);
+            console.log(result); 
+        }
+    };
+
     const proceed=async ()=>{
         let res=await info.proceedCallback()
         close()
@@ -115,13 +129,22 @@ const Warning=()=>{
             {
                 info.warningTitle
                 ?
-                <Transitionview effect="pan" delay={200}>
+                <Transitionview effect="panY" delay={200}>
                     <Text style={[styles[Device].text,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Regular}]}>{info.warningTitle}</Text>
                 </Transitionview>
                 :
                 null
             }
             <View><Text style={[styles[Device].subtext,{textAlign:"center",color:Themes.Light.OnewindowPrimaryBlue(0.4),fontFamily:Fonts.NeutrifStudio.Regular}]}>{info.warningMessage}</Text></View>
+            {
+                info.redirect
+                ?
+                <Pressable style={{backgroundColor:Themes.Light.OnewindowLightBlue,borderRadius:100}} onPress={redirect}>
+                    <Text style={[styles[Device].subtext,{padding:7,fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{info.redirect.title}</Text>
+                </Pressable>
+                :
+                null
+            }
             <View style={{flexDirection:"row",gap:10}}>
                 <View style={[{flex:1}]}><Asynchronousbutton successText="Success" idleText={info.yesLabel?info.yesLabel:"Proceed"} failureText="Something went wront" callback={proceed}/></View>
                 <Pressable onPress={close} style={{flex:1,alignItems:'center',justifyContent:"center",borderWidth:1.2,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2),borderRadius:100}}>

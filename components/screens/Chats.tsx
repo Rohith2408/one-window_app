@@ -1,18 +1,12 @@
 import { LayoutRectangle, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useAppSelector } from "../../hooks/useAppSelector"
-import { ListItem, Recommendation, ServerResponse } from "../../types"
-import Loadingview from "../resources/Loadingview"
-import Recommendationcard from "../cards/Recommendationcard"
+import { ListItem} from "../../types"
 import { useEffect, useRef, useState } from "react"
 import { getChatType, getDevice } from "../../utils"
 import Loadinglistscreen from "../resources/Loadinglistscreen"
 import useNavigation from "../../hooks/useNavigation"
-import { store } from "../../store"
-import { requests } from "../../constants/requests"
-import Loader from "../resources/Loader"
 import { Fonts, Themes } from "../../constants"
 import Listselection from "../resources/Listselection"
-import Asynchronousbutton from "../resources/Asynchronousbutton"
 import emptylist from '../../assets/images/illustrations/sad.png'
 import { Image } from "expo-image"
 import Chatcard from "../cards/Chatcard"
@@ -182,13 +176,13 @@ const Chats=()=>{
             {
                 chats.responseStatus!="recieved"
                 ?
-                <Loadinglistscreen cardStyles={{width:"100%",height:Device=="MobileS"?100:(Device=="MobileM"?130:170)}} cardGap={30} count={3} direction="vertical"/>
+                <View style={{flex:1}}><Loadinglistscreen cardGap={30} count={6} visibilityCount={5} direction="vertical"/></View>
                 :
                 <View style={{flex:1,gap:25}}>
-                    <Transitionview effect="pan"><Pressable style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100}} onPress={openSearch}><Text style={[styles[Device].search,{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}]}>{"Search..."}</Text></Pressable></Transitionview>
+                    <Transitionview effect="panY"><Pressable style={{borderWidth:1.25,borderColor:Themes.Light.OnewindowPrimaryBlue(0.25),borderRadius:100}} onPress={openSearch}><Text style={[styles[Device].search,{padding:10,fontFamily:Fonts.NeutrifStudio.Bold,color:Themes.Light.OnewindowPrimaryBlue(0.25)}]}>{"Search..."}</Text></Pressable></Transitionview>
                     <Listselection
                         direction="horizontal"
-                        selectionStyle="background"
+                        selectionStyle="background-with-wrapper"
                         initialSelection={[{label:"Experts",value:"experts"}]}
                         blurUnSelected={true}
                         styles={{contentcontainer:{gap:10}}}
@@ -200,7 +194,7 @@ const Chats=()=>{
                             selectionMode:"single"
                         }}
                     />
-                    <ScrollView horizontal scrollEnabled={false} ref={ref} style={{flex:1}} contentContainerStyle={{paddingTop:0}}>
+                    <ScrollView showsHorizontalScrollIndicator={false} horizontal scrollEnabled={false} ref={ref} style={{flex:1}} contentContainerStyle={{paddingTop:0}}>
                         <View style={{width:dimensions.width}}>
                             {
                                 experts.length==0
@@ -214,7 +208,7 @@ const Chats=()=>{
                                 <ScrollView ref={ref} style={{flex:1}} contentContainerStyle={{gap:15,paddingTop:10,paddingBottom:30}}>
                                 {
                                     experts.map((item,i)=>
-                                    <Transitionview effect="pan" delay={100*i}>
+                                    <Transitionview effect="panY" delay={100*i}>
                                         <View key={item._id}><Chatcard {...item} index={i}/></View>
                                     </Transitionview>
                                     )
@@ -237,11 +231,11 @@ const Chats=()=>{
                                     community.map((item,i)=>
                                     (item.participants.length==1)
                                     ?
-                                    <Transitionview effect="pan" delay={100*i}>
+                                    <Transitionview effect="panY" delay={100*i}>
                                         <Userdoesntexist/>
                                     </Transitionview>
                                     :
-                                    <Transitionview effect="pan" delay={100*i}>
+                                    <Transitionview effect="panY" delay={100*i}>
                                         <View key={item._id}><Chatcard {...item} index={i}/></View>
                                     </Transitionview>
                                     )

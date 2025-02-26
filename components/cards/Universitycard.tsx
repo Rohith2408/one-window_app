@@ -105,7 +105,7 @@ const MobileSStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:14,
+        fontSize:13,
         lineHeight:18
     },
     icon:{
@@ -145,7 +145,7 @@ const MobileMStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:16,
+        fontSize:15,
         lineHeight:24
     },
     icon:{
@@ -155,11 +155,11 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:14,
+        fontSize:13,
         lineHeight:20
     },
     misc:{
-        fontSize:14
+        fontSize:13
     },
     important:{
         fontSize:10
@@ -185,7 +185,7 @@ const MobileLStyles=StyleSheet.create({
         top:15,
     },
     name:{
-        fontSize:16,
+        fontSize:15,
         lineHeight:24
     },
     icon:{
@@ -195,11 +195,11 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_name:{
-        fontSize:14,
+        fontSize:13,
         lineHeight:20
     },
     misc:{
-        fontSize:14
+        fontSize:13
     },
     important:{
         fontSize:10
@@ -223,7 +223,7 @@ const styles={
 
 const Universitycard=(props:UniversityListObj & {index:number})=>{
 
-    const Device=useRef(getDevice()).current
+    const Device=useRef<keyof typeof styles>(getDevice()).current
     const [path,navigate]=useNavigation()
 
     const openUniversity=()=>{
@@ -260,7 +260,7 @@ const Universitycard=(props:UniversityListObj & {index:number})=>{
                     <View style={{flexDirection:"row",alignItems:'center'}}><Image source={go_icon} style={[styles[Device].go_icon,{transform:[{scaleX:-1}]}]}/></View>
                 </View>
                 <View style={[GeneralStyles.misc_wrapper]}>
-                    <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence([props.acceptanceRate?(props.acceptanceRate+" Acceptence"):undefined,props.graduationRate?(props.graduationRate+" Graduation Rate"):"No Info",props.courses?(props.courses+" Courses"):"No Info"],"","|")}</Text>
+                    <Text style={[styles[Device].misc,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{Word2Sentence([props.acceptanceRate?(props.acceptanceRate+" Acceptence"):"",props.graduationRate?(props.graduationRate+" Graduation Rate"):"No Info",props.courses?(props.courses+" Courses"):"No Info"],"","|")}</Text>
                 </View>
             </View>
         </Pressable>
@@ -269,7 +269,7 @@ const Universitycard=(props:UniversityListObj & {index:number})=>{
 
 const Banner=(props:{text:string,color:string})=>{
 
-    const Device=useRef(getDevice()).current
+    const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
         <View style={[{backgroundColor:"#FFDAA1",borderRadius:100}]}><Text style={[{color:props.color,fontFamily:Fonts.NeutrifStudio.Regular,padding:3,paddingLeft:15,paddingRight:15},styles[Device].stem_banner_text]}>{props.text}</Text></View>

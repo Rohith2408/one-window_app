@@ -219,7 +219,7 @@ const styles={
 
 const Programcard=(props:CourseListObj & {index:number})=>{
 
-    const Device=useRef(getDevice()).current
+    const Device=useRef<keyof typeof styles>(getDevice()).current
     const [path,navigate]=useNavigation()
 
     const openProgram=()=>{
@@ -265,7 +265,7 @@ const Programcard=(props:CourseListObj & {index:number})=>{
 
 const Banner=(props:{text:string,color:string})=>{
 
-    const Device=useRef(getDevice()).current
+    const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
         <View style={[{borderWidth:1,borderColor:"white",borderRadius:100}]}><Text style={[{color:props.color,fontFamily:Fonts.NeutrifStudio.Bold,padding:3,paddingLeft:15,paddingRight:15},styles[Device].stem_banner_text]}>{props.text}</Text></View>

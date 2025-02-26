@@ -127,7 +127,7 @@ const Myorders=()=>{
         {
             orders.responseStatus=="not_recieved"
             ?
-            <Loadinglistscreen cardStyles={styles[Device].card} cardGap={30} count={3} direction="vertical"/>
+            <View style={{flex:1}}><Loadinglistscreen cardGap={30} count={7} visibilityCount={6} direction="vertical"/></View>
             :
             <View style={{flex:1}}>
             {
@@ -142,7 +142,7 @@ const Myorders=()=>{
                 <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,padding:15,paddingTop:25}}>
                 {
                     orders.data.map((order,i)=>
-                    <Transitionview effect="pan" delay={100*i}>
+                    <Transitionview effect="panY" delay={100*i}>
                         <View key={order._id}><Ordercard index={i} {...order}/></View>
                     </Transitionview>
                     

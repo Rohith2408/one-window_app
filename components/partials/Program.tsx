@@ -16,7 +16,7 @@ import cart_icon from '../../assets/images/misc/cart.png'
 import start_icon from '../../assets/images/misc/rocket.png'
 import deadline_icon from '../../assets/images/misc/deadline.png'
 import arrow_icon from '../../assets/images/misc/arrow.png'
-import { Fonts, Themes } from "../../constants";
+import { Fonts, Themes, appStandardStyles } from "../../constants";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import wishlist_icon from '../../assets/images/misc/wishlist.png'
 import wishlisted_icon from '../../assets/images/misc/wishlisted.png'
@@ -25,6 +25,9 @@ import Loader from "../resources/Loader";
 import Styledtext from "../resources/Styledtext";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { setRemoveScreen } from "../../store/slices/removeScreenSlice";
+import loading_gif from '../../assets/images/misc/loader.gif'
+import Loadinglistscreen from "../resources/Loadinglistscreen";
+import Heading from "../resources/Heading";
 
 const GeneralStyles=StyleSheet.create({
     main_wrapper:{
@@ -106,8 +109,8 @@ const TabStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:38,
-        height:38,
+        width:32,
+        height:32,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -184,6 +187,18 @@ const TabStyles=StyleSheet.create({
         width:22,
         height:22,
         resizeMode:'contain'
+    },
+    loader_mid_wrapper:{
+        width:"100%",
+        height:275
+    },
+    loader_bottom_wrapper:{
+        width:"100%",
+        height:230
+    },
+    loader_top_wrapper:{
+        width:"100%",
+        height:180
     }
 })
 
@@ -194,8 +209,8 @@ const MobileSStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:24,
-        height:24,
+        width:16,
+        height:16,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -272,6 +287,18 @@ const MobileSStyles=StyleSheet.create({
         width:16,
         height:16,
         resizeMode:'contain'
+    },
+    loader_mid_wrapper:{
+        width:"100%",
+        height:225
+    },
+    loader_bottom_wrapper:{
+        width:"100%",
+        height:180
+    },
+    loader_top_wrapper:{
+        width:"100%",
+        height:120
     }
 })
 
@@ -282,8 +309,8 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:26,
-        height:26,
+        width:20,
+        height:20,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -332,7 +359,7 @@ const MobileMStyles=StyleSheet.create({
         lineHeight:30
     },
     add_to_cart:{
-        fontSize:15
+        fontSize:14
     },
     cart_icon:{
         width:18,
@@ -360,6 +387,18 @@ const MobileMStyles=StyleSheet.create({
         width:18,
         height:18,
         resizeMode:'contain'
+    },
+    loader_mid_wrapper:{
+        width:"100%",
+        height:250
+    },
+    loader_bottom_wrapper:{
+        width:"100%",
+        height:200
+    },
+    loader_top_wrapper:{
+        width:"100%",
+        height:150
     }
 })
 
@@ -371,8 +410,8 @@ const MobileLStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     uni_icon:{
-        width:26,
-        height:26,
+        width:40,
+        height:40,
         borderRadius:100,
         resizeMode:"contain"
     },
@@ -421,7 +460,7 @@ const MobileLStyles=StyleSheet.create({
         lineHeight:30
     },
     add_to_cart:{
-        fontSize:15
+        fontSize:14
     },
     cart_icon:{
         width:18,
@@ -445,6 +484,18 @@ const MobileLStyles=StyleSheet.create({
         width:18,
         height:18,
         resizeMode:'contain'
+    },
+    loader_mid_wrapper:{
+        width:"100%",
+        height:250
+    },
+    loader_bottom_wrapper:{
+        width:"100%",
+        height:200
+    },
+    loader_top_wrapper:{
+        width:"100%",
+        height:150
     }
 })
 
@@ -693,15 +744,15 @@ const Program=(props:{programid:string})=>{
             ?
             <ScrollView onLayout={(e)=>setDimensions(e.nativeEvent.layout)} contentContainerStyle={{gap:38,padding:20}}>
                 <View style={[GeneralStyles.info_wrapper]}>
-                    <View style={[GeneralStyles.uni_icon_wrapper,{position:"relative"}]}>
-                        <Image source={programInfo.university?.logoSrc} style={[styles[Device].uni_icon]}/>
-                        <View style={[styles[Device].uni_icon_bg,{position:"absolute",zIndex:-1,backgroundColor:getThemeColor(0)}]}></View>
-                    </View>
                     <View style={[GeneralStyles.uni_info_wrapper]}>
-                        <View><Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{programInfo.name}</Text></View>
-                        <View style={[GeneralStyles.location_wrapper]}>
-                            <Image source={location_icon} style={[styles[Device].location_icon]}/>
-                            <Pressable onPress={openUniversity} style={{flex:1}}><Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([programInfo.university?.name,programInfo.university?.location?.country],"",",",true)}</Text></Pressable>
+                        <View style={{flexDirection:'row',alignItems:"flex-start",justifyContent:"flex-start",gap:5}}>
+                            <View style={{flex:1,flexDirection:"column",alignItems:"flex-start"}}>
+                                <Text style={[styles[Device].program_name,{fontFamily:Fonts.NeutrifStudio.SemiBold,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{programInfo.name}</Text>
+                                <Pressable onPress={openUniversity} style={{flex:1,flexDirection:'row',alignItems:"flex-start",justifyContent:"flex-start",gap:5}}>
+                                    <Text style={[styles[Device].uni_location,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{Word2Sentence([programInfo.university?.name,programInfo.university?.location?.country],"",",",true)}</Text>
+                                </Pressable>
+                            </View>
+                            <Image source={programInfo.university?.logoSrc} style={[styles[Device].uni_icon]}/>
                         </View>
                         <View style={[GeneralStyles.actions_wrapper]}>
                             {
@@ -714,57 +765,65 @@ const Program=(props:{programid:string})=>{
                                 :
                                 null
                             }
-                            {
-                                AT
-                                ?
-                                <Pressable  onPress={()=>showIntakes(addToCart,"cart")} style={{flexDirection:'row',alignItems:'center',gap:5,borderWidth:programInfo.elite?1.2:0,padding:10,paddingLeft:programInfo.elite?15:5,paddingRight:programInfo.elite?15:5,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
-                                    <Image source={cart_icon} style={[styles[Device].cart_icon]}/>
-                                    {
-                                        programInfo.elite
-                                        ?
-                                        <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Add to Cart</Text>
-                                        :
-                                        null
-                                    }
-                                </Pressable>
-                                :
-                                null
-                            }
+                            <View style={{flex:1,flexDirection:"row"}}>
+                                <View style={{flex:1,display:'flex',flexDirection:'row',alignSelf:"center",justifyContent:"flex-start"}}>
+                                {
+                                    AT
+                                    ?
+                                    <Pressable onPress={()=>showIntakes(addToCart,"cart")} style={{flexDirection:'row',alignSelf:"flex-start",alignItems:'center',gap:5,borderWidth:programInfo.elite?1.2:0,padding:10,paddingLeft:programInfo.elite?15:5,paddingRight:programInfo.elite?15:5,borderRadius:100,borderColor:Themes.Light.OnewindowPrimaryBlue(0.2)}}>
+                                        <Image source={cart_icon} style={[styles[Device].cart_icon]}/>
+                                        {
+                                            programInfo.elite
+                                            ?
+                                            <Text style={[styles[Device].add_to_cart,{color:Themes.Light.OnewindowPrimaryBlue(1),fontFamily:Fonts.NeutrifStudio.Medium}]}>Add to Cart</Text>
+                                            :
+                                            null
+                                        }
+                                    </Pressable>
+                                    :
+                                    null
+                                }
+                                </View>
+                                <View style={{flex:1,display:'flex',flexDirection:'row',alignSelf:"center",justifyContent:"flex-end"}}>
+                                {
+                                    isLoading
+                                    ?
+                                    <Loader  isLoading={isLoading} loaderStyles={[styles[Device].cart_icon]}/>
+                                    :
+                                    AT
+                                    ?
+                                    <Pressable onPress={!isLoading?modilfyWishlist:null}><Image style={[styles[Device].cart_icon]} source={wishlist.data.find((item)=>item._id==programInfo?._id)?wishlisted_icon:wishlist_icon}/></Pressable>
+                                    :
+                                    null
+                                }
+                                </View>
+                            </View>
                         </View>
                     </View>
-                    <View>
-                    {
-                        isLoading
-                        ?
-                        <Loader  isLoading={isLoading} loaderStyles={[styles[Device].cart_icon]}/>
-                        :
-                        AT
-                        ?
-                        <Pressable onPress={!isLoading?modilfyWishlist:null}><Image style={[styles[Device].cart_icon]} source={wishlist.data.find((item)=>item._id==programInfo?._id)?wishlisted_icon:wishlist_icon}/></Pressable>
-                        :
-                        null
-                    }
-                    </View>
                 </View>
-                <View style={[GeneralStyles.dashboards_wrapper,styles[Device].dashboards_wrapper]}>
-                    <View style={[GeneralStyles.dashboard_wrapper,styles[Device].dashboard_wrapper]}>
-                        <Dashboarditem {...dashboardInfo[0]} index={0}/>
-                        <Dashboarditem {...dashboardInfo[1]} index={1}/>
-                        <Dashboarditem {...dashboardInfo[2]} index={2}/>
-                    </View>
-                    <View style={[GeneralStyles.dashboard_wrapper,styles[Device].dashboard_wrapper]}>
-                        <Dashboarditem {...dashboardInfo[3]} index={3}/>
-                        <Dashboarditem {...dashboardInfo[4]} index={0}/>
-                        <Dashboarditem {...dashboardInfo[5]} index={1}/>
+                <View style={{gap:15}}>
+                    <Heading heading="Information at a Glance"/>
+                    <View style={[GeneralStyles.dashboards_wrapper,styles[Device].dashboards_wrapper]}>
+                        <View style={[GeneralStyles.dashboard_wrapper,styles[Device].dashboard_wrapper]}>
+                            <Dashboarditem {...dashboardInfo[0]} index={0}/>
+                            <Dashboarditem {...dashboardInfo[1]} index={1}/>
+                            <Dashboarditem {...dashboardInfo[2]} index={2}/>
+                        </View>
+                        <View style={[GeneralStyles.dashboard_wrapper,styles[Device].dashboard_wrapper]}>
+                            <Dashboarditem {...dashboardInfo[3]} index={3}/>
+                            <Dashboarditem {...dashboardInfo[4]} index={0}/>
+                            <Dashboarditem {...dashboardInfo[5]} index={1}/>
+                        </View>
                     </View>
                 </View>
                 <View style={[GeneralStyles.about_wrapper]}>
-                    <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>About:</Text>
+                    <Heading heading="About"/>
+                    {/* <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>About:</Text> */}
                     <Text style={[styles[Device].about,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>{programInfo.about}</Text>
                 </View>
                 <View style={[GeneralStyles.keyinfo_wrapper]}>
-                    {/* <Styledtext styles={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium}]} text="Additional Information :" focusWord="Information"/> */}
-                    <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Additional Information:</Text>
+                    <Heading heading="Additional Information"/>
+                    {/* <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Additional Information:</Text> */}
                     <View style={[{flexDirection:"column",gap:20}]}>
                     {
                         additionalInfo.map((item,i)=>
@@ -781,15 +840,19 @@ const Program=(props:{programid:string})=>{
                     }
                     </View>
                 </View>
-                <View style={[GeneralStyles.application_wrapper]}>
-                    <Image style={{width:"100%",aspectRatio:2.2,objectFit:"contain"}} source={applicarion_details_template}/>
-                    <View style={[{position:"absolute",top:"15%",left:"5%",gap:10}]}>
-                        <Text style={[styles[Device].application_title,{fontFamily:Fonts.NeutrifStudio.Medium}]}>Application Details</Text>
-                        <Text style={[styles[Device].application_fee,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{"Fee: "+(programInfo.applicationDetails.applicationFee=="NaN"?"Info not available":formatCurrency(parseInt(programInfo.applicationDetails.applicationFee),programInfo.currency?.code))}</Text>
+                <View style={{gap:10}}>
+                    <Heading heading="Application details"/>
+                    <View style={[GeneralStyles.application_wrapper]}>
+                        <Image style={{width:"100%",aspectRatio:2.2,objectFit:"contain"}} source={applicarion_details_template}/>
+                        <View style={[{position:"absolute",top:"15%",left:"5%",gap:10}]}>
+                            <Text style={[styles[Device].application_title,{fontFamily:Fonts.NeutrifStudio.Medium}]}>Application Details</Text>
+                            <Text style={[styles[Device].application_fee,{fontFamily:Fonts.NeutrifStudio.Medium}]}>{"Fee: "+(programInfo.applicationDetails.applicationFee=="NaN"?"Info not available":formatCurrency(parseInt(programInfo.applicationDetails.applicationFee),programInfo.currency?.code))}</Text>
+                        </View>
                     </View>
                 </View>
                 <View style={[GeneralStyles.about_wrapper]}>
-                    <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Course Start:</Text>
+                    <Heading heading="Course Start"/>
+                    {/* <Text style={[styles[Device].about_heading,{fontFamily:Fonts.NeutrifStudio.Medium,color:Themes.Light.OnewindowPrimaryBlue(1)}]}>Course Start:</Text> */}
                     <View style={{flexDirection:'column',alignSelf:"stretch",gap:40}}>
                     {
                         programInfo?.startDate?.map((date)=>
@@ -812,7 +875,14 @@ const Program=(props:{programid:string})=>{
                 </View>
             </ScrollView>
             :
-            <Text>Loading</Text>
+            <View style={[{flex:1,gap:50,overflow:"hidden"},appStandardStyles.screenMarginSmall]}>
+                <View style={[styles[Device].loader_top_wrapper]}><Loadinglistscreen visibilityCount={2} cardGap={10} count={2} direction="vertical"/></View>
+                <View style={[styles[Device].loader_mid_wrapper,{gap:10,alignSelf:'center'}]}>
+                    <View style={{flex:1}}><Loadinglistscreen cardGap={10} visibilityCount={3} count={3} direction="horizontal" /></View>
+                    <View style={{flex:1}}><Loadinglistscreen cardGap={10} visibilityCount={3} count={3} direction="horizontal" /></View>
+                </View>
+                <View style={[styles[Device].loader_bottom_wrapper]}><Loadinglistscreen visibilityCount={1} cardGap={10} count={1} direction="vertical"/></View>
+            </View>
         }
         </View>
     )
@@ -826,8 +896,8 @@ const Dashboarditem=(data:{label:string,value:string,icon:string,index:number})=
     return(
         <View style={[GeneralStyles.dashboard_item_wrapper,styles[Device].dashboard_item_wrapper,{backgroundColor:getLightThemeColor(data.index)}]}>
             <Image style={[styles[Device].dashboard_icon]} source={data.icon}/>
-            <Text style={[styles[Device].dashboard_value,{color:"black",fontFamily:Fonts.NeutrifStudio.Bold}]}>{data.value}</Text>
-            <Text style={[styles[Device].dashboard_label,{color:"black",fontFamily:Fonts.NeutrifStudio.Regular}]}>{data.label}</Text>
+            <Text style={[styles[Device].dashboard_value,{color:"black",fontFamily:Fonts.NeutrifStudio.SemiBold}]}>{data.value}</Text>
+            <Text style={[styles[Device].dashboard_label,{color:"grey",fontFamily:Fonts.NeutrifStudio.Regular}]}>{data.label}</Text>
         </View>
     )
 

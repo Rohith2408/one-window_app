@@ -46,7 +46,7 @@ const styles={
 }
 
 
-const Textbox=(props:{styles:StyleProp<TextStyle>[],readonly:boolean,placeholder:string,eventHandler:(event:Event)=>void,value:string|undefined,id:string})=>{
+const Textbox=(props:{styles?:StyleProp<TextStyle>[],readonly?:boolean,placeholder:string,eventHandler:(event:Event)=>void,value:string|undefined,id:string})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
     useEffect(()=>{

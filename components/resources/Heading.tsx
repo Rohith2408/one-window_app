@@ -36,7 +36,7 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     heading:{
-        fontSize:12,
+        fontSize:14,
         lineHeight:16
     }
 })
@@ -48,13 +48,13 @@ const styles={
     MobileL:MobileLStyles
 }
 
-const Heading=(props:{heading:string})=>{
+const Heading=(props:{heading:string,alignment?:"center"|"left"})=>{
 
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
     return(
-        <View style={[GeneralStyles.main_wrapper]}>
-            <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.4)}]}>{props.heading}</Text>
+        <View style={[GeneralStyles.main_wrapper,props.alignment=="center"?{alignSelf:"center"}:""]}>
+            <Text style={[styles[Device].heading,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.3)}]}>{props.heading}</Text>
             <View style={{width:100,height:1,backgroundColor:Themes.Light.OnewindowPrimaryBlue(0.1)}}/>
         </View>
     )

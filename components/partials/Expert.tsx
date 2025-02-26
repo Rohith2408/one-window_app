@@ -350,7 +350,7 @@ const Expert=(props:{expertid:string})=>{
                     <ScrollView style={{flex:1}} contentContainerStyle={{gap:35,padding:10}}>
                     {
                         meetings.map((meeting,i)=>
-                        <Transitionview effect="pan"><View key={meeting._id}><Meetingcard data={meeting} index={i}/></View></Transitionview>
+                        <Transitionview effect="panY"><View key={meeting._id}><Meetingcard data={meeting} index={i}/></View></Transitionview>
                         )
                     }
                     </ScrollView>

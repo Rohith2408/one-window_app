@@ -70,6 +70,9 @@ const TabStyles=StyleSheet.create({
         height:14,
         resizeMode:"contain",
     },
+    paynow:{
+        fontSize:16
+    },
     go_icon:{
         width:10,
         height:10,
@@ -85,7 +88,7 @@ const MobileSStyles=StyleSheet.create({
         fontSize:11
     },
     intake:{
-        fontSize:11
+        fontSize:12
     },
     icon:{
         width:14,
@@ -109,13 +112,13 @@ const MobileSStyles=StyleSheet.create({
 
 const MobileMStyles=StyleSheet.create({
     name:{
-        fontSize:16
+        fontSize:15
     },
     category:{
-        fontSize:14
+        fontSize:12
     },
     intake:{
-        fontSize:14
+        fontSize:13
     },
     icon:{
         width:18,
@@ -126,6 +129,9 @@ const MobileMStyles=StyleSheet.create({
         width:10,
         height:10,
         resizeMode:"contain",
+    },
+    paynow:{
+        fontSize:14
     },
     go_icon:{
         width:10,
@@ -136,13 +142,13 @@ const MobileMStyles=StyleSheet.create({
 
 const MobileLStyles=StyleSheet.create({
     name:{
-        fontSize:14
+        fontSize:15
     },
     category:{
         fontSize:12
     },
     intake:{
-        fontSize:11
+        fontSize:13
     },
     icon:{
         width:18,
@@ -153,6 +159,9 @@ const MobileLStyles=StyleSheet.create({
         width:10,
         height:10,
         resizeMode:"contain",
+    },
+    paynow:{
+        fontSize:14
     },
     go_icon:{
         width:10,
@@ -202,7 +211,7 @@ const Ordercard=(props:Order & {index:number})=>{
     return(
     <Pressable onPress={showOrderDetails} style={[GeneralStyles.sub_wrapper]}>
         <View style={[GeneralStyles.info_wrapper]}>
-            <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,styles[Device].status,{transform:[{translateY:translate}]}]}>
+            <Animated.View onLayout={(e)=>animate(-e.nativeEvent.layout.height-5)} style={[GeneralStyles.status,{transform:[{translateY:translate}]}]}>
                 <View style={{width:5,height:5,borderRadius:10,backgroundColor:"orange"}}></View>
                 <Text style={[styles[Device].category,{fontFamily:Fonts.NeutrifStudio.Regular,color:Themes.Light.OnewindowPrimaryBlue(0.5)}]}>{props.products.length+(props.products.length==1?" product":" products")}</Text>
             </Animated.View>

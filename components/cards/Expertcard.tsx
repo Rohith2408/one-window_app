@@ -28,7 +28,7 @@ const GeneralStyles=StyleSheet.create({
         justifyContent:"center",
         flex:1,
         alignSelf:"stretch",
-        padding:10
+        padding:15
     },
     superset_wrapper:{
         display:"flex",
@@ -150,7 +150,7 @@ const MobileMStyles=StyleSheet.create({
         resizeMode:"contain"
     },
     course_name:{
-        fontSize:16
+        fontSize:15
     },
     uni_name:{
         fontSize:14
@@ -209,7 +209,7 @@ const Expertcard=(props:Advisor & {index:number})=>{
             <View style={[GeneralStyles.sub_wrapper,styles[Device].sub_wrapper,{backgroundColor:getLightThemeColor(props.index%4)}]}>
                 <View style={[GeneralStyles.superset_wrapper]}>
                     <View style={{borderRadius:100,backgroundColor:getThemeColor(props.index%4)}}>
-                        <Text style={[GeneralStyles.superset_text,styles[Device].superset_text,{color:"rgba(0,0,0,0.3)",fontFamily:Fonts.NeutrifStudio.Regular,padding:5}]}>{Word2Sentence(camelCaseToString(props.info.role),"","",true)}</Text>
+                        <Text style={[GeneralStyles.superset_text,styles[Device].superset_text,{color:"rgba(0,0,0,0.3)",fontFamily:Fonts.NeutrifStudio.Medium,padding:5}]}>{Word2Sentence(camelCaseToString(props.info.role),"","",true)}</Text>
                     </View>
                     {/* <View><Image style={[styles[Device].info_icon,{borderRadius:100}]} source={info_icon}/></View> */}
                     {/* <Pressable onPress={!isLoading?deleteItem:null}>

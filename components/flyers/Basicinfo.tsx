@@ -306,7 +306,7 @@ const Basicinfo=()=>{
         // }
     ]).current
     const requiredData=useRef(dataList.filter((item)=>item.emptyChecker(item.data))).current;
-    const scrollRef=useRef()
+    const scrollRef=useRef<any>()
     const [path,navigate]=useNavigation()
     const Device=useRef<keyof typeof styles>(getDevice()).current
 
@@ -315,15 +315,17 @@ const Basicinfo=()=>{
     }
 
     useEffect(()=>{
-        //console.log(requiredData)
-        requiredData.length==0?navigate({type:"RemoveSpecificScreen",payload:{id:"Basicinfo"}}):null
+        requiredData.length==0?navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Basicinfo"}}):null:null
     },[])
 
     const logout=async ()=>{
         await SecureStore.setItemAsync(secureStoreKeys.ACCESS_TOKEN,"");
         resetStore();
-        navigate?navigate({type:"Logout"}):null
-        //navigate?navigate({type:"RemoveSpecificScreen",payload:{id:"Basicinfo"}}):null
+        let res:ServerResponse=await serverRequest({
+            url:getServerRequestURL("logout","POST"),
+            reqType:"POST"
+        });
+        navigate?navigate({type:"Logout"}):null;
     }
 
     console.log("location",store.getState().location.data)
@@ -380,7 +382,7 @@ const Container=(props:Listitem & {index:number,total:number,setScreen:any})=>{
             {
                 error
                 ?
-                <Transitionview effect="pan"><Text style={[{color:'red',fontFamily:Fonts.NeutrifStudio.Medium}]}>{error}</Text></Transitionview>
+                <Transitionview effect="panY"><Text style={[{color:'red',fontFamily:Fonts.NeutrifStudio.Medium}]}>{error}</Text></Transitionview>
                 :
                 null
             }
@@ -521,7 +523,7 @@ const Email=(props:{setData:any,data:any,setError:any})=>{
             {
                 showOtpUi
                 ?
-                <Transitionview effect="pan">
+                <Transitionview effect="panY">
                     <View style={{flexDirection:"row",gap:5}}>
                         <View style={{flex:1}}><Textbox eventHandler={(e:Event)=>setOtp(e.data)} placeholder="Enter the 6 digit OTP sent to your mail" value={otp} id="otp"/></View>
                         {
@@ -560,12 +562,12 @@ const Phonenumber=(props:{setData:any,data:any,setError:any})=>{
                 idExtractor:(item:Countrycode)=>item.code,
                 searchEvaluator:(item:Countrycode,search:string)=>(item.dial_code+item.code+item.name).toLowerCase().trim().includes(search.toLowerCase().trim()),
             },
-            selected:props.data.countryCode?[Countrycodes.find((item)=>item.dial_code==props.data.countryCode)]:[],
             eventHandler:(e:Event)=>{setDialCode(e.data[0])},
+            basketid:"basicinfo-dialcode-basketid",
             selectionMode:"single"
         }
-        addToBasket("dial-codes",data)
-        navigate({type:"AddScreen",payload:{screen:"Dropdownoptions",params:{basketid:"dial-codes"}}});
+        addToBasket("dial-codes",{...data,selected:props.data.countryCode?[Countrycodes.find((item)=>item.dial_code==props.data.countryCode)]:[]})
+        navigate?navigate({type:"AddScreen",payload:{screen:"Dropdownoptions",params:{basketid:"dial-codes"}}}):null;
     }
 
     const setDialCode=(data:Countrycode)=>{
@@ -659,7 +661,7 @@ const Phonenumber=(props:{setData:any,data:any,setError:any})=>{
             {
                 showOtpUi
                 ?
-                <Transitionview effect="pan">
+                <Transitionview effect="panY">
                     <View style={{flexDirection:"row",gap:5}}>
                         <View style={{flex:1}}><Textbox eventHandler={(e:Event)=>setOtp(e.data)} placeholder="Enter the 6 digit OTP sent to your mobile" value={otp} id="otp"/></View>
                         {

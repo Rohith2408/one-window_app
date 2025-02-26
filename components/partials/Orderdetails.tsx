@@ -321,7 +321,7 @@ const Orderdetails=(props:{orderdetailsid:string})=>{
                             {
                                 i<order.logs.length-1
                                 ?
-                                <Transitionview effect="pan"><View style={{height:2,width:70,backgroundColor:Themes.Light.OnewindowPrimaryBlue(1),borderRadius:5}}/></Transitionview>
+                                <Transitionview effect="panY"><View style={{height:2,width:70,backgroundColor:Themes.Light.OnewindowPrimaryBlue(1),borderRadius:5}}/></Transitionview>
                                 :
                                 null
                             }

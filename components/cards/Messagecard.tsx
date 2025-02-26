@@ -13,6 +13,7 @@ import default_icon from '../../assets/images/misc/defaultDP.png'
 import document_icon from '../../assets/images/misc/document.png'
 import WebView from "react-native-webview"
 import ai_icon from '../../assets/images/profile/ai.png'
+import Markdown from "react-native-markdown-display"
 
 const GeneralStyles=StyleSheet.create({
     wrapper:{
@@ -295,7 +296,7 @@ const Messagecard=(props:Message & {index:number})=>{
     const blockedUsers=useAppSelector((state)=>state.blockedusers).data
     let chat=useAppSelector((state)=>state.chats).data.find((chat)=>chat._id==props.chat)
 
-    console.log("msgs",chat)
+    //console.log("msgs",props.content)
 
     return(
         <View style={[GeneralStyles.wrapper]}>
@@ -304,15 +305,15 @@ const Messagecard=(props:Message & {index:number})=>{
             //?
             //<Blocked/>
             //:
-                props.type=="normal"
-                ?
-                <Normal chatObj={chat} {...props}/>
-                :
-                props.type=="typing"
-                ?
-                <Typing {...props}/>
-                :
-                <Seen {...props}/>
+            props.type=="normal"
+            ?
+            <Normal chatObj={chat} {...props}/>
+            :
+            props.type=="typing"
+            ?
+            <Typing {...props}/>
+            :
+            <Seen {...props}/>
         }
         </View>
     )
@@ -333,7 +334,7 @@ const Blocked=()=>{
 
 const Seen=(props:Message)=>{
 
-    console.log("seen",props);
+    //console.log("seen",props);
 
     return(
         <View style={{alignSelf:"flex-end"}}>
@@ -378,7 +379,7 @@ const Normal=(props:Message & {chatObj:Chat|undefined})=>{
         }
     }
 
-    console.log("message",props.chat)
+    //console.log("message",props.chat)
 
     return(
         <View style={{gap:5,alignSelf:props.sender?._id==profile?._id?"flex-end":"flex-start",maxWidth:"65%"}}>
@@ -397,7 +398,8 @@ const Normal=(props:Message & {chatObj:Chat|undefined})=>{
                     :
                     null
                 }
-                <Text style={[styles[Device].normal_msg,{padding:10},{fontFamily:Fonts.NeutrifStudio.Regular}]}>{props.content}</Text>
+                <Markdown style={{text:{...styles[Device].normal_msg,padding:10,fontFamily:Fonts.NeutrifStudio.Regular},link: { color: Themes.Light.OnewindowPrimaryBlue(1), textDecorationLine: "underline" },}}>{props.content}</Markdown>
+                {/* <Text style={[styles[Device].normal_msg,{padding:10},{fontFamily:Fonts.NeutrifStudio.Regular}]}></Text> */}
                 {
                     props.sender?._id==profile?._id
                     ?

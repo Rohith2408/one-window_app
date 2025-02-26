@@ -164,7 +164,7 @@ const Wishlist=(props:any)=>{
         {
             wishlist.responseStatus=="not_recieved"
             ?
-            <Loadinglistscreen cardStyles={styles[Device].card} cardGap={30} count={3} direction="vertical"/>
+            <View style={{flex:1}}><Loadinglistscreen cardGap={30} count={6} visibilityCount={5} direction="vertical"/></View>
             :
             <View style={{flex:1,gap:30}}>
                 <Pressable onPress={openExplore} style={[GeneralStyles.add_wrapper]}>
@@ -184,7 +184,7 @@ const Wishlist=(props:any)=>{
                     <ScrollView style={{flex:1}} contentContainerStyle={{gap:50,padding:15}}>
                     {
                         wishlist.data.map((item,i)=>
-                        <Transitionview effect="pan" delay={100*i}>
+                        <Transitionview effect="panY" delay={100*i}>
                             <View key={item._id} style={[styles[Device].card]}>
                                 <Wishlistcard data={item} index={i}/>
                             </View>
